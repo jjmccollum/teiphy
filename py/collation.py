@@ -250,22 +250,30 @@ class collation():
     """
     def __init__(self, xml, manuscript_suffixes=[], trivial_reading_types=[], missing_reading_types=[], verbose=False):
         self.manuscript_suffixes = manuscript_suffixes # list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses
-        self.trivial_reading_types = set(trivial_reading_types) # set of reading types (e.g., defective, orthographic, nomSac) whose readings should be collapsed under the previous substantive reading
+        self.trivial_reading_types = set(trivial_reading_types) # set of reading types (e.g., defective, orthographic, subreading) whose readings should be collapsed under the previous substantive reading
         self.missing_reading_types = set(missing_reading_types) # set of reading types (e.g., lacunose, overlap) whose readings should be treated as missing data
         self.verbose = verbose # flag indicating whether or not to print timing and debugging details for the user
         self.witnesses = [] # a list of witness instances
+        self.witness_index_by_id = {} # a dictionary mapping base witness IDs to their indices in the above list
         self.variation_units = [] # a list of variation_unit instances
+        self.readings_by_witness = {} # a dictionary mapping base witness IDs to a list of reading support sets for all units (with at least two substantive readings)
         # Now parse the XML tree to populate these data structures:
         self.parse_list_wit(xml, verbose)
         self.parse_apps(xml, verbose)
+        self.parse_readings_by_witness(verbose)
 
     """
     Given an XML tree for a collation, populates its list of witnesses from its <listWit> element.
     """
     def parse_list_wit(self, xml, verbose=False):
+        self.witnesses = []
+        self.witness_index_by_id = {}
         for w in xml.xpath("/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listWit/tei:witness", namespaces={"tei": tei_ns}):
             wit = witness(w, verbose)
+            self.witness_index_by_id[wit.id] = len(self.witnesses)
             self.witnesses.append(wit)
+        if verbose:
+            print("Finished processing %d witnesses." % len(self.witnesses))
         return
 
     """
@@ -275,10 +283,12 @@ class collation():
         for a in xml.xpath('//tei:app', namespaces={'tei': tei_ns}):
             vu = variation_unit(a, verbose)
             self.variation_units.append(vu)
+        if verbose:
+            print("Finished processing %d variation units." % len(self.variation_units))
         return
 
     """
-    Given a manuscript witness siglum, returns the base siglum of the witness, stripped of all subwitness suffixes.
+    Given a witness siglum (assumed to be for a manuscript witness), returns the base siglum of the witness, stripped of all subwitness suffixes.
     """
     def get_base_wit(self, wit):
         base_wit = wit
@@ -294,67 +304,128 @@ class collation():
         return base_wit
 
     """
+    Returns a dictionary mapping witness IDs to a set of their readings for a given variation unit.
+    """
+    def get_readings_by_witness_for_unit(self, vu, verbose=False):
+        # In a first pass, populate a list of substantive readings and a map from reading IDs to the indices of their parent substantive reading in this unit:
+        substantive_reading_ids = []
+        reading_id_to_index = {}
+        for rdg in vu.readings:
+            # If this reading is missing (e.g., lacunose or inapplicable due to an overlapping variant) or targets another reading, then skip it:
+            if rdg.type in self.missing_reading_types or len(rdg.targets) > 0:
+                continue
+            # If this reading is trivial, then map it to the last substantive index:
+            if rdg.type in self.trivial_reading_types:
+                reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
+                continue
+            # Otherwise, the reading is substantive: add it to the map and update the last substantive index:
+            substantive_reading_ids.append(rdg.id)
+            reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
+        # If the list of substantive readings only contains one entry, then this variation unit is not informative;
+        # return an empty dictionary:
+        readings_by_witness_for_unit = {}
+        if len(substantive_reading_ids) <= 1:
+            return readings_by_witness_for_unit
+        # Otherwise, initialize the output dictionary with empty sets for all base witnesses:
+        for wit in self.witnesses:
+            readings_by_witness_for_unit[wit.id] = set()
+        # In a second pass, assign each base witness a set containing the readings it supports in this unit:
+        for rdg in vu.readings:
+            # Initialize the set indicating support for this reading (or its disambiguations):
+            rdg_support = set()
+            # If this is a missing reading (e.g., a lacuna or an overlap), then we can skip this reading, as its corresponding set will be empty:
+            if rdg.type in self.missing_reading_types:
+                continue
+            # If this reading is trivial, then it will contain an entry for the index of its parent substantive reading:
+            if rdg.type in self.trivial_reading_types:
+                rdg_support.add(reading_id_to_index[rdg.id])
+            # Otherwise, if this reading has one or more target readings, then add an entry for the index of each of those readings:
+            elif len(rdg.targets) > 0:
+                for t in rdg.targets:
+                    rdg_support.add(reading_id_to_index[t])
+            # Proceed for each witness siglum in the support for this reading:
+            for wit in rdg.wits:
+                # Is this siglum a base siglum?
+                base_wit = wit
+                if base_wit not in self.witness_index_by_id:
+                    # If not, then assume it is a manuscript witness, strip any of the specified suffixes from it, 
+                    # and check if the resulting siglum is a base siglum:
+                    base_wit = self.get_base_wit(wit)
+                    if base_wit not in self.witness_index_by_id:
+                        # If it is not, then it is probably just because we've encountered a corrector or some other secondary witness not included in the witness list;
+                        # report this if we're in verbose mode and move on:
+                        if verbose:
+                            print("Skipping witness siglum %s (base siglum %s) in variation unit %s, reading %s..." % (wit, base_wit, vu.id, rdg.id))
+                        continue
+                # If we've found a base siglum, then add this reading's contribution to the base witness's reading set for this unit;
+                # normally the existing set will be empty, but if we reduce two suffixed sigla to the same base witness, 
+                # then that witness may attest to multiple readings in the same unit:
+                readings_by_witness_for_unit[wit.id] = readings_by_witness_for_unit[wit.id].union(rdg_support)
+        return readings_by_witness_for_unit
+
+    """
+    Populates the internal dictionary mapping witness IDs to a list of their reading support sets for all variation units.
+    """
+    def parse_readings_by_witness(self, verbose=False):
+        # Initialize the output dictionary with empty lists for all base witnesses:
+        self.readings_by_witness = {}
+        for wit in self.witnesses:
+            readings_by_witness[wit.id] = []
+        # Populate it for each variation unit:
+        for vu in self.variation_units:
+            readings_by_witness_for_unit = self.get_readings_by_witness_for_unit(vu, verbose)
+            for wit in readings_by_witness_for_unit:
+                readings_by_witness[wit.id].append(readings_by_witness_for_unit[wit.id])
+        return
+
+    """
     Returns the number of taxa representing the base witnesses covered in this collation.
     """
-    def get_ntax(self):
+    def get_nexus_ntax(self):
         return len(self.witnesses)
 
     """
-    Returns the number of characters (i.e., sites, variation units) covered in this collation. 
+    Returns the number of characters (i.e., sites, variation units) covered in this collation.
+    Note that not all units detailed in the collation will necessarily be included in this count;
+    Only units with two or more substantive readings will be included in the NEXUS output and counted here.
     """
-    def get_nchars(self):
-        nchars = 0
-        for vu in self.variation_units:
-            nchars_for_vu = 0
-            for rdg in vu.readings:
-                # Don't count trivial, missing, or ambiguous readings:
-                if rdg.type not in self.trivial_reading_types and rdg.type not in self.missing_reading_types and len(rdg.targets) == 0:
-                    nchars_for_vu += 1
-            # Count this unit if it has two or more distinct reaidngs:
-            if nchars_for_vu > 1:
-                nchars += 1
-        return nchars
+    def get_nexus_nchars(self):
+        # If the witnesses list is empty, then by necessity the collation matrix should be empty:
+        if len(self.witnesses) == 0:
+            return 0
+        # Otherwise, all rows should have the same number of characters; use the first row:
+        wit_id = self.witnesses[0].id
+        return len(self.readings_by_witness[wit_id])
 
     """
     Returns different symbols or lists of symbols needed to represent the states of all substantive readings in NEXUS.
     """
-    def get_symbol_lists(self):
+    def get_nexus_symbol_lists(self):
         possible_symbols = list(string.digits) + list(string.ascii_letters)
-        n_base_symbols = 0
-        covered_equate_sequences = set() # which sets of readings for equate symbols have been covered already?
-        for vu in self.variation_units:
-            # In a first pass, populate a list of substantive readings and a map from reading IDs to the indices of their parent substantive reading in this unit:
-            substantive_reading_ids = []
-            reading_id_to_index = {}
-            for rdg in vu.readings:
-                # If this reading is missing (e.g., lacunose, or inapplicable due to an overlapping variant) or targets another reading, then skip it:
-                if rdg.type in self.missing_reading_types or len(rdg.targets) > 0:
+        covered_singleton_sequences = set() # which singleton sets of individual readings have been covered already?
+        covered_mixed_sequences = set() # which mixed sets of readings have been covered already?
+        # Proceed first for each witness, then for each variation unit:
+        for wit in self.witnesses:
+            wit_id = wit.id
+            for rdg_support in self.readings_by_witness[wit_id]:
+                # Skip any empty sets for missing readings (the '?' symbol is already reserved for these):
+                if len(rdg_support) == 0:
                     continue
-                # If this reading is trivial, then map it to the last substantive index:
-                if rdg.type in self.trivial_reading_types:
-                    reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
+                # For any singleton sets, add them as tuples to the set of singleton reading sequences:
+                if len(rdg_support) == 1:
+                    t = tuple(rdg_support)
+                    covered_singleton_sequences.add(t)
                     continue
-                # Otherwise, the reading is substantive: add it to the map and update the last substantive index:
-                substantive_reading_ids.append(rdg.id)
-                reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
-            # If the number of substantive readings exceeds the current number of base symbols, then update the current number of base symbols:
-            n_base_symbols = max(n_base_symbols, len(substantive_reading_ids))
-            # In a second pass, determine which sequences of target readings (if any) occur in this unit:
-            for rdg in vu.readings:
-                if len(rdg.targets) > 0:
-                    # Get the set of distinct substantive reading indices corresponding to the target reading IDs:
-                    target_reading_indices = set()
-                    for rdg_id in rdg.targets:
-                        if rdg_id in reading_id_to_index:
-                            target_reading_indices.add(reading_id_to_index[rdg_id])
-                    target_readings_tuple = tuple(target_reading_indices)
-                    if target_readings_tuple not in covered_equate_sequences:
-                        covered_equate_sequences.add(target_readings_tuple)
+                # For any mixed sets, add them as tuples to the set of mixed reading sequences:
+                if len(rdg_support) > 1:
+                    t = tuple(rdg_support)
+                    covered_mixed_sequences.add(t)
+                    continue
         missing_symbol = '?'
-        base_symbols = possible_symbols[:n_base_symbols]
-        equate_symbols = {}
-        for i, t in enumerate(covered_equate_sequences):
-            equate_symbol = possible_symbols[n_base_symbols + i]
+        base_symbols = possible_symbols[:len(covered_singleton_sequences)]
+        equate_symbols_by_sequence = {}
+        for i, t in enumerate(covered_mixed_sequences):
+            equate_symbol = possible_symbols[len(covered_singleton_sequences) + i]
             equate_tuple = tuple([possible_symbols[j] for j in t])
-            equate_symbols[equate_symbol] = equate_tuple
-        return missing_symbol, base_symbols, equate_symbols
+            equate_symbols_by_sequence[equate_symbol] = equate_tuple
+        return missing_symbol, base_symbols, equate_symbols_by_sequence
