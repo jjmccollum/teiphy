@@ -211,7 +211,6 @@ class variation_unit():
     """
     def parse(self, xml, verbose):
         # Determine what this element is:
-        print(xml)
         raw_tag = xml.tag.replace("{%s}" % tei_ns, "")
         # If it is an apparatus, then initialize the readings list and process the child elements of the apparatus recursively:
         if raw_tag == "app":
@@ -317,7 +316,7 @@ class collation():
         return
 
     """
-    Given a witness siglum (assumed to be for a manuscript witness), strips of the specified manuscript suffixes 
+    Given a witness siglum, strips of the specified manuscript suffixes 
     until the siglum matches one in the witness list or until no more suffixes can be stripped.
     """
     def get_base_wit(self, wit):
@@ -495,7 +494,7 @@ class collation():
             # Write the number of characters:
             f.write("\tDimensions nchar=%d;\n" % (nchar))
             # Write the labels for characters, with each on its own line:
-            f.write("\tCharLabels\n\t\t%s;\n" % ("\n\t\t".join(taxlabels)))
+            f.write("\tCharLabels\n\t\t%s;\n" % ("\n\t\t".join(charlabels)))
             # Write the format subblock:
             f.write("\tFormat\n\t\tDataType=Standard\n\t\tStatesFormat=Frequency\n\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
             # Write the matrix subblock:
