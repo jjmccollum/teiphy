@@ -20,11 +20,12 @@ Likewise, as noted in the previous section, uncertainty about witnesses' attesta
 
 ## Installation and Dependencies
 
-TBA
+**TBA**
 
 ## Usage
 
-TBA
+The usage and expected input format for this utility are described in what follows.
+Examples are provided to illustrate different concepts.
 
 ### Analysis at Varying Levels of Detail Using Reading Types
 
@@ -168,14 +169,14 @@ Consider the following set of variation units:
         <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
     </rdg>
     <witDetail n="W1/2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-    <witDetail n="Z" type="lac" wit="syrhmg VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
+    <witDetail n="Z" type="lac" wit="VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
 </app>
 <app xml:id="B10K4V28U18-20">
     <lem><w>το</w><w>αγαθον</w></lem>
     <rdg n="1" wit="P46 P49 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678C 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster BasilOfCaesarea Chrysostom ClementOfAlexandria Jerome MariusVictorinus Origen Pelagius Speculum TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
     <rdg n="1-f1" type="defective" cause="aural-confusion" wit="L60"><w>τω</w><w>αγαθων</w></rdg>
     <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="1678* 1991 copsa Tertullian"/>
-    <witDetail n="Z" type="lac" wit="syrhmg VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
+    <witDetail n="Z" type="lac" wit="VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
 </app>
 <app xml:id="B10K4V28U22-24">
     <lem><w>ταις</w><w>χερσιν</w></lem>
@@ -199,7 +200,7 @@ Consider the following set of variation units:
     <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
     <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
     <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum"/>
-    <witDetail n="Z" type="lac" wit="syrhmg VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
+    <witDetail n="Z" type="lac" wit="VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
 </app>
 ```
 
@@ -207,21 +208,63 @@ In the first variation unit, readings `3` and `4` omit one of the phrases covere
 (They are assigned `@xml:id` values so that they can be referenced from these other units.)
 The `witDetail` elements in those units with a `@type` of `overlap` describe the witnesses that attest to no readings there because of their omission in the overlapping unit.
 Likewise, the `witDetail` with a `@type` of `lac` indicates which witnesses are lacunose at each unit.
-Both types of readings can be treated as missing characters for the witnesses that attest to them by specifying
+Both types of readings can be treated as missing characters for the witnesses that attest to them by specifying the following arguments when invoking `convert_tei.py`:
 
 ```
 -m lac -m overlap
 ```
 
-### Correctors' Hands
+### Correctors' Hands 
 
-TBD
+Collation data often distinguishes the first hand responsible for a manuscript from the hands of correctors who introduced changed readings either into the text or into the margin of the same manuscript.
+Some manuscripts include multiple layers of correction, where each corrector can be assumed to have had knowledge of any previous correctors' notes.
+Since the activity of most correctors is sporadic, the average corrector will effectively be a fragmentary witness in the places where he or she is cited in the apparatus.
+But if we wish to assume that each corrector approved of all the readings from the previous hand that he or she did not change, then we can "fill out" each corrector's text using the text of the first hand (for the first corrector) or the filled-out text of the previous corrector (for all subsequent correctors).
+Under this assumption, the placement of the corrector on a phylogenetic tree will be facilitated by the disambiguation of what would otherwise be the corrector's "missing" characters.
 
-### Test Command
+To enable this behavior, you first have to ensure that the desired correctors have their own `witness` elements in the collation `listWit` element and that they have a `@type` value of `corrector`.
+An example for the first hand and the first two correctors of Codex Sinaiticus follows:
 
-(Delete this later?)
+```xml
+<witness n="01"/>
+<witness type="corrector" n="01C1"/>
+<witness type="corrector" n="01C2"/>
+```
 
-To test with example input in verbose mode, enter the command
+Then, when you run the `convert_tei.py` script, make sure that you include the `--fill-correctors` argument.
+
+### Removing First-hand Siglum Suffixes and Merging Multiple Attestations
+
+In some instances, the siglum for a manuscript may have a first-hand suffix added to it when the manuscript was corrected at the unit in question.
+In New Testament textual criticism, the first hand in the presence of correctors is conventionally suffixed with `*`, and the first hand in the presence of an alternative reading or the lemma text in a commentary that evidently supports a different reading is suffixed with `T`.
+Other times, a manuscript might repeat the same text multiple times with different variations, resulting in multiple attestations within the same witness.
+In New Testament textual criticism, this commonly occurs with lectionaries and catena commentaries, and the multiple attestations are indicated by the suffixes `/1`, `/2`, etc.
+The inclusion of these suffixes in the `@wit` attribute of a reading is not strictly in accordance with the TEI Guidelines, but for the sake of convenience, this behavior is supported by this utility.
+
+For the purposes of analysis, we will usually want to strip the first-hand suffixes, leaving just the base siglum for the witness itself.
+In addition, we may wish to merge multiple attestations of a passage in the same witness, effectively treating multiple attestations as ambiguous readings.
+Both can be accomplished using the `-s` argument to `convert_tei.py`.
+If we want to strip first-hand suffixes only, then we can do this via
+
+```
+-t "*" -t "T"
+```
+
+This will ignore multiple attestations (i.e., treat the units where they occur as missing characters for the base witnesses with multiple attestations at those units), unless the sigla with multiple attestation suffixes are included as distinct `witness` elements in the collation's `listWit` element.
+
+If we want to strip first-hand suffixes and merge all multiple attestations, then we can do so via
+
+```
+-t "*" -t "T" -t "/1" -t "/2" -t "/3"
+```
+
+assuming that there are at most three multiple attestations in any unit. 
+
+### Other Options
+
+If you wish to include status messages for the purposes of measuring performance or validating your collation, you can include the `--verbose` flag when you invoke `convert_tei.py`.
+
+To run this script with the example input in verbose mode with all of the settings described above enabled, enter the command
 
 ```
 python py\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s * -s T -s /1 -s /2 -s /3 --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
