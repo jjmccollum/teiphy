@@ -41,21 +41,19 @@ class reading():
     """
     def __init__(self, xml, verbose=False):
         # If it has a type, then save that; otherwise, default to "substantive":
-        self.type = xml.get("type") if xml.get("type") is not None else "substantive"
+        self.type = ""
         # Serialize its contents:
-        self.text = self.serialize(xml)
+        self.text = ""
         # Use its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
         self.id = ""
-        if xml.get("{%s}id" % xml_ns) is not None:
-            self.id = xml.get("{%s}id" % xml_ns)
-        elif xml.get("n") is not None:
-            self.id = xml.get("n")
-        else:
-            self.id = xml.text
-        # Save a list of the targets in its target attribute (stripping any "#" prefixes), split over spaces:
-        self.targets = [t.strip("#") for t in xml.get("target").split()] if xml.get("target") is not None else []
-        # Save a list of the entries in its wit attribute (stripping any "#" prefixes), split over spaces:
-        self.wits = [w.strip("#") for w in xml.get("wit").split()] if xml.get("wit") is not None else []
+        # Initialize a list of the targets in its target attribute (stripping any "#" prefixes), split over spaces:
+        self.targets = []
+        # Initialize a dictionary mapping target readings to their certainty values:
+        self.certainties = {}
+        # Initialize a list of the entries in its wit attribute (stripping any "#" prefixes), split over spaces:
+        self.wits = []
+        # Now populate all of these values:
+        self.parse(xml, verbose)
         if verbose:
             if len(self.wits) == 0:
                 if self.text != "":
@@ -69,35 +67,114 @@ class reading():
                     print("New reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
 
     """
-    Given an XML element, recursively serializes it in a more readable format.
+    Given an XML element, recursively parses it and its subelements.
     """
-    def serialize(self, xml):
+    def parse(self, xml, verbose=False):
         # Determine what this element is:
         raw_tag = xml.tag.replace("{%s}" % tei_ns, "")
-        # If it is a reading, then serialize its children, separated by spaces:
+        # If it is a reading, then copy its witnesses, and recursively process its children:
         if raw_tag == "rdg":
-            text = "" if xml.text is None else xml.text
-            text += " ".join([self.serialize(child) for child in xml])
-            return text
-        # If it is a word, abbreviation, or overline-rendered element, then serialize its text and tail, 
+            # If it has a type, then save that; otherwise, default to "substantive":
+            self.type = xml.get("type") if xml.get("type") is not None else "substantive"
+            # Populate its list of the entries in its wit attribute (stripping any "#" prefixes), split over spaces:
+            self.wits = [w.strip("#") for w in xml.get("wit").split()] if xml.get("wit") is not None else []
+            # Populate its text recursively using its children:
+            self.text = "" if xml.text is None else xml.text
+            for child in xml:
+                self.parse(child, verbose)
+            # Strip any surrounding whitespace left over from spaces added between word elements:
+            self.text = self.text.strip()
+            # Populate its ID, using its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
+            self.id = ""
+            if xml.get("{%s}id" % xml_ns) is not None:
+                self.id = xml.get("{%s}id" % xml_ns)
+            elif xml.get("n") is not None:
+                self.id = xml.get("n")
+            else:
+                self.id = xml.text
+            return
+        # If it is a witness detail (e.g., an ambiguous reading), then copy its target readings and witnesses, and recursively process its children:
+        if raw_tag == "witDetail":
+            # If it has a type, then save that; otherwise, default to "substantive":
+            self.type = xml.get("type") if xml.get("type") is not None else "substantive"
+            # Populate its list of target reading IDs in its target attribute (stripping any "#" prefixes), split over spaces:
+            self.targets = [t.strip("#") for t in xml.get("target").split()] if xml.get("target") is not None else []
+            # Populate its list of the entries in its wit attribute (stripping any "#" prefixes), split over spaces:
+            self.wits = [w.strip("#") for w in xml.get("wit").split()] if xml.get("wit") is not None else []
+            # Populate its certainties map and text recursively using its children:
+            self.certainties = {}
+            for t in self.targets:
+                self.certainties[t] = 0
+            self.text = xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+            # Normalize its certainties map:
+            norm = sum(self.certainties.values())
+            if norm == 0:
+                # If the norm is zero, then presumably no certainty elements were included under this element;
+                # just set the value for each target to 1 and normalize as usual:
+                for t in self.targets:
+                    self.certainties[t] = 1
+                    norm += 1
+            if norm > 0:
+                for t in self.certainties:
+                    self.certainties[t] = self.certainties[t]/norm
+            # Strip any surrounding whitespace left over from spaces added between word elements:
+            self.text = self.text.strip()
+            # Populate its ID, using its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
+            self.id = ""
+            if xml.get("{%s}id" % xml_ns) is not None:
+                self.id = xml.get("{%s}id" % xml_ns)
+            elif xml.get("n") is not None:
+                self.id = xml.get("n")
+            else:
+                self.id = xml.text
+            return
+        # If it is a certainty measurement, then store its value in this reading's certainties map
+        # (overwriting any previous values for this reading in the map, since they shouldn't be specified more than once):
+        if raw_tag == "certainty":
+            # Get its target reading IDs (stripping any "#" prefixes):
+            targets = [t.strip("#") for t in xml.get("target").split()] if xml.get("target") is not None else []
+            # Now set the entry for each target reading to that degree;
+            # if no degree is specified, then assume that all targets are equally likely and assign them all a value of 1 (we will normalize at the end):
+            degree = float(xml.get("degree")) if xml.get("degree") is not None else 1
+            for t in targets:
+                self.certainties[t] = degree
+            return
+        # If it is a word, then serialize its text and tail, 
+        # recursively processing any subelements,
+        # and add a space after it:
+        if raw_tag == "w":
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+            self.text += xml.tail if xml.tail is not None else ""
+            self.text += " "
+            return
+        # If it is an abbreviation, then serialize its text and tail, 
         # recursively processing any subelements:
-        if raw_tag in ["w", "abbr"]:
-            text = "" if xml.text is None else xml.text
-            text += "".join([self.serialize(child) for child in xml])
-            text += "" if xml.tail is None else xml.tail
-            return text
+        if raw_tag == "abbr":
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+            self.text += xml.tail if xml.tail is not None else ""
+            return
         # If it is an overline-rendered element, then add an overline to each character in its contents:
         if raw_tag == "hi":
-            text = ""
-            text += "" if xml.text is None else xml.text
-            text += " ".join([self.serialize(child) for child in xml])
+            # Keep track of how long the text currently is, so we can modify just the portion we're about to add:
+            starting_ind = len(self.text)
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
             # NOTE: other rendering types could be supported here
             if xml.get("rend") is not None:
+                old_text = self.text[starting_ind:]
                 rend = xml.get("rend")
                 if rend == "overline":
-                    text = "".join([c + "\u0305" for c in text])
-            text += "" if xml.tail is None else xml.tail
-            return text
+                    new_text = "".join([c + "\u0305" for c in old_text])
+                    self.text = self.text[:starting_ind] + new_text
+            self.text += xml.tail if xml.tail is not None else ""
+            return
         # If it is a space, then serialize as a single space:
         if raw_tag == "space":
             text = "["
@@ -115,17 +192,18 @@ class reading():
                 reason = xml.get("reason")
                 text += "(" + reason + ")"
             text += "]"
-            text += "" if xml.tail is None else xml.tail
-            return text
+            text += xml.tail if xml.tail is not None else ""
+            self.text += text
+            return
         # If it is an expansion, then serialize it in parentheses:
         if raw_tag == "ex":
-            text = ""
-            text += "("
-            text += "" if xml.text is None else xml.text
-            text += " ".join([self.serialize(child) for child in xml])
-            text += ")"
-            text += "" if xml.tail is None else xml.tail
-            return text
+            self.text += "("
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+            self.text += ")"
+            self.text += xml.tail if xml.tail is not None else ""
+            return
         # If it is a gap, then serialize it based on its attributes:
         if raw_tag == "gap":
             text = ""
@@ -143,44 +221,50 @@ class reading():
                 reason = xml.get("reason")
                 text += "(" + reason + ")"
             text += "]"
-            text += "" if xml.tail is None else xml.tail
-            return text
+            text += xml.tail if xml.tail is not None else ""
+            self.text += text
+            return
         # If it is a supplied element, then recursively set the contents in brackets:
         if raw_tag == "supplied":
-            text = ""
-            text += "["
-            text += "" if xml.text is None else xml.text
-            text += " ".join([self.serialize(child) for child in xml])
-            text += "]"
-            text += "" if xml.tail is None else xml.tail
-            return text
+            self.text += "["
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+            self.text += "]"
+            self.text += xml.tail if xml.tail is not None else ""
+            return
         # If it is an unclear element, then add an underdot to each character in its contents:
         if raw_tag == "unclear":
-            text = ""
-            text += "" if xml.text is None else xml.text
-            text += " ".join([self.serialize(child) for child in xml])
-            text = "".join([c + "\u0323" for c in text])
-            text += "" if xml.tail is None else xml.tail
-            return text
+            # Keep track of how long the text currently is, so we can modify just the portion we're about to add:
+            starting_ind = len(self.text)
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+            old_text = self.text[starting_ind:]
+            new_text = "".join([c + "\u0323" for c in old_text])
+            self.text = self.text[:starting_ind] + new_text
+            self.text += xml.tail if xml.tail is not None else ""
+            return
         # If it is a choice element, then recursively set the contents in brackets, separated by slashes:
         if raw_tag == "choice":
-            text = ""
-            text += "["
-            text += "" if xml.text is None else xml.text
-            text += "/".join([self.serialize(child) for child in xml])
-            text += "]"
-            text += "" if xml.tail is None else xml.tail
-            return text
+            self.text += "["
+            self.text += xml.text if xml.text is not None else ""
+            for child in xml:
+                self.parse(child, verbose)
+                self.text = self.text.strip() + "/" # add a slash between each possibility
+            self.text.strip("/") # remove the last one we added
+            self.text += "]"
+            self.text += xml.tail if xml.tail is not None else ""
+            return
         # If it is a ref element, then set its text in brackets:
         if raw_tag == "ref":
-            text = ""
-            text += "["
-            text += "" if xml.text is None else xml.text
-            text += "]"
-            text += "" if xml.tail is None else xml.tail
-            return text
-        # For all other elements, return an empty string:
-        return ""
+            self.text += "<"
+            self.text += xml.text if xml.text is not None else ""
+            self.text += ">"
+            self.text += xml.tail if xml.tail is not None else ""
+            return
+        # Skip all other elements:
+        return
 
 """
 Base class for storing TEI XML variation unit data internally.
@@ -378,11 +462,10 @@ class collation():
             # If this reading is trivial, then it will contain an entry for the index of its parent substantive reading:
             if rdg.type in self.trivial_reading_types:
                 rdg_support[reading_id_to_index[rdg.id]] += 1
-            # Otherwise, if this reading has one or more target readings, then add an entry for the index of each of those readings:
-            elif len(rdg.targets) > 0:
-                for t in rdg.targets:
-                    # TODO: If the reading has certainty values assigned to these values, then use these rather than 1
-                    rdg_support[reading_id_to_index[t]] += 1
+            # Otherwise, if this reading has one or more target readings, then add an entry for each of those readings according to their certainty in this reading:
+            elif len(rdg.certainties) > 0:
+                for t in rdg.certainties:
+                    rdg_support[reading_id_to_index[t]] += rdg.certainties[t]
             # Otherwise, this reading is itself substantive; add an entry for the index of this reading:
             else:
                 rdg_support[reading_id_to_index[rdg.id]] += 1

@@ -674,7 +674,7 @@
                 <rdg n="2" wit="01* 01C2b 03 025 0159 61 69 81 218 326 442 462 1175 1241 1678 1837 1912 1918 1939 1963 1996 1999 2012 2344* 2400* 2576 L60 L169 L1440 VL61 VL78 VL86 VL89 copsa copbo Ambrosiaster MariusVictorinus Speculum"><w>ηγαπησεν</w><w>υμας</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="02"><w><supplied reason="lacuna">ηγα</supplied><unclear>π</unclear>ησεν</w><w>υμας</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="P49"><w>ηγαπησ<unclear>ε</unclear><gap unit="word" extent="part" reason="lacuna"/></w><w><gap unit="word" extent="part" reason="lacuna"/>ας</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" cause="commentary" wit="ClementOfAlexandria"><certainty target="#B10K5V2U18-20R1" locus="value" degree="0.5000"/><certainty target="#B10K5V2U18-20R2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" cause="commentary" wit="ClementOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
                 <rdg n="Z" type="lac" wit="syrhmg VL85 P92 P132 04 016 048 075S 082 0230 0285 0320 203S 1942 2834 2865S L1126 Origen Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V2U28-40">
