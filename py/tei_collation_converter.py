@@ -334,6 +334,7 @@ class variation_unit():
             if len(witDetail.targets) == 0 and len(self.readings) > 0:
                 previous_rdg = self.readings[-1]
                 witDetail.targets.append(previous_rdg.id)
+                witDetail.certainties[previous_rdg.id] = 1
             self.readings.append(witDetail)
             return
 
