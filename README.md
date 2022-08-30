@@ -144,6 +144,8 @@ So the following more compact format is also supported, even if it is not strict
 
 The only condition is that you must use these attributes consistently: if you label a `rdg` element with an `@xml:id` attribute, then you must reference that attribute's value in the `witDetail` and `certainty` elements; otherwise, you must use and reference the `@n` attribute.
 
+For NEXUS output, the character states for each witness will be encoded using `StatesFormat=Frequency`, meaning that each non-missing character will be encoded as a vector of frequencies for each reading/state.
+
 ### Lacunae and Other Missing Data
 
 In the interest of accounting for all witnesses, a collation might include placeholder `rdg` or `witDetail` elements for witnesses that are entirely lacunose, illegible, or otherwise unavailable (e.g., due to missing images or irrelevance due to a different reading in an overlapping passage) at each point of variation.
@@ -208,7 +210,7 @@ In the first variation unit, readings `3` and `4` omit one of the phrases covere
 (They are assigned `@xml:id` values so that they can be referenced from these other units.)
 The `witDetail` elements in those units with a `@type` of `overlap` describe the witnesses that attest to no readings there because of their omission in the overlapping unit.
 Likewise, the `witDetail` with a `@type` of `lac` indicates which witnesses are lacunose at each unit.
-Both types of readings can be treated as missing characters for the witnesses that attest to them by specifying the following arguments when invoking `convert_tei.py`:
+Both types of readings can be treated as missing characters (which is the default of `?` for NEXUS output) for the witnesses that attest to them by specifying the following arguments when invoking `convert_tei.py`:
 
 ```
 -m lac -m overlap
@@ -267,5 +269,5 @@ If you wish to include status messages for the purposes of measuring performance
 To run this script with the example input in verbose mode with all of the settings described above enabled, enter the command
 
 ```
-python py\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s * -s T -s /1 -s /2 -s /3 --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+python py\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -t "*" -t "T" -t "/1" -t "/2" -t "/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 ```
