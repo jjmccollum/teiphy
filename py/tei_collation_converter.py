@@ -13,7 +13,7 @@ tei_ns = "http://www.tei-c.org/ns/1.0"
 """
 Base class for storing TEI XML witness data internally.
 """
-class witness():
+class Witness():
     """
     Constructs a new witness instance from the TEI XML input.
     """
@@ -29,13 +29,13 @@ class witness():
         else:
             self.id = xml.text
         if verbose:
-            print("New witness %s with type %s" % (self.id, self.type))
+            print("New Witness %s with type %s" % (self.id, self.type))
 
 """
 Base class for storing TEI XML reading data internally.
 This can correspond to a <lem>, <rdg>, or <witDetail> element in the collation.
 """
-class reading():
+class Reading():
     """
     Constructs a new reading instance from the TEI XML input.
     """
@@ -57,14 +57,14 @@ class reading():
         if verbose:
             if len(self.wits) == 0:
                 if self.text != "":
-                    print("New reading %s with type %s, no witnesses, and text %s" % (self.id, self.type, self.text))
+                    print("New Reading %s with type %s, no witnesses, and text %s" % (self.id, self.type, self.text))
                 else:
-                    print("New reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
+                    print("New Reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
             else:
                 if self.text != "":
-                    print("New reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
+                    print("New Reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
                 else:
-                    print("New reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
+                    print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
 
     """
     Given an XML element, recursively parses it and its subelements.
@@ -269,9 +269,9 @@ class reading():
 """
 Base class for storing TEI XML variation unit data internally.
 """
-class variation_unit():
+class VariationUnit():
     """
-    Constructs a new variation_unit instance from the TEI XML input.
+    Constructs a new VariationUnit instance from the TEI XML input.
     """
     def __init__(self, xml, verbose=False):
         # If it has a type, then save that; otherwise, default to "substantive":
@@ -287,7 +287,7 @@ class variation_unit():
         # Now parse the XML <app> element to populate these data structures:
         self.parse(xml, verbose)
         if verbose:
-            print("New variation_unit %s of type %s with %d readings" % (self.id, self.type, len(self.readings)))
+            print("New VariationUnit %s of type %s with %d readings" % (self.id, self.type, len(self.readings)))
 
     """
     Given an XML element, recursively parses its subelements for readings and reading groups.
@@ -309,7 +309,7 @@ class variation_unit():
             for child in xml:
                 child_raw_tag = child.tag.replace("{%s}" % tei_ns, "")
                 if child_raw_tag in ["lem", "rdg"]: # any <lem> element in a <rdgGrp> can be assumed not to be a duplicate of a <rdg> element, as there should be only one <lem> at all levels under an <app> element
-                    rdg = reading(child, verbose)
+                    rdg = Reading(child, verbose)
                     if rdg.type is not None:
                         rdg.type = reading_group_type
                     self.readings.append(rdg)
@@ -320,17 +320,17 @@ class variation_unit():
         # otherwise, assume its reading is duplicated in a <rdg> element and skip it:
         if raw_tag == "lem":
             if xml.get("wit") is not None:
-                lem = reading(xml, verbose)
+                lem = Reading(xml, verbose)
                 self.readings.append(lem)
             return
         # If it is a reading, then add it as a reading:
         elif raw_tag == "rdg":
-            rdg = reading(xml, verbose)
+            rdg = Reading(xml, verbose)
             self.readings.append(rdg)
             return
         # If it is a witness detail, then add it as a reading, and if it does not have any targeted readings, then add a target for the previous reading (per the TEI Guidelines §12.1.4.1):
         elif raw_tag == "witDetail":
-            witDetail = reading(xml, verbose)
+            witDetail = Reading(xml, verbose)
             if len(witDetail.targets) == 0 and len(self.readings) > 0:
                 previous_rdg = self.readings[-1]
                 witDetail.targets.append(previous_rdg.id)
@@ -341,9 +341,9 @@ class variation_unit():
 """
 Base class for storing TEI XML collation data internally.
 """
-class collation():
+class Collation():
     """
-    Constructs a new collation instance with the given settings.
+    Constructs a new Collation instance with the given settings.
     """
     def __init__(self, xml, manuscript_suffixes=[], trivial_reading_types=[], missing_reading_types=[], fill_corrector_lacunae=False, verbose=False):
         self.manuscript_suffixes = manuscript_suffixes # list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses
@@ -353,9 +353,9 @@ class collation():
         self.verbose = verbose # flag indicating whether or not to print timing and debugging details for the user
         self.witnesses = [] # a list of witness instances
         self.witness_index_by_id = {} # a dictionary mapping base witness IDs to their indices in the above list
-        self.variation_units = [] # a list of variation_unit instances
+        self.variation_units = [] # a list of VariationUnit instances
         self.readings_by_witness = {} # a dictionary mapping base witness IDs to a list of reading support sets for all units (with at least two substantive readings)
-        self.substantive_variation_unit_ids = [] # a list of IDs for variation units with two or more substantive readings
+        self.substantive_VariationUnit_ids = [] # a list of IDs for variation units with two or more substantive readings
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
@@ -377,7 +377,7 @@ class collation():
         self.witnesses = []
         self.witness_index_by_id = {}
         for w in xml.xpath("/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listWit/tei:witness", namespaces={"tei": tei_ns}):
-            wit = witness(w, verbose)
+            wit = Witness(w, self.verbose)
             self.witness_index_by_id[wit.id] = len(self.witnesses)
             self.witnesses.append(wit)
         t1 = time.time()
@@ -393,7 +393,7 @@ class collation():
             print("Parsing variation units...")
         t0 = time.time()
         for a in xml.xpath('//tei:app', namespaces={'tei': tei_ns}):
-            vu = variation_unit(a, verbose)
+            vu = VariationUnit(a, self.verbose)
             self.variation_units.append(vu)
         t1 = time.time()
         if self.verbose:
@@ -499,20 +499,20 @@ class collation():
     Populates the internal dictionary mapping witness IDs to a list of their reading support sets for all variation units,
     and then fills the empty reading support sets for witnesses of type "corrector" with the entries of the previous witness.
     """
-    def parse_readings_by_witness(self, verbose=False):
+    def parse_readings_by_witness(self):
         if self.verbose:
             print("Populating internal dictionary of witness readings...")
         t0 = time.time()
         # Initialize the data structures to be populated here:
         self.readings_by_witness = {}
-        self.substantive_variation_unit_ids = []
+        self.substantive_VariationUnit_ids = []
         for wit in self.witnesses:
             self.readings_by_witness[wit.id] = []
         # Populate them for each variation unit:
         for vu in self.variation_units:
-            readings_by_witness_for_unit = self.get_readings_by_witness_for_unit(vu, verbose)
+            readings_by_witness_for_unit = self.get_readings_by_witness_for_unit(vu)
             if len(readings_by_witness_for_unit) > 0:
-                self.substantive_variation_unit_ids.append(vu.id)
+                self.substantive_VariationUnit_ids.append(vu.id)
             for wit in readings_by_witness_for_unit:
                 self.readings_by_witness[wit].append(readings_by_witness_for_unit[wit])
         # Optionally, fill the lacunae of the correctors:
@@ -531,8 +531,8 @@ class collation():
                     if sum(self.readings_by_witness[wit.id][j]) == 0:
                         self.readings_by_witness[wit.id][j] = self.readings_by_witness[prev_wit.id][j]
         t1 = time.time()
-        if verbose:
-            print("Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs." % (len(self.witnesses), len(self.substantive_variation_unit_ids), t1 - t0))
+        if self.verbose:
+            print("Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs." % (len(self.witnesses), len(self.substantive_VariationUnit_ids), t1 - t0))
         return
 
     """
@@ -559,7 +559,7 @@ class collation():
         ntax = len(self.witnesses)
         nchar = len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0 # if the number of taxa is 0, then the number of characters is irrelevant
         taxlabels = [wit.id for wit in self.witnesses]
-        charlabels = self.substantive_variation_unit_ids
+        charlabels = self.substantive_VariationUnit_ids
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
         with open(file_addr, "w", encoding="utf-8") as f:

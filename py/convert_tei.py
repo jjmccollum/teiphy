@@ -3,7 +3,7 @@
 import argparse # for parsing command-line arguments
 from lxml import etree as et # for reading TEI XML inputs
 
-from tei_collation_converter import collation
+from tei_collation_converter import Collation
 
 """
 Entry point to the script. Parses command-line arguments and calls the core functions.
@@ -44,7 +44,7 @@ def main():
         print("Error opening output file: Currently, the only supported output format is NEXUS (.nex, .nxs). Make sure the output file is of this type.")
         exit(1)
     # Initialize the internal representation of the collation:
-    coll = collation(xml, manuscript_suffixes, trivial_reading_types, missing_reading_types, fill_corrector_lacunae, verbose)
+    coll = Collation(xml, manuscript_suffixes, trivial_reading_types, missing_reading_types, fill_corrector_lacunae, verbose)
     if output_addr.endswith(".nex") or output_addr.endswith(".nxs"):
         coll.to_nexus(output_addr)
     exit(0)
