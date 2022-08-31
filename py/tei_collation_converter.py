@@ -360,9 +360,9 @@ class collation():
         if self.verbose:
             print("Initializing collation...")
         t0 = time.time()
-        self.parse_list_wit(xml, verbose)
-        self.parse_apps(xml, verbose)
-        self.parse_readings_by_witness(verbose)
+        self.parse_list_wit(xml)
+        self.parse_apps(xml)
+        self.parse_readings_by_witness()
         t1 = time.time()
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
@@ -370,7 +370,7 @@ class collation():
     """
     Given an XML tree for a collation, populates its list of witnesses from its <listWit> element.
     """
-    def parse_list_wit(self, xml, verbose=False):
+    def parse_list_wit(self, xml):
         if self.verbose:
             print("Parsing witness list...")
         t0 = time.time()
@@ -381,14 +381,14 @@ class collation():
             self.witness_index_by_id[wit.id] = len(self.witnesses)
             self.witnesses.append(wit)
         t1 = time.time()
-        if verbose:
+        if self.verbose:
             print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
         return
 
     """
     Given an XML tree for a collation, populates its list of variation units from its <app> elements.
     """
-    def parse_apps(self, xml, verbose=False):
+    def parse_apps(self, xml):
         if self.verbose:
             print("Parsing variation units...")
         t0 = time.time()
@@ -396,7 +396,7 @@ class collation():
             vu = variation_unit(a, verbose)
             self.variation_units.append(vu)
         t1 = time.time()
-        if verbose:
+        if self.verbose:
             print("Finished processing %d variation units in %0.4fs." % (len(self.variation_units), t1 - t0))
         return
 
@@ -428,7 +428,7 @@ class collation():
     """
     Returns a dictionary mapping witness IDs to a set of their readings for a given variation unit.
     """
-    def get_readings_by_witness_for_unit(self, vu, verbose=False):
+    def get_readings_by_witness_for_unit(self, vu):
         # In a first pass, populate a list of substantive readings and a map from reading IDs to the indices of their parent substantive reading in this unit:
         substantive_reading_ids = []
         reading_id_to_index = {}
@@ -477,7 +477,7 @@ class collation():
                 if base_wit not in self.witness_index_by_id:
                     # If it is not, then it is probably just because we've encountered a corrector or some other secondary witness not included in the witness list;
                     # report this if we're in verbose mode and move on:
-                    if verbose:
+                    if self.verbose:
                         print("Skipping unknown witness siglum %s (base siglum %s) in variation unit %s, reading %s..." % (wit, base_wit, vu.id, rdg.id))
                     continue
                 # If we've found a base siglum, then add this reading's contribution to the base witness's reading set for this unit;
