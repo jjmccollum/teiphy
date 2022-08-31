@@ -1,4 +1,4 @@
-# tei-collation-converter
+# teiphy
 General-purpose Python utility for converting TEI XML collations to NEXUS and other formats.
 
 ## About This Project

@@ -3,7 +3,7 @@
 import argparse # for parsing command-line arguments
 from lxml import etree as et # for reading TEI XML inputs
 
-from tei_collation_converter import Collation
+from teiphy import Collation
 
 """
 Entry point to the script. Parses command-line arguments and calls the core functions.

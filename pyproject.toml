@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "tei-collation-converter"
+name = "teiphy"
 version = "0.1.0"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
