@@ -354,11 +354,15 @@ class VariationUnit():
             rdg = Reading(xml, verbose)
             self.readings.append(rdg)
             return
-        # If it is a witness detail, then add it as a reading, and if it does not have any targeted readings, then add a target for the previous reading (per the TEI Guidelines §12.1.4.1):
+        # If it is a witness detail, then add it as a reading, and if it does not have any targeted readings, then add a target for the previous rdg element (per the TEI Guidelines §12.1.4.1):
         elif raw_tag == "witDetail":
             witDetail = Reading(xml, verbose)
             if len(witDetail.targets) == 0 and len(self.readings) > 0:
-                previous_rdg = self.readings[-1]
+                previous_rdg_ind = -1
+                previous_rdg = self.readings[previous_rdg_ind]
+                while len(previous_rdg.targets) > 0:
+                    previous_rdg_ind -= 1
+                    previous_rdg = self.readings[previous_rdg_ind]
                 witDetail.targets.append(previous_rdg.id)
                 witDetail.certainties[previous_rdg.id] = 1
             self.readings.append(witDetail)
@@ -502,6 +506,9 @@ class Collation():
             if rdg.type in self.trivial_reading_types:
                 reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
                 continue
+            # If this reading has one or more target readings, then skip it (it will be mapped to its target readings):
+            if len(rdg.certainties) > 0:
+                continue
             # Otherwise, the reading is substantive: add it to the map and update the last substantive index:
             substantive_reading_ids.append(rdg.id)
             reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
@@ -523,12 +530,14 @@ class Collation():
             if rdg.type in self.missing_reading_types:
                 continue
             # If this reading is trivial, then it will contain an entry for the index of its parent substantive reading:
-            if rdg.type in self.trivial_reading_types:
+            elif rdg.type in self.trivial_reading_types:
                 rdg_support[reading_id_to_index[rdg.id]] += 1
-            # Otherwise, if this reading has one or more target readings, then add an entry for each of those readings according to their certainty in this reading:
+            # If this reading has one or more target readings, then add an entry for each of those readings according to their certainty in this reading:
             elif len(rdg.certainties) > 0:
                 for t in rdg.certainties:
-                    rdg_support[reading_id_to_index[t]] += rdg.certainties[t]
+                    # For overlaps, the target may be to a reading not included in this unit, so skip it if its ID is unrecognized:
+                    if t in reading_id_to_index:
+                        rdg_support[reading_id_to_index[t]] += rdg.certainties[t]
             # Otherwise, this reading is itself substantive; add an entry for the index of this reading:
             else:
                 rdg_support[reading_id_to_index[rdg.id]] += 1
