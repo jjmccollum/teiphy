@@ -309,7 +309,7 @@ class VariationUnit():
         # Now parse the app element to populate these data structures:
         self.parse(xml, verbose)
         if verbose:
-            print("New VariationUnit %s of type %s with %d readings" % (self.id, self.type, len(self.readings)))
+            print("New VariationUnit %s with %d readings" % (self.id, len(self.readings)))
 
     def parse(self, xml, verbose=False):
         """Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.
