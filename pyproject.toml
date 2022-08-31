@@ -3,7 +3,7 @@ name = "tei-collation-converter"
 version = "0.1.0"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
-license = "Apache 2.0"
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
