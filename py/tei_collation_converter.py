@@ -10,14 +10,22 @@ XML namespaces
 xml_ns = "http://www.w3.org/XML/1998/namespace"
 tei_ns = "http://www.tei-c.org/ns/1.0"
 
-"""
-Base class for storing TEI XML witness data internally.
-"""
 class Witness():
-    """
-    Constructs a new witness instance from the TEI XML input.
+    """Base class for storing TEI XML witness data internally.
+    
+    This corresponds to a witness element in the collation.
+
+    Attributes:
+        id: The ID string of this reading, which should be unique within its parent app element.
+        type: A string representing the type of witness. Examples include "corrector", "version", and "father".
     """
     def __init__(self, xml, verbose=False):
+        """Constructs a new Witness instance from the TEI XML input.
+
+        Args:
+            xml: An lxml.etree.Element representing a witness element.
+            verbose: An optional boolean flag indicating whether or not to print status updates.
+        """
         # If it has a type, then save that; otherwise, default to "manuscript":
         self.type = xml.get("type") if xml.get("type") is not None else "manuscript"
         # Use its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
@@ -31,28 +39,33 @@ class Witness():
         if verbose:
             print("New Witness %s with type %s" % (self.id, self.type))
 
-"""
-Base class for storing TEI XML reading data internally.
-This can correspond to a <lem>, <rdg>, or <witDetail> element in the collation.
-"""
 class Reading():
-    """
-    Constructs a new reading instance from the TEI XML input.
+    """Base class for storing TEI XML reading data internally.
+    
+    This can correspond to a lem, rdg, or witDetail element in the collation.
+
+    Attributes:
+        id: The ID string of this reading, which should be unique within its parent app element.
+        type: A string representing the type of reading. Examples include "reconstructed", "defective", "orthographic", "subreading", "ambiguous", "overlap", and "lac". The default value is "substantive".
+        text: Serialization of the contents of this element.
+        wits: A list of sigla referring to witnesses that support this reading.
+        targets: A list of other reading ID strings to which this reading corresponds. For substantive readings, this should be empty. For ambiguous readings, it should contain references to the readings that might correspond to this one. For overlap readings, it should contain a reference to the reading from the overlapping variation unit responsible for the overlap. 
+        certainties: A dictionary mapping target reading IDs to floating-point certainty values.
     """
     def __init__(self, xml, verbose=False):
-        # If it has a type, then save that; otherwise, default to "substantive":
+        """Constructs a new Reading instance from the TEI XML input.
+
+        Args:
+            xml: An lxml.etree.Element representing a lem, rdg, or witDetail element.
+            verbose: An optional boolean flag indicating whether or not to print status updates.
+        """
         self.type = ""
-        # Serialize its contents:
         self.text = ""
-        # Use its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
         self.id = ""
-        # Initialize a list of the targets in its target attribute (stripping any "#" prefixes), split over spaces:
         self.targets = []
-        # Initialize a dictionary mapping target readings to their certainty values:
         self.certainties = {}
-        # Initialize a list of the entries in its wit attribute (stripping any "#" prefixes), split over spaces:
         self.wits = []
-        # Now populate all of these values:
+        # Populate all attributes:
         self.parse(xml, verbose)
         if verbose:
             if len(self.wits) == 0:
@@ -66,10 +79,13 @@ class Reading():
                 else:
                     print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
 
-    """
-    Given an XML element, recursively parses it and its subelements.
-    """
     def parse(self, xml, verbose=False):
+        """Given an XML element, recursively parses it and its subelements.
+
+        Args:
+            xml: An lxml.etree.Element representing a lem, rdg, or witDetail element.
+            verbose: An optional boolean flag indicating whether or not to print status updates.
+        """
         # Determine what this element is:
         raw_tag = xml.tag.replace("{%s}" % tei_ns, "")
         # If it is a reading, then copy its witnesses, and recursively process its children:
@@ -266,16 +282,22 @@ class Reading():
         # Skip all other elements:
         return
 
-"""
-Base class for storing TEI XML variation unit data internally.
-"""
 class VariationUnit():
-    """
-    Constructs a new VariationUnit instance from the TEI XML input.
+    """Base class for storing TEI XML variation unit data internally.
+    
+    This corresponds to an app element in the collation.
+
+    Attributes:
+        id: The ID string of this variation unit, which should be unique.
+        readings: A list of Readings contained in this VariationUnit.
     """
     def __init__(self, xml, verbose=False):
-        # If it has a type, then save that; otherwise, default to "substantive":
-        self.type = xml.get("type") if xml.get("type") is not None else "substantive"
+        """Constructs a new VariationUnit instance from the TEI XML input.
+
+        Args:
+            xml: An lxml.etree.Element representing an app element.
+            verbose: An optional boolean flag indicating whether or not to print status updates.
+        """
         # Use its xml:id if it has one; otherwise, use its n attribute if it has one:
         self.id = ""
         if xml.get("{%s}id" % xml_ns) is not None:
@@ -284,16 +306,20 @@ class VariationUnit():
             self.id = xml.get("n")
         # Initialize its list of readings:
         self.readings = []
-        # Now parse the XML <app> element to populate these data structures:
+        # Now parse the app element to populate these data structures:
         self.parse(xml, verbose)
         if verbose:
             print("New VariationUnit %s of type %s with %d readings" % (self.id, self.type, len(self.readings)))
 
-    """
-    Given an XML element, recursively parses its subelements for readings and reading groups.
-    Other children of <app> elements, such as <note>, <noteGrp>, and <wit> elements, are ignored.
-    """
-    def parse(self, xml, verbose):
+    def parse(self, xml, verbose=False):
+        """Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.
+        
+        Other children of app elements, such as note, noteGrp, and wit elements, are ignored.
+
+        Args:
+            xml: An lxml.etree.Element representing an app element.
+            verbose: An optional boolean flag indicating whether or not to print status updates.
+        """
         # Determine what this element is:
         raw_tag = xml.tag.replace("{%s}" % tei_ns, "")
         # If it is an apparatus, then initialize the readings list and process the child elements of the apparatus recursively:
@@ -342,20 +368,46 @@ class VariationUnit():
 Base class for storing TEI XML collation data internally.
 """
 class Collation():
+    """Base class for storing TEI XML collation data internally.
+    
+    This corresponds to the entire XML tree, rooted at the TEI element of the collation.
+
+    Attributes:
+        manuscript_suffixes: A list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses.
+        trivial_reading_types: A set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
+        missing_reading_types: A set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
+        fill_corrector_lacunae: A boolean flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+        witnesses: A list of Witness instances contained in this Collation.
+        witness_index_by_id: A dictionary mapping base witness ID strings to their int indices in the witnesses list.
+        variation_units: A list of VariationUnit instances contained in this Collation.
+        readings_by_witness: # A dictionary mapping base witness ID strings lists of reading support coefficients for all units (with at least two substantive readings).
+        substantive_variation_unit_ids: # A list of ID strings for variation units with two or more substantive readings.
+        verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
+    """
     """
     Constructs a new Collation instance with the given settings.
     """
     def __init__(self, xml, manuscript_suffixes=[], trivial_reading_types=[], missing_reading_types=[], fill_corrector_lacunae=False, verbose=False):
-        self.manuscript_suffixes = manuscript_suffixes # list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses
-        self.trivial_reading_types = set(trivial_reading_types) # set of reading types (e.g., defective, orthographic, subreading) whose readings should be collapsed under the previous substantive reading
-        self.missing_reading_types = set(missing_reading_types) # set of reading types (e.g., lacunose, overlap) whose readings should be treated as missing data
-        self.fill_corrector_lacunae = fill_corrector_lacunae # flag indicating whether or not to fill "lacuna" in witnesses with type "corrector"
-        self.verbose = verbose # flag indicating whether or not to print timing and debugging details for the user
-        self.witnesses = [] # a list of witness instances
-        self.witness_index_by_id = {} # a dictionary mapping base witness IDs to their indices in the above list
-        self.variation_units = [] # a list of VariationUnit instances
-        self.readings_by_witness = {} # a dictionary mapping base witness IDs to a list of reading support sets for all units (with at least two substantive readings)
-        self.substantive_VariationUnit_ids = [] # a list of IDs for variation units with two or more substantive readings
+        """Constructs a new Collation instance with the given settings.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element. 
+            manuscript_suffixes: An optional list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses.
+            trivial_reading_types: An optional set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
+            missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
+            fill_corrector_lacunae: An optional boolean flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+            verbose: An optional boolean flag indicating whether or not to print timing and debugging details for the user.
+        """
+        self.manuscript_suffixes = manuscript_suffixes
+        self.trivial_reading_types = set(trivial_reading_types)
+        self.missing_reading_types = set(missing_reading_types)
+        self.fill_corrector_lacunae = fill_corrector_lacunae
+        self.verbose = verbose
+        self.witnesses = []
+        self.witness_index_by_id = {}
+        self.variation_units = []
+        self.readings_by_witness = {}
+        self.substantive_variation_unit_ids = []
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
@@ -367,10 +419,12 @@ class Collation():
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
 
-    """
-    Given an XML tree for a collation, populates its list of witnesses from its <listWit> element.
-    """
     def parse_list_wit(self, xml):
+        """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element. 
+        """
         if self.verbose:
             print("Parsing witness list...")
         t0 = time.time()
@@ -385,10 +439,12 @@ class Collation():
             print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
         return
 
-    """
-    Given an XML tree for a collation, populates its list of variation units from its <app> elements.
-    """
     def parse_apps(self, xml):
+        """Given an XML tree for a collation, populates its list of variation units from its app elements.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element. 
+        """
         if self.verbose:
             print("Parsing variation units...")
         t0 = time.time()
@@ -400,11 +456,12 @@ class Collation():
             print("Finished processing %d variation units in %0.4fs." % (len(self.variation_units), t1 - t0))
         return
 
-    """
-    Given a witness siglum, strips of the specified manuscript suffixes 
-    until the siglum matches one in the witness list or until no more suffixes can be stripped.
-    """
     def get_base_wit(self, wit):
+        """Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.
+
+        Args:
+            wit: A string representing a witness siglum, potentially including suffixes to be stripped. 
+        """
         base_wit = wit
         # If our starting siglum corresponds to a siglum in the witness list, then just return it:
         if base_wit in self.witness_index_by_id:
@@ -425,10 +482,15 @@ class Collation():
         # If we get here, then all possible manuscript suffixes have been stripped, and the resulting siglum does not correspond to a siglum in the witness list:
         return base_wit
 
-    """
-    Returns a dictionary mapping witness IDs to a set of their readings for a given variation unit.
-    """
     def get_readings_by_witness_for_unit(self, vu):
+        """Returns a dictionary mapping witness IDs to a list of their reading coefficients for a given variation unit.
+
+        Args:
+            vu: A VariationUnit to be processed.
+
+        Returns:
+            A dictionary mapping witness ID strings to a list of their coefficients for all substantive readings in this VariationUnit.
+        """
         # In a first pass, populate a list of substantive readings and a map from reading IDs to the indices of their parent substantive reading in this unit:
         substantive_reading_ids = []
         reading_id_to_index = {}
@@ -495,24 +557,21 @@ class Collation():
                 rdg_support[i] = rdg_support[i]/norm
         return readings_by_witness_for_unit
 
-    """
-    Populates the internal dictionary mapping witness IDs to a list of their reading support sets for all variation units,
-    and then fills the empty reading support sets for witnesses of type "corrector" with the entries of the previous witness.
-    """
     def parse_readings_by_witness(self):
+        """Populates the internal dictionary mapping witness IDs to a list of their reading support sets for all variation units, and then fills the empty reading support sets for witnesses of type "corrector" with the entries of the previous witness."""
         if self.verbose:
             print("Populating internal dictionary of witness readings...")
         t0 = time.time()
         # Initialize the data structures to be populated here:
         self.readings_by_witness = {}
-        self.substantive_VariationUnit_ids = []
+        self.substantive_variation_unit_ids = []
         for wit in self.witnesses:
             self.readings_by_witness[wit.id] = []
         # Populate them for each variation unit:
         for vu in self.variation_units:
             readings_by_witness_for_unit = self.get_readings_by_witness_for_unit(vu)
             if len(readings_by_witness_for_unit) > 0:
-                self.substantive_VariationUnit_ids.append(vu.id)
+                self.substantive_variation_unit_ids.append(vu.id)
             for wit in readings_by_witness_for_unit:
                 self.readings_by_witness[wit].append(readings_by_witness_for_unit[wit])
         # Optionally, fill the lacunae of the correctors:
@@ -532,13 +591,17 @@ class Collation():
                         self.readings_by_witness[wit.id][j] = self.readings_by_witness[prev_wit.id][j]
         t1 = time.time()
         if self.verbose:
-            print("Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs." % (len(self.witnesses), len(self.substantive_VariationUnit_ids), t1 - t0))
+            print("Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs." % (len(self.witnesses), len(self.substantive_variation_unit_ids), t1 - t0))
         return
 
-    """
-    Returns a list of one-character symbols needed to represent the states of all substantive readings in NEXUS.
-    """
     def get_nexus_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in NEXUS.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
         possible_symbols = list(string.digits) + list(string.ascii_letters)
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
@@ -551,15 +614,17 @@ class Collation():
         nexus_symbols = possible_symbols[:nsymbols]
         return nexus_symbols
 
-    """
-    Writes this collation to a NEXUS file with the given address.
-    """
     def to_nexus(self, file_addr):
+        """Writes this Collation to a NEXUS file with the given address.
+
+        Args:
+            file_addr: A string representing the path to an output NEXUS file; the file type should be .nex or .nxs.
+        """
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
         nchar = len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0 # if the number of taxa is 0, then the number of characters is irrelevant
         taxlabels = [wit.id for wit in self.witnesses]
-        charlabels = self.substantive_VariationUnit_ids
+        charlabels = self.substantive_variation_unit_ids
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
         with open(file_addr, "w", encoding="utf-8") as f:
