@@ -144,7 +144,8 @@ So the following more compact format is also supported, even if it is not strict
 
 The only condition is that you must use these attributes consistently: if you label a `rdg` element with an `@xml:id` attribute, then you must reference that attribute's value in the `witDetail` and `certainty` elements; otherwise, you must use and reference the `@n` attribute.
 
-For NEXUS output, the character states for each witness will be encoded using `StatesFormat=Frequency`, meaning that each non-missing character will be encoded as a vector of frequencies for each reading/state.
+For NEXUS output, the character states for each witness is encoded using `StatesFormat=Frequency`, meaning that each non-missing character is represented as a vector of frequencies for each reading/state.
+For unambiguous readings, this vector should have a value of 1 for a single reading/state, while for ambiguous readings, it should have multiple values for different readings/states.
 
 ### Lacunae and Other Missing Data
 
@@ -171,14 +172,14 @@ Consider the following set of variation units:
         <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
     </rdg>
     <witDetail n="W1/2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-    <witDetail n="Z" type="lac" wit="VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
+    <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
 </app>
 <app xml:id="B10K4V28U18-20">
     <lem><w>το</w><w>αγαθον</w></lem>
     <rdg n="1" wit="P46 P49 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678C 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster BasilOfCaesarea Chrysostom ClementOfAlexandria Jerome MariusVictorinus Origen Pelagius Speculum TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
     <rdg n="1-f1" type="defective" cause="aural-confusion" wit="L60"><w>τω</w><w>αγαθων</w></rdg>
     <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="1678* 1991 copsa Tertullian"/>
-    <witDetail n="Z" type="lac" wit="VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
+    <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
 </app>
 <app xml:id="B10K4V28U22-24">
     <lem><w>ταις</w><w>χερσιν</w></lem>
@@ -202,7 +203,7 @@ Consider the following set of variation units:
     <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
     <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
     <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum"/>
-    <witDetail n="Z" type="lac" wit="VL85 P92 P132 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298"/>
+    <witDetail n="Z" type="lac" wit="P92 P132 01C1 03C1 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
 </app>
 ```
 
@@ -210,7 +211,7 @@ In the first variation unit, readings `3` and `4` omit one of the phrases covere
 (They are assigned `@xml:id` values so that they can be referenced from these other units.)
 The `witDetail` elements in those units with a `@type` of `overlap` describe the witnesses that attest to no readings there because of their omission in the overlapping unit.
 Likewise, the `witDetail` with a `@type` of `lac` indicates which witnesses are lacunose at each unit.
-Both types of readings can be treated as missing characters (which is the default of `?` for NEXUS output) for the witnesses that attest to them by specifying the following arguments when invoking `convert_tei.py`:
+Both types of readings can be treated as missing characters (which has the default representation `?` in NEXUS output) for the witnesses that attest to them by specifying the following arguments when invoking `convert_tei.py`:
 
 ```
 -m lac -m overlap

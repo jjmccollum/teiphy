@@ -212,7 +212,7 @@
                     <witness type="version" n="syrhmg"/>
                     <witness type="version" n="copsa"/>
                     <witness type="version" n="copbo"/>
-                    <witness type="version" n="gotha"/>
+                    <witness type="version" n="gothA"/>
                     <witness type="version" n="gothB"/>
                     <!-- Church fathers -->
                     <witness type="father" n="Adamantius"/>
@@ -252,7 +252,7 @@
         <body>
             <app xml:id="B10K1V1U24-26">
                 <lem><w>εν</w><w>εφεσω</w></lem>
-                <rdg n="1" wit="01C2 02 03C2 06 012 018 020 025 044 049 056 075S 0142 0150 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 296 322 326 330 337 363 365 383 398 424* 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865S L169 L587 L809 L1159 L1178 L1188 L1440 L2058 VL61 VL64 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo gotha gothB Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius PseudoAthanasius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
+                <rdg n="1" wit="01C2 02 03C2 06 012 018 020 025 044 049 056 075S 0142 0150 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 296 322 326 330 337 363 365 383 398 424* 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865S L169 L587 L809 L1159 L1178 L1188 L1440 L2058 VL61 VL64 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo gothA gothB Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius PseudoAthanasius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
                 <rdg n="1-v1" type="reconstructed" wit="L2010"><w>εν</w><w><unclear>ε</unclear>φεσω</w></rdg>
                 <rdg n="1-v2" type="reconstructed" wit="2344"><w><unclear>εν</unclear></w><w>εφεσω</w></rdg>
                 <rdg n="1-v3" type="reconstructed" wit="256"><w><supplied reason="lacuna">εν</supplied></w><w><supplied reason="lacuna">εφεσ</supplied>ω</w></rdg>
@@ -276,7 +276,7 @@
                 <rdg n="1-s1" type="subreading" cause="commentary" wit="1910/2"><w>δια</w><w>του</w><w>ηγαπημενου</w></rdg>
                 <rdg n="2" wit="06* 010 012 0319* 330 451 629 2400 2516 2576 VL61 VL64 VL77 VL78 VL89 vgcl syrh copsa copbo Adamantius Ambrosiaster MariusVictorinus"><w>εν</w><w>τω</w><w>ηγαπημενω</w><w>υιω</w><w>αυτου</w></rdg>
                 <witDetail n="↑B10K1V4U2-V8U8R1-f1" type="overlap" target="B10K1V4U2-V8U8R1-f1" wit="1398"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 049 075 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL75 VL76 VL83 VL85 VL86 gotha gothB AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 049 075 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL75 VL76 VL83 VL85 VL86 gothA gothB AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K1V14U2">
                 <lem><w>ος</w></lem>
@@ -285,7 +285,7 @@
                 <rdg n="2" wit="P46 02 03 010 012 020 075S 6 38 61 81 104 181 203 218 256 263 326 365 424C1 442 459 506 606 1108 1175 1319 1505 1573 1611 1678 1718 1739 1837 1840 1860* 1877 1881 1893 1908 1910 1912 1962 2005 2008 2127 2243C 2464 2495 2523 2544 VL75 VL77 VL89 vgcl vgww vgst syrp syrh CyrilOfAlexandria Irenaeus"><w>ο</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="025"><w>ω</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" cause="harmonization" wit="2516"><w>οις</w><w>ουκ</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075 082 0159 0230 0278 0285 203S 1942 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg copsa copbo gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075 082 0159 0230 0278 0285 203S 1942 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg copsa copbo gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K1V15U26-40">
                 <lem><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></lem>
@@ -303,7 +303,7 @@
                 <rdg n="3-f1" type="subreading" cause="parablepsis" wit="2464"><w>και</w><w>εις</w><w>παντας</w><w>τους</w><w>αγι<unclear>ους</unclear></w><w>αγαπην</w></rdg>
                 <rdg n="4" wit="P46 01* 02 03 025 33 1739 1881 Jerome Origen"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
                 <witDetail n="W1/4" type="ambiguous" target="1 4" wit="copbo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 016 048 049 075 082 0159 0230 0278 0285 203S 424C1 1942 2834 2865 L23 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrp syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 016 048 049 075 082 0159 0230 0278 0285 203S 424C1 1942 2834 2865 L23 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K1V18U2-12">
                 <lem><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></lem>
@@ -325,7 +325,7 @@
                 <rdg n="3-v1" type="reconstructed" wit="1999"><w>πεφωτισμεν<unclear>ους</unclear></w><w>τους</w><w>οφθαλμους</w><w>της</w><w>διανοιας</w><w><unclear>υμων</unclear></w></rdg>
                 <rdg n="3-s1" type="subreading" cause="commentary" wit="ClementOfAlexandria"><w>διοιχθεντων</w><w>των</w><w>της</w><w>διανοιας</w><w>ομματων</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" cause="commentary" wit="Cyprian"><gap unit="verse" extent="part" reason="commentary"/><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><gap unit="verse" extent="part" reason="commentary"/></witDetail> <!-- Cyprian alludes to "oculos cordis" and "cordis oculos" in Laps. 35 (CCSL 3:240) and Zel. liv. 5 (CCSL 3A:77); see Murphy, "Cyprian's Use of Paul," 146. -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075 082 0159 0230 0285 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075 082 0159 0230 0285 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
             </app>
             <app xml:id="B10K2V5U16-18">
                 <lem><w>τω</w><w>χριστω</w></lem>
@@ -334,7 +334,7 @@
                 <rdg n="1-o1" type="orthographic" wit="0278"><w>τωι</w><w>χριστω</w></rdg>
                 <rdg n="2" wit="P46 03 33 442 L60 VL61 VL77A vgcl copsa copbo Ambrosiaster Chrysostom MariusVictorinus"><w>εν</w><w>τω</w><w>χριστω</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="1831C"><w><unclear>εν</unclear></w><w>τω</w><w>χριστω</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075S 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075S 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
             </app>
             <app xml:id="B10K2V5U20-24">
                 <lem><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></lem>
@@ -362,7 +362,7 @@
                 <rdg n="2-s1-v1" type="reconstructed" wit="0319"><w><unclear>ο</unclear>υ</w><w>τη</w><w>χαριτι</w><w>εστε</w><w><supplied reason="lacuna">σεσ</supplied>ωσμενοι</w></rdg>
                 <rdg n="3" wit="256 365 436 1319 1573 2127 copsa copbo"><w>χαριτι</w><w>γαρ</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
                 <rdg n="4" wit="1678* 2464"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 049 075S 082 0159 0230 0285 0320 203S 424C1 1910 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrp syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Chrysostom ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 049 075S 082 0159 0230 0285 0320 203S 424C1 1910 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Chrysostom ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
             </app>
             <app xml:id="B10K2V21U6-8">
                 <lem><w>πασα</w><w>οικοδομη</w></lem>
@@ -375,7 +375,7 @@
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="326 1837"><w>πασα</w><w>η</w><w>οικοδομει</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="93 665 1241"><w>πασα</w><w>ηκοδομη</w></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="1311"><w>πασα</w><w>οι</w><w>οικοδομη</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P46 P49 P92 P132 01C2 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1918 1942 2005 2834 2865S L1126 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL75 VL76 VL77 VL78 VL83 VL85 VL86 VL89 vgcl vgww vgst syrp syrhmg gotha gothB Adamantius Ambrosiaster AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Jerome Lucifer Marcion MariusVictorinus Pelagius Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P46 P49 P92 P132 01C2 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1918 1942 2005 2834 2865S L1126 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL75 VL76 VL77 VL78 VL83 VL85 VL86 VL89 vgcl vgww vgst syrp syrhmg gothA gothB Adamantius Ambrosiaster AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Jerome Lucifer Marcion MariusVictorinus Pelagius Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
             </app>
             <app xml:id="B10K3V1U14-18">
                 <lem><w>του</w><w>χριστου</w><w>ιησου</w></lem>
@@ -395,7 +395,7 @@
                 <witDetail n="W1/5-1" type="ambiguous" target="1 5" wit="CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="5" locus="value" degree="0.5000"/></witDetail>
                 <witDetail n="W1/5-2" type="ambiguous" target="1 5" wit="Jerome"><certainty target="1" locus="value" degree="0.3333"/><certainty target="5" locus="value" degree="0.6667"/></witDetail>
                 <witDetail n="W4/5" type="ambiguous" target="4 5" cause="translation" xml:lang="la" wit="VL89"><w>iesu</w><w>christi</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C2 03C1 03C2 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C2 03C1 03C2 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
             </app>
             <app xml:id="B10K3V9U6">
                 <lem><w>παντας</w></lem>
@@ -404,7 +404,7 @@
                 <rdg n="1-f2" type="defective" cause="linguistic-confusion" wit="1991"><w>παντων</w></rdg>
                 <rdg n="2" wit="01* 02 0150 6 424C1 1739 1881 Jerome"/>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Origen Primasius Procopius PseudoAthanasius Severian Speculum Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Origen Primasius Procopius PseudoAthanasius Severian Speculum Theodoret"/>
             </app>
             <app xml:id="B10K3V13U18-20">
                 <lem><w>υπερ</w><w>υμων</w></lem>
@@ -415,7 +415,7 @@
                 <rdg n="2" wit="P46 6 81* 88 436 915 1241 1311 1840* 1881 1918 1985 2180"><w>υπερ</w><w>ημων</w></rdg>
                 <rdg n="3" wit="38* 218 1991"/>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" cause="commentary" wit="1910"><w>υπερ</w><w>εμου</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K3V14U14-28">
                 <lem><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></lem>
@@ -430,7 +430,7 @@
                 <rdg n="2-v1" type="reconstructed" wit="0285"><w>προς</w><w>το<unclear>ν</unclear></w><w>πατερα</w></rdg>
                 <rdg n="2-f1" type="defective" cause="parablepsis" wit="2516"><w>τον</w><w>πατερα</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0320 203S 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0320 203S 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
             </app>
             <app xml:id="B10K3V19U20-34">
                 <lem><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></lem>
@@ -456,7 +456,7 @@
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="0285"><gap unit="verse" extent="part" reason="lacuna"/><w>παν</w><w>τ<unclear>ο</unclear></w><w><gap unit="word" extent="part" reason="lacuna"/><unclear>η</unclear>ρω<unclear>μ</unclear><gap unit="word" extent="part" reason="lacuna"/></w><w><gap unit="word" extent="part" reason="lacuna"/><unclear>υ</unclear></w><w>θεου</w></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="462"><w>ινα</w><w>πληρωθη</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></witDetail><!-- conflation or parablepsis -->
                 <witDetail n="W1/2-3" type="ambiguous" target="1 2" cause="haplography" wit="2516"><w>ινα</w><w>πληρωμα</w><w>του</w><w>θεου</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K3V20U8-10">
                 <lem><w>υπερ</w><w>παντα</w></lem>
@@ -469,7 +469,7 @@
                 <rdg n="2-f1" type="defective" wit="0319"><w>παν</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="016"><gap unit="verse" extent="part" reason="lacuna"/><w>παντα</w></witDetail>
                 <witDetail n="↑B10K3V20U8-18R3" type="overlap" target="B10K3V20U8-18R3" wit="606 1939 1963 1996 1999 2012"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
             </app>
             <app xml:id="B10K4V6U24-30">
                 <lem><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></lem>
@@ -487,7 +487,7 @@
                 <rdg n="3" wit="296 363 629 1245 1678 1739C 1838 1840 1939 1963 1985 1991 1996 1999 2008 2012 2576 L169 L1440"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
                 <rdg n="4" wit="1241 1311"><w>και</w><w>εν</w><w>πασιν</w><w>αμην</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 016 048 075S 082 0159 0230 0285 0320 203S 1729 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa Lucifer Primasius Procopius PseudoAthanasius Severian Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 016 048 075S 082 0159 0230 0285 0320 203S 1729 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa Lucifer Primasius Procopius PseudoAthanasius Severian Tertullian"/>
             </app>
             <app xml:id="B10K4V8U12-20">
                 <lem><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></lem>
@@ -536,7 +536,7 @@
                 <witDetail n="W1/2/3/4" type="ambiguous" target="1 2 3 4" wit="0285"><gap unit="verse" extent="part" reason="lacuna"/><w>εδω<gap unit="word" extent="part" reason="lacuna"/><unclear>ε</unclear>ν</w><w>δομα<gap unit="word" extent="part" reason="lacuna"/></w></witDetail>
                 <witDetail n="W1/3" type="ambiguous" target="1 3" cause="haplography" wit="1319*"><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δ<unclear>ω</unclear>ματα</w></witDetail>
                 <witDetail n="↑B10K4V8U12-24R1-s1" type="ambiguous" target="1 2" wit="2344"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 06C1 016 048 075S 082 0151 0159 0230 0278 0320 203S 424C1 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 06C1 016 048 075S 082 0151 0159 0230 0278 0320 203S 424C1 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K4V9U21">
                 <lem/>
@@ -546,7 +546,7 @@
                 <rdg n="2-v1" type="reconstructed" wit="1837"><w><unclear>πρω</unclear>τον</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="L60"><w>προτον</w></rdg>
                 <rdg n="2-s1" type="subreading" cause="clarification" wit="363"><w>προτερον</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 025 048 075S 082 0159 0230 0278 0285 0320 203S 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Marcion Primasius Procopius PseudoAthanasius Severian Speculum"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 025 048 075S 082 0159 0230 0278 0285 0320 203S 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Marcion Primasius Procopius PseudoAthanasius Severian Speculum"/>
             </app>
             <app xml:id="B10K4V9U22-28">
                 <lem><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερη</w></lem>
@@ -566,7 +566,7 @@
                 <rdg n="2-s1" type="subreading" cause="commentary" wit="ClementOfAlexandria"><w>εις</w><w>τα</w><w>κατωτατα</w></rdg>
                 <rdg n="3" wit="P46"><w>εις</w><w>κατωτερα</w></rdg>
                 <witDetail n="W1/2/3" type="ambiguous" target="1 2 3" cause="translation" xml:lang="syr" wit="syrp"><w>ܠܬܚܬܝܬܗ</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius BasilOfCaesarea Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Marcion Primasius Procopius PseudoAthanasius Severian Speculum"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius BasilOfCaesarea Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Marcion Primasius Procopius PseudoAthanasius Severian Speculum"/>
             </app>
             <app xml:id="B10K4V19U4">
                 <lem><w>απηλγηκοτες</w></lem>
@@ -579,7 +579,7 @@
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010 012"><w>αφηλπικοτες</w></rdg>
                 <rdg n="2-f2" type="defective" cause="aural-confusion" wit="451C"><w>απηλπηκοτες</w></rdg>
                 <rdg n="2-s1" type="subreading" wit="1240C"><w>απογνοντες</w></rdg><!-- correction towards a Latin text? -->
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2344 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2344 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Tertullian TheodoreOfMopsuestia Theodoret"/>
             </app>
             <!-- a large transposition is encoded as an overlapping unit below -->
             <app xml:id="B10K4V28U18-24">
@@ -598,7 +598,7 @@
                     <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
                 </rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp syrhmg gotha gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
             </app>
             <!-- this unit should be ignored if defective readings are treated as trivial -->
             <app xml:id="B10K4V28U18-20">
@@ -606,7 +606,7 @@
                 <rdg n="1" wit="P46 P49 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678C 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster BasilOfCaesarea Chrysostom ClementOfAlexandria Jerome MariusVictorinus Origen Pelagius Speculum TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
                 <rdg n="1-f1" type="defective" cause="aural-confusion" wit="L60"><w>τω</w><w>αγαθων</w></rdg>
                 <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="1678* 1991 copsa Tertullian"/>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
             </app>
             <app xml:id="B10K4V28U22-24">
                 <lem><w>ταις</w><w>χερσιν</w></lem>
@@ -630,7 +630,7 @@
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
                 <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum"/>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 03C1 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 03C1 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
             </app>
             <app xml:id="B10K4V29U32-34">
                 <lem><w>της</w><w>χρειας</w></lem>
@@ -641,7 +641,7 @@
                 <rdg n="1-f3" type="defective" wit="2805"><w>τη</w><w>χρειας</w></rdg>
                 <rdg n="2" wit="06* 010 012 0319* 181 1836 2544C VL61 VL75 VL77 VL78 VL86 VL89 vgcl Ambrosiaster BasilOfCaesarea Cyprian GregoryOfNyssa MariusVictorinus Pelagius Speculum Tertullian"><w>της</w><w>πιστεως</w></rdg>
                 <rdg n="3" wit="syrp"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1910 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1910 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian"/>
             </app>
             <app xml:id="B10K4V32U30-32">
                 <lem><w>εχαρισατο</w><w>ημιν</w></lem>
@@ -662,7 +662,7 @@
                 <rdg n="2-f3" type="defective" cause="aural-confusion" wit="263 1751"><w>εχαρησατο</w><w>υμιν</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="1991"><w>εχ<gap unit="word" extent="part" reason="lacuna"/>το</w><gap unit="verse" extent="part" reason="lacuna"/></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen Tertullian"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 075S 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 075S 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Theodoret"/>
             </app>
             <app xml:id="B10K5V2U18-20">
                 <lem><w>ηγαπησεν</w><w>ημας</w></lem>
@@ -675,7 +675,7 @@
                 <rdg n="2-v1" type="reconstructed" wit="02"><w><supplied reason="lacuna">ηγα</supplied><unclear>π</unclear>ησεν</w><w>υμας</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="P49"><w>ηγαπησ<unclear>ε</unclear><gap unit="word" extent="part" reason="lacuna"/></w><w><gap unit="word" extent="part" reason="lacuna"/>ας</w></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" cause="commentary" wit="ClementOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V2U28-40">
                 <lem><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></lem>
@@ -699,7 +699,7 @@
                 <rdg n="5" type="reconstructed" wit=""><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
                 <rdg n="5-v1" type="reconstructed" wit="1991"><w>προσφορ<unclear>α</unclear>ν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
                 <rdg n="5-s1" type="subreading" wit="1985"><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>θεου</w></rdg>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V9U2-10">
                 <lem><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>φωτος</w></lem>
@@ -715,7 +715,7 @@
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="2008"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w></witDetail>
                 <witDetail n="W1/2-3" type="ambiguous" target="1 2" wit="016"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><gap unit="verse" extent="part" reason="lacuna"/></witDetail>
                 <witDetail n="W1/2-4" type="ambiguous" target="1 2" wit="CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 075S 082 0159 0230 0285 0320 203 1942 2011 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Epiphanius GregoryOfNazianzus GregoryOfNyssa Irenaeus Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 075S 082 0159 0230 0285 0320 203 1942 2011 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Epiphanius GregoryOfNazianzus GregoryOfNyssa Irenaeus Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
             </app>
             <app xml:id="B10K5V14U34-42">
                 <lem><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></lem>
@@ -738,14 +738,14 @@
                 <rdg n="2-v1" type="reconstructed" wit="06*"><w>και</w><w>επι<unclear>ψ</unclear>αυσεις</w><w>του</w><w>χριστου</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="606"><w>και</w><w>επιφαυσεις</w><w>του</w><w>χριστου</w></rdg>
                 <rdg n="3" wit="Ambrosiaster MariusVictorinus Theodoret"><w>και</w><w>επιψαυσει</w><w>σου</w><w>ο</w><w>χριστος</w></rdg><!-- known to be in some manuscripts contemporary with Chrysostom, Theodore of Mopsuestia, and Jerome; Theodoret is also aware of the common reading in some manuscripts of his time -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius BasilOfCaesarea Cyprian CyrilOfJerusalem GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer PseudoAthanasius Severian Speculum Tertullian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius BasilOfCaesarea Cyprian CyrilOfJerusalem GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer PseudoAthanasius Severian Speculum Tertullian"/>
             </app>
             <app xml:id="B10K5V15U5">
                 <lem/>
                 <rdg n="1" wit="P46 01* 03 06 010 012 018 020 025 044 048 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2492 2495 2516 2523 2544 2576 2865S L23 L156 L169 L1159 L1178 L1188 L1298 L1440 L2058 VL75 VL77 VL78 VL86 VL89 syrp syrh copsa Ambrosiaster Chrysostom Jerome Lucifer MariusVictorinus TheodoreOfMopsuestia"/>
                 <rdg n="2" wit="01C2 02 629 1942 L1126 VL61 vgcl vgww vgst copbo Pelagius"><w>αδελφοι</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="2464"><w><supplied reason="lacuna">αδελ</supplied>φοι</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V15U6-8">
                 <lem><w>πως</w><w>ακριβως</w></lem>
@@ -758,7 +758,7 @@
                 <rdg n="2-v1" type="reconstructed" wit="048"><w>ακριβω<supplied reason="lacuna">ς</supplied></w><w><supplied reason="lacuna">πω</supplied>ς</w></rdg>
                 <rdg n="2-v2" type="reconstructed" wit="2344"><w>ακριβως</w><w><supplied reason="lacuna">π</supplied>ως</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="P46 03*"><w>ακρειβως</w><w>πως</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Marcion Origen Pelagius Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Marcion Origen Pelagius Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V19U12-16">
                 <lem><w>και</w><w>ωδαις</w><w>πνευματικαις</w></lem>
@@ -769,13 +769,13 @@
                 <rdg n="1-f2" type="defective" cause="aural-confusion" wit="1729"><w>και</w><w>οδαις</w><w>πνευματικαις</w></rdg>
                 <rdg n="1-f3" type="defective" cause="aural-confusion" wit="1918"><w>και</w><w>ωδες</w><w>πνευματικες</w></rdg>
                 <rdg n="2" wit="P46 03 VL75 VL89 Ambrosiaster"><w>και</w><w>ωδαις</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C2 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 256 424C1 1838 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C2 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 256 424C1 1838 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V19U17">
                 <lem/>
                 <rdg n="1" wit="P46 01 03 06 010 012 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2865S L23 L156 L169 L1126 L1159 L1178 L1188 L1298 L1440 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copsa copbo Ambrosiaster BasilOfCaesarea Chrysostom CyrilOfJerusalem Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"/>
                 <rdg n="2" wit="02"><w>εν</w><w>χαριτι</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0285 0320 203 256 424C1 1838 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0285 0320 203 256 424C1 1838 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V22U6-12">
                 <lem><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></lem>
@@ -803,7 +803,7 @@
                 <rdg n="4" wit="P46 03 Jerome TheodoreOfMopsuestia"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
                 <rdg n="5" wit="1851"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσομεναι</w></rdg>
                 <witDetail n="W1/4" type="ambiguous" target="1 4" cause="commentary" wit="ClementOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C2 075S 082 0159 0230 0285 0320 203 256 1838 2805 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp gotha gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C2 075S 082 0159 0230 0285 0320 203 256 1838 2805 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K5V30U14-30">
                 <lem><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></lem>
@@ -824,7 +824,7 @@
                 <rdg n="4-v1" type="reconstructed" wit="94"><w>εκ</w><w>της</w><w><supplied reason="lacuna">σαρ</supplied>κος</w><w>αυτου</w></rdg>
                 <rdg n="5" wit="P46 01* 02 03 048 6 33 81 424C1 1739* 1881 1991 2464 copsa copbo Jerome Origen"/>
                 <witDetail n="W1/3" type="ambiguous" target="1 3" cause="haplography" wit="1751"><w>εκ</w><w>των</w><w>αυτου</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 256 1838 2805 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Primasius Procopius PseudoAthanasius Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 256 1838 2805 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Primasius Procopius PseudoAthanasius Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K6V1U14-16">
                 <lem><w>εν</w><w>κυριω</w></lem>
@@ -834,7 +834,7 @@
                 <rdg n="1-s1" type="subreading" cause="harmonization" wit="664"><w>ως</w><w>τω</w><w>κυριω</w></rdg>
                 <rdg n="1-s2" type="subreading" cause="haplography" wit="1573"><w>κυριω</w></rdg>
                 <rdg n="2" wit="03 06* 010 012 VL75 VL77 VL78 VL89 Ambrosiaster Cyprian Marcion"/><!-- Western contamination in 03? -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 075S 082 0159 0230 0320 203 424C1 1838 2805 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer MariusVictorinus Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 075S 082 0159 0230 0320 203 424C1 1838 2805 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer MariusVictorinus Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K6V12U2-12">
                 <lem><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμιν</w><w>η</w><w>παλη</w></lem>
@@ -853,7 +853,7 @@
                 <rdg n="2-s1" type="subreading" cause="clarification" wit="1939 1996"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημων</w><w>η</w><w>παλη</w></rdg><!-- constructio ad sensum -->
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="177*"><w>οτι</w><w>ουκ</w><w>εστιν</w><gap unit="char" extent="7-9" reason="illegible"/></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.0476"/><certainty target="2" locus="value" degree="0.9524"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 048 075S 082 0159 0285 0320 203 424C1 1838 2865S VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius BasilOfCaesarea CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus MariusVictorinus Primasius Procopius PseudoAthanasius Severian"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 048 075S 082 0159 0285 0320 203 424C1 1838 2865S VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius BasilOfCaesarea CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus MariusVictorinus Primasius Procopius PseudoAthanasius Severian"/>
             </app>
             <app xml:id="B10K6V19U32-38">
                 <lem><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></lem>
@@ -871,7 +871,7 @@
                 <rdg n="2" wit="03 06* 010 012 VL77 VL86* VL89 Ambrosiaster Ephrem MariusVictorinus Tertullian"><w>το</w><w>μυστηριον</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="P46"><certainty target="1" locus="value" degree="0.0148"/><certainty target="2" locus="value" degree="0.9852"/></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Marcion"><certainty target="1" locus="value" degree="0.2500"/><certainty target="2" locus="value" degree="0.7500"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL75 VL76 VL83 VL85 syrhmg gotha Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius PseudoAthanasius Severian Speculum"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL75 VL76 VL83 VL85 syrhmg gothA Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius PseudoAthanasius Severian Speculum"/>
             </app>
             <!-- transposition of εν αυτω -->
             <app xml:id="B10K6V20U12-18">
@@ -891,13 +891,13 @@
                     <ref target="#B10K6V20U18">[B10K6V20U18]</ref>
                     <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
                 </witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <!-- this unit should always be ignored -->
             <app xml:id="B10K6V20U12">
                 <lem><w>ινα</w></lem>
                 <rdg n="1" wit="P46 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1912 1918 1939 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2834 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copsa copbo Ambrosiaster BasilOfCaesarea Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K6V20U14-16">
                 <lem><w>εν</w><w>αυτω</w></lem>
@@ -910,7 +910,7 @@
                 <rdg n="2" wit="1311 1573/2 1836"><w>αυτω</w></rdg>
                 <rdg n="3" wit="P46 03 1739 1881 syrp"><w>αυτο</w></rdg><!-- some potential examples of this verb with an accusative object occur in LSJ, s.v. "παρρησιάζομαι" -->
                 <rdg n="4" wit="2516"><w>και</w><w>αυτος</w></rdg><!-- intelligible as "even I"? -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg copsa copbo gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg copsa copbo gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K6V20U18">
                 <lem><w>παρρησιασωμαι</w></lem>
@@ -927,7 +927,7 @@
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010* 1912"><w>παρρισιασομαι</w></rdg>
                 <rdg n="2-f2" type="defective" wit="2464"><w>παρησιασομαι</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="016"><w>παρ<gap unit="word" extent="part" reason="lacuna"/></w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg copsa copbo gotha gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg copsa copbo gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
             <app xml:id="B10K6V24U28">
                 <lem><w>αμην</w></lem>
@@ -935,7 +935,7 @@
                 <rdg n="1-s1" type="subreading" wit="1918"><w>αμην</w><w>αμην</w><w>αμην</w></rdg> <!-- pious expansion -->
                 <rdg n="2" wit="P46 01* 02 03 010 012 0278 6 33 81 424C1 442 1175 1241 1881 1910 VL77 VL78 VL86* vgst copsa Ambrosiaster Jerome Origen Pelagius TheodoreOfMopsuestia"/>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="copbo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0285 0320 203S 1838 2834 2865S L23 L60 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL76 VL83 VL85 syrhmg gotha gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0285 0320 203S 1838 2834 2865S L23 L60 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
             </app>
         </body>
     </text>
