@@ -197,7 +197,6 @@ class Reading():
         if raw_tag == "space":
             text = "["
             if xml.get("unit") is not None and xml.get("extent") is not None:
-                text += ", "
                 unit = xml.get("unit")
                 extent = xml.get("extent")
                 text += extent + " " + unit
@@ -277,7 +276,7 @@ class Reading():
         # If it is a ref element, then set its text in brackets:
         if raw_tag == "ref":
             self.text += "<"
-            self.text += xml.text if xml.text is not None else ""
+            self.text += xml.get("target") if xml.get("target") is not None else ""
             self.text += ">"
             self.text += xml.tail if xml.tail is not None else ""
             return
