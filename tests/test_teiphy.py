@@ -3,7 +3,7 @@ from lxml import etree as et
 import numpy as np
 import pandas as pd
 
-from teiphy import Witness, Reading, VariationUnit, Collation
+from teiphy.teiphy import Witness, Reading, VariationUnit, Collation
 
 class WitnessTestCase(unittest.TestCase):
     def test_init_xml_id(self):
