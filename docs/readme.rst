@@ -8,9 +8,8 @@ NEXUS and other formats.
 About This Project
 ==================
 
-
 Introduction
-------------------
+------------
 
 This project began as a utility for my PhD research on reconstructing
 the textual tradition of Ephesians using phylogenetic methods. Since
@@ -33,7 +32,7 @@ other rich features from TEI XML, could be respected (and, where,
 necessary, preserved) in the conversion process.
 
 Design Philosophy
-------------------
+-----------------
 
 My underlying philosophy about collations is that they should preserve
 as much detail as possible, including information on how certain types
@@ -136,20 +135,21 @@ ambiguous readings, no two readings in the same ``app`` element should
 be assigned the same ``@xml:id`` or ``@n`` attribute, even if they are
 under different ``rdgGrp`` elements.
 
-If we want to collapse certain types of readings under their “parent”
-readings, then we can specify this using the ``-t`` argument in the
-``convert_tei.py`` script. So with the flags
+If you want to collapse certain types of readings under their “parent”
+readings, then you can specify this using the ``-t`` argument with any
+conversion command invoked through the ``main.py`` script. So with the
+flags
 
 ::
 
-   -t reconstructed -t defective -t orthographic -t subreading
+   -t"reconstructed" -t"defective" -t"orthographic" -t"subreading"
 
 the variation unit illustrated above would have only two substantive
 readings (``1`` and ``2``), while with the flags
 
 ::
 
-   -t reconstructed -t defective
+   -t"reconstructed" -t"defective"
 
 it would have four substantive readings (``1``, ``1-o1``, ``1-s1``, and
 ``2``).
@@ -240,8 +240,8 @@ are entirely lacunose, illegible, or otherwise unavailable (e.g., due to
 missing images or irrelevance due to a different reading in an
 overlapping passage) at each point of variation. As long as these
 placeholders are labeled with ``@type`` elements, you can specify that
-they mark missing data using the ``-m`` argument in the
-``convert_tei.py`` script.
+they mark missing data using the ``-m`` argument with any command
+invoked through the ``main.py`` script.
 
 Consider the following set of variation units:
 
@@ -308,11 +308,11 @@ because of their omission in the overlapping unit. Likewise, the
 lacunose at each unit. Both types of readings can be treated as missing
 characters (which has the default representation ``?`` in NEXUS output)
 for the witnesses that attest to them by specifying the following
-arguments when invoking ``convert_tei.py``:
+arguments when invoking any conversion command through ``main.py``:
 
 ::
 
-   -m lac -m overlap
+   -m"lac" -m"overlap"
 
 Correctors’ Hands
 -----------------
@@ -345,8 +345,8 @@ correctors of Codex Sinaiticus follows:
    <witness type="corrector" n="01C1"/>
    <witness type="corrector" n="01C2"/>
 
-Then, when you run the ``convert_tei.py`` script, make sure that you
-include the ``--fill-correctors`` argument.
+Then, when you invoke any conversion command through the ``main.py``
+script, make sure that you include the ``--fill-correctors`` argument.
 
 Removing First-hand Siglum Suffixes and Merging Multiple Attestations
 ---------------------------------------------------------------------
@@ -368,16 +368,16 @@ TEI Guidelines, but for the sake of convenience, this behavior is
 supported by this utility.
 
 For the purposes of analysis, we will usually want to strip the
-first-hand suffixes, leaving just the base siglum for the witness
-itself. In addition, we may wish to merge multiple attestations of a
+first-hand suffixes, leaving just the base sigla for the witnesses
+themselves. In addition, we may wish to merge multiple attestations of a
 passage in the same witness, effectively treating multiple attestations
 as ambiguous readings. Both can be accomplished using the ``-s``
-argument to ``convert_tei.py``. If we want to strip first-hand suffixes
-only, then we can do this via
+argument with any conversion command invoked through ``main.py``. If we
+want to strip first-hand suffixes only, then we can do this via
 
 ::
 
-   -t "*" -t "T"
+   -s"*" -s"T"
 
 This will ignore multiple attestations (i.e., treat the units where they
 occur as missing characters for the base witnesses with multiple
@@ -390,7 +390,7 @@ attestations, then we can do so via
 
 ::
 
-   -t "*" -t "T" -t "/1" -t "/2" -t "/3"
+   -s"*" -s"T" -s"/1" -s"/2" -s"/3"
 
 assuming that there are at most three multiple attestations in any unit.
 
@@ -399,14 +399,16 @@ Other Options
 
 If you wish to include status messages for the purposes of measuring
 performance or validating your collation, you can include the
-``--verbose`` flag when you invoke ``convert_tei.py``.
+``--verbose`` flag when you invoke any conversion command through
+``main.py``.
 
 To run this script with the example input in verbose mode with all of
-the settings described above enabled, enter the command
+the settings described above enabled, enter ``teiphy`` directory and
+enter the command
 
 ::
 
-   python teiphy\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -t "*" -t "T" -t "/1" -t "/2" -t "/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+   python teiphy\main.py to-nexus -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.
 (If you are using Mac or Linux rather than Windows, make sure you use a forward slash instead of a backward one.)

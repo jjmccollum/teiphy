@@ -88,17 +88,17 @@ Readings without a `@type` attribute are assumed to be substantive.
 In both cases, the `rdg` or `rdgGrp` elements should be placed according to where their type falls in the hierarchy; a reconstruction of a subreading (e.g., reading `1-s1-v1` should be placed directly after the subreading itself (e.g., `1-s1`).
 Likewise, for the purposes of resolving ambiguous readings, no two readings in the same `app` element should be assigned the same `@xml:id` or `@n` attribute, even if they are under different `rdgGrp` elements.
 
-If we want to collapse certain types of readings under their "parent" readings, then we can specify this using the `-t` argument in the `convert_tei.py` script.
+If you want to collapse certain types of readings under their "parent" readings, then you can specify this using the `-t` argument with any conversion command invoked through the `main.py` script.
 So with the flags
 
 ```
--t reconstructed -t defective -t orthographic -t subreading
+-t"reconstructed" -t"defective" -t"orthographic" -t"subreading"
 ```
 
 the variation unit illustrated above would have only two substantive readings (`1` and `2`), while with the flags
 
 ```
--t reconstructed -t defective
+-t"reconstructed" -t"defective"
 ```
 
 it would have four substantive readings (`1`, `1-o1`, `1-s1`, and `2`).
@@ -150,7 +150,7 @@ For unambiguous readings, this vector should have a value of 1 for a single read
 ### Lacunae and Other Missing Data
 
 In the interest of accounting for all witnesses, a collation might include placeholder `rdg` or `witDetail` elements for witnesses that are entirely lacunose, illegible, or otherwise unavailable (e.g., due to missing images or irrelevance due to a different reading in an overlapping passage) at each point of variation.
-As long as these placeholders are labeled with `@type` elements, you can specify that they mark missing data using the `-m` argument in the `convert_tei.py` script.
+As long as these placeholders are labeled with `@type` elements, you can specify that they mark missing data using the `-m` argument with any command invoked through the `main.py` script.
 
 Consider the following set of variation units:
 
@@ -211,10 +211,10 @@ In the first variation unit, readings `3` and `4` omit one of the phrases covere
 (They are assigned `@xml:id` values so that they can be referenced from these other units.)
 The `witDetail` elements in those units with a `@type` of `overlap` describe the witnesses that attest to no readings there because of their omission in the overlapping unit.
 Likewise, the `witDetail` with a `@type` of `lac` indicates which witnesses are lacunose at each unit.
-Both types of readings can be treated as missing characters (which has the default representation `?` in NEXUS output) for the witnesses that attest to them by specifying the following arguments when invoking `convert_tei.py`:
+Both types of readings can be treated as missing characters (which has the default representation `?` in NEXUS output) for the witnesses that attest to them by specifying the following arguments when invoking any conversion command through `main.py`:
 
 ```
--m lac -m overlap
+-m"lac" -m"overlap"
 ```
 
 ### Correctors' Hands 
@@ -234,7 +234,7 @@ An example for the first hand and the first two correctors of Codex Sinaiticus f
 <witness type="corrector" n="01C2"/>
 ```
 
-Then, when you run the `convert_tei.py` script, make sure that you include the `--fill-correctors` argument.
+Then, when you invoke any conversion command through the `main.py` script, make sure that you include the `--fill-correctors` argument.
 
 ### Removing First-hand Siglum Suffixes and Merging Multiple Attestations
 
@@ -244,13 +244,13 @@ Other times, a manuscript might repeat the same text multiple times with differe
 In New Testament textual criticism, this commonly occurs with lectionaries and catena commentaries, and the multiple attestations are indicated by the suffixes `/1`, `/2`, etc.
 The inclusion of these suffixes in the `@wit` attribute of a reading is not strictly in accordance with the TEI Guidelines, but for the sake of convenience, this behavior is supported by this utility.
 
-For the purposes of analysis, we will usually want to strip the first-hand suffixes, leaving just the base siglum for the witness itself.
+For the purposes of analysis, we will usually want to strip the first-hand suffixes, leaving just the base sigla for the witnesses themselves.
 In addition, we may wish to merge multiple attestations of a passage in the same witness, effectively treating multiple attestations as ambiguous readings.
-Both can be accomplished using the `-s` argument to `convert_tei.py`.
+Both can be accomplished using the `-s` argument with any conversion command invoked through `main.py`.
 If we want to strip first-hand suffixes only, then we can do this via
 
 ```
--t "*" -t "T"
+-s"*" -s"T"
 ```
 
 This will ignore multiple attestations (i.e., treat the units where they occur as missing characters for the base witnesses with multiple attestations at those units), unless the sigla with multiple attestation suffixes are included as distinct `witness` elements in the collation's `listWit` element.
@@ -258,19 +258,19 @@ This will ignore multiple attestations (i.e., treat the units where they occur a
 If we want to strip first-hand suffixes and merge all multiple attestations, then we can do so via
 
 ```
--t "*" -t "T" -t "/1" -t "/2" -t "/3"
+-s"*" -s"T" -s"/1" -s"/2" -s"/3"
 ```
 
 assuming that there are at most three multiple attestations in any unit. 
 
 ### Other Options
 
-If you wish to include status messages for the purposes of measuring performance or validating your collation, you can include the `--verbose` flag when you invoke `convert_tei.py`.
+If you wish to include status messages for the purposes of measuring performance or validating your collation, you can include the `--verbose` flag when you invoke any conversion command through `main.py`.
 
-To run this script with the example input in verbose mode with all of the settings described above enabled, enter the command
+To run this script with the example input in verbose mode with all of the settings described above enabled, enter `teiphy` directory and enter the command
 
 ```
-python teiphy\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -t "*" -t "T" -t "/1" -t "/2" -t "/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+python teiphy\main.py to-nexus -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 ```
 
 from the command line.
