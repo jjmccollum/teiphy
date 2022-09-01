@@ -1,14 +1,16 @@
+======
 teiphy
-=======================
+======
 
 General-purpose Python utility for converting TEI XML collations to
 NEXUS and other formats.
 
 About This Project
-------------------
+==================
+
 
 Introduction
-~~~~~~~~~~~~
+------------------
 
 This project began as a utility for my PhD research on reconstructing
 the textual tradition of Ephesians using phylogenetic methods. Since
@@ -31,7 +33,7 @@ other rich features from TEI XML, could be respected (and, where,
 necessary, preserved) in the conversion process.
 
 Design Philosophy
-~~~~~~~~~~~~~~~~~
+------------------
 
 My underlying philosophy about collations is that they should preserve
 as much detail as possible, including information on how certain types
@@ -44,18 +46,18 @@ witnesses’ attestations should be encoded in the collation and preserved
 in the conversion of the collation.
 
 Installation and Dependencies
------------------------------
+=============================
 
 **TBA**
 
 Usage
------
+=====
 
 The usage and expected input format for this utility are described in
 what follows. Examples are provided to illustrate different concepts.
 
 Analysis at Varying Levels of Detail Using Reading Types
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------
 
 For text-critical purposes, differences in granularity typically concern
 which types of variant readings we consider important for analysis. At
@@ -153,7 +155,7 @@ it would have four substantive readings (``1``, ``1-o1``, ``1-s1``, and
 ``2``).
 
 Ambiguities and Judgments of Certainty
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
 When we have one or more witnesses with an ambiguous attestation, we may
 wish to express which readings the witness(es) in question might have.
@@ -230,7 +232,7 @@ reading/state, while for ambiguous readings, it should have multiple
 values for different readings/states.
 
 Lacunae and Other Missing Data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 In the interest of accounting for all witnesses, a collation might
 include placeholder ``rdg`` or ``witDetail`` elements for witnesses that
@@ -313,7 +315,7 @@ arguments when invoking ``convert_tei.py``:
    -m lac -m overlap
 
 Correctors’ Hands
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Collation data often distinguishes the first hand responsible for a
 manuscript from the hands of correctors who introduced changed readings
@@ -347,7 +349,7 @@ Then, when you run the ``convert_tei.py`` script, make sure that you
 include the ``--fill-correctors`` argument.
 
 Removing First-hand Siglum Suffixes and Merging Multiple Attestations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------------------------
 
 In some instances, the siglum for a manuscript may have a first-hand
 suffix added to it when the manuscript was corrected at the unit in
@@ -393,7 +395,7 @@ attestations, then we can do so via
 assuming that there are at most three multiple attestations in any unit.
 
 Other Options
-~~~~~~~~~~~~~
+-------------
 
 If you wish to include status messages for the purposes of measuring
 performance or validating your collation, you can include the
