@@ -90,14 +90,14 @@ class Reading():
         """
         # Determine what this element is:
         raw_tag = xml.tag.replace("{%s}" % tei_ns, "")
-        # If it is a reading, then copy its witnesses, and recursively process its children:
-        if raw_tag == "rdg":
+        # If it is a reading or lemma, then copy its witnesses, and recursively process its children:
+        if raw_tag in ["rdg", "lem"]:
             # If it has a type, then save that; otherwise, default to "substantive":
             self.type = xml.get("type") if xml.get("type") is not None else "substantive"
             # Populate its list of the entries in its wit attribute (stripping any "#" prefixes), split over spaces:
             self.wits = [w.strip("#") for w in xml.get("wit").split()] if xml.get("wit") is not None else []
             # Populate its text recursively using its children:
-            self.text = "" if xml.text is None else xml.text
+            self.text = xml.text if xml.text is not None else ""
             for child in xml:
                 self.parse(child, verbose)
             # Strip any surrounding whitespace left over from spaces added between word elements:
@@ -109,7 +109,7 @@ class Reading():
             elif xml.get("n") is not None:
                 self.id = xml.get("n")
             else:
-                self.id = xml.text
+                self.id = self.text
             return
         # If it is a witness detail (e.g., an ambiguous reading), then copy its target readings and witnesses, and recursively process its children:
         if raw_tag == "witDetail":
@@ -257,8 +257,13 @@ class Reading():
             self.text += xml.text if xml.text is not None else ""
             for child in xml:
                 self.parse(child, verbose)
-            old_text = self.text[starting_ind:]
-            new_text = "".join([c + "\u0323" for c in old_text])
+            old_text = self.text[starting_ind:].strip() # strip any trailing spaces (in case there were entire words whose presence is unclear)
+            new_text = ""
+             # Add a dot under each character other than spaces:
+            for c in old_text:
+                new_text += c
+                if c != " ":
+                    new_text += "\u0323"
             self.text = self.text[:starting_ind] + new_text
             self.text += xml.tail if xml.tail is not None else ""
             return
@@ -269,14 +274,14 @@ class Reading():
             for child in xml:
                 self.parse(child, verbose)
                 self.text = self.text.strip() + "/" # add a slash between each possibility
-            self.text.strip("/") # remove the last one we added
+            self.text = self.text.strip("/") # remove the last one we added
             self.text += "]"
             self.text += xml.tail if xml.tail is not None else ""
             return
-        # If it is a ref element, then set its text in brackets:
+        # If it is a ref element, then set its text (stripped of "#" characters) in diagonal brackets:
         if raw_tag == "ref":
             self.text += "<"
-            self.text += xml.get("target") if xml.get("target") is not None else ""
+            self.text += xml.get("target").strip("#") if xml.get("target") is not None else ""
             self.text += ">"
             self.text += xml.tail if xml.tail is not None else ""
             return
