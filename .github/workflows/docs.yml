@@ -34,12 +34,12 @@ jobs:
       with:
         branch: gh-pages # The branch the action should deploy to.
         folder: gh-pages # The folder the action should deploy.
-    - name: Create Coverage Badge
-      uses: schneegans/dynamic-badges-action@v1.1.0
-      with:
-        auth: ${{ secrets.GIST_SECRET }}
-        gistID: TODO_ADD_GIST
-        filename: coverage-badge.json
-        label: coverage
-        message: ${{ env.COVERAGE }}
-        color: green
+    # - name: Create Coverage Badge
+    #   uses: schneegans/dynamic-badges-action@v1.1.0
+    #   with:
+    #     auth: ${{ secrets.GIST_SECRET }}
+    #     gistID: TODO_ADD_GIST
+    #     filename: coverage-badge.json
+    #     label: coverage
+    #     message: ${{ env.COVERAGE }}
+    #     color: green
