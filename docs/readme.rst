@@ -406,4 +406,7 @@ the settings described above enabled, enter the command
 
 ::
 
-   python py\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -t "*" -t "T" -t "/1" -t "/2" -t "/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+   python teiphy\convert_tei.py -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -t "*" -t "T" -t "/1" -t "/2" -t "/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+
+from the command line.
+(If you are using Mac or Linux rather than Windows, make sure you use a forward slash instead of a backward one.)
