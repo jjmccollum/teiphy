@@ -3,6 +3,8 @@
 import time # to time calculations for users
 import string # for easy retrieval of character ranges
 from lxml import etree as et # for reading TEI XML inputs
+import numpy as np # for collation matrix outputs
+import pandas as pd # for 
 
 """
 XML namespaces
@@ -384,8 +386,9 @@ class Collation():
         witnesses: A list of Witness instances contained in this Collation.
         witness_index_by_id: A dictionary mapping base witness ID strings to their int indices in the witnesses list.
         variation_units: A list of VariationUnit instances contained in this Collation.
-        readings_by_witness: # A dictionary mapping base witness ID strings lists of reading support coefficients for all units (with at least two substantive readings).
+        readings_by_witness: # A dictionary mapping base witness ID strings to lists of reading support coefficients for all units (with at least two substantive readings).
         substantive_variation_unit_ids: # A list of ID strings for variation units with two or more substantive readings.
+        substantive_reading_ids: # A list of ID strings for readings considered substantive.
         verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
     """
     """
@@ -412,6 +415,7 @@ class Collation():
         self.variation_units = []
         self.readings_by_witness = {}
         self.substantive_variation_unit_ids = []
+        self.substantive_reading_ids = []
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
@@ -513,13 +517,15 @@ class Collation():
             substantive_reading_ids.append(rdg.id)
             reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
         # If the list of substantive readings only contains one entry, then this variation unit is not informative;
-        # return an empty dictionary:
+        # return an empty dictionary and add nothing to the list of substantive reading IDs:
         if self.verbose:
             print("Variation unit %s has %d substantive readings." % (vu.id, len(substantive_reading_ids)))
         readings_by_witness_for_unit = {}
         if len(substantive_reading_ids) <= 1:
             return readings_by_witness_for_unit
-        # Otherwise, initialize the output dictionary with empty sets for all base witnesses:
+        # Otherwise, add these substantive reading IDs to their corresponding list and initialize the output dictionary with empty sets for all base witnesses:
+        for substantive_reading_id in substantive_reading_ids:
+            self.substantive_reading_ids.append(vu.id + ", " + substantive_reading_id)
         for wit in self.witnesses:
             readings_by_witness_for_unit[wit.id] = [0]*len(substantive_reading_ids)
         # In a second pass, assign each base witness a set containing the readings it supports in this unit:
@@ -679,4 +685,82 @@ class Collation():
             f.write("End;")
         return
 
-    # TODO: Add output methods for CSV, Excel, and, if possible, Stemma
+    def to_numpy(self, split_missing=True):
+        """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
+
+        Args:
+            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+        
+        Returns:
+            A NumPy array with a row for each substantive reading and a column for each witness.
+            A list of substantive reading ID strings.
+            A list of witness ID strings.
+        """
+        # Initialize the output array with the appropriate dimensions:
+        reading_labels = self.substantive_reading_ids
+        witness_labels = [wit.id for wit in self.witnesses]
+        matrix = np.zeros((len(reading_labels), len(witness_labels)), dtype=float)
+        # Then populate it with the appropriate values:
+        for col_ind, wit_id in enumerate(witness_labels):
+            row_ind = 0
+            for rdg_support in self.readings_by_witness[wit_id]:
+                # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                if sum(rdg_support) == 0:
+                    if split_missing:
+                        for i in range(len(rdg_support)):
+                            matrix[row_ind,col_ind] = 1/len(rdg_support)
+                            row_ind += 1
+                    else:
+                        row_ind += len(rdg_support)
+                # Otherwise, adds its coefficients normally:
+                else:
+                    for i in range(len(rdg_support)):
+                        matrix[row_ind,col_ind] = rdg_support[i]
+                        row_ind += 1
+        return matrix, reading_labels, witness_labels
+
+    def to_dataframe(self, split_missing=True):
+        """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
+
+        Args:
+            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+        
+        Returns:
+            A Pandas DataFrame with a row for each substantive reading and a column for each witness.
+        """
+        # Convert the collation to a NumPy array and get its row and column labels first:
+        matrix, reading_labels, witness_labels = self.to_numpy(split_missing)
+        df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
+        return df
+
+    def to_csv(self, file_addr, split_missing=True):
+        """Writes this Collation to a comma-separated value (CSV) file with the given address.
+
+        If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
+
+        Args:
+            file_addr: A string representing the path to an output CSV file; the file type should be .csv.
+            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+        """
+        # Convert the collation to a Pandas DataFrame first:
+        df = self.to_dataframe(split_missing)
+        df.to_csv(file_addr)
+        return
+
+    def to_excel(self, file_addr, split_missing=True):
+        """Writes this Collation to an Excel (.xlsx) file with the given address.
+
+        If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the Excel file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
+
+        Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.
+
+        Args:
+            file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
+            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+        """
+        # Convert the collation to a Pandas DataFrame first:
+        df = self.to_dataframe(split_missing)
+        df.to_excel(file_addr)
+        return
+    
+    # TODO: Add output method for Stemma

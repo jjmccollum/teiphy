@@ -6,8 +6,11 @@ authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.7.1"
+python = "^3.8"
 lxml = "^4.9.1"
+numpy = "^1.23.2"
+pandas = "^1.4.4"
+openpyxl = "^3.0.10"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^5.1.1"
