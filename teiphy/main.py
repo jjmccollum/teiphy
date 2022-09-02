@@ -3,7 +3,9 @@ from pathlib import Path # for validating file address inputs
 from lxml import etree as et # for parsing XML input
 import typer
 
+from .format import Format
 from .teiphy import Collation
+
 
 app = typer.Typer()
 
@@ -32,9 +34,10 @@ def to_file(
         False, 
         help="Enable verbose logging (mostly for debugging purposes)."
     ),
-    output_format: bool = typer.Option(
-        False, 
-        help="Enable verbose logging (mostly for debugging purposes)."
+    format: Format = typer.Option(
+        None, 
+        case_sensitive=False,
+        help="The output format."
     ),
     input_addr: Path = typer.Argument(
         ...,
@@ -66,7 +69,7 @@ def to_file(
         print(f"Error opening input file: {err}")
 
     coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
-    coll.to_file(output_addr)
+    coll.to_file(output_addr, format=format)
     
 
 if __name__ == "__main__":
