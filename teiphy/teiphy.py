@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
-
+from typing import Union
+from pathlib import Path
 import time # to time calculations for users
 import string # for easy retrieval of character ranges
 from lxml import etree as et # for reading TEI XML inputs
 import numpy as np # for collation matrix outputs
 import pandas as pd # for writing to DataFrames, CSV, Excel, etc.
 
+from .format import Format
+
 """
 XML namespaces
 """
 xml_ns = "http://www.w3.org/XML/1998/namespace"
 tei_ns = "http://www.tei-c.org/ns/1.0"
+
+
+
 
 class Witness():
     """Base class for storing TEI XML witness data internally.
@@ -737,7 +743,7 @@ class Collation():
         df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         return df
 
-    def to_csv(self, file_addr, split_missing=True):
+    def to_csv(self, file_addr, split_missing=True, **kwargs):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
 
         If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
@@ -745,11 +751,12 @@ class Collation():
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
             split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
         df = self.to_dataframe(split_missing)
-        df.to_csv(file_addr)
-        return
+        return df.to_csv(file_addr, **kwargs)
+        
 
     def to_excel(self, file_addr, split_missing=True):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
@@ -767,4 +774,37 @@ class Collation():
         df.to_excel(file_addr)
         return
     
+    def to_file(self, file_addr:Union[Path, str], format:Format=None, split_missing:bool=True):
+        """Writes collation to file
+
+        Args:
+            file_addr (Union[Path, str]): The path to the output file.
+            format (Format, optional): The desired output format. 
+                If None then it is infered from the file suffix. 
+                Defaults to None.
+            split_missing (bool, optional): An optional boolean flag indicating whether or not to treat 
+                missing characters/variation units as having a contribution of 1 split over all states/readings; 
+                if False, then missing data is ignored (i.e., all states are 0). 
+                Not applicable for Nexus format.
+                Default value is True.
+        """
+        file_addr = Path(file_addr)
+        format = format or Format.infer(file_addr.suffix)
+
+        if format == Format.NEXUS:
+            return self.to_nexus(file_addr)
+        
+        if format == Format.CSV:
+            return self.to_csv(file_addr, split_missing=split_missing)
+        
+        if format == Format.TSV:
+            return self.to_csv(file_addr, split_missing=split_missing, sep="\t")
+
+        if format == Format.EXCEL:
+            return self.to_excel(file_addr, split_missing=split_missing)
+
+        raise Exception(f"Format {format} not understood.")
+
+
+
     # TODO: Add output method for Stemma
