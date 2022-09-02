@@ -13,10 +13,21 @@ author = 'Joey McCollum and Robert Turnbull'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    "sphinx_rtd_theme",
+    "nbsphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.coverage",
+    "sphinx.ext.napoleon",
+    "sphinx_copybutton",
+    # "sphinx_click",
+]
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = [
+]
 
 
 

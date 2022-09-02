@@ -11,6 +11,7 @@ teiphy
    :caption: Contents:
 
    readme
+   reference
    CONTRIBUTING
 
 Indices and Tables
