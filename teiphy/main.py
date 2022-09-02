@@ -59,7 +59,6 @@ def to_file(
     # Make sure the input is an XML file:
     if input_addr.suffix.lower() != ".xml":
         print("Error opening input file: The input file is not an XML file. Make sure the input file type is .xml.")
-    
     # If it is, then try to parse it:
     xml = None
     try:

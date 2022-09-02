@@ -14,7 +14,7 @@ class VariationUnit():
         id: The ID string of this variation unit, which should be unique.
         readings: A list of Readings contained in this VariationUnit.
     """
-    def __init__(self, xml, verbose=False):
+    def __init__(self, xml:et.Element, verbose:bool=False):
         """Constructs a new VariationUnit instance from the TEI XML input.
 
         Args:
@@ -34,7 +34,7 @@ class VariationUnit():
         if verbose:
             print("New VariationUnit %s with %d readings" % (self.id, len(self.readings)))
 
-    def parse(self, xml, verbose=False):
+    def parse(self, xml:et.Element, verbose:bool=False):
         """Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.
         
         Other children of app elements, such as note, noteGrp, and wit elements, are ignored.

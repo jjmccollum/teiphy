@@ -1,12 +1,18 @@
 import unittest
+from unittest.mock import patch
+from io import StringIO
+from pathlib import Path
 from lxml import etree as et
 
 from teiphy import Collation
 
+root_dir = Path("__file__").parent.parent
+input_example = root_dir/"example/ubs_ephesians.xml"
+
 class CollationDefaultTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml)
 
     def test_witnesses(self):
@@ -30,7 +36,7 @@ class CollationDefaultTestCase(unittest.TestCase):
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed"])
 
     def test_witnesses(self):
@@ -54,7 +60,7 @@ class CollationTrivialReconstructedTestCase(unittest.TestCase):
 class CollationTrivialDefectiveTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective"])
 
     def test_witnesses(self):
@@ -78,7 +84,7 @@ class CollationTrivialDefectiveTestCase(unittest.TestCase):
 class CollationTrivialOrthographicTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective", "orthographic"])
 
     def test_witnesses(self):
@@ -102,7 +108,7 @@ class CollationTrivialOrthographicTestCase(unittest.TestCase):
 class CollationTrivialOrthographicTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective", "orthographic", "subreading"])
 
     def test_witnesses(self):
@@ -126,7 +132,7 @@ class CollationTrivialOrthographicTestCase(unittest.TestCase):
 class CollationMissingTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, missing_reading_types=["lac", "overlap"])
     
     def test_missing_lac(self):
@@ -142,7 +148,7 @@ class CollationMissingTestCase(unittest.TestCase):
 class CollationManuscriptSuffixesTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, manuscript_suffixes=["*", "T", "C", "C0", "C1", "C2", "C2a", "C2b", "A", "/1", "/2", "/3"])
 
     def test_get_base_wit_no_suffix(self):
@@ -165,7 +171,7 @@ class CollationManuscriptSuffixesTestCase(unittest.TestCase):
 class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, fill_corrector_lacunae=True)
 
     def test_inactive_corrector(self):
@@ -178,15 +184,29 @@ class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
         rdg_support = self.collation.readings_by_witness["01C2"][vu_ind]
         self.assertEqual(rdg_support, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # this corrector is active in this unit and should have its own reading
 
+class CollationVerboseTestCase(unittest.TestCase):
+    def test_verbose(self):
+        with patch("sys.stdout", new = StringIO()) as out:
+            parser = et.XMLParser(remove_comments=True)
+            xml = et.parse(input_example, parser=parser)
+            self.collation = Collation(xml, verbose=True)
+            self.assertTrue(out.getvalue().startswith("Initializing collation..."))
+
 class CollationOutputTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse("example/ubs_ephesians.xml", parser=parser)
+        xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective", "orthographic", "subreading"], missing_reading_types=["lac", "overlap"], manuscript_suffixes=["*", "T", "/1", "/2", "/3"], fill_corrector_lacunae=True)
 
     def test_get_nexus_symbols(self):
         nexus_symbols = self.collation.get_nexus_symbols()
         self.assertEqual(nexus_symbols, ["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+
+    def test_get_nexus_symbols_empty(self):
+        empty_xml = et.fromstring("<TEI/>")
+        empty_collation = Collation(empty_xml)
+        nexus_symbols = empty_collation.get_nexus_symbols()
+        self.assertEqual(nexus_symbols, [])
 
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)

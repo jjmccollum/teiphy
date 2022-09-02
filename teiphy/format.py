@@ -20,7 +20,6 @@ class Format(Enum):
             ".csv":cls.CSV,
             ".tsv":cls.TSV,
             ".xlsx":cls.EXCEL,
-            "":cls.STEMMA,
         }
 
         suffix_lower = suffix.lower()

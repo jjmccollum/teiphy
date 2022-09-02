@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from lxml import etree as et
+
 from .common import xml_ns, tei_ns
 
 class Reading():
@@ -15,12 +17,12 @@ class Reading():
         targets: A list of other reading ID strings to which this reading corresponds. For substantive readings, this should be empty. For ambiguous readings, it should contain references to the readings that might correspond to this one. For overlap readings, it should contain a reference to the reading from the overlapping variation unit responsible for the overlap. 
         certainties: A dictionary mapping target reading IDs to floating-point certainty values.
     """
-    def __init__(self, xml, verbose=False):
+    def __init__(self, xml:et.Element=None, verbose:bool=False):
         """Constructs a new Reading instance from the TEI XML input.
 
         Args:
-            xml: An lxml.etree.Element representing a lem, rdg, or witDetail element.
-            verbose: An optional boolean flag indicating whether or not to print status updates.
+            xml: A lem, rdg, or witDetail element.
+            verbose: An optional flag indicating whether or not to print status updates.
         """
         self.type = ""
         self.text = ""
@@ -28,26 +30,26 @@ class Reading():
         self.targets = []
         self.certainties = {}
         self.wits = []
-        # Populate all attributes:
-        self.parse(xml, verbose)
-        if verbose:
-            if len(self.wits) == 0:
-                if self.text != "":
-                    print("New Reading %s with type %s, no witnesses, and text %s" % (self.id, self.type, self.text))
+        if xml is not None:
+            self.parse(xml, verbose)
+            if verbose:
+                if len(self.wits) == 0:
+                    if self.text != "":
+                        print("New Reading %s with type %s, no witnesses, and text %s" % (self.id, self.type, self.text))
+                    else:
+                        print("New Reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
                 else:
-                    print("New Reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
-            else:
-                if self.text != "":
-                    print("New Reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
-                else:
-                    print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
+                    if self.text != "":
+                        print("New Reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
+                    else:
+                        print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
 
-    def parse(self, xml, verbose=False):
+    def parse(self, xml:et.Element, verbose:bool=False):
         """Given an XML element, recursively parses it and its subelements.
 
         Args:
-            xml: An lxml.etree.Element representing a lem, rdg, or witDetail element.
-            verbose: An optional boolean flag indicating whether or not to print status updates.
+            xml: A lem, rdg, or witDetail element.
+            verbose: An optional flag indicating whether or not to print status updates.
         """
         # Determine what this element is:
         raw_tag = xml.tag.replace("{%s}" % tei_ns, "")
@@ -107,7 +109,7 @@ class Reading():
             elif xml.get("n") is not None:
                 self.id = xml.get("n")
             else:
-                self.id = xml.text
+                self.id = self.text
             return
         # If it is a certainty measurement, then store its value in this reading's certainties map
         # (overwriting any previous values for this reading in the map, since they shouldn't be specified more than once):
@@ -143,8 +145,8 @@ class Reading():
             # Keep track of how long the text currently is, so we can modify just the portion we're about to add:
             starting_ind = len(self.text)
             self.text += xml.text if xml.text is not None else ""
-            for child in xml:
-                self.parse(child, verbose)
+            # for child in xml:
+            #     self.parse(child, verbose)
             # NOTE: other rendering types could be supported here
             if xml.get("rend") is not None:
                 old_text = self.text[starting_ind:]
@@ -177,8 +179,8 @@ class Reading():
         if raw_tag == "ex":
             self.text += "("
             self.text += xml.text if xml.text is not None else ""
-            for child in xml:
-                self.parse(child, verbose)
+            # for child in xml:
+            #     self.parse(child, verbose)
             self.text += ")"
             self.text += xml.tail if xml.tail is not None else ""
             return
@@ -246,5 +248,3 @@ class Reading():
             self.text += ">"
             self.text += xml.tail if xml.tail is not None else ""
             return
-        # Skip all other elements:
-        return

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Union
+from typing import List, Union
 from pathlib import Path
 import time # to time calculations for users
 import string # for easy retrieval of character ranges
@@ -31,7 +31,7 @@ class Collation():
         substantive_reading_ids: # A list of ID strings for readings considered substantive.
         verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
     """
-    def __init__(self, xml, manuscript_suffixes=[], trivial_reading_types=[], missing_reading_types=[], fill_corrector_lacunae=False, verbose=False):
+    def __init__(self, xml:et.ElementTree, manuscript_suffixes:List[str]=[], trivial_reading_types:List[str]=[], missing_reading_types:List[str]=[], fill_corrector_lacunae:bool=False, verbose:bool=False):
         """Constructs a new Collation instance with the given settings.
 
         Args:
@@ -64,7 +64,7 @@ class Collation():
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
 
-    def parse_list_wit(self, xml):
+    def parse_list_wit(self, xml:et.ElementTree):
         """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
 
         Args:
@@ -84,7 +84,7 @@ class Collation():
             print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
         return
 
-    def parse_apps(self, xml):
+    def parse_apps(self, xml:et.ElementTree):
         """Given an XML tree for a collation, populates its list of variation units from its app elements.
 
         Args:
@@ -101,7 +101,7 @@ class Collation():
             print("Finished processing %d variation units in %0.4fs." % (len(self.variation_units), t1 - t0))
         return
 
-    def get_base_wit(self, wit):
+    def get_base_wit(self, wit:str):
         """Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.
 
         Args:
@@ -127,7 +127,7 @@ class Collation():
         # If we get here, then all possible manuscript suffixes have been stripped, and the resulting siglum does not correspond to a siglum in the witness list:
         return base_wit
 
-    def get_readings_by_witness_for_unit(self, vu):
+    def get_readings_by_witness_for_unit(self, vu:VariationUnit):
         """Returns a dictionary mapping witness IDs to a list of their reading coefficients for a given variation unit.
 
         Args:
@@ -141,14 +141,11 @@ class Collation():
         reading_id_to_index = {}
         for rdg in vu.readings:
             # If this reading is missing (e.g., lacunose or inapplicable due to an overlapping variant) or targets another reading, then skip it:
-            if rdg.type in self.missing_reading_types or len(rdg.targets) > 0:
+            if rdg.type in self.missing_reading_types or len(rdg.targets) > 0 or len(rdg.certainties) > 0:
                 continue
             # If this reading is trivial, then map it to the last substantive index:
             if rdg.type in self.trivial_reading_types:
                 reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
-                continue
-            # If this reading has one or more target readings, then skip it (it will be mapped to its target readings):
-            if len(rdg.certainties) > 0:
                 continue
             # Otherwise, the reading is substantive: add it to the map and update the last substantive index:
             substantive_reading_ids.append(rdg.id)
@@ -266,7 +263,7 @@ class Collation():
         nexus_symbols = possible_symbols[:nsymbols]
         return nexus_symbols
 
-    def to_nexus(self, file_addr):
+    def to_nexus(self, file_addr:Union[Path, str]):
         """Writes this Collation to a NEXUS file with the given address.
 
         Args:
@@ -322,7 +319,7 @@ class Collation():
             f.write("End;")
         return
 
-    def to_numpy(self, split_missing=True):
+    def to_numpy(self, split_missing:bool=True):
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
         Args:
@@ -356,7 +353,7 @@ class Collation():
                         row_ind += 1
         return matrix, reading_labels, witness_labels
 
-    def to_dataframe(self, split_missing=True):
+    def to_dataframe(self, split_missing:bool=True):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
@@ -370,7 +367,7 @@ class Collation():
         df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         return df
 
-    def to_csv(self, file_addr, split_missing=True, **kwargs):
+    def to_csv(self, file_addr:Union[Path, str], split_missing:bool=True, **kwargs):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
 
         If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
@@ -385,7 +382,7 @@ class Collation():
         return df.to_csv(file_addr, **kwargs)
         
 
-    def to_excel(self, file_addr, split_missing=True):
+    def to_excel(self, file_addr:Union[Path, str], split_missing:bool=True):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
         Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.
@@ -396,27 +393,92 @@ class Collation():
         """
         # Convert the collation to a Pandas DataFrame first:
         df = self.to_dataframe(split_missing)
-        df.to_excel(file_addr)
-        return
+        return df.to_excel(file_addr)
 
-    def to_stemma(self, file_addr):
+    def to_stemma(self, file_addr:Union[Path, str]):
         """Writes this Collation to an STEMMA file with the given address.
 
-        Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as missing data.
+        Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.
 
         Args:
             file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
         """
+        # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary 
+        # to the readings' texts:
+        reading_texts_by_indices = {}
+        substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
+        substantive_reading_ids_set = set(self.substantive_reading_ids)
+        vu_ind = 0
+        for vu in self.variation_units:
+            if vu.id not in substantive_variation_unit_ids_set:
+                continue
+            rdg_ind = 0
+            for rdg in vu.readings:
+                key = vu.id + ", " + rdg.id
+                if key not in substantive_reading_ids_set:
+                    continue
+                indices = tuple([vu_ind, rdg_ind])
+                reading_texts_by_indices[indices] = rdg.text
+                rdg_ind += 1
+            if rdg_ind > 0:
+                vu_ind += 1
+        # In a second pass, populate another dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary 
+        # to the witnesses exclusively supporting those readings:
+        reading_wits_by_indices = {}
+        for indices in reading_texts_by_indices:
+            reading_wits_by_indices[indices] = []
+        for wit in self.readings_by_witness:
+            for vu_ind, rdg_support in enumerate(self.readings_by_witness[wit]):
+                # If this witness does not exclusively support exactly one reading at this unit, then treat it as lacunose:
+                if len([i for i, w in enumerate(rdg_support) if w > 0]) != 1:
+                    continue
+                rdg_ind = rdg_support.index(1)
+                indices = tuple([vu_ind, rdg_ind])
+                reading_wits_by_indices[indices].append(wit)
+        # In a third pass, write to the STEMMA file:
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
             f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
             # Then proceed for each variation unit:
-            for i, vu_id in enumerate(self.substantive_variation_unit_ids):
+            for vu_ind, vu_id in enumerate(self.substantive_variation_unit_ids):
                 # Print the variation unit ID first:
                 f.write("@ %s\n" % vu_id)
+                # In a first pass, print the texts of all readings enclosed in brackets:
+                f.write("[ ")
+                rdg_ind = 0
+                while True:
+                    indices = tuple([vu_ind, rdg_ind])
+                    if indices not in reading_texts_by_indices:
+                        break
+                    text = reading_texts_by_indices[indices]
+                    # Denote omissions by en-dashes:
+                    if text == "":
+                        text = "\u2013"
+                    # TODO: We may need to reformat some serializations from Reading here, as some characters may be reserved for other purposes in this format.
+                    if rdg_ind == 1:
+                        f.write("\n| ")
+                    elif rdg_ind > 1:
+                        f.write("/")
+                    f.write(text)
+                    rdg_ind += 1
+                f.write(" ]\n")
+                # In a second pass, print the indices and witnesses for all readings enclosed in diagonal brackets:
+                f.write("\t< ")
+                rdg_ind = 0
+                while True:
+                    indices = tuple([vu_ind, rdg_ind])
+                    if indices not in reading_wits_by_indices:
+                        break
+                    wits = " ".join(reading_wits_by_indices[indices])
+                    if rdg_ind > 0:
+                        f.write("\t| ")
+                    f.write("%d %s\n" % (rdg_ind, wits))
+                    rdg_ind += 1
+                f.write("\t>\n")
+        return
     
     def to_file(self, file_addr:Union[Path, str], format:Format=None, split_missing:bool=True):
-        """Writes collation to file
+        """Writes this Collation to the file with the given address.
 
         Args:
             file_addr (Union[Path, str]): The path to the output file.
@@ -430,7 +492,7 @@ class Collation():
                 Default value is True.
         """
         file_addr = Path(file_addr)
-        format = format or Format.infer(file_addr.suffix)
+        format = format or Format.infer(file_addr.suffix) # an exception will be raised here if the format or suffix is invalid
 
         if format == Format.NEXUS:
             return self.to_nexus(file_addr)
@@ -446,5 +508,3 @@ class Collation():
 
         if format == Format.STEMMA:
             return self.to_stemma(file_addr)
-
-        raise Exception(f"Format {format} not understood.")
