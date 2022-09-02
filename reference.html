@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; teiphy  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="CONTRIBUTING.html" />
+    <link rel="prev" title="teiphy" href="readme.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> teiphy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">teiphy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#collation">Collation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#variation-unit">Variation Unit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#witness">Witness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading">Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">teiphy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
+<section id="collation">
+<h2>Collation<a class="headerlink" href="#collation" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="teiphy.Collation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for storing TEI XML collation data internally.</p>
+<p>This corresponds to the entire XML tree, rooted at the TEI element of the collation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.manuscript_suffixes">
+<span class="sig-name descname"><span class="pre">manuscript_suffixes</span></span><a class="headerlink" href="#teiphy.Collation.manuscript_suffixes" title="Permalink to this definition"></a></dt>
+<dd><p>A list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.trivial_reading_types">
+<span class="sig-name descname"><span class="pre">trivial_reading_types</span></span><a class="headerlink" href="#teiphy.Collation.trivial_reading_types" title="Permalink to this definition"></a></dt>
+<dd><p>A set of reading types (e.g., “reconstructed”, “defective”, “orthographic”, “subreading”) whose readings should be collapsed under the previous substantive reading.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.missing_reading_types">
+<span class="sig-name descname"><span class="pre">missing_reading_types</span></span><a class="headerlink" href="#teiphy.Collation.missing_reading_types" title="Permalink to this definition"></a></dt>
+<dd><p>A set of reading types (e.g., “lac”, “overlap”) whose readings should be treated as missing data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.fill_corrector_lacunae">
+<span class="sig-name descname"><span class="pre">fill_corrector_lacunae</span></span><a class="headerlink" href="#teiphy.Collation.fill_corrector_lacunae" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean flag indicating whether or not to fill “lacunae” in witnesses with type “corrector”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.witnesses">
+<span class="sig-name descname"><span class="pre">witnesses</span></span><a class="headerlink" href="#teiphy.Collation.witnesses" title="Permalink to this definition"></a></dt>
+<dd><p>A list of Witness instances contained in this Collation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.witness_index_by_id">
+<span class="sig-name descname"><span class="pre">witness_index_by_id</span></span><a class="headerlink" href="#teiphy.Collation.witness_index_by_id" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary mapping base witness ID strings to their int indices in the witnesses list.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.variation_units">
+<span class="sig-name descname"><span class="pre">variation_units</span></span><a class="headerlink" href="#teiphy.Collation.variation_units" title="Permalink to this definition"></a></dt>
+<dd><p>A list of VariationUnit instances contained in this Collation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.readings_by_witness">
+<span class="sig-name descname"><span class="pre">readings_by_witness</span></span><a class="headerlink" href="#teiphy.Collation.readings_by_witness" title="Permalink to this definition"></a></dt>
+<dd><p># A dictionary mapping base witness ID strings to lists of reading support coefficients for all units (with at least two substantive readings).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.substantive_variation_unit_ids">
+<span class="sig-name descname"><span class="pre">substantive_variation_unit_ids</span></span><a class="headerlink" href="#teiphy.Collation.substantive_variation_unit_ids" title="Permalink to this definition"></a></dt>
+<dd><p># A list of ID strings for variation units with two or more substantive readings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.substantive_reading_ids">
+<span class="sig-name descname"><span class="pre">substantive_reading_ids</span></span><a class="headerlink" href="#teiphy.Collation.substantive_reading_ids" title="Permalink to this definition"></a></dt>
+<dd><p># A list of ID strings for readings considered substantive.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Collation.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#teiphy.Collation.verbose" title="Permalink to this definition"></a></dt>
+<dd><p>A boolean flag indicating whether or not to print timing and debugging details for the user.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_base_wit">
+<span class="sig-name descname"><span class="pre">get_base_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_base_wit" title="Permalink to this definition"></a></dt>
+<dd><p>Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wit</strong> – A string representing a witness siglum, potentially including suffixes to be stripped.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_nexus_symbols">
+<span class="sig-name descname"><span class="pre">get_nexus_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_nexus_symbols" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in NEXUS.</p>
+<p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of individual characters representing states in readings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_readings_by_witness_for_unit">
+<span class="sig-name descname"><span class="pre">get_readings_by_witness_for_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_readings_by_witness_for_unit" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a dictionary mapping witness IDs to a list of their reading coefficients for a given variation unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vu</strong> – A VariationUnit to be processed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary mapping witness ID strings to a list of their coefficients for all substantive readings in this VariationUnit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.parse_apps">
+<span class="sig-name descname"><span class="pre">parse_apps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_apps" title="Permalink to this definition"></a></dt>
+<dd><p>Given an XML tree for a collation, populates its list of variation units from its app elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.parse_list_wit">
+<span class="sig-name descname"><span class="pre">parse_list_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_list_wit" title="Permalink to this definition"></a></dt>
+<dd><p>Given an XML tree for a collation, populates its list of witnesses from its listWit element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.parse_readings_by_witness">
+<span class="sig-name descname"><span class="pre">parse_readings_by_witness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_readings_by_witness" title="Permalink to this definition"></a></dt>
+<dd><p>Populates the internal dictionary mapping witness IDs to a list of their reading support sets for all variation units, and then fills the empty reading support sets for witnesses of type “corrector” with the entries of the previous witness.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_csv">
+<span class="sig-name descname"><span class="pre">to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to a comma-separated value (CSV) file with the given address.</p>
+<p>If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_addr</strong> – A string representing the path to an output CSV file; the file type should be .csv.</p></li>
+<li><p><strong>split_missing</strong> – An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments for pandas.DataFrame.to_csv.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_dataframe">
+<span class="sig-name descname"><span class="pre">to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>split_missing</strong> – An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Pandas DataFrame with a row for each substantive reading and a column for each witness.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_excel">
+<span class="sig-name descname"><span class="pre">to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_excel" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to an Excel (.xlsx) file with the given address.</p>
+<p>If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the Excel file, but Excel will likely interpret them as numbers and truncate any leading zeroes!</p>
+<p>Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_addr</strong> – A string representing the path to an output Excel file; the file type should be .xlsx.</p></li>
+<li><p><strong>split_missing</strong> – An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_file">
+<span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Format</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_file" title="Permalink to this definition"></a></dt>
+<dd><p>Writes collation to file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_addr</strong> (<em>Union</em><em>[</em><em>Path</em><em>, </em><em>str</em><em>]</em>) – The path to the output file.</p></li>
+<li><p><strong>format</strong> (<em>Format</em><em>, </em><em>optional</em>) – The desired output format.
+If None then it is infered from the file suffix.
+Defaults to None.</p></li>
+<li><p><strong>split_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional boolean flag indicating whether or not to treat
+missing characters/variation units as having a contribution of 1 split over all states/readings;
+if False, then missing data is ignored (i.e., all states are 0).
+Not applicable for Nexus format.
+Default value is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_nexus">
+<span class="sig-name descname"><span class="pre">to_nexus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_nexus" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to a NEXUS file with the given address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output NEXUS file; the file type should be .nex or .nxs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_numpy">
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_numpy" title="Permalink to this definition"></a></dt>
+<dd><p>Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>split_missing</strong> – An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A NumPy array with a row for each substantive reading and a column for each witness.
+A list of substantive reading ID strings.
+A list of witness ID strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="variation-unit">
+<h2>Variation Unit<a class="headerlink" href="#variation-unit" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="teiphy.VariationUnit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">VariationUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.VariationUnit" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for storing TEI XML variation unit data internally.</p>
+<p>This corresponds to an app element in the collation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.VariationUnit.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#teiphy.VariationUnit.id" title="Permalink to this definition"></a></dt>
+<dd><p>The ID string of this variation unit, which should be unique.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.VariationUnit.readings">
+<span class="sig-name descname"><span class="pre">readings</span></span><a class="headerlink" href="#teiphy.VariationUnit.readings" title="Permalink to this definition"></a></dt>
+<dd><p>A list of Readings contained in this VariationUnit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.VariationUnit.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.VariationUnit.parse" title="Permalink to this definition"></a></dt>
+<dd><p>Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.</p>
+<p>Other children of app elements, such as note, noteGrp, and wit elements, are ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xml</strong> – An lxml.etree.Element representing an app element.</p></li>
+<li><p><strong>verbose</strong> – An optional boolean flag indicating whether or not to print status updates.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="witness">
+<h2>Witness<a class="headerlink" href="#witness" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="teiphy.Witness">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Witness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Witness" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for storing TEI XML witness data internally.</p>
+<p>This corresponds to a witness element in the collation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Witness.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#teiphy.Witness.id" title="Permalink to this definition"></a></dt>
+<dd><p>The ID string of this reading, which should be unique within its parent app element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Witness.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#teiphy.Witness.type" title="Permalink to this definition"></a></dt>
+<dd><p>A string representing the type of witness. Examples include “corrector”, “version”, and “father”.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="reading">
+<h2>Reading<a class="headerlink" href="#reading" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="teiphy.Reading">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Reading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Reading" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for storing TEI XML reading data internally.</p>
+<p>This can correspond to a lem, rdg, or witDetail element in the collation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Reading.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#teiphy.Reading.id" title="Permalink to this definition"></a></dt>
+<dd><p>The ID string of this reading, which should be unique within its parent app element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Reading.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#teiphy.Reading.type" title="Permalink to this definition"></a></dt>
+<dd><p>A string representing the type of reading. Examples include “reconstructed”, “defective”, “orthographic”, “subreading”, “ambiguous”, “overlap”, and “lac”. The default value is “substantive”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Reading.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#teiphy.Reading.text" title="Permalink to this definition"></a></dt>
+<dd><p>Serialization of the contents of this element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Reading.wits">
+<span class="sig-name descname"><span class="pre">wits</span></span><a class="headerlink" href="#teiphy.Reading.wits" title="Permalink to this definition"></a></dt>
+<dd><p>A list of sigla referring to witnesses that support this reading.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Reading.targets">
+<span class="sig-name descname"><span class="pre">targets</span></span><a class="headerlink" href="#teiphy.Reading.targets" title="Permalink to this definition"></a></dt>
+<dd><p>A list of other reading ID strings to which this reading corresponds. For substantive readings, this should be empty. For ambiguous readings, it should contain references to the readings that might correspond to this one. For overlap readings, it should contain a reference to the reading from the overlapping variation unit responsible for the overlap.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="teiphy.Reading.certainties">
+<span class="sig-name descname"><span class="pre">certainties</span></span><a class="headerlink" href="#teiphy.Reading.certainties" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary mapping target reading IDs to floating-point certainty values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Reading.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Reading.parse" title="Permalink to this definition"></a></dt>
+<dd><p>Given an XML element, recursively parses it and its subelements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xml</strong> – An lxml.etree.Element representing a lem, rdg, or witDetail element.</p></li>
+<li><p><strong>verbose</strong> – An optional boolean flag indicating whether or not to print status updates.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="readme.html" class="btn btn-neutral float-left" title="teiphy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CONTRIBUTING.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Joey McCollum and Robert Turnbull.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
