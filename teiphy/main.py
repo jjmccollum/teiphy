@@ -4,7 +4,7 @@ from lxml import etree as et # for parsing XML input
 import typer
 
 from .format import Format
-from .teiphy import Collation
+from .collation import Collation
 
 
 app = typer.Typer()
