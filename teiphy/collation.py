@@ -388,8 +388,6 @@ class Collation():
     def to_excel(self, file_addr, split_missing=True):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
-        If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the Excel file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
-
         Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.
 
         Args:
@@ -400,6 +398,22 @@ class Collation():
         df = self.to_dataframe(split_missing)
         df.to_excel(file_addr)
         return
+
+    def to_stemma(self, file_addr):
+        """Writes this Collation to an STEMMA file with the given address.
+
+        Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as missing data.
+
+        Args:
+            file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
+        """
+        with open(file_addr, "w", encoding="utf-8") as f:
+            # Start with the witness list:
+            f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
+            # Then proceed for each variation unit:
+            for i, vu_id in enumerate(self.substantive_variation_unit_ids):
+                # Print the variation unit ID first:
+                f.write("@ %s\n" % vu_id)
     
     def to_file(self, file_addr:Union[Path, str], format:Format=None, split_missing:bool=True):
         """Writes collation to file
@@ -412,7 +426,7 @@ class Collation():
             split_missing (bool, optional): An optional boolean flag indicating whether or not to treat 
                 missing characters/variation units as having a contribution of 1 split over all states/readings; 
                 if False, then missing data is ignored (i.e., all states are 0). 
-                Not applicable for Nexus format.
+                Not applicable for Nexus or STEMMA format.
                 Default value is True.
         """
         file_addr = Path(file_addr)
@@ -430,8 +444,7 @@ class Collation():
         if format == Format.EXCEL:
             return self.to_excel(file_addr, split_missing=split_missing)
 
+        if format == Format.STEMMA:
+            return self.to_stemma(file_addr)
+
         raise Exception(f"Format {format} not understood.")
-
-
-
-    # TODO: Add output method for Stemma

@@ -9,6 +9,7 @@ class Format(Enum):
     CSV = 'CSV'
     TSV = 'TSV'
     EXCEL = 'EXCEL'
+    STEMMA = 'STEMMA'
 
     @classmethod
     def infer(cls, suffix:str):
@@ -19,6 +20,7 @@ class Format(Enum):
             ".csv":cls.CSV,
             ".tsv":cls.TSV,
             ".xlsx":cls.EXCEL,
+            "":cls.STEMMA,
         }
 
         suffix_lower = suffix.lower()
