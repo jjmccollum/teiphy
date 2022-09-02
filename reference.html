@@ -277,7 +277,6 @@
 <dt class="sig sig-object py" id="teiphy.Collation.to_excel">
 <span class="sig-name descname"><span class="pre">to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_excel" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to an Excel (.xlsx) file with the given address.</p>
-<p>If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the Excel file, but Excel will likely interpret them as numbers and truncate any leading zeroes!</p>
 <p>Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -303,7 +302,7 @@ Defaults to None.</p></li>
 <li><p><strong>split_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional boolean flag indicating whether or not to treat
 missing characters/variation units as having a contribution of 1 split over all states/readings;
 if False, then missing data is ignored (i.e., all states are 0).
-Not applicable for Nexus format.
+Not applicable for Nexus or STEMMA format.
 Default value is True.</p></li>
 </ul>
 </dd>
@@ -333,6 +332,18 @@ Default value is True.</p></li>
 <dd class="field-even"><p>A NumPy array with a row for each substantive reading and a column for each witness.
 A list of substantive reading ID strings.
 A list of witness ID strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_stemma">
+<span class="sig-name descname"><span class="pre">to_stemma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_stemma" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to an STEMMA file with the given address.</p>
+<p>Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as missing data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output STEMMA prep file; the file should have no extension.</p>
 </dd>
 </dl>
 </dd></dl>
