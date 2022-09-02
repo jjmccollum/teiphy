@@ -109,7 +109,7 @@
 <h2>Collation<a class="headerlink" href="#collation" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="teiphy.Collation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for storing TEI XML collation data internally.</p>
 <p>This corresponds to the entire XML tree, rooted at the TEI element of the collation.</p>
 <dl class="py attribute">
@@ -180,7 +180,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_base_wit">
-<span class="sig-name descname"><span class="pre">get_base_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_base_wit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_base_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_base_wit" title="Permalink to this definition"></a></dt>
 <dd><p>Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -203,7 +203,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_readings_by_witness_for_unit">
-<span class="sig-name descname"><span class="pre">get_readings_by_witness_for_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_readings_by_witness_for_unit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_readings_by_witness_for_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#teiphy.VariationUnit" title="teiphy.variation_unit.VariationUnit"><span class="pre">VariationUnit</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_readings_by_witness_for_unit" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a dictionary mapping witness IDs to a list of their reading coefficients for a given variation unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -217,7 +217,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.parse_apps">
-<span class="sig-name descname"><span class="pre">parse_apps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_apps" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parse_apps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_apps" title="Permalink to this definition"></a></dt>
 <dd><p>Given an XML tree for a collation, populates its list of variation units from its app elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -228,7 +228,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.parse_list_wit">
-<span class="sig-name descname"><span class="pre">parse_list_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_list_wit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parse_list_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_list_wit" title="Permalink to this definition"></a></dt>
 <dd><p>Given an XML tree for a collation, populates its list of witnesses from its listWit element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -245,7 +245,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_csv">
-<span class="sig-name descname"><span class="pre">to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_csv" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_csv" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to a comma-separated value (CSV) file with the given address.</p>
 <p>If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!</p>
 <dl class="field-list simple">
@@ -261,7 +261,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_dataframe">
-<span class="sig-name descname"><span class="pre">to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_dataframe" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_dataframe" title="Permalink to this definition"></a></dt>
 <dd><p>Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -275,7 +275,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_excel">
-<span class="sig-name descname"><span class="pre">to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_excel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_excel" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to an Excel (.xlsx) file with the given address.</p>
 <p>Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.</p>
 <dl class="field-list simple">
@@ -291,7 +291,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_file">
 <span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Format</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_file" title="Permalink to this definition"></a></dt>
-<dd><p>Writes collation to file</p>
+<dd><p>Writes this Collation to the file with the given address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -311,7 +311,7 @@ Default value is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_nexus">
-<span class="sig-name descname"><span class="pre">to_nexus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_nexus" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_nexus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_nexus" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to a NEXUS file with the given address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -322,7 +322,7 @@ Default value is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_numpy">
-<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_numpy" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_numpy" title="Permalink to this definition"></a></dt>
 <dd><p>Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -338,9 +338,9 @@ A list of witness ID strings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_stemma">
-<span class="sig-name descname"><span class="pre">to_stemma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_stemma" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_stemma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_stemma" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to an STEMMA file with the given address.</p>
-<p>Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as missing data.</p>
+<p>Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output STEMMA prep file; the file should have no extension.</p>
@@ -355,7 +355,7 @@ A list of witness ID strings.</p>
 <h2>Variation Unit<a class="headerlink" href="#variation-unit" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="teiphy.VariationUnit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">VariationUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.VariationUnit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">VariationUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.VariationUnit" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for storing TEI XML variation unit data internally.</p>
 <p>This corresponds to an app element in the collation.</p>
 <dl class="py attribute">
@@ -372,7 +372,7 @@ A list of witness ID strings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.VariationUnit.parse">
-<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.VariationUnit.parse" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.VariationUnit.parse" title="Permalink to this definition"></a></dt>
 <dd><p>Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.</p>
 <p>Other children of app elements, such as note, noteGrp, and wit elements, are ignored.</p>
 <dl class="field-list simple">
@@ -392,7 +392,7 @@ A list of witness ID strings.</p>
 <h2>Witness<a class="headerlink" href="#witness" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="teiphy.Witness">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Witness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Witness" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Witness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Witness" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for storing TEI XML witness data internally.</p>
 <p>This corresponds to a witness element in the collation.</p>
 <dl class="py attribute">
@@ -414,7 +414,7 @@ A list of witness ID strings.</p>
 <h2>Reading<a class="headerlink" href="#reading" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="teiphy.Reading">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Reading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Reading" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Reading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Reading" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for storing TEI XML reading data internally.</p>
 <p>This can correspond to a lem, rdg, or witDetail element in the collation.</p>
 <dl class="py attribute">
@@ -455,13 +455,13 @@ A list of witness ID strings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Reading.parse">
-<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Reading.parse" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Reading.parse" title="Permalink to this definition"></a></dt>
 <dd><p>Given an XML element, recursively parses it and its subelements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>xml</strong> – An lxml.etree.Element representing a lem, rdg, or witDetail element.</p></li>
-<li><p><strong>verbose</strong> – An optional boolean flag indicating whether or not to print status updates.</p></li>
+<li><p><strong>xml</strong> – A lem, rdg, or witDetail element.</p></li>
+<li><p><strong>verbose</strong> – An optional flag indicating whether or not to print status updates.</p></li>
 </ul>
 </dd>
 </dl>
