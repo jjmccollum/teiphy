@@ -60,11 +60,13 @@ def to_nexus(
     except Exception as e:
         print("Error opening input file: %s" % e)
     # Make sure the output is a valid file type:
-    if output_addr.suffix != ".nex" and output_addr.suffix != ".nxs":
-        print("Error opening output file: The output file is not a NEXUS file. Make sure the output file type is .nex or .nxs.")
+    allowed_nexus_formats = [".nex", ".nxs", ".nexus"]
+    if output_addr.suffix.lower() not in allowed_nexus_formats:
+        print(f"Error opening output file '{output_addr}': The output file is not a NEXUS file. Make sure the output file extension  is one of {', '.join(allowed_nexus_formats)}.")
     # Initialize the internal representation of the collation:
     coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
     coll.to_nexus(output_addr)
+
 
 @app.command()
 def to_csv(
