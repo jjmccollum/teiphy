@@ -27,12 +27,9 @@ jobs:
     - name: Coverage
       run: |
         poetry run coverage run -m pytest
-        poetry run coverage html --directory gh-pages/coverage
-        ls gh-pages/coverage
+        poetry run coverage html --directory gh-pages/coverage-report
         echo "COVERAGE=$(poetry run coverage report --precision 2 | grep TOTAL | tr -s ' ' | cut -f 4 -d " ")" >> $GITHUB_ENV
-        mkdir gh-pages/htmlcov
-        echo test > gh-pages/htmlcov/index.html
-        ls gh-pages/coverage
+        ls gh-pages/coverage-report
     - name: Build draft PDF
       uses: openjournals/openjournals-draft-action@master
       with:
@@ -42,7 +39,6 @@ jobs:
     - name: Move PDF
       run: |
         mv paper.pdf gh-pages/joss-draft.pdf
-        ls gh-pages/coverage
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@4.1.5
       with:
