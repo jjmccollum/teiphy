@@ -141,9 +141,8 @@ class Collation():
         reading_id_to_index = {}
         for rdg in vu.readings:
             # If this reading is missing (e.g., lacunose or inapplicable due to an overlapping variant) or targets another reading, then skip it:
-            if rdg.type in self.missing_reading_types or len(rdg.targets) > 0 or len(rdg.certainties) > 0:
+            if rdg.type in self.missing_reading_types or len(rdg.certainties) > 0:
                 continue
-
             # If this reading is trivial, then map it to the last substantive index:
             if rdg.type in self.trivial_reading_types:
                 reading_id_to_index[rdg.id] = len(substantive_reading_ids) - 1
