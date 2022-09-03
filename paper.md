@@ -85,7 +85,6 @@ The software can be installed through the Python Package Index (PyPI)
 and the source code is available under the MIT license from the GitHub repository. 
 The automated testing suite has 100% coverage.
 
-
 # Acknowledgements
 
 The authors wish to thank Stephen C. Carlson for his feedback on this project.
