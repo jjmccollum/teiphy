@@ -23,7 +23,12 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
     # "sphinx_click",
+    'sphinxcontrib.bibtex',
 ]
+
+# https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html
+bibtex_bibfiles = ['references.bib']
+
 
 templates_path = ['_templates']
 exclude_patterns = [
