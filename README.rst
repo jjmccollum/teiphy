@@ -16,7 +16,7 @@ teiphy
     :target: https://github.com/psf/black
     
 .. |coverage badge| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/jjmccollum/62997df516f95bbda6eaefa02b9570aa/raw/coverage-badge.json
-    :target: https://jjmccollum.github.io/teiphy/coverage-report/
+    :target: https://jjmccollum.github.io/teiphy/coverage/
 
 .. |git3moji badge| image:: https://img.shields.io/badge/git3moji-%E2%9A%A1%EF%B8%8F%F0%9F%90%9B%F0%9F%93%BA%F0%9F%91%AE%F0%9F%94%A4-fffad8.svg
     :target: https://robinpokorny.github.io/git3moji/
