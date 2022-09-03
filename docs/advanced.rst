@@ -379,4 +379,3 @@ enter the command
    teiphy -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.
-(If you are using Mac or Linux rather than Windows, make sure you use a forward slash instead of a backward one.)
