@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>teiphy &mdash; teiphy  documentation</title>
+  <title>Advanced Usage &mdash; teiphy  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API Reference" href="reference.html" />
-    <link rel="prev" title="teiphy" href="index.html" /> 
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,26 +44,19 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">teiphy</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#about-this-project">About This Project</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#design-philosophy">Design Philosophy</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-and-dependencies">Installation and Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-at-varying-levels-of-detail-using-reading-types">Analysis at Varying Levels of Detail Using Reading Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ambiguities-and-judgments-of-certainty">Ambiguities and Judgments of Certainty</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#lacunae-and-other-missing-data">Lacunae and Other Missing Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#correctors-hands">Correctors’ Hands</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">Removing First-hand Siglum Suffixes and Merging Multiple Attestations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#other-options">Other Options</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#analysis-at-varying-levels-of-detail-using-reading-types">Analysis at Varying Levels of Detail Using Reading Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ambiguities-and-judgments-of-certainty">Ambiguities and Judgments of Certainty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lacunae-and-other-missing-data">Lacunae and Other Missing Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#correctors-hands">Correctors’ Hands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">Removing First-hand Siglum Suffixes and Merging Multiple Attestations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-options">Other Options</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 </ul>
 
         </div>
@@ -80,9 +73,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>teiphy</li>
+      <li>Advanced Usage</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/advanced.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -114,36 +107,19 @@
     text-align: unset;
 }
 </style>
-<section id="teiphy">
-<h1>teiphy<a class="headerlink" href="#teiphy" title="Permalink to this heading"></a></h1>
-<p>General-purpose Python utility for converting TEI XML collations to
-NEXUS and other formats.</p>
-<section id="about-this-project">
-<h2>About This Project<a class="headerlink" href="#about-this-project" title="Permalink to this heading"></a></h2>
-<section id="introduction">
-<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h3>
-<p>This project began as a utility for my PhD research on reconstructing
-the textual tradition of Ephesians using phylogenetic methods. Since
-transcriptions and collations in the humanities are commonly encoded in
-TEI XML format (<a class="reference external" href="https://tei-c.org/">https://tei-c.org/</a>), while most phylogenetic software
-expects input in NEXUS format (<a class="reference external" href="https://doi.org/10.1093/sysbio/46.4.590">https://doi.org/10.1093/sysbio/46.4.590</a>),
-I needed a tool to convert my collation data from the former to the
-latter.</p>
-<p>While this is a straightforward process for most collation data,
-lacunae, retroversions, and other sources of ambiguity occasionally make
+<section id="advanced-usage">
+<h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading"></a></h1>
+<p>Lacunae, retroversions, and other sources of ambiguity occasionally make
 a one-to-one mapping of witnesses to readings impossible, and in some
 cases, one disambiguation may be more likely than another in a
 quantifiable way. Mechanisms for accommodating such situations exist in
 both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
 “soft decisions” about the states at the leaves and even the root of the
 tree can provide useful information to the inference process. For these
-reasons, I wanted to ensure that these types of judgments, as well as
-other rich features from TEI XML, could be respected (and, where,
+reasons, teiphy ensures that these types of judgments, as well as
+other rich features from TEI XML, can be respected (and, where,
 necessary, preserved) in the conversion process.</p>
-</section>
-<section id="design-philosophy">
-<h3>Design Philosophy<a class="headerlink" href="#design-philosophy" title="Permalink to this heading"></a></h3>
-<p>My underlying philosophy about collations is that they should preserve
+<p>Collations should preserve
 as much detail as possible, including information on how certain types
 of data can be normalized and collapsed for analysis. Since we may want
 to conduct the same analysis at different levels of granularity, the
@@ -152,18 +128,8 @@ and only the output should reflect changes in the desired level of
 detail. Likewise, as noted in the previous section, uncertainty about
 witnesses’ attestations should be encoded in the collation and preserved
 in the conversion of the collation.</p>
-</section>
-</section>
-<section id="installation-and-dependencies">
-<h2>Installation and Dependencies<a class="headerlink" href="#installation-and-dependencies" title="Permalink to this heading"></a></h2>
-<p><strong>TBA</strong></p>
-</section>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>The usage and expected input format for this utility are described in
-what follows. Examples are provided to illustrate different concepts.</p>
 <section id="analysis-at-varying-levels-of-detail-using-reading-types">
-<h3>Analysis at Varying Levels of Detail Using Reading Types<a class="headerlink" href="#analysis-at-varying-levels-of-detail-using-reading-types" title="Permalink to this heading"></a></h3>
+<h2>Analysis at Varying Levels of Detail Using Reading Types<a class="headerlink" href="#analysis-at-varying-levels-of-detail-using-reading-types" title="Permalink to this heading"></a></h2>
 <p>For text-critical purposes, differences in granularity typically concern
 which types of variant readings we consider important for analysis. At
 the lowest level, readings with uncertain or reconstructed portions are
@@ -237,7 +203,7 @@ be assigned the same <code class="docutils literal notranslate"><span class="pre
 under different <code class="docutils literal notranslate"><span class="pre">rdgGrp</span></code> elements.</p>
 <p>If you want to collapse certain types of readings under their “parent”
 readings, then you can specify this using the <code class="docutils literal notranslate"><span class="pre">-t</span></code> argument with any
-conversion command invoked through the <code class="docutils literal notranslate"><span class="pre">main.py</span></code> script. So with the
+conversion command invoked through the command-line interface (CLI). So with the
 flags</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">t</span><span class="s2">&quot;reconstructed&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;defective&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;orthographic&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;subreading&quot;</span>
 </pre></div>
@@ -251,7 +217,7 @@ readings (<code class="docutils literal notranslate"><span class="pre">1</span><
 <code class="docutils literal notranslate"><span class="pre">2</span></code>).</p>
 </section>
 <section id="ambiguities-and-judgments-of-certainty">
-<h3>Ambiguities and Judgments of Certainty<a class="headerlink" href="#ambiguities-and-judgments-of-certainty" title="Permalink to this heading"></a></h3>
+<h2>Ambiguities and Judgments of Certainty<a class="headerlink" href="#ambiguities-and-judgments-of-certainty" title="Permalink to this heading"></a></h2>
 <p>When we have one or more witnesses with an ambiguous attestation, we may
 wish to express which readings the witness(es) in question might have.
 The TEI Guidelines
@@ -321,7 +287,7 @@ reading/state, while for ambiguous readings, it should have multiple
 values for different readings/states.</p>
 </section>
 <section id="lacunae-and-other-missing-data">
-<h3>Lacunae and Other Missing Data<a class="headerlink" href="#lacunae-and-other-missing-data" title="Permalink to this heading"></a></h3>
+<h2>Lacunae and Other Missing Data<a class="headerlink" href="#lacunae-and-other-missing-data" title="Permalink to this heading"></a></h2>
 <p>In the interest of accounting for all witnesses, a collation might
 include placeholder <code class="docutils literal notranslate"><span class="pre">rdg</span></code> or <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> elements for witnesses that
 are entirely lacunose, illegible, or otherwise unavailable (e.g., due to
@@ -329,7 +295,7 @@ missing images or irrelevance due to a different reading in an
 overlapping passage) at each point of variation. As long as these
 placeholders are labeled with <code class="docutils literal notranslate"><span class="pre">&#64;type</span></code> elements, you can specify that
 they mark missing data using the <code class="docutils literal notranslate"><span class="pre">-m</span></code> argument with any command
-invoked through the <code class="docutils literal notranslate"><span class="pre">main.py</span></code> script.</p>
+invoked through the CLI.</p>
 <p>Consider the following set of variation units:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- a large transposition is encoded as an overlapping unit below --&gt;</span>
 <span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-24&quot;</span><span class="nt">&gt;</span>
@@ -393,13 +359,13 @@ because of their omission in the overlapping unit. Likewise, the
 lacunose at each unit. Both types of readings can be treated as missing
 characters (which has the default representation <code class="docutils literal notranslate"><span class="pre">?</span></code> in NEXUS output)
 for the witnesses that attest to them by specifying the following
-arguments when invoking any conversion command through <code class="docutils literal notranslate"><span class="pre">main.py</span></code>:</p>
+arguments when invoking any conversion command through the CLI:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">m</span><span class="s2">&quot;lac&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;overlap&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="correctors-hands">
-<h3>Correctors’ Hands<a class="headerlink" href="#correctors-hands" title="Permalink to this heading"></a></h3>
+<h2>Correctors’ Hands<a class="headerlink" href="#correctors-hands" title="Permalink to this heading"></a></h2>
 <p>Collation data often distinguishes the first hand responsible for a
 manuscript from the hands of correctors who introduced changed readings
 either into the text or into the margin of the same manuscript. Some
@@ -425,11 +391,10 @@ correctors of Codex Sinaiticus follows:</p>
 <span class="nt">&lt;witness</span> <span class="na">type=</span><span class="s">&quot;corrector&quot;</span> <span class="na">n=</span><span class="s">&quot;01C2&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
-<p>Then, when you invoke any conversion command through the <code class="docutils literal notranslate"><span class="pre">main.py</span></code>
-script, make sure that you include the <code class="docutils literal notranslate"><span class="pre">--fill-correctors</span></code> argument.</p>
+<p>Then, when you invoke any conversion command through the CLI, make sure that you include the <code class="docutils literal notranslate"><span class="pre">--fill-correctors</span></code> argument.</p>
 </section>
 <section id="removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">
-<h3>Removing First-hand Siglum Suffixes and Merging Multiple Attestations<a class="headerlink" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations" title="Permalink to this heading"></a></h3>
+<h2>Removing First-hand Siglum Suffixes and Merging Multiple Attestations<a class="headerlink" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations" title="Permalink to this heading"></a></h2>
 <p>In some instances, the siglum for a manuscript may have a first-hand
 suffix added to it when the manuscript was corrected at the unit in
 question. In New Testament textual criticism, the first hand in the
@@ -450,7 +415,7 @@ first-hand suffixes, leaving just the base sigla for the witnesses
 themselves. In addition, we may wish to merge multiple attestations of a
 passage in the same witness, effectively treating multiple attestations
 as ambiguous readings. Both can be accomplished using the <code class="docutils literal notranslate"><span class="pre">-s</span></code>
-argument with any conversion command invoked through <code class="docutils literal notranslate"><span class="pre">main.py</span></code>. If we
+argument with any conversion command invoked through the CLI. If we
 want to strip first-hand suffixes only, then we can do this via</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;T&quot;</span>
 </pre></div>
@@ -468,20 +433,19 @@ attestations, then we can do so via</p>
 <p>assuming that there are at most three multiple attestations in any unit.</p>
 </section>
 <section id="other-options">
-<h3>Other Options<a class="headerlink" href="#other-options" title="Permalink to this heading"></a></h3>
+<h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this heading"></a></h2>
 <p>If you wish to include status messages for the purposes of measuring
 performance or validating your collation, you can include the
 <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> flag when you invoke any conversion command through
-<code class="docutils literal notranslate"><span class="pre">main.py</span></code>.</p>
+the CLI.</p>
 <p>To run this script with the example input in verbose mode with all of
 the settings described above enabled, enter <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> directory and
 enter the command</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">teiphy</span>\<span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">to</span><span class="o">-</span><span class="n">nexus</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;reconstructed&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;defective&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;orthographic&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;subreading&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;lac&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;overlap&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;T&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/1&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/2&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/3&quot;</span> <span class="o">--</span><span class="n">fill</span><span class="o">-</span><span class="n">correctors</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">example</span>\<span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">xml</span> <span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">nxs</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">teiphy</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;reconstructed&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;defective&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;orthographic&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;subreading&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;lac&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;overlap&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;T&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/1&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/2&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/3&quot;</span> <span class="o">--</span><span class="n">fill</span><span class="o">-</span><span class="n">correctors</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">example</span>\<span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">xml</span> <span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">nxs</span>
 </pre></div>
 </div>
 <p>from the command line.
 (If you are using Mac or Linux rather than Windows, make sure you use a forward slash instead of a backward one.)</p>
-</section>
 </section>
 </section>
 
@@ -489,7 +453,7 @@ enter the command</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="teiphy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -1,40 +1,20 @@
-======
-teiphy
-======
-
-General-purpose Python utility for converting TEI XML collations to
-NEXUS and other formats.
-
-About This Project
+==================
+Advanced Usage
 ==================
 
-Introduction
-------------
-
-This project began as a utility for my PhD research on reconstructing
-the textual tradition of Ephesians using phylogenetic methods. Since
-transcriptions and collations in the humanities are commonly encoded in
-TEI XML format (https://tei-c.org/), while most phylogenetic software
-expects input in NEXUS format (https://doi.org/10.1093/sysbio/46.4.590),
-I needed a tool to convert my collation data from the former to the
-latter.
-
-While this is a straightforward process for most collation data,
-lacunae, retroversions, and other sources of ambiguity occasionally make
+Lacunae, retroversions, and other sources of ambiguity occasionally make
 a one-to-one mapping of witnesses to readings impossible, and in some
 cases, one disambiguation may be more likely than another in a
 quantifiable way. Mechanisms for accommodating such situations exist in
 both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
 “soft decisions” about the states at the leaves and even the root of the
 tree can provide useful information to the inference process. For these
-reasons, I wanted to ensure that these types of judgments, as well as
-other rich features from TEI XML, could be respected (and, where,
+reasons, teiphy ensures that these types of judgments, as well as
+other rich features from TEI XML, can be respected (and, where,
 necessary, preserved) in the conversion process.
 
-Design Philosophy
------------------
 
-My underlying philosophy about collations is that they should preserve
+Collations should preserve
 as much detail as possible, including information on how certain types
 of data can be normalized and collapsed for analysis. Since we may want
 to conduct the same analysis at different levels of granularity, the
@@ -43,17 +23,6 @@ and only the output should reflect changes in the desired level of
 detail. Likewise, as noted in the previous section, uncertainty about
 witnesses’ attestations should be encoded in the collation and preserved
 in the conversion of the collation.
-
-Installation and Dependencies
-=============================
-
-**TBA**
-
-Usage
-=====
-
-The usage and expected input format for this utility are described in
-what follows. Examples are provided to illustrate different concepts.
 
 Analysis at Varying Levels of Detail Using Reading Types
 --------------------------------------------------------
@@ -137,7 +106,7 @@ under different ``rdgGrp`` elements.
 
 If you want to collapse certain types of readings under their “parent”
 readings, then you can specify this using the ``-t`` argument with any
-conversion command invoked through the ``main.py`` script. So with the
+conversion command invoked through the command-line interface (CLI). So with the
 flags
 
 ::
@@ -241,7 +210,7 @@ missing images or irrelevance due to a different reading in an
 overlapping passage) at each point of variation. As long as these
 placeholders are labeled with ``@type`` elements, you can specify that
 they mark missing data using the ``-m`` argument with any command
-invoked through the ``main.py`` script.
+invoked through the CLI.
 
 Consider the following set of variation units:
 
@@ -308,7 +277,7 @@ because of their omission in the overlapping unit. Likewise, the
 lacunose at each unit. Both types of readings can be treated as missing
 characters (which has the default representation ``?`` in NEXUS output)
 for the witnesses that attest to them by specifying the following
-arguments when invoking any conversion command through ``main.py``:
+arguments when invoking any conversion command through the CLI:
 
 ::
 
@@ -345,8 +314,7 @@ correctors of Codex Sinaiticus follows:
    <witness type="corrector" n="01C1"/>
    <witness type="corrector" n="01C2"/>
 
-Then, when you invoke any conversion command through the ``main.py``
-script, make sure that you include the ``--fill-correctors`` argument.
+Then, when you invoke any conversion command through the CLI, make sure that you include the ``--fill-correctors`` argument.
 
 Removing First-hand Siglum Suffixes and Merging Multiple Attestations
 ---------------------------------------------------------------------
@@ -372,7 +340,7 @@ first-hand suffixes, leaving just the base sigla for the witnesses
 themselves. In addition, we may wish to merge multiple attestations of a
 passage in the same witness, effectively treating multiple attestations
 as ambiguous readings. Both can be accomplished using the ``-s``
-argument with any conversion command invoked through ``main.py``. If we
+argument with any conversion command invoked through the CLI. If we
 want to strip first-hand suffixes only, then we can do this via
 
 ::
@@ -400,7 +368,7 @@ Other Options
 If you wish to include status messages for the purposes of measuring
 performance or validating your collation, you can include the
 ``--verbose`` flag when you invoke any conversion command through
-``main.py``.
+the CLI.
 
 To run this script with the example input in verbose mode with all of
 the settings described above enabled, enter ``teiphy`` directory and
@@ -408,7 +376,7 @@ enter the command
 
 ::
 
-   python teiphy\main.py to-nexus -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+   teiphy -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.
 (If you are using Mac or Linux rather than Windows, make sure you use a forward slash instead of a backward one.)
