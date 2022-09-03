@@ -5,9 +5,10 @@ tags:
   - phylogenetics
   - text encoding
   - TEI
+  - NEXUS
 authors:
-  - name: James McCollum
-    orcid: 0000-0000-0000-0000
+  - name: Joey McCollum
+    orcid: 0000-0002-5647-0365
     affiliation: 1
   - name: Robert Turnbull
     orcid: 0000-0003-1274-6750
@@ -23,66 +24,55 @@ bibliography: docs/references.bib
 
 # Summary
 
-Textual scholars have been using phylogenetics to analyze manuscript traditions since the early 1990s [@robinson_report_1992].
-Many standard phylogenetic software packages accept as input the NEXUS file format [@nexus_format]. 
-The teiphy program takes a collation of texts encoded using the Text Encoding Initiative (TEI) guidelines and converts it to a NEXUS format
-so that it can be used for phylogenetic analysis. It can also convert to other formats as well.
+Textual scholars have been using phylogenetics to analyze manuscript traditions since the early 1990s [@roh_report_1992].
+Many standard phylogenetic software packages accept as input the NEXUS file format [@msm_nexus_1997]. 
+The `teiphy` program takes a collation of texts encoded using the Text Encoding Initiative (TEI) guidelines and converts it to a NEXUS format
+so that it can be used for phylogenetic analysis.
+It can convert to other formats, as well.
 
-# Statement of need
+# Statement of Need
 
-The TEI is an initiative to provide an international standard
-for digital encoding textual information for the humanities [@ide_tei_1995]. 
-The TEI guidelines express a standard XML format for encoding a critical apparatus [@tei_critical_apparatus].
+The TEI aims to provide an international standard for digital encoding textual information for the humanities [@ism_tei_1995]. 
+The TEI guidelines describe an XML format for encoding a critical apparatus [@tei_critical_apparatus].
+Due to its rich and well-documented set of elements for expressing a wide range of features in manuscript transcriptions, collations, and critical editions,
+TEI XML has become the _de facto_ format for textual data in the digital humanities [@fischer_representing_2020]. 
+Its expressive power has proven increasingly valuable since its release, as scholars have learned—sometimes the hard way—that digitized texts should (1) preserve as much detail as they can from their material sources, including paratextual features; (2) reproduce the text of their sources as closely as possible, with editorial regularizations to things like orthography, accentuation, and scribal shorthand encoded alongside rather than in place of the source text; and (3) uncertainties about what a source read, both in transcriptions and collations, should be described as accurately as possible, allowing for degrees of uncertainty and multiple choices for disambiguations if necessary.
 
+Such principles have much bearing on the editing of critical texts, a task fundamental to both digital humanities and classical philology.
+Within the digital humanities, phylogenetic algorithms have been popular approaches to this task.
+Taking the most arduous part of reconstructing a textual tradition and delegating it to a computer proved to be a promising technique, and its successful demonstration with a portion of _The Canterbury Tales_ was a milestone in the development of the field [@bhbr_phylogeny_1998].
+Soon after this, the same methods were applied more comprehensively to the tradition of _Lanseloet van Denemerken_ in a work that would formalize many practical rules for computer-assisted textual criticism [@salemans_building_2000].
+Since then, phylogenetic methods have quickly evolved [@felsenstein_inferring_2004], and textual critics have adapted the improvements and even added their own innovations to make the process more suitable for their purposes [@swh_vorlage_2002; @swh_pathways_2004; @carlson_text_2015; @edmondson_analysis_2019; @turnbull_history_2020; @hyytiainen_acts_2021].
 
-discussion of TEI
+As their name might suggest, phylogenetic methods originated in the setting of evolutionary biology.
+They have a natural place in textual criticism given the deep analogy between the two fields: a sequence alignment, which consists of taxa, sites or characters, and the states of taxa at those characters, corresponds almost identically to a collation, which consists of witnesses to the text, locations of textual variation (which we will call “variation units” from here on), and the variant readings attested by witnesses at those points.
 
+Most phylogenetic software, however, expects inputs not in TEI XML format, but in NEXUS format [@msm_nexus_1997].
+This format was conceived with versatility in mind, and this design choice has been vindicated in its applicability with textual data, but NEXUS is not equipped or meant to express the same kinds of details that TEI XML is.
+Conversely, for those interested primarily in working with the collation as an alignment, TEI XML is overkill.
+Thus, a great chasm has been fixed between the two formats, and the only way to cross over it is by conversion.
 
+Another format of value for text-critical phylogenetics is the input format associated with the `STEMMA` software developed by Stephen C. Carlson for his 2012 thesis [@carlson_text_2015]; the code is hosted at https://github.com/stemmatic/stemma.
+Carlson's software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
+While it has so far only been applied to books of the New Testament, it is just as applicable to other traditions, and a way of converting TEI XML collations of other texts to a format that can be used by this software could help bridge this gap. 
+
+Finally, it is also worth mentioning that other basic machine-learning approaches to textual criticism, which are frequently based on clustering and biclustering algorithms [@thorpe_multivariate2002; @finney_discover_2018; @mccollum_biclustering_2019], expect the collation data to be encoded as a matrix with a row for each variant reading and a column for each witness.
+Thus, a means of converting the essential data from TEI XML collation to a NumPy array [@numpy_2020] and other related formats is a need for applications like these.
 
 # Design
-basic history of phylogenetics and texts
 
+While the conversion process is a straightforward one for most collation data, lacunae, retroversions, and other sources of ambiguity occasionally make a one-to-one mapping of witnesses to readings impossible, and in some cases, one disambiguation may be more likely than another in a quantifiable way.
+Mechanisms for accommodating such situations exist in both TEI XML and NEXUS, and for likelihood-based phylogenetic methods, “soft decisions” about the states at the leaves and even the root of the tree can provide useful information to the inference process.
+For these reasons, we wanted to ensure that these types of judgments, as well as other rich features from TEI XML, could be respected (and, where, necessary, preserved) in the conversion process.
 
+Collations should preserve as much detail as possible, including information on how certain types of data can be normalized and collapsed for analysis. Since one might want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for use in any case, and only the output should reflect changes in the desired level of detail.
+Likewise, as noted in the previous section, uncertainty about witnesses' attestations should be encoded in the collation and preserved in the conversion of the collation.
 
-other formats
-
-
-# Design
-
-While this is a straightforward process for most collation data,
-lacunae, retroversions, and other sources of ambiguity occasionally make
-a one-to-one mapping of witnesses to readings impossible, and in some
-cases, one disambiguation may be more likely than another in a
-quantifiable way. Mechanisms for accommodating such situations exist in
-both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
-“soft decisions” about the states at the leaves and even the root of the
-tree can provide useful information to the inference process. For these
-reasons, I wanted to ensure that these types of judgments, as well as
-other rich features from TEI XML, could be respected (and, where,
-necessary, preserved) in the conversion process.
-
-Collations should preserve as much detail as possible, including information on how certain types
-of data can be normalized and collapsed for analysis. Since we may want
-to conduct the same analysis at different levels of granularity, the
-underlying collation data should be available for us to use in any case,
-and only the output should reflect changes in the desired level of
-detail. Likewise, as noted in the previous section, uncertainty about
-witnesses’ attestations should be encoded in the collation and preserved
-in the conversion of the collation.
-
-
-For text-critical purposes, differences in granularity typically concern
-which types of variant readings we consider important for analysis. At
-the lowest level, readings with uncertain or reconstructed portions are
-almost always considered identical with their reconstructions for the
-purpose of analysis. Defective forms that are obvious misspellings of a
-more substantive reading are often treated the same way. Even
-orthographic subvariants that reflect equally “correct” regional
-spelling practices may be considered too common and of too trivial a
-nature to be of value for analysis. Other readings that do not fall
-under these rubrics but are nevertheless considered manifestly secondary
-(due to late and/or isolated attestion, for instance), may also be
-considered uninformative “noise” that is better left filtered out.
+For text-critical purposes, differences in granularity typically concern which types of variant readings we consider important for analysis.
+At the lowest level, readings with uncertain or reconstructed portions are almost always considered identical with their reconstructions (provided these reconstructions can be made unambiguously) for the purpose of analysis.
+Defective forms that are obvious misspellings of a more substantive reading are often treated the same way.
+Even orthographic subvariants that reflect equally “correct” regional spelling practices may be considered too common and of too trivial a nature to be of value for analysis.
+Other readings that do not fall under these rubrics but are nevertheless considered manifestly secondary (due to late and/or isolated attestion, for instance), may also be considered uninformative “noise” that is better left filtered out.
 
 # Use Case
 
@@ -92,12 +82,16 @@ Is there an example from
 # Availability
 
 The software can be installed through the Python Package Index (PyPI) 
-and the source code is available under the MIT license from the Github repository. 
-The automated testing suite has 100% coverage. 
+and the source code is available under the MIT license from the GitHub repository. 
+The automated testing suite has 100% coverage.
 
 
 # Acknowledgements
 
-Stephen Carlson.
+The authors wish to thank Stephen C. Carlson for his feedback on this project.
+
+## Funding
+
+This work was supported by an Australian Government Research Training Program (RTP) Scholarship.
 
 # References
