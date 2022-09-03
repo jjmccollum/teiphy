@@ -14,6 +14,8 @@ class VariationUnitTestCase(unittest.TestCase):
         """)
         vu = VariationUnit(xml)
         self.assertEqual(vu.id, "B10K6V20U12")
+        self.assertEqual(str(vu), "B10K6V20U12")
+        self.assertEqual(repr(vu), "B10K6V20U12")
 
     def test_init_n_id(self):
         xml = et.fromstring("""

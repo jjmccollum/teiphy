@@ -34,6 +34,12 @@ class VariationUnit():
         if verbose:
             print("New VariationUnit %s with %d readings" % (self.id, len(self.readings)))
 
+    def __str__(self):
+        return self.id
+
+    def __repr__(self):
+        return str(self)
+
     def parse(self, xml:et.Element, verbose:bool=False):
         """Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.
         

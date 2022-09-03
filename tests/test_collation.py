@@ -145,6 +145,13 @@ class CollationMissingTestCase(unittest.TestCase):
         rdg_support = self.collation.readings_by_witness["1398"][vu_ind]
         self.assertEqual(sum(rdg_support), 0) # all entries in the reading support vector for this witness to an overlapping reading should be 0
 
+    def test_missing_get_readings_by_witness_for_unit(self):
+        vu = self.collation.variation_units[0]
+        assert vu.id == "B10K1V1U24-26"
+        result = self.collation.get_readings_by_witness_for_unit(vu)
+        assert(len(result) == 223)
+
+
 class CollationManuscriptSuffixesTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)

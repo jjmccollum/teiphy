@@ -70,6 +70,3 @@ def to_file(
     coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
     coll.to_file(output_addr, format=format)
     
-
-if __name__ == "__main__":
-    app()
