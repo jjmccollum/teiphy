@@ -91,7 +91,7 @@ Credits
 
 .. start-credits
 
-teipy was designed by Joey McCollum (Australian Catholic University) and Robert Turnbull (University of Melbourne).
+``teiphy`` was designed by Joey McCollum (Australian Catholic University) and Robert Turnbull (University of Melbourne).
 We received additional help from Stephen Carlson (Australian Catholic University).
 
 If you use this software, please cite the forthcoming paper.

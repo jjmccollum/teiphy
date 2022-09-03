@@ -4,14 +4,6 @@ from lxml import etree as et
 from teiphy import Reading
 
 class ReadingTestCase(unittest.TestCase):
-    def test_init_empty(self):
-        reading = Reading()
-        self.assertEqual(reading.id, "")
-        self.assertEqual(reading.text, "")
-        self.assertEqual(reading.targets, [])
-        self.assertEqual(reading.certainties, {})
-        self.assertEqual(reading.wits, [])
-        
     def test_init_rdg_xml_id(self):
         xml = et.fromstring("<rdg xml:id=\"B10K1V1U2R1\" n=\"1\"><w>παυλος</w></rdg>")
         reading = Reading(xml, verbose=True)
