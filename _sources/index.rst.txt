@@ -2,9 +2,6 @@
 teiphy
 ======
 
-A general-purpose Python utility for converting TEI XML collations to
-NEXUS and other formats.
-
 .. include:: ../README.rst
    :start-after: start-badges
    :end-before: end-badges
