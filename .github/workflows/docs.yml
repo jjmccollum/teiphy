@@ -30,6 +30,8 @@ jobs:
         poetry run coverage html --directory gh-pages/coverage
         ls gh-pages/coverage
         echo "COVERAGE=$(poetry run coverage report --precision 2 | grep TOTAL | tr -s ' ' | cut -f 4 -d " ")" >> $GITHUB_ENV
+        mkdir gh-pages/htmlcov
+        echo test > gh-pages/htmlcov/index.html
         ls gh-pages/coverage
     - name: Build draft PDF
       uses: openjournals/openjournals-draft-action@master
