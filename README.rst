@@ -25,14 +25,13 @@ teiphy
 
 .. start-about
 
-A general-purpose Python utility for converting TEI XML collations to
-NEXUS and other formats.
+A general-purpose Python utility for converting TEI XML collations to NEXUS and other formats.
 
 Textual scholars have been using phylogenetics to analyze manuscript traditions since the early 1990s.
 Many standard phylogenetic software packages accept as input the `NEXUS file format <https://doi.org/10.1093/sysbio/46.4.590>`_.
-The teiphy program takes a collation of texts encoded using the `Text Encoding Initiative (TEI) guidelines <https://tei-c.org/release/doc/tei-p5-doc/en/html/TC.html>`_
-and converts it to a NEXUS format
-so that it can be used for phylogenetic analysis. It can also convert to other formats as well.
+The ``teiphy`` program takes a collation of texts encoded using the `Text Encoding Initiative (TEI) guidelines <https://tei-c.org/release/doc/tei-p5-doc/en/html/TC.html>`_
+and converts it to a NEXUS format so that it can be used for phylogenetic analysis.
+It can also convert to other formats as well.
 
 
 .. end-about
@@ -91,7 +90,7 @@ Credits
 
 .. start-credits
 
-teipy was designed by Joey McCollum (Australian Catholic University) and Robert Turnbull (University of Melbourne).
+``teiphy`` was designed by Joey McCollum (Australian Catholic University) and Robert Turnbull (University of Melbourne).
 We received additional help from Stephen Carlson (Australian Catholic University).
 
 If you use this software, please cite the forthcoming paper.

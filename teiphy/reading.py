@@ -17,7 +17,7 @@ class Reading():
         targets: A list of other reading ID strings to which this reading corresponds. For substantive readings, this should be empty. For ambiguous readings, it should contain references to the readings that might correspond to this one. For overlap readings, it should contain a reference to the reading from the overlapping variation unit responsible for the overlap. 
         certainties: A dictionary mapping target reading IDs to floating-point certainty values.
     """
-    def __init__(self, xml:et.Element=None, verbose:bool=False):
+    def __init__(self, xml:et.Element, verbose:bool=False):
         """Constructs a new Reading instance from the TEI XML input.
 
         Args:
@@ -30,19 +30,18 @@ class Reading():
         self.targets = []
         self.certainties = {}
         self.wits = []
-        if xml is not None:
-            self.parse(xml, verbose)
-            if verbose:
-                if len(self.wits) == 0:
-                    if self.text != "":
-                        print("New Reading %s with type %s, no witnesses, and text %s" % (self.id, self.type, self.text))
-                    else:
-                        print("New Reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
+        self.parse(xml, verbose)
+        if verbose:
+            if len(self.wits) == 0:
+                if self.text != "":
+                    print("New Reading %s with type %s, no witnesses, and text %s" % (self.id, self.type, self.text))
                 else:
-                    if self.text != "":
-                        print("New Reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
-                    else:
-                        print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
+                    print("New Reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
+            else:
+                if self.text != "":
+                    print("New Reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
+                else:
+                    print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
 
     def parse(self, xml:et.Element, verbose:bool=False):
         """Given an XML element, recursively parses it and its subelements.
