@@ -62,7 +62,7 @@ To use the software, run the ``teiphy`` command line tool:
 
     teiphy <input TEI XML> <output file>
 
-teiphy can export to NEXUS, CSV, TSV, Excel and STEMMA formats. 
+teiphy can export to NEXUS, CSV, TSV, Excel and `stemma` formats. 
 teiphy will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
 ".nex", ".nexus", ".nxs", ".csv", ".tsv", ".xlsx".
 
@@ -91,7 +91,7 @@ Credits
 .. start-credits
 
 ``teiphy`` was designed by Joey McCollum (Australian Catholic University) and Robert Turnbull (University of Melbourne).
-We received additional help from Stephen Carlson (Australian Catholic University).
+We received additional help from Stephen C. Carlson (Australian Catholic University).
 
 If you use this software, please cite the forthcoming paper.
 

@@ -52,7 +52,7 @@ This format was conceived with versatility in mind, and this design choice has b
 Conversely, for those interested primarily in working with the collation as an alignment, TEI XML is overkill.
 Thus, a great chasm has been fixed between the two formats, and the only way to cross over it is by conversion.
 
-Another format of value for text-critical phylogenetics is the input format associated with the `STEMMA` software developed by Stephen C. Carlson for his 2012 thesis [@carlson_text_2015]; the code is hosted at https://github.com/stemmatic/stemma.
+Another format of value for text-critical phylogenetics is the input format associated with the `stemma` software developed by Stephen C. Carlson for his 2012 thesis [@carlson_text_2015]; the code is hosted at https://github.com/stemmatic/stemma.
 Carlson's software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
 While it has so far only been applied to books of the New Testament, it is just as applicable to other traditions, and a way of converting TEI XML collations of other texts to a format that can be used by this software could help bridge this gap. 
 
