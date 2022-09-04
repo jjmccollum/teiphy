@@ -18,7 +18,8 @@ teiphy
    quickstart
    advanced
    reference
-   CONTRIBUTING
+   cli
+   contributing
    credits
 
 Indices and Tables
