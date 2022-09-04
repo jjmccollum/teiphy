@@ -3,6 +3,7 @@ from lxml import etree as et
 
 from teiphy import Witness
 
+
 class WitnessTestCase(unittest.TestCase):
     def test_init_xml_id(self):
         xml = et.fromstring("<witness xml:id=\"A\" n=\"1\">A witness</witness>")
@@ -28,6 +29,7 @@ class WitnessTestCase(unittest.TestCase):
         xml = et.fromstring("<witness n=\"424C1\" type=\"corrector\"/>")
         witness = Witness(xml)
         self.assertEqual(witness.type, "corrector")
+
 
 if __name__ == '__main__':
     unittest.main()
