@@ -30,6 +30,10 @@ def to_file(
         False, 
         help="Fill in missing readings in witnesses with type \"corrector\" using the witnesses they follow in the TEI XML witness list."
     ),
+    states_present: bool = typer.Option(
+        False,
+        help="Use the StatesFormat=StatesPresent setting instead of the StatesFormat=Frequency setting (and thus represent all states with single symbols rather than frequency vectors) in NEXUS output."
+    ),
     verbose: bool = typer.Option(
         False, 
         help="Enable verbose logging (mostly for debugging purposes)."
@@ -68,5 +72,5 @@ def to_file(
         print(f"Error opening input file: {err}")
 
     coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
-    coll.to_file(output_addr, format=format)
+    coll.to_file(output_addr, format=format, states_present=states_present)
     

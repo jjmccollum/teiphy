@@ -31,6 +31,18 @@ def test_to_nexus():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
+        assert "StatesFormat=Frequency" in text
+
+def test_to_nexus_states_format():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir)/"test.nexus"
+        result = runner.invoke(app, ["--states-present", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "StatesFormat=StatesPresent" in text
+        assert "Equate=" in text
 
 def test_to_csv():
     with tempfile.TemporaryDirectory() as tmp_dir:
