@@ -362,6 +362,38 @@ attestations, then we can do so via
 
 assuming that there are at most three multiple attestations in any unit.
 
+Supported Output Formats and Options
+------------------------------------
+
+You can specify a preferred output format for the conversion explicitly with the ``--format`` flag.
+Supported options include ``nexus``, ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
+If you do not supply a ``--format`` argument, then ``teiphy`` will attempt to infer the correct format from the file extension of the output file name.
+
+For ``nexus`` outputs, you can also include a ``--states-present`` flag, which will convert your collation data for each witness to a string of single-state symbols, 
+including symbols that represent ambiguous readings (e.g., ``P46 1013110?00111111020100100100110340090201``).
+The ``StatesFormat=StatesPresent`` NEXUS setting produces more compact outputs and is the expected states format for PAUP*.
+The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
+If the ``--states-present`` flag is not supplied, then the more precise ``StatesFormat=Frequency`` setting is used by default, which encodes reading states as frequency vectors:
+
+::
+
+    P46
+		(0:0.0000 1:1.0000)
+		(0:1.0000 1:0.0000)
+		(0:0.0000 1:1.0000)
+		(0:0.0000 1:0.0000 2:0.0000 3:1.0000)
+		(0:0.0000 1:1.0000 2:0.0000)
+		(0:0.0000 1:1.0000)
+		(0:1.0000 1:0.0000 2:0.0000 3:0.0000)
+		?
+		(0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000 6:0.0000 7:0.0000 8:0.0000)
+        ...
+        (0:0.0148 1:0.9852)
+        (0:1.0000 1:0.0000)
+        (0:0.0000 1:0.0000 2:1.0000 3:0.0000)
+        (0:1.0000 1:0.0000)
+        (0:0.0000 1:1.0000)
+
 Other Options
 -------------
 
@@ -376,6 +408,6 @@ enter the command
 
 ::
 
-   teiphy -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+   teiphy -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --states-present --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.

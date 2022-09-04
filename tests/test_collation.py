@@ -215,6 +215,20 @@ class CollationOutputTestCase(unittest.TestCase):
         nexus_symbols = empty_collation.get_nexus_symbols()
         self.assertEqual(nexus_symbols, [])
 
+    def test_get_nexus_equates(self):
+        nexus_symbols = self.collation.get_nexus_symbols()
+        equates, equate_mapping = self.collation.get_nexus_equates(nexus_symbols)
+        self.assertEqual(equates, ["9", "a", "b", "c", "d", "e", "f"])
+        self.assertEqual(equate_mapping, {(0, 1): "9", (0, 1, 2): "a", (0, 1, 2, 3): "b", (0, 2): "c", (0, 3): "d", (0, 4): "e", (3, 4): "f"})
+
+    def test_get_nexus_equates_empty(self):
+        empty_xml = et.fromstring("<TEI/>")
+        empty_collation = Collation(empty_xml)
+        nexus_symbols = empty_collation.get_nexus_symbols()
+        equates, equate_mapping = empty_collation.get_nexus_equates(nexus_symbols)
+        self.assertEqual(equates, [])
+        self.assertEqual(equate_mapping, {})
+
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
         self.assertTrue(matrix.sum(axis=0)[0] < len(self.collation.substantive_variation_unit_ids)) # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
