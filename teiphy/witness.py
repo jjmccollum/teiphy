@@ -4,16 +4,18 @@ from lxml import etree as et
 
 from .common import xml_ns, tei_ns
 
-class Witness():
+
+class Witness:
     """Base class for storing TEI XML witness data internally.
-    
+
     This corresponds to a witness element in the collation.
 
     Attributes:
         id: The ID string of this reading, which should be unique within its parent app element.
         type: A string representing the type of witness. Examples include "corrector", "version", and "father".
     """
-    def __init__(self, xml:et.Element, verbose:bool=False):
+
+    def __init__(self, xml: et.Element, verbose: bool = False):
         """Constructs a new Witness instance from the TEI XML input.
 
         Args:

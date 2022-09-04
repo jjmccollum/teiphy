@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class FormatUnknownException(Exception):
     pass
 
@@ -12,14 +13,14 @@ class Format(Enum):
     STEMMA = 'STEMMA'
 
     @classmethod
-    def infer(cls, suffix:str):
+    def infer(cls, suffix: str):
         suffix_map = {
-            ".nex":cls.NEXUS,
-            ".nexus":cls.NEXUS,
-            ".nxs":cls.NEXUS,
-            ".csv":cls.CSV,
-            ".tsv":cls.TSV,
-            ".xlsx":cls.EXCEL,
+            ".nex": cls.NEXUS,
+            ".nexus": cls.NEXUS,
+            ".nxs": cls.NEXUS,
+            ".csv": cls.CSV,
+            ".tsv": cls.TSV,
+            ".xlsx": cls.EXCEL,
         }
 
         suffix_lower = suffix.lower()
@@ -28,6 +29,5 @@ class Format(Enum):
 
         allowed_suffixes = ', '.join(suffix_map.keys())
         raise FormatUnknownException(
-            f"Cannot infer format from suffix '{suffix}'. "
-            f"Please set explicitly or use one of: {allowed_suffixes}."
+            f"Cannot infer format from suffix '{suffix}'. " f"Please set explicitly or use one of: {allowed_suffixes}."
         )

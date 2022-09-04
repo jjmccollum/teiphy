@@ -4,9 +4,10 @@ from lxml import etree as et
 
 from .common import xml_ns, tei_ns
 
-class Reading():
+
+class Reading:
     """Base class for storing TEI XML reading data internally.
-    
+
     This can correspond to a lem, rdg, or witDetail element in the collation.
 
     Attributes:
@@ -14,10 +15,11 @@ class Reading():
         type: A string representing the type of reading. Examples include "reconstructed", "defective", "orthographic", "subreading", "ambiguous", "overlap", and "lac". The default value is "substantive".
         text: Serialization of the contents of this element.
         wits: A list of sigla referring to witnesses that support this reading.
-        targets: A list of other reading ID strings to which this reading corresponds. For substantive readings, this should be empty. For ambiguous readings, it should contain references to the readings that might correspond to this one. For overlap readings, it should contain a reference to the reading from the overlapping variation unit responsible for the overlap. 
+        targets: A list of other reading ID strings to which this reading corresponds. For substantive readings, this should be empty. For ambiguous readings, it should contain references to the readings that might correspond to this one. For overlap readings, it should contain a reference to the reading from the overlapping variation unit responsible for the overlap.
         certainties: A dictionary mapping target reading IDs to floating-point certainty values.
     """
-    def __init__(self, xml:et.Element, verbose:bool=False):
+
+    def __init__(self, xml: et.Element, verbose: bool = False):
         """Constructs a new Reading instance from the TEI XML input.
 
         Args:
@@ -39,11 +41,17 @@ class Reading():
                     print("New Reading %s with type %s, no witnesses, and no text" % (self.id, self.type))
             else:
                 if self.text != "":
-                    print("New Reading %s with type %s, witnesses %s, and text %s" % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text))
+                    print(
+                        "New Reading %s with type %s, witnesses %s, and text %s"
+                        % (self.id, self.type, ", ".join([wit for wit in self.wits]), self.text)
+                    )
                 else:
-                    print("New Reading %s with type %s, witnesses %s, and no text" % (self.id, self.type, ", ".join([wit for wit in self.wits])))
+                    print(
+                        "New Reading %s with type %s, witnesses %s, and no text"
+                        % (self.id, self.type, ", ".join([wit for wit in self.wits]))
+                    )
 
-    def parse(self, xml:et.Element, verbose:bool=False):
+    def parse(self, xml: et.Element, verbose: bool = False):
         """Given an XML element, recursively parses it and its subelements.
 
         Args:
@@ -98,7 +106,7 @@ class Reading():
                     norm += 1
             if norm > 0:
                 for t in self.certainties:
-                    self.certainties[t] = self.certainties[t]/norm
+                    self.certainties[t] = self.certainties[t] / norm
             # Strip any surrounding whitespace left over from spaces added between word elements:
             self.text = self.text.strip()
             # Populate its ID, using its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
@@ -121,7 +129,7 @@ class Reading():
             for t in targets:
                 self.certainties[t] = degree
             return
-        # If it is a word, then serialize its text and tail, 
+        # If it is a word, then serialize its text and tail,
         # recursively processing any subelements,
         # and add a space after it:
         if raw_tag == "w":
@@ -131,7 +139,7 @@ class Reading():
             self.text += xml.tail if xml.tail is not None else ""
             self.text += " "
             return
-        # If it is an abbreviation, then serialize its text and tail, 
+        # If it is an abbreviation, then serialize its text and tail,
         # recursively processing any subelements:
         if raw_tag == "abbr":
             self.text += xml.text if xml.text is not None else ""
@@ -194,7 +202,7 @@ class Reading():
                 text += " "
                 text += "gap"
             else:
-                text += "..." # placeholder text for gap if no unit and extent are specified
+                text += "..."  # placeholder text for gap if no unit and extent are specified
             if xml.get("reason") is not None:
                 text += " "
                 reason = xml.get("reason")
@@ -219,9 +227,11 @@ class Reading():
             self.text += xml.text if xml.text is not None else ""
             for child in xml:
                 self.parse(child, verbose)
-            old_text = self.text[starting_ind:].strip() # strip any trailing spaces (in case there were entire words whose presence is unclear)
+            old_text = self.text[
+                starting_ind:
+            ].strip()  # strip any trailing spaces (in case there were entire words whose presence is unclear)
             new_text = ""
-             # Add a dot under each character other than spaces:
+            # Add a dot under each character other than spaces:
             for c in old_text:
                 new_text += c
                 if c != " ":
@@ -235,8 +245,8 @@ class Reading():
             self.text += xml.text if xml.text is not None else ""
             for child in xml:
                 self.parse(child, verbose)
-                self.text = self.text.strip() + "/" # add a slash between each possibility
-            self.text = self.text.strip("/") # remove the last one we added
+                self.text = self.text.strip() + "/"  # add a slash between each possibility
+            self.text = self.text.strip("/")  # remove the last one we added
             self.text += "]"
             self.text += xml.tail if xml.tail is not None else ""
             return

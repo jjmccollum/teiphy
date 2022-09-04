@@ -2,20 +2,21 @@
 
 from typing import List, Union
 from pathlib import Path
-import time # to time calculations for users
-import string # for easy retrieval of character ranges
-from lxml import etree as et # for reading TEI XML inputs
-import numpy as np # for collation matrix outputs
-import pandas as pd # for writing to DataFrames, CSV, Excel, etc.
+import time  # to time calculations for users
+import string  # for easy retrieval of character ranges
+from lxml import etree as et  # for reading TEI XML inputs
+import numpy as np  # for collation matrix outputs
+import pandas as pd  # for writing to DataFrames, CSV, Excel, etc.
 
 from .common import xml_ns, tei_ns
 from .format import Format
 from .witness import Witness
 from .variation_unit import VariationUnit
 
-class Collation():
+
+class Collation:
     """Base class for storing TEI XML collation data internally.
-    
+
     This corresponds to the entire XML tree, rooted at the TEI element of the collation.
 
     Attributes:
@@ -31,11 +32,20 @@ class Collation():
         substantive_reading_ids: # A list of ID strings for readings considered substantive.
         verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
     """
-    def __init__(self, xml:et.ElementTree, manuscript_suffixes:List[str]=[], trivial_reading_types:List[str]=[], missing_reading_types:List[str]=[], fill_corrector_lacunae:bool=False, verbose:bool=False):
+
+    def __init__(
+        self,
+        xml: et.ElementTree,
+        manuscript_suffixes: List[str] = [],
+        trivial_reading_types: List[str] = [],
+        missing_reading_types: List[str] = [],
+        fill_corrector_lacunae: bool = False,
+        verbose: bool = False,
+    ):
         """Constructs a new Collation instance with the given settings.
 
         Args:
-            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element. 
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
             manuscript_suffixes: An optional list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses.
             trivial_reading_types: An optional set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
             missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
@@ -64,18 +74,20 @@ class Collation():
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
 
-    def parse_list_wit(self, xml:et.ElementTree):
+    def parse_list_wit(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
 
         Args:
-            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element. 
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
         """
         if self.verbose:
             print("Parsing witness list...")
         t0 = time.time()
         self.witnesses = []
         self.witness_index_by_id = {}
-        for w in xml.xpath("/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listWit/tei:witness", namespaces={"tei": tei_ns}):
+        for w in xml.xpath(
+            "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listWit/tei:witness", namespaces={"tei": tei_ns}
+        ):
             wit = Witness(w, self.verbose)
             self.witness_index_by_id[wit.id] = len(self.witnesses)
             self.witnesses.append(wit)
@@ -84,11 +96,11 @@ class Collation():
             print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
         return
 
-    def parse_apps(self, xml:et.ElementTree):
+    def parse_apps(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates its list of variation units from its app elements.
 
         Args:
-            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element. 
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
         """
         if self.verbose:
             print("Parsing variation units...")
@@ -101,11 +113,11 @@ class Collation():
             print("Finished processing %d variation units in %0.4fs." % (len(self.variation_units), t1 - t0))
         return
 
-    def get_base_wit(self, wit:str):
+    def get_base_wit(self, wit: str):
         """Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.
 
         Args:
-            wit: A string representing a witness siglum, potentially including suffixes to be stripped. 
+            wit: A string representing a witness siglum, potentially including suffixes to be stripped.
         """
         base_wit = wit
         # If our starting siglum corresponds to a siglum in the witness list, then just return it:
@@ -114,20 +126,20 @@ class Collation():
         # Otherwise, strip any suffixes we find until the siglum corresponds to a base witness in the list
         # or no more suffixes can be stripped:
         suffix_found = True
-        while (suffix_found):
+        while suffix_found:
             suffix_found = False
             for suffix in self.manuscript_suffixes:
                 if base_wit.endswith(suffix):
                     suffix_found = True
-                    base_wit = base_wit[:-len(suffix)]
-                    break # stop looking for other suffixes
+                    base_wit = base_wit[: -len(suffix)]
+                    break  # stop looking for other suffixes
             # If the siglum stripped of this suffix now corresponds to a siglum in the witness list, then return it:
             if base_wit in self.witness_index_by_id:
                 return base_wit
         # If we get here, then all possible manuscript suffixes have been stripped, and the resulting siglum does not correspond to a siglum in the witness list:
         return base_wit
 
-    def get_readings_by_witness_for_unit(self, vu:VariationUnit):
+    def get_readings_by_witness_for_unit(self, vu: VariationUnit):
         """Returns a dictionary mapping witness IDs to a list of their reading coefficients for a given variation unit.
 
         Args:
@@ -161,11 +173,11 @@ class Collation():
         for substantive_reading_id in substantive_reading_ids:
             self.substantive_reading_ids.append(vu.id + ", " + substantive_reading_id)
         for wit in self.witnesses:
-            readings_by_witness_for_unit[wit.id] = [0]*len(substantive_reading_ids)
+            readings_by_witness_for_unit[wit.id] = [0] * len(substantive_reading_ids)
         # In a second pass, assign each base witness a set containing the readings it supports in this unit:
         for rdg in vu.readings:
             # Initialize the dictionary indicating support for this reading (or its disambiguations):
-            rdg_support = [0]*len(substantive_reading_ids)
+            rdg_support = [0] * len(substantive_reading_ids)
             # If this is a missing reading (e.g., a lacuna or an overlap), then we can skip this reading, as its corresponding set will be empty:
             if rdg.type in self.missing_reading_types:
                 continue
@@ -189,12 +201,17 @@ class Collation():
                     # If it is not, then it is probably just because we've encountered a corrector or some other secondary witness not included in the witness list;
                     # report this if we're in verbose mode and move on:
                     if self.verbose:
-                        print("Skipping unknown witness siglum %s (base siglum %s) in variation unit %s, reading %s..." % (wit, base_wit, vu.id, rdg.id))
+                        print(
+                            "Skipping unknown witness siglum %s (base siglum %s) in variation unit %s, reading %s..."
+                            % (wit, base_wit, vu.id, rdg.id)
+                        )
                     continue
                 # If we've found a base siglum, then add this reading's contribution to the base witness's reading set for this unit;
-                # normally the existing set will be empty, but if we reduce two suffixed sigla to the same base witness, 
+                # normally the existing set will be empty, but if we reduce two suffixed sigla to the same base witness,
                 # then that witness may attest to multiple readings in the same unit:
-                readings_by_witness_for_unit[base_wit] = [(readings_by_witness_for_unit[base_wit][i] + rdg_support[i]) for i in range(len(rdg_support))]
+                readings_by_witness_for_unit[base_wit] = [
+                    (readings_by_witness_for_unit[base_wit][i] + rdg_support[i]) for i in range(len(rdg_support))
+                ]
         # In a third pass, normalize the reading weights for all non-lacunose readings:
         for wit in readings_by_witness_for_unit:
             rdg_support = readings_by_witness_for_unit[wit]
@@ -203,7 +220,7 @@ class Collation():
             if norm == 0:
                 continue
             for i in range(len(rdg_support)):
-                rdg_support[i] = rdg_support[i]/norm
+                rdg_support[i] = rdg_support[i] / norm
         return readings_by_witness_for_unit
 
     def parse_readings_by_witness(self):
@@ -233,14 +250,17 @@ class Collation():
                 if wit.type != "corrector":
                     continue
                 # Otherwise, retrieve the previous witness:
-                prev_wit = self.witnesses[i-1]
+                prev_wit = self.witnesses[i - 1]
                 for j in range(len(self.readings_by_witness[wit.id])):
                     # If the corrector has no reading, then set it to the previous witness's reading:
                     if sum(self.readings_by_witness[wit.id][j]) == 0:
                         self.readings_by_witness[wit.id][j] = self.readings_by_witness[prev_wit.id][j]
         t1 = time.time()
         if self.verbose:
-            print("Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs." % (len(self.witnesses), len(self.substantive_variation_unit_ids), t1 - t0))
+            print(
+                "Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs."
+                % (len(self.witnesses), len(self.substantive_variation_unit_ids), t1 - t0)
+            )
         return
 
     def get_nexus_symbols(self):
@@ -251,7 +271,9 @@ class Collation():
         Returns:
             A list of individual characters representing states in readings.
         """
-        possible_symbols = list(string.digits) + list(string.ascii_letters) +['§', '¶'] # NOTE: for w-bit machines, the maximum number of symbols allowed by PAUP* is w
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_letters) + ['§', '¶']
+        )  # NOTE: for w-bit machines, the maximum number of symbols allowed by PAUP* is w
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
@@ -263,7 +285,7 @@ class Collation():
         nexus_symbols = possible_symbols[:nsymbols]
         return nexus_symbols
 
-    def get_nexus_equates(self, nexus_symbols:List[str]):
+    def get_nexus_equates(self, nexus_symbols: List[str]):
         """Returns a list of one-character multiple-reading symbols for the NEXUS Equate block and a dictionary mapping multistate reading index lists to these symbols.
 
         Note that this will ignore any certainty degrees assigned to these states in the collation.
@@ -274,8 +296,12 @@ class Collation():
         Returns:
             A dictionary mapping tuples of multiple reading indices to their corresponding symbols in the equate block.
         """
-        possible_symbols = list(string.digits) + list(string.ascii_letters) + ['§', '¶'] # NOTE: for w-bit machines, the maximum number of symbols allowed by PAUP* is w
-        available_symbols = possible_symbols[len(nexus_symbols):] # we can't use any of the symbols already allocated for singleton states
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_letters) + ['§', '¶']
+        )  # NOTE: for w-bit machines, the maximum number of symbols allowed by PAUP* is w
+        available_symbols = possible_symbols[
+            len(nexus_symbols) :
+        ]  # we can't use any of the symbols already allocated for singleton states
         # First, populate a set of all reading index tuples that we encounter in the collation:
         reading_ind_tuples_set = set()
         # If there are no witnesses, then no symbols are needed at all:
@@ -283,31 +309,37 @@ class Collation():
             return [], {}
         for wit in self.witnesses:
             for rdg_support in self.readings_by_witness[wit.id]:
-                rdg_inds = [i for i, w in enumerate(rdg_support) if w > 0] # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                rdg_inds = [
+                    i for i, w in enumerate(rdg_support) if w > 0
+                ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
                 if len(rdg_inds) > 1:
                     rdg_ind_tuple = tuple(rdg_inds)
                     reading_ind_tuples_set.add(rdg_ind_tuple)
         # Sort the reading index tuples in lexicographical order and map them to the remaining symbols:
         reading_ind_tuples = sorted(list(reading_ind_tuples_set))
-        nexus_equates = available_symbols[:len(reading_ind_tuples)]
+        nexus_equates = available_symbols[: len(reading_ind_tuples)]
         nexus_equate_mapping = {t: available_symbols[i] for i, t in enumerate(reading_ind_tuples)}
         return nexus_equates, nexus_equate_mapping
 
-    def to_nexus(self, file_addr:Union[Path, str], states_present:bool=False):
+    def to_nexus(self, file_addr: Union[Path, str], states_present: bool = False):
         """Writes this Collation to a NEXUS file with the given address.
 
         Args:
             file_addr: A string representing the path to an output NEXUS file; the file type should be .nex or .nxs.
-            states_present: An optional flag indicating whether to use the StatesFormat=StatesPresent setting 
+            states_present: An optional flag indicating whether to use the StatesFormat=StatesPresent setting
                 instead of the StatesFormat=Frequency setting
                 (and thus represent all states with single symbols rather than frequency vectors).
                 Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.
         """
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
-        nchar = len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0 # if the number of taxa is 0, then the number of characters is irrelevant
+        nchar = (
+            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
+        )  # if the number of taxa is 0, then the number of characters is irrelevant
         taxlabels = [wit.id for wit in self.witnesses]
-        max_taxlabel_length = max([len(taxlabel) for taxlabel in taxlabels]) # keep track of the longest taxon label for tabular alignment purposes
+        max_taxlabel_length = max(
+            [len(taxlabel) for taxlabel in taxlabels]
+        )  # keep track of the longest taxon label for tabular alignment purposes
         charlabels = self.substantive_variation_unit_ids
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
@@ -359,13 +391,15 @@ class Collation():
                 if states_present:
                     sequence = "\n\t\t" + taxlabel
                     # Add enough space after this label ensure that all sequences are nicely aligned:
-                    sequence += " "*(max_taxlabel_length - len(taxlabel) + 1)
+                    sequence += " " * (max_taxlabel_length - len(taxlabel) + 1)
                     for rdg_support in self.readings_by_witness[wit.id]:
                         # If this reading is lacunose in this witness, then use the missing character:
                         if sum(rdg_support) == 0:
                             sequence += missing_symbol
                             continue
-                        rdg_inds = [i for i, w in enumerate(rdg_support) if w > 0] # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                        rdg_inds = [
+                            i for i, w in enumerate(rdg_support) if w > 0
+                        ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
                         # For singleton readings, just print the symbol:
                         if len(rdg_inds) == 1:
                             sequence += symbols[rdg_inds[0]]
@@ -394,12 +428,12 @@ class Collation():
             f.write("End;")
         return
 
-    def to_numpy(self, split_missing:bool=True):
+    def to_numpy(self, split_missing: bool = True):
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
         Args:
             split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
-        
+
         Returns:
             A NumPy array with a row for each substantive reading and a column for each witness.
             A list of substantive reading ID strings.
@@ -417,23 +451,23 @@ class Collation():
                 if sum(rdg_support) == 0:
                     if split_missing:
                         for i in range(len(rdg_support)):
-                            matrix[row_ind,col_ind] = 1/len(rdg_support)
+                            matrix[row_ind, col_ind] = 1 / len(rdg_support)
                             row_ind += 1
                     else:
                         row_ind += len(rdg_support)
                 # Otherwise, adds its coefficients normally:
                 else:
                     for i in range(len(rdg_support)):
-                        matrix[row_ind,col_ind] = rdg_support[i]
+                        matrix[row_ind, col_ind] = rdg_support[i]
                         row_ind += 1
         return matrix, reading_labels, witness_labels
 
-    def to_dataframe(self, split_missing:bool=True):
+    def to_dataframe(self, split_missing: bool = True):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
             split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
-        
+
         Returns:
             A Pandas DataFrame with a row for each substantive reading and a column for each witness.
         """
@@ -442,7 +476,7 @@ class Collation():
         df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         return df
 
-    def to_csv(self, file_addr:Union[Path, str], split_missing:bool=True, **kwargs):
+    def to_csv(self, file_addr: Union[Path, str], split_missing: bool = True, **kwargs):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
 
         If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
@@ -455,9 +489,8 @@ class Collation():
         # Convert the collation to a Pandas DataFrame first:
         df = self.to_dataframe(split_missing)
         return df.to_csv(file_addr, **kwargs)
-        
 
-    def to_excel(self, file_addr:Union[Path, str], split_missing:bool=True):
+    def to_excel(self, file_addr: Union[Path, str], split_missing: bool = True):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
         Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.
@@ -470,7 +503,7 @@ class Collation():
         df = self.to_dataframe(split_missing)
         return df.to_excel(file_addr)
 
-    def to_stemma(self, file_addr:Union[Path, str]):
+    def to_stemma(self, file_addr: Union[Path, str]):
         """Writes this Collation to an STEMMA file with the given address.
 
         Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.
@@ -478,7 +511,7 @@ class Collation():
         Args:
             file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
         """
-        # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary 
+        # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
         # to the readings' texts:
         reading_texts_by_indices = {}
         substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
@@ -497,7 +530,7 @@ class Collation():
                 rdg_ind += 1
             if rdg_ind > 0:
                 vu_ind += 1
-        # In a second pass, populate another dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary 
+        # In a second pass, populate another dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
         # to the witnesses exclusively supporting those readings:
         reading_wits_by_indices = {}
         for indices in reading_texts_by_indices:
@@ -551,35 +584,43 @@ class Collation():
                     rdg_ind += 1
                 f.write("\t>\n")
         return
-    
-    def to_file(self, file_addr:Union[Path, str], format:Format=None, split_missing:bool=True, states_present:bool=False):
+
+    def to_file(
+        self,
+        file_addr: Union[Path, str],
+        format: Format = None,
+        split_missing: bool = True,
+        states_present: bool = False,
+    ):
         """Writes this Collation to the file with the given address.
 
         Args:
             file_addr (Union[Path, str]): The path to the output file.
-            format (Format, optional): The desired output format. 
-                If None then it is infered from the file suffix. 
+            format (Format, optional): The desired output format.
+                If None then it is infered from the file suffix.
                 Defaults to None.
-            split_missing (bool, optional): An optional boolean flag indicating whether or not to treat 
-                missing characters/variation units as having a contribution of 1 split over all states/readings; 
-                if False, then missing data is ignored (i.e., all states are 0). 
+            split_missing (bool, optional): An optional boolean flag indicating whether or not to treat
+                missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
                 Not applicable for NEXUS or STEMMA format.
                 Default value is True.
-            states_present (bool, optional): An optional flag indicating whether to use the StatesFormat=StatesPresent setting 
+            states_present (bool, optional): An optional flag indicating whether to use the StatesFormat=StatesPresent setting
                 instead of the StatesFormat=Frequency setting
                 (and thus represent all states with single symbols rather than frequency vectors)
                 in NEXUS output.
                 Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.
         """
         file_addr = Path(file_addr)
-        format = format or Format.infer(file_addr.suffix) # an exception will be raised here if the format or suffix is invalid
+        format = format or Format.infer(
+            file_addr.suffix
+        )  # an exception will be raised here if the format or suffix is invalid
 
         if format == Format.NEXUS:
             return self.to_nexus(file_addr, states_present=states_present)
-        
+
         if format == Format.CSV:
             return self.to_csv(file_addr, split_missing=split_missing)
-        
+
         if format == Format.TSV:
             return self.to_csv(file_addr, split_missing=split_missing, sep="\t")
 

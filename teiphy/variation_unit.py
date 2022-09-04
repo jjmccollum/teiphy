@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
-from lxml import etree as et # for reading TEI XML inputs
+from lxml import etree as et  # for reading TEI XML inputs
 
 from .common import xml_ns, tei_ns
 from .reading import Reading
 
-class VariationUnit():
+
+class VariationUnit:
     """Base class for storing TEI XML variation unit data internally.
-    
+
     This corresponds to an app element in the collation.
 
     Attributes:
         id: The ID string of this variation unit, which should be unique.
         readings: A list of Readings contained in this VariationUnit.
     """
-    def __init__(self, xml:et.Element, verbose:bool=False):
+
+    def __init__(self, xml: et.Element, verbose: bool = False):
         """Constructs a new VariationUnit instance from the TEI XML input.
 
         Args:
@@ -40,9 +42,9 @@ class VariationUnit():
     def __repr__(self):
         return str(self)
 
-    def parse(self, xml:et.Element, verbose:bool=False):
+    def parse(self, xml: et.Element, verbose: bool = False):
         """Given an XML element, recursively parses its subelements for readings, reading groups, and witness details.
-        
+
         Other children of app elements, such as note, noteGrp, and wit elements, are ignored.
 
         Args:
@@ -63,7 +65,10 @@ class VariationUnit():
             reading_group_type = xml.get("type") if xml.get("type") is not None else None
             for child in xml:
                 child_raw_tag = child.tag.replace("{%s}" % tei_ns, "")
-                if child_raw_tag in ["lem", "rdg"]: # any <lem> element in a <rdgGrp> can be assumed not to be a duplicate of a <rdg> element, as there should be only one <lem> at all levels under an <app> element
+                if child_raw_tag in [
+                    "lem",
+                    "rdg",
+                ]:  # any <lem> element in a <rdgGrp> can be assumed not to be a duplicate of a <rdg> element, as there should be only one <lem> at all levels under an <app> element
                     rdg = Reading(child, verbose)
                     if rdg.type is not None:
                         rdg.type = reading_group_type
