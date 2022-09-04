@@ -76,13 +76,27 @@ Other readings that do not fall under these rubrics but are nevertheless conside
 
 # Use Case
 
-Ephesians UBS example?
+Due to the availability of extensive collation data for the Greek New Testament, and because this project was originally developed for use with such data, we tested this library on a collation of the book of Ephesians in over 200 textual witnesses (including manuscripts, correctors' hands, translations to other languages, and quotations from church fathers).
+The manuscript transcriptions used for this collation were those produced by the University pf Birmingham's Institute for Textual Scholarship and Electronic Editing (ITSEE) for the International Greek New Testament Project (IGNTP); they are freely accessible at https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml.
+To achieve a balance between variety and conciseness, we restricted the collation to a set of forty-two variation units in Ephesians corresponding to variation units in the United Bible Societies Greek New Testament [@ubs5], which highlights variation units that affect substantive matters of translation.
+As a result, this collation is by no means complete, and some witnesses are lacunose for the entirety of the collation.
+Still, it is complete enough to serve as a sufficient example of the types of details outlined in previous sections.
+
+In our example collation, witnesses are described in the `listWit` element under the `TeiHeader`.
+Because most New Testament witnesses are identified by numerical Gregory-Aland identifiers, these witnesses are identified with `@n` attributes; the recommended practice is to identify such elements by `@xml:id` attributes, but this software is designed to work with either identifying attribute (preferring `@xml:id` if both are provided), and we have left things as they are to demonstrate this feature. 
+
+Each variation unit is encoded as an `app` element with a unique `@xml:id` attribute.
+Within a variation unit, a `lem` element without a `@wit` attribute presents the main text, and it is followed by `rdg` elements that describe variant readings (with the first `rdg` duplicating the `lem` reading and detailing its witnesses) and their attestations among the witnesses.
+(Situations where the `lem` reading is not duplicated by the first `rdg` element, but has its own `@wit` attribute, are also supported.)
+For conciseness, we use the `@n` attribute for each reading as a local identifier; the recommended practice for readings that will be referenced elsewhere is to use the `@xml:id` attribute, and this software will use this as the identifier if it is specified, but we have only specified `@xml:id` attributes for `rdg` elements referenced in other variation units to demonstrate the flexibility of the software.
+For witnesses with missing or ambiguous readings at a given variation unit, we use the `witDetail` element.
+For ambiguous readings, we specify their possible disambiguations with the `@target` attribute and express our degrees of certainty about these disambiguations using `certainty` elements under the `witDetail` element.
+
 Is there an example from 
 
 # Availability
 
-The software can be installed through the Python Package Index (PyPI) 
-and the source code is available under the MIT license from the GitHub repository. 
+The software can be installed through the Python Package Index (PyPI), and the source code is available under the MIT license from the GitHub repository. 
 The automated testing suite has 100% coverage.
 
 # Acknowledgements
