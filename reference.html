@@ -192,6 +192,21 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_nexus_equates">
+<span class="sig-name descname"><span class="pre">get_nexus_equates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nexus_symbols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_nexus_equates" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of one-character multiple-reading symbols for the NEXUS Equate block and a dictionary mapping multistate reading index lists to these symbols.</p>
+<p>Note that this will ignore any certainty degrees assigned to these states in the collation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nexus_symbols</strong> – A list of nexus symbols for the singleton states.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary mapping tuples of multiple reading indices to their corresponding symbols in the equate block.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_nexus_symbols">
 <span class="sig-name descname"><span class="pre">get_nexus_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_nexus_symbols" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in NEXUS.</p>
@@ -292,7 +307,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_file">
-<span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Format</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Format</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states_present</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_file" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to the file with the given address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -304,8 +319,13 @@ Defaults to None.</p></li>
 <li><p><strong>split_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional boolean flag indicating whether or not to treat
 missing characters/variation units as having a contribution of 1 split over all states/readings;
 if False, then missing data is ignored (i.e., all states are 0).
-Not applicable for Nexus or STEMMA format.
+Not applicable for NEXUS or STEMMA format.
 Default value is True.</p></li>
+<li><p><strong>states_present</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to use the StatesFormat=StatesPresent setting
+instead of the StatesFormat=Frequency setting
+(and thus represent all states with single symbols rather than frequency vectors)
+in NEXUS output.
+Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.</p></li>
 </ul>
 </dd>
 </dl>
@@ -313,11 +333,17 @@ Default value is True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_nexus">
-<span class="sig-name descname"><span class="pre">to_nexus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_nexus" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_nexus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states_present</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_nexus" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to a NEXUS file with the given address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output NEXUS file; the file type should be .nex or .nxs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_addr</strong> – A string representing the path to an output NEXUS file; the file type should be .nex or .nxs.</p></li>
+<li><p><strong>states_present</strong> – An optional flag indicating whether to use the StatesFormat=StatesPresent setting
+instead of the StatesFormat=Frequency setting
+(and thus represent all states with single symbols rather than frequency vectors).
+Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

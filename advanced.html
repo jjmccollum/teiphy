@@ -51,6 +51,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#lacunae-and-other-missing-data">Lacunae and Other Missing Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#correctors-hands">Correctors’ Hands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">Removing First-hand Siglum Suffixes and Merging Multiple Attestations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-output-formats-and-options">Supported Output Formats and Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#other-options">Other Options</a></li>
 </ul>
 </li>
@@ -432,6 +433,35 @@ attestations, then we can do so via</p>
 </div>
 <p>assuming that there are at most three multiple attestations in any unit.</p>
 </section>
+<section id="supported-output-formats-and-options">
+<h2>Supported Output Formats and Options<a class="headerlink" href="#supported-output-formats-and-options" title="Permalink to this heading"></a></h2>
+<p>You can specify a preferred output format for the conversion explicitly with the <code class="docutils literal notranslate"><span class="pre">--format</span></code> flag.
+Supported options include <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">csv</span></code>, <code class="docutils literal notranslate"><span class="pre">tsv</span></code>, <code class="docutils literal notranslate"><span class="pre">excel</span></code> (note that only <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> format is supported), and <code class="docutils literal notranslate"><span class="pre">stemma</span></code>.
+If you do not supply a <code class="docutils literal notranslate"><span class="pre">--format</span></code> argument, then <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will attempt to infer the correct format from the file extension of the output file name.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs, you can also include a <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag, which will convert your collation data for each witness to a string of single-state symbols,
+including symbols that represent ambiguous readings (e.g., <code class="docutils literal notranslate"><span class="pre">P46</span> <span class="pre">1013110?00111111020100100100110340090201</span></code>).
+The <code class="docutils literal notranslate"><span class="pre">StatesFormat=StatesPresent</span></code> NEXUS setting produces more compact outputs and is the expected states format for PAUP*.
+The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
+If the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag is not supplied, then the more precise <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code> setting is used by default, which encodes reading states as frequency vectors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>P46
+            (0:0.0000 1:1.0000)
+            (0:1.0000 1:0.0000)
+            (0:0.0000 1:1.0000)
+            (0:0.0000 1:0.0000 2:0.0000 3:1.0000)
+            (0:0.0000 1:1.0000 2:0.0000)
+            (0:0.0000 1:1.0000)
+            (0:1.0000 1:0.0000 2:0.0000 3:0.0000)
+            ?
+            (0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000 6:0.0000 7:0.0000 8:0.0000)
+    ...
+    (0:0.0148 1:0.9852)
+    (0:1.0000 1:0.0000)
+    (0:0.0000 1:0.0000 2:1.0000 3:0.0000)
+    (0:1.0000 1:0.0000)
+    (0:0.0000 1:1.0000)
+</pre></div>
+</div>
+</section>
 <section id="other-options">
 <h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this heading"></a></h2>
 <p>If you wish to include status messages for the purposes of measuring
@@ -441,7 +471,7 @@ the CLI.</p>
 <p>To run this script with the example input in verbose mode with all of
 the settings described above enabled, enter <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> directory and
 enter the command</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">teiphy</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;reconstructed&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;defective&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;orthographic&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;subreading&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;lac&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;overlap&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;T&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/1&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/2&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/3&quot;</span> <span class="o">--</span><span class="n">fill</span><span class="o">-</span><span class="n">correctors</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">example</span>\<span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">xml</span> <span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">nxs</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">teiphy</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;reconstructed&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;defective&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;orthographic&quot;</span> <span class="o">-</span><span class="n">t</span><span class="s2">&quot;subreading&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;lac&quot;</span> <span class="o">-</span><span class="n">m</span><span class="s2">&quot;overlap&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;T&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/1&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/2&quot;</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;/3&quot;</span> <span class="o">--</span><span class="n">fill</span><span class="o">-</span><span class="n">correctors</span> <span class="o">--</span><span class="n">states</span><span class="o">-</span><span class="n">present</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">example</span>\<span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">xml</span> <span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">nxs</span>
 </pre></div>
 </div>
 <p>from the command line.</p>
