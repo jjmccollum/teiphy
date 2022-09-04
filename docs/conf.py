@@ -22,7 +22,7 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
-    # "sphinx_click",
+    "sphinx_click",
     'sphinxcontrib.bibtex',
 ]
 
