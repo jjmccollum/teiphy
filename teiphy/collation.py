@@ -336,11 +336,44 @@ class Collation:
         nchar = (
             len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
         )  # if the number of taxa is 0, then the number of characters is irrelevant
-        taxlabels = [wit.id for wit in self.witnesses]
+        taxlabels = []
+        forbidden_chars = [
+            '(',
+            ')',
+            '[',
+            ']',
+            '{',
+            '}',
+            '/',
+            '\\',
+            ',',
+            ';',
+            ':',
+            '-',
+            '=',
+            '*',
+            '\'',
+            '"',
+            '*',
+            '<',
+            '>',
+        ]
+        for wit in self.witnesses:
+            taxlabel = wit.id
+            for c in forbidden_chars:
+                if c in taxlabel:
+                    taxlabel = taxlabel.replace(c, '_')
+            taxlabels.append(taxlabel)
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
         )  # keep track of the longest taxon label for tabular alignment purposes
-        charlabels = self.substantive_variation_unit_ids
+        charlabels = []
+        for vu_id in self.substantive_variation_unit_ids:
+            charlabel = vu_id
+            for c in forbidden_chars:
+                if c in charlabel:
+                    charlabel = charlabel.replace(c, '_')
+            charlabels.append(charlabel)
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
         equates, equate_mapping = [], {}
@@ -367,7 +400,7 @@ class Collation:
             f.write("\tFormat\n")
             f.write("\t\tDataType=Standard\n")
             if states_present:
-                f.write("\t\tStatesFormat=StatesPresent\n")
+                # There's no need to write StatesFormat=StatesPresent\n")
                 f.write("\t\tSymbols=\"%s\"\n" % (" ".join(symbols)))
                 f.write("\t\tEquate=\"")
                 # Populate a reverse dictionary mapping the equate symbols to their reading index tuples:

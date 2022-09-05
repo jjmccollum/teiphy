@@ -47,7 +47,6 @@ def test_to_nexus_states_format():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "StatesFormat=StatesPresent" in text
         assert "Equate=" in text
 
 
