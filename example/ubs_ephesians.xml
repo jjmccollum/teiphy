@@ -34,19 +34,19 @@
                     <witness n="010"/>
                     <witness n="012"/>
                     <witness n="016"/>
-                    <witness n="018"/>
+                    <witness type="commentary" n="018"/>
                     <witness n="020"/>
                     <witness n="025"/>
                     <witness n="044"/>
                     <witness n="048"/>
                     <witness n="049"/>
-                    <witness n="056"/>
-                    <witness n="075"/>
-                    <witness n="075S"/>
+                    <witness type="commentary" n="056"/>
+                    <witness type="commentary" n="075"/>
+                    <witness type="commentary" n="075S"/>
                     <witness n="082"/>
-                    <witness n="0142"/>
-                    <witness n="0150"/>
-                    <witness n="0151"/>
+                    <witness type="commentary" n="0142"/>
+                    <witness type="commentary" n="0150"/>
+                    <witness type="commentary" n="0151"/>
                     <witness n="0159"/>
                     <witness n="0230"/>
                     <witness n="0278"/>
@@ -87,13 +87,13 @@
                     <witness n="424"/>
                     <witness type="corrector" n="424C1"/>
                     <witness n="436"/>
-                    <witness n="442"/>
+                    <witness type="commentary" n="442"/>
                     <witness n="451"/>
                     <witness n="459"/>
                     <witness n="462"/>
                     <witness n="467"/>
                     <witness n="506"/>
-                    <witness n="606"/>
+                    <witness type="commentary" n="606"/>
                     <witness n="629"/>
                     <witness n="636"/>
                     <witness n="664"/>
@@ -126,7 +126,7 @@
                     <witness n="1836"/>
                     <witness n="1837"/>
                     <witness n="1838"/>
-                    <witness n="1840"/>
+                    <witness type="commentary" n="1840"/>
                     <witness n="1851"/>
                     <witness n="1860"/>
                     <witness n="1877"/>
@@ -134,24 +134,24 @@
                     <witness n="1886"/>
                     <witness n="1893"/>
                     <witness n="1908"/>
-                    <witness n="1910"/>
+                    <witness type="commentary" n="1910"/>
                     <witness n="1912"/>
                     <witness n="1918"/>
-                    <witness n="1939"/>
-                    <witness n="1942"/>
+                    <witness type="commentary" n="1939"/>
+                    <witness type="commentary" n="1942"/>
                     <witness n="1959"/>
-                    <witness n="1962"/>
-                    <witness n="1963"/>
-                    <witness n="1985"/>
-                    <witness n="1987"/>
-                    <witness n="1991"/>
-                    <witness n="1996"/>
-                    <witness n="1999"/>
+                    <witness type="commentary" n="1962"/>
+                    <witness type="commentary" n="1963"/>
+                    <witness type="commentary" n="1985"/>
+                    <witness type="commentary" n="1987"/>
+                    <witness type="commentary" n="1991"/>
+                    <witness type="commentary" n="1996"/>
+                    <witness type="commentary" n="1999"/>
                     <witness n="2004"/>
                     <witness n="2005"/>
-                    <witness n="2008"/>
-                    <witness n="2011"/>
-                    <witness n="2012"/>
+                    <witness type="commentary" n="2008"/>
+                    <witness type="commentary" n="2011"/>
+                    <witness type="commentary" n="2012"/>
                     <witness n="2127"/>
                     <witness n="2138"/>
                     <witness n="2180"/>
@@ -165,26 +165,26 @@
                     <witness n="2516"/>
                     <witness n="2523"/>
                     <witness n="2544"/>
-                    <witness n="2576"/>
+                    <witness type="commentary" n="2576"/>
                     <witness n="2805"/>
                     <witness n="2834"/>
                     <witness n="2865"/>
                     <witness n="2865S"/>
                     <!-- Lectionaries -->
-                    <witness n="L23"/>
-                    <witness n="L60"/>
-                    <witness n="L156"/>
-                    <witness n="L169"/>
-                    <witness n="L587"/>
-                    <witness n="L809"/>
-                    <witness n="L1126"/>
-                    <witness n="L1159"/>
-                    <witness n="L1178"/>
-                    <witness n="L1188"/>
-                    <witness n="L1298"/>
-                    <witness n="L1440"/>
-                    <witness n="L2010"/>
-                    <witness n="L2058"/>
+                    <witness type="lectionary" n="L23"/>
+                    <witness type="lectionary" n="L60"/>
+                    <witness type="lectionary" n="L156"/>
+                    <witness type="lectionary" n="L169"/>
+                    <witness type="lectionary" n="L587"/>
+                    <witness type="lectionary" n="L809"/>
+                    <witness type="lectionary" n="L1126"/>
+                    <witness type="lectionary" n="L1159"/>
+                    <witness type="lectionary" n="L1178"/>
+                    <witness type="lectionary" n="L1188"/>
+                    <witness type="lectionary" n="L1298"/>
+                    <witness type="lectionary" n="L1440"/>
+                    <witness type="lectionary" n="L2010"/>
+                    <witness type="lectionary" n="L2058"/>
                     <!-- Old Latin manuscripts (see https://itseeweb.cal.bham.ac.uk/vetuslatina/NT-MSS/ for more details)-->
                     <witness n="VL51"/> <!-- gig -->
                     <witness n="VL54"/> <!-- p -->
