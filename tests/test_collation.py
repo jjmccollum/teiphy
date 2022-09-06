@@ -256,6 +256,33 @@ class CollationOutputTestCase(unittest.TestCase):
             fill_corrector_lacunae=True,
         )
 
+    def test_replace_forbidden_chars(self):
+        text = "(this)[is]{a}/bad\\,unacceptable;:nexus-string"
+        forbidden_chars = [
+            '(',
+            ')',
+            '[',
+            ']',
+            '{',
+            '}',
+            '/',
+            '\\',
+            ',',
+            ';',
+            ':',
+            '-',
+            '=',
+            '*',
+            '\'',
+            '"',
+            '*',
+            '<',
+            '>',
+        ]
+        replacement_char = '_'
+        new_text = self.collation.replace_forbidden_chars(text, forbidden_chars, replacement_char)
+        self.assertEqual(new_text, "_this__is__a__bad__unacceptable__nexus_string")
+
     def test_get_nexus_symbols(self):
         nexus_symbols = self.collation.get_nexus_symbols()
         self.assertEqual(nexus_symbols, ["0", "1", "2", "3", "4", "5", "6", "7", "8"])

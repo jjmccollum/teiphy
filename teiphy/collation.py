@@ -321,6 +321,23 @@ class Collation:
         nexus_equate_mapping = {t: available_symbols[i] for i, t in enumerate(reading_ind_tuples)}
         return nexus_equates, nexus_equate_mapping
 
+    def replace_forbidden_chars(self, text: str, forbidden_chars: List[str], replacement_char: str):
+        """Replaces all characters in the given text that belong to a given list of forbidden characters with a specified replacement character.
+
+        Args:
+            text: A string that potentially contains forbidden characters to be replaced.
+            forbidden_chars: A list of forbidden_characters to replace in the target string.
+            replacement_char: A character that will replace the forbidden characters in the target string.
+
+        Returns:
+            A copy of the text input with all forbidden characters replaced with the replacement character.
+        """
+        new_text = text
+        for c in forbidden_chars:
+            if c in new_text:
+                new_text = new_text.replace(c, replacement_char)
+        return new_text
+
     def to_nexus(self, file_addr: Union[Path, str], states_present: bool = False):
         """Writes this Collation to a NEXUS file with the given address.
 
@@ -336,7 +353,6 @@ class Collation:
         nchar = (
             len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
         )  # if the number of taxa is 0, then the number of characters is irrelevant
-        taxlabels = []
         forbidden_chars = [
             '(',
             ')',
@@ -358,22 +374,13 @@ class Collation:
             '<',
             '>',
         ]
-        for wit in self.witnesses:
-            taxlabel = wit.id
-            for c in forbidden_chars:
-                if c in taxlabel:
-                    taxlabel = taxlabel.replace(c, '_')
-            taxlabels.append(taxlabel)
+        taxlabels = [self.replace_forbidden_chars(wit.id, forbidden_chars, '_') for wit in self.witnesses]
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
         )  # keep track of the longest taxon label for tabular alignment purposes
-        charlabels = []
-        for vu_id in self.substantive_variation_unit_ids:
-            charlabel = vu_id
-            for c in forbidden_chars:
-                if c in charlabel:
-                    charlabel = charlabel.replace(c, '_')
-            charlabels.append(charlabel)
+        charlabels = [
+            self.replace_forbidden_chars(vu_id, forbidden_chars, '_') for vu_id in self.substantive_variation_unit_ids
+        ]
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
         equates, equate_mapping = [], {}
