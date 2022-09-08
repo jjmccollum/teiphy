@@ -92,8 +92,6 @@ For conciseness, we use the `@n` attribute for each reading as a local identifie
 For witnesses with missing or ambiguous readings at a given variation unit, we use the `witDetail` element.
 For ambiguous readings, we specify their possible disambiguations with the `@target` attribute and express our degrees of certainty about these disambiguations using `certainty` elements under the `witDetail` element.
 
-Is there an example from 
-
 # Availability
 
 The software can be installed through the Python Package Index (PyPI), and the source code is available under the MIT license from the GitHub repository. 
