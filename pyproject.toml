@@ -4,6 +4,17 @@ version = "0.1.0"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
+readme = "README.rst"
+homepage = "https://github.com/jjmccollum/teiphy"
+repository = "https://github.com/jjmccollum/teiphy"
+documentation = "https://jjmccollum.github.io/teiphy/"
+keywords = ["Python", "phylogenetics", "text encoding", "TEI", "NEXUS"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.8"
