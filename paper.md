@@ -1,5 +1,5 @@
 ---
-title: 'teiphy: A Python package for converting TEI XML collations to NEXUS and other formats'
+title: 'teiphy: A Python Package for Cconverting TEI XML Collations to NEXUS and Other Formats'
 tags:
   - Python
   - phylogenetics
@@ -28,7 +28,7 @@ Textual scholars have been using phylogenetics to analyze manuscript traditions 
 Many standard phylogenetic software packages accept as input the NEXUS file format [@msm_nexus_1997]. 
 The `teiphy` program takes a collation of texts encoded using the Text Encoding Initiative (TEI) guidelines and converts it to a NEXUS format
 so that it can be used for phylogenetic analysis.
-The package can also convert to other formats such as to Stephen Carlson's [`STEMMA`](https://github.com/stemmatic/stemma) format or to a NumPy array [@numpy_2020].
+The package can also convert to other formats such as Stephen C. Carlson's [`STEMMA`](https://github.com/stemmatic/stemma) format or to a NumPy array [@numpy_2020].
 
 # Statement of Need
 
@@ -36,11 +36,11 @@ The TEI aims to provide an international standard for digital encoding textual i
 The TEI guidelines describe an XML format for encoding a critical apparatus [@tei_critical_apparatus].
 Due to its rich and well-documented set of elements for expressing a wide range of features in manuscript transcriptions, collations, and critical editions,
 TEI XML has become the _de facto_ format for textual data in the digital humanities [@fischer_representing_2020]. 
-Its expressive power has proven increasingly valuable since its release, as scholars have learned—sometimes the hard way—that digitized texts should
+Its expressive power has proven increasingly valuable since its release, as scholars have learned—sometimes the hard way—that digital transcriptions and collations should
 
 1. preserve as much detail as they can from their material sources, including paratextual features; 
-2. reproduce the text of their sources as closely as possible, with editorial regularizations to things like orthography, accentuation, and scribal shorthand encoded alongside rather than in place of the source text; 
-3. uncertainties about what a source read, both in transcriptions and collations, should be described as accurately as possible, allowing for degrees of uncertainty and multiple choices for disambiguations if necessary.
+2. reproduce the text of their sources as closely as possible, with editorial regularizations to things like orthography, accentuation, and scribal shorthand encoded alongside rather than in place of the source text; and
+3. describe uncertainties about what a source read as accurately as possible, allowing for degrees of uncertainty and multiple choices for disambiguations if necessary.
 
 Such principles have much bearing on the editing of critical texts, a task fundamental to both digital humanities and classical philology.
 Within the digital humanities, phylogenetic algorithms have been popular approaches to this task.
@@ -56,7 +56,8 @@ This format was conceived with versatility in mind, and this design choice has b
 Conversely, for those interested primarily in working with the collation as an alignment, TEI XML is overkill.
 Thus, a great chasm has been fixed between the two formats, and the only way to cross over it is by conversion.
 
-Another format of value for text-critical phylogenetics is the input format associated with the [`STEMMA` software](https://github.com/stemmatic/stemma) developed by Stephen C. Carlson for his phylogenetic analysis of the Epistle to the Galatians [@carlson_text_2015]. Carlson's software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
+Another format of value for text-critical phylogenetics is the input format associated with the [`STEMMA` software](https://github.com/stemmatic/stemma) developed by Stephen C. Carlson for his phylogenetic analysis of the Epistle to the Galatians [@carlson_text_2015].
+Carlson's software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
 While it has so far only been applied to books of the New Testament, it is just as applicable to other traditions, and a way of converting TEI XML collations of other texts to a format that can be used by this software could help bridge this gap. 
 
 Other basic machine-learning approaches to textual criticism, which are frequently based on clustering and biclustering algorithms [@thorpe_multivariate2002; @finney_discover_2018; @mccollum_biclustering_2019], expect the collation data to be encoded as a matrix with a row for each variant reading and a column for each witness.
@@ -80,12 +81,12 @@ Other readings that do not fall under these rubrics but are nevertheless conside
 # Use Case
 
 Due to the availability of extensive collation data for the Greek New Testament, and because this project was originally developed for use with such data, we tested this library on a collation of the book of Ephesians in over 200 textual witnesses (including manuscripts, correctors' hands, translations to other languages, and quotations from church fathers).
-The manuscript transcriptions used for this collation were those produced by the University pf Birmingham's Institute for Textual Scholarship and Electronic Editing (ITSEE) for the International Greek New Testament Project (IGNTP); they are freely accessible at [https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml](https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml).
+The manuscript transcriptions used for this collation were those produced by the University of Birmingham's Institute for Textual Scholarship and Electronic Editing (ITSEE) for the International Greek New Testament Project (IGNTP); they are freely accessible at [https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml](https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml).
 To achieve a balance between variety and conciseness, we restricted the collation to a set of forty-two variation units in Ephesians corresponding to variation units in the United Bible Societies Greek New Testament [@ubs5], which highlights variation units that affect substantive matters of translation.
 As a result, this collation is by no means complete, and some witnesses are lacunose for the entirety of the collation.
 Still, it is complete enough to serve as a sufficient example of the types of details outlined in previous sections.
 
-In our example collation, witnesses are described in the `listWit` element under the `TeiHeader`.
+In our example collation, witnesses are described in the `listWit` element under the `teiHeader`.
 Because most New Testament witnesses are identified by numerical Gregory-Aland identifiers, these witnesses are identified with `@n` attributes; the recommended practice is to identify such elements by `@xml:id` attributes, but this software is designed to work with either identifying attribute (preferring `@xml:id` if both are provided), and we have left things as they are to demonstrate this feature. 
 
 Each variation unit is encoded as an `app` element with a unique `@xml:id` attribute.
