@@ -80,7 +80,7 @@ Other readings that do not fall under these rubrics but are nevertheless conside
 # Use Case
 
 Due to the availability of extensive collation data for the Greek New Testament, and because this project was originally developed for use with such data, we tested this library on a collation of the book of Ephesians in over 200 textual witnesses (including manuscripts, correctors' hands, translations to other languages, and quotations from church fathers).
-The manuscript transcriptions used for this collation were those produced by the University pf Birmingham's Institute for Textual Scholarship and Electronic Editing (ITSEE) for the International Greek New Testament Project (IGNTP); they are freely accessible at https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml.
+The manuscript transcriptions used for this collation were those produced by the University pf Birmingham's Institute for Textual Scholarship and Electronic Editing (ITSEE) for the International Greek New Testament Project (IGNTP); they are freely accessible at [https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml](https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml).
 To achieve a balance between variety and conciseness, we restricted the collation to a set of forty-two variation units in Ephesians corresponding to variation units in the United Bible Societies Greek New Testament [@ubs5], which highlights variation units that affect substantive matters of translation.
 As a result, this collation is by no means complete, and some witnesses are lacunose for the entirety of the collation.
 Still, it is complete enough to serve as a sufficient example of the types of details outlined in previous sections.
