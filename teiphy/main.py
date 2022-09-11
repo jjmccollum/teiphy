@@ -37,7 +37,7 @@ def to_file(
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     format: Format = typer.Option(None, case_sensitive=False, help="The output format."),
-    input_addr: Path = typer.Argument(
+    input: Path = typer.Argument(
         ...,
         exists=True,
         file_okay=True,
@@ -45,8 +45,9 @@ def to_file(
         writable=False,
         readable=True,
         resolve_path=True,
+        help="Input TEI XML collation file to convert.",
     ),
-    output_addr: Path = typer.Argument(
+    output: Path = typer.Argument(
         ...,
         exists=False,
         file_okay=True,
@@ -54,18 +55,19 @@ def to_file(
         writable=True,
         readable=False,
         resolve_path=True,
+        help="Output for converted collation. If --format is not specified, then the format will be derived from the extension of this file.",
     ),
 ):
     # Make sure the input is an XML file:
-    if input_addr.suffix.lower() != ".xml":
+    if input.suffix.lower() != ".xml":
         print("Error opening input file: The input file is not an XML file. Make sure the input file type is .xml.")
     # If it is, then try to parse it:
     xml = None
     try:
         parser = et.XMLParser(remove_comments=True)
-        xml = et.parse(input_addr, parser=parser)
+        xml = et.parse(input, parser=parser)
     except Exception as err:
         print(f"Error opening input file: {err}")
 
     coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
-    coll.to_file(output_addr, format=format, states_present=states_present)
+    coll.to_file(output, format=format, states_present=states_present)
