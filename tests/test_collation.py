@@ -310,6 +310,16 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(equates, [])
         self.assertEqual(equate_mapping, {})
 
+    def test_get_hennig86_symbols(self):
+        hennig86_symbols = self.collation.get_hennig86_symbols()
+        self.assertEqual(hennig86_symbols, ["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+
+    def test_get_hennig86_symbols_empty(self):
+        empty_xml = et.fromstring("<TEI/>")
+        empty_collation = Collation(empty_xml)
+        hennig86_symbols = empty_collation.get_hennig86_symbols()
+        self.assertEqual(hennig86_symbols, [])
+
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
         self.assertTrue(

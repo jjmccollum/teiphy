@@ -321,6 +321,28 @@ class Collation:
         nexus_equate_mapping = {t: available_symbols[i] for i, t in enumerate(reading_ind_tuples)}
         return nexus_equates, nexus_equate_mapping
 
+    def get_hennig86_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_uppercase)[:22]
+        )  # NOTE: the maximum number of symbols allowed in Hennig86 format is 32
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        hennig86_symbols = possible_symbols[:nsymbols]
+        return hennig86_symbols
+
     def replace_forbidden_chars(self, text: str, forbidden_chars: List[str], replacement_char: str):
         """Replaces all characters in the given text that belong to a given list of forbidden characters with a specified replacement character.
 
@@ -427,7 +449,7 @@ class Collation:
             # Write the matrix subblock:
             f.write("\tMatrix")
             for i, wit in enumerate(self.witnesses):
-                taxlabel = wit.id
+                taxlabel = taxlabels[i]
                 if states_present:
                     sequence = "\n\t\t" + taxlabel
                     # Add enough space after this label ensure that all sequences are nicely aligned:
@@ -466,6 +488,66 @@ class Collation:
             f.write(";\n")
             # End the characters block:
             f.write("End;")
+        return
+
+    def to_hennig86(self, file_addr: Union[Path, str]):
+        """Writes this Collation to a file in Hennig86 format with the given address.
+        Note that because Hennig86 format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.
+
+        Args:
+            file_addr: A string representing the path to an output file.
+        """
+        # Start by calculating the values we will be using here:
+        ntax = len(self.witnesses)
+        nchar = (
+            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
+        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        forbidden_chars = [
+            ' ',
+            '.',
+        ]
+        taxlabels = []
+        for wit in self.witnesses:
+            taxlabel = wit.id
+            # Hennig86 format requires taxon names to start with a letter, so if this is not the case, then append "WIT_" to the start of the name:
+            if taxlabel[0] not in string.ascii_letters:
+                taxlabel = "WIT_" + taxlabel
+            # Then replace any disallowed characters in the string with an underscore:
+            taxlabel = self.replace_forbidden_chars(taxlabel, forbidden_chars, '_')
+            taxlabels.append(taxlabel)
+        max_taxlabel_length = max(
+            [len(taxlabel) for taxlabel in taxlabels]
+        )  # keep track of the longest taxon label for tabular alignment purposes
+        missing_symbol = '?'
+        symbols = self.get_hennig86_symbols()
+        with open(file_addr, "w", encoding="utf-8") as f:
+            # Start with the nstates header:
+            f.write("nstates %d;\n" % len(symbols))
+            # Then begin the xread block:
+            f.write("xread\n")
+            # Write the dimensions:
+            f.write("%d %d\n" % (nchar, ntax))
+            # Now write the matrix:
+            for i, wit in enumerate(self.witnesses):
+                taxlabel = taxlabels[i]
+                # Add enough space after this label ensure that all sequences are nicely aligned:
+                sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel) + 1))
+                for rdg_support in self.readings_by_witness[wit.id]:
+                    # If this reading is lacunose in this witness, then use the missing character:
+                    if sum(rdg_support) == 0:
+                        sequence += missing_symbol
+                        continue
+                    rdg_inds = [
+                        i for i, w in enumerate(rdg_support) if w > 0
+                    ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                    # For singleton readings, just print the symbol:
+                    if len(rdg_inds) == 1:
+                        sequence += symbols[rdg_inds[0]]
+                        continue
+                    # For multiple readings, print the missing symbol:
+                    sequence += missing_symbol
+                f.write("%s\n" % (sequence))
+            f.write(";")
         return
 
     def to_numpy(self, split_missing: bool = True):
@@ -657,6 +739,9 @@ class Collation:
 
         if format == Format.NEXUS:
             return self.to_nexus(file_addr, states_present=states_present)
+
+        if format == format.HENNIG86:
+            return self.to_hennig86(file_addr)
 
         if format == Format.CSV:
             return self.to_csv(file_addr, split_missing=split_missing)
