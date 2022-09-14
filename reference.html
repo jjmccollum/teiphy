@@ -192,6 +192,18 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_hennig86_symbols">
+<span class="sig-name descname"><span class="pre">get_hennig86_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_hennig86_symbols" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.</p>
+<p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of individual characters representing states in readings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_nexus_equates">
 <span class="sig-name descname"><span class="pre">get_nexus_equates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nexus_symbols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_nexus_equates" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list of one-character multiple-reading symbols for the NEXUS Equate block and a dictionary mapping multistate reading index lists to these symbols.</p>
@@ -345,6 +357,18 @@ instead of the StatesFormat=Frequency setting
 in NEXUS output.
 Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_hennig86">
+<span class="sig-name descname"><span class="pre">to_hennig86</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_hennig86" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to a file in Hennig86 format with the given address.
+Note that because Hennig86 format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output file.</p>
 </dd>
 </dl>
 </dd></dl>
