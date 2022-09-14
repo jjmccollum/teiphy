@@ -64,7 +64,7 @@ To use the software, run the ``teiphy`` command line tool:
 
 teiphy can export to NEXUS, CSV, TSV, Excel and `stemma` formats. 
 teiphy will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
-".nex", ".nexus", ".nxs", ".csv", ".tsv", ".xlsx".
+".nex", ".nexus", ".nxs", ".tnt", ".csv", ".tsv", ".xlsx".
 
 To explicitly say which format you wish to export to, use the ``--format`` option. For example:
 
