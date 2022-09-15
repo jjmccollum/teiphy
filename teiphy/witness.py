@@ -11,7 +11,7 @@ class Witness:
     This corresponds to a witness element in the collation.
 
     Attributes:
-        id: The ID string of this reading, which should be unique within its parent app element.
+        id: The ID string of this Witness. It should be unique.
         type: A string representing the type of witness. Examples include "corrector", "version", and "father".
     """
 
