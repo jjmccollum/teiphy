@@ -56,9 +56,13 @@ This format was conceived with versatility in mind, and this design choice has b
 Conversely, for those interested primarily in working with the collation as an alignment, TEI XML is overkill.
 Thus, a great chasm has been fixed between the two formats, and the only way to cross over it is by conversion.
 
+The problem is compounded by the fact that other tools for phylogenetic and other analyses anticipate input formats other than NEXUS.
+A noteworthy alternative is Hennig86, which is the format of choice for the TNT phylogenetic software [@farris_hennig86_1988; @gc_tnt_2016].
+While this format does not allow for as much flexibility in the input as NEXUS does (e.g., it does not support ambiguities that can be disambiguated as some states and not others), TNT's remarkable performance in tree search makes support for this format a desirable option on practical grounds.
+
 Another format of value for text-critical phylogenetics is the input format associated with the [`STEMMA` software](https://github.com/stemmatic/stemma) developed by Stephen C. Carlson for his phylogenetic analysis of the Epistle to the Galatians [@carlson_text_2015].
 Carlson's software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
-While it has so far only been applied to books of the New Testament, it is just as applicable to other traditions, and a way of converting TEI XML collations of other texts to a format that can be used by this software could help bridge this gap. 
+While it has so far only been applied to books of the New Testament, it is just as applicable to other traditions, and a way of converting TEI XML collations of other texts to a format that can be used by this software could help bridge this gap.
 
 Other basic machine-learning approaches to textual criticism, which are frequently based on clustering and biclustering algorithms [@thorpe_multivariate2002; @finney_discover_2018; @mccollum_biclustering_2019], expect the collation data to be encoded as a matrix with a row for each variant reading and a column for each witness.
 Thus, a means of converting the essential data from TEI XML collation to a NumPy array [@numpy_2020] and other related formats is a need for applications like these.

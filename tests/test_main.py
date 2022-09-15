@@ -39,7 +39,7 @@ def test_to_nexus():
         assert "StatesFormat=Frequency" in text
 
 
-def test_to_nexus_states_format():
+def test_to_nexus_states_present():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
         result = runner.invoke(app, ["--states-present", str(input_example), str(output)])
@@ -48,6 +48,31 @@ def test_to_nexus_states_format():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Equate=" in text
+
+
+def test_to_hennig86():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.tnt"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("nstates")
+        assert "xread" in text
 
 
 def test_to_csv():

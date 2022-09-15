@@ -7,7 +7,7 @@ from .format import Format
 from .collation import Collation
 
 
-app = typer.Typer()
+app = typer.Typer(rich_markup_mode="rich")
 
 
 @app.command()
