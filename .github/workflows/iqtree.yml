@@ -20,7 +20,7 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy example/ubs_ephesians.xml example.nexus 
+        poetry run teiphy example/ubs_ephesians.xml example.nexus --states-present 
     - name: Install Phylogenetics Package
       run: sudo apt-get install -y iqtree
     - name: Phylogenetics Run
