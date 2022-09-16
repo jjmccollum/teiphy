@@ -1,0 +1,29 @@
+name: iqtree
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - name: Install dependencies for Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'poetry'
+    - run: poetry install
+    - name: Testing
+      run: |
+        poetry run teiphy example/ubs_ephesians.xml example.nexus 
+    - name: Install Phylogenetics Package
+      run: sudo apt-get install -y iqtree
+    - name: Phylogenetics Run
+      run: |
+        iqtree2 -s example.nexus -m MK+ASC -bb 1000
+      
