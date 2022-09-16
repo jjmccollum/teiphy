@@ -4,7 +4,7 @@ teiphy
 
 .. start-badges
 
-|testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge|
+|license badge| |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge|
 
 .. |license badge| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
     :target: https://choosealicense.com/licenses/mit/
