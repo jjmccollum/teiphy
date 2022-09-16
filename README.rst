@@ -6,6 +6,9 @@ teiphy
 
 |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge|
 
+.. |license badge| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
+    :target: https://choosealicense.com/licenses/mit/
+
 .. |testing badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/testing.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions
 
