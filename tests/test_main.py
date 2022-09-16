@@ -6,10 +6,12 @@ from teiphy.main import app
 
 runner = CliRunner()
 
-root_dir = Path("__file__").parent.parent
+test_dir = Path(__file__).parent
+root_dir = test_dir.parent
+
 input_example = root_dir / "example/ubs_ephesians.xml"
 non_xml_example = root_dir / "pyproject.toml"
-malformed_example = root_dir / "example/malformed_example.xml"
+malformed_example = test_dir / "malformed_example.xml"
 
 
 def test_non_xml_input():
