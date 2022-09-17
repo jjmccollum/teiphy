@@ -38,6 +38,19 @@ def test_to_nexus():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
+        assert "CharStateLabels" in text
+        assert "StatesFormat=Frequency" in text
+
+
+def test_to_nexus_no_labels():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--no-labels", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "CharStateLabels" not in text
         assert "StatesFormat=Frequency" in text
 
 
@@ -49,7 +62,19 @@ def test_to_nexus_states_present():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "Equate=" in text
+        assert "StatesFormat=Frequency" not in text
+
+
+def test_to_nexus_states_present_ambiguous_as_missing():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--states-present", "--ambiguous-as-missing", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "StatesFormat=Frequency" not in text
+        assert "{" not in text
 
 
 def test_to_hennig86():
@@ -58,13 +83,13 @@ def test_to_hennig86():
         result = runner.invoke(
             app,
             [
-                "-treconstructed",
-                "-tdefective",
-                "-torthographic",
-                "-mlac",
-                "-moverlap",
-                "-s*",
-                "-sT",
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
                 "--fill-correctors",
                 str(input_example),
                 str(output),
@@ -83,8 +108,8 @@ def test_to_csv():
         result = runner.invoke(app, [str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text()
-        assert text.startswith(",P46,P49,P92,P132,01,01C1")
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith(",UBS,P46,01,02,03,04,06")
 
 
 def test_to_tsv():
@@ -93,8 +118,8 @@ def test_to_tsv():
         result = runner.invoke(app, [str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text()
-        assert text.startswith("\tP46\tP49\tP92\tP132\t01\t01C1")
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("\tUBS\tP46\t01\t02\t03\t04\t06")
 
 
 def test_to_excel():
@@ -112,7 +137,7 @@ def test_to_stemma():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8")
-        assert text.startswith("* P46 P49 P92 P132 01 01C1")
+        assert text.startswith("* UBS P46 01 02 03 04 06")
 
 
 def test_to_file_bad_format():

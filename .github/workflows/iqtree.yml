@@ -20,7 +20,7 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy example/ubs_ephesians.xml example.nexus --states-present 
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --states-present --fill-correctors example/ubs_ephesians.xml example.nexus
     - name: Install Phylogenetics Package
       run: sudo apt-get install -y iqtree
     - name: Phylogenetics Run

@@ -17,26 +17,26 @@ class CollationDefaultTestCase(unittest.TestCase):
         self.collation = Collation(xml)
 
     def test_witnesses(self):
-        self.assertEqual(len(self.collation.witnesses), 223)
+        self.assertEqual(len(self.collation.witnesses), 38)
 
     def test_witness_index_by_id(self):
-        self.assertEqual(len(self.collation.witness_index_by_id), 223)
+        self.assertEqual(len(self.collation.witness_index_by_id), 38)
 
     def test_variation_units(self):
         self.assertEqual(len(self.collation.variation_units), 42)
 
     def test_readings_by_witness(self):
-        self.assertEqual(len(self.collation.readings_by_witness), 223)
+        self.assertEqual(len(self.collation.readings_by_witness), 38)
 
     def test_substantive_variation_unit_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 41
-        )  # app B10K6V20U12 should always be ignored
+            len(self.collation.substantive_variation_unit_ids), 40
+        )  # apps B10K4V28U24-26 and B10K6V20U12 should always be ignored
 
     def test_substantive_reading_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_reading_ids), 443
-        )  # all readings except for the one in app B10K6V20U12
+            len(self.collation.substantive_variation_unit_reading_tuples), 160
+        )  # all readings except for the ones in apps B10K4V28U24-26 and B10K6V20U12
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
@@ -45,27 +45,15 @@ class CollationTrivialReconstructedTestCase(unittest.TestCase):
         xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed"])
 
-    def test_witnesses(self):
-        self.assertEqual(len(self.collation.witnesses), 223)
-
-    def test_witness_index_by_id(self):
-        self.assertEqual(len(self.collation.witness_index_by_id), 223)
-
-    def test_variation_units(self):
-        self.assertEqual(len(self.collation.variation_units), 42)
-
-    def test_readings_by_witness(self):
-        self.assertEqual(len(self.collation.readings_by_witness), 223)
-
     def test_substantive_variation_unit_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 41
-        )  # app B10K6V20U12 should always be ignored
+            len(self.collation.substantive_variation_unit_ids), 40
+        )  # apps B10K4V28U24-26 and B10K6V20U12 should always be ignored
 
     def test_substantive_reading_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_reading_ids), 319
-        )  # all readings except for the one in app B10K6V20U12 and all reconstructed readings
+            len(self.collation.substantive_variation_unit_reading_tuples), 147
+        )  # all readings except for the ones in apps B10K4V28U24-26 and B10K6V20U12 and all reconstructed readings
 
 
 class CollationTrivialDefectiveTestCase(unittest.TestCase):
@@ -74,27 +62,15 @@ class CollationTrivialDefectiveTestCase(unittest.TestCase):
         xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective"])
 
-    def test_witnesses(self):
-        self.assertEqual(len(self.collation.witnesses), 223)
-
-    def test_witness_index_by_id(self):
-        self.assertEqual(len(self.collation.witness_index_by_id), 223)
-
-    def test_variation_units(self):
-        self.assertEqual(len(self.collation.variation_units), 42)
-
-    def test_readings_by_witness(self):
-        self.assertEqual(len(self.collation.readings_by_witness), 223)
-
     def test_substantive_variation_unit_ids(self):
         self.assertEqual(
             len(self.collation.substantive_variation_unit_ids), 40
-        )  # all units except B10K6V20U12 and B10K4V28U18-20
+        )  # apps B10K4V28U24-26 and B10K6V20U12 should always be ignored
 
     def test_substantive_reading_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_reading_ids), 175
-        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U18-20 and all reconstructed and defective readings
+            len(self.collation.substantive_variation_unit_reading_tuples), 108
+        )  # all readings except for the ones in apps B10K4V28U24-26 and B10K6V20U12 and all reconstructed and defective readings
 
 
 class CollationTrivialOrthographicTestCase(unittest.TestCase):
@@ -103,30 +79,18 @@ class CollationTrivialOrthographicTestCase(unittest.TestCase):
         xml = et.parse(input_example, parser=parser)
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective", "orthographic"])
 
-    def test_witnesses(self):
-        self.assertEqual(len(self.collation.witnesses), 223)
-
-    def test_witness_index_by_id(self):
-        self.assertEqual(len(self.collation.witness_index_by_id), 223)
-
-    def test_variation_units(self):
-        self.assertEqual(len(self.collation.variation_units), 42)
-
-    def test_readings_by_witness(self):
-        self.assertEqual(len(self.collation.readings_by_witness), 223)
-
     def test_substantive_variation_unit_ids(self):
         self.assertEqual(
             len(self.collation.substantive_variation_unit_ids), 40
-        )  # all units except B10K6V20U12 and B10K4V28U18-20
+        )  # all units except B10K6V20U12 and B10K4V28U24-26
 
     def test_substantive_reading_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_reading_ids), 163
-        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U18-20 and all reconstructed, defective, and orthographic readings
+            len(self.collation.substantive_variation_unit_reading_tuples), 105
+        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U24-26 and all reconstructed, defective, and orthographic readings
 
 
-class CollationTrivialOrthographicTestCase(unittest.TestCase):
+class CollationTrivialSubreadingTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
@@ -134,27 +98,15 @@ class CollationTrivialOrthographicTestCase(unittest.TestCase):
             xml, trivial_reading_types=["reconstructed", "defective", "orthographic", "subreading"]
         )
 
-    def test_witnesses(self):
-        self.assertEqual(len(self.collation.witnesses), 223)
-
-    def test_witness_index_by_id(self):
-        self.assertEqual(len(self.collation.witness_index_by_id), 223)
-
-    def test_variation_units(self):
-        self.assertEqual(len(self.collation.variation_units), 42)
-
-    def test_readings_by_witness(self):
-        self.assertEqual(len(self.collation.readings_by_witness), 223)
-
     def test_substantive_variation_unit_ids(self):
         self.assertEqual(
             len(self.collation.substantive_variation_unit_ids), 40
-        )  # all units except B10K6V20U12 and B10K4V28U18-20
+        )  # all units except B10K6V20U12 and B10K4V28U24-26
 
     def test_substantive_reading_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_reading_ids), 113
-        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U18-20 and all readings that have non-substantive types
+            len(self.collation.substantive_variation_unit_reading_tuples), 100
+        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U24-26 and all readings that have non-substantive types
 
 
 class CollationMissingTestCase(unittest.TestCase):
@@ -165,14 +117,14 @@ class CollationMissingTestCase(unittest.TestCase):
 
     def test_missing_lac(self):
         vu_ind = self.collation.substantive_variation_unit_ids.index("B10K1V1U24-26")
-        rdg_support = self.collation.readings_by_witness["01C1"][vu_ind]
+        rdg_support = self.collation.readings_by_witness["04"][vu_ind]
         self.assertEqual(
             sum(rdg_support), 0
         )  # all entries in the reading support vector for this lacunose witness should be 0
 
     def test_missing_overlap(self):
-        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K1V6U22-26")
-        rdg_support = self.collation.readings_by_witness["1398"][vu_ind]
+        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K3V20U8-10")
+        rdg_support = self.collation.readings_by_witness["606"][vu_ind]
         self.assertEqual(
             sum(rdg_support), 0
         )  # all entries in the reading support vector for this witness to an overlapping reading should be 0
@@ -181,7 +133,7 @@ class CollationMissingTestCase(unittest.TestCase):
         vu = self.collation.variation_units[0]
         assert vu.id == "B10K1V1U24-26"
         result = self.collation.get_readings_by_witness_for_unit(vu)
-        assert len(result) == 223
+        assert len(result) == 38
 
 
 class CollationManuscriptSuffixesTestCase(unittest.TestCase):
@@ -197,8 +149,8 @@ class CollationManuscriptSuffixesTestCase(unittest.TestCase):
 
     def test_get_base_wit_apparent_suffix(self):
         self.assertEqual(
-            self.collation.get_base_wit("424C1"), "424C1"
-        )  # "C1" is a suffix, but "424C1" is a distinct witness
+            self.collation.get_base_wit("424C"), "424C"
+        )  # "C" is a suffix, but "424C" is a distinct witness
 
     def test_get_base_wit_one_suffix(self):
         self.assertEqual(self.collation.get_base_wit("424*"), "424")
@@ -207,10 +159,10 @@ class CollationManuscriptSuffixesTestCase(unittest.TestCase):
         self.assertEqual(self.collation.get_base_wit("424T*"), "424")
 
     def test_merged_attestations(self):
-        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K3V14U14-28")
+        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K3V14U14-18")
         rdg_support = self.collation.readings_by_witness["1910"][vu_ind]
         self.assertEqual(
-            rdg_support, [0.5, 0, 0, 0, 0, 0, 0, 0.5, 0, 0]
+            rdg_support, [0.5, 0.5, 0]
         )  # all entries in the reading support vector for this witness to an overlapping reading should be 0
 
 
@@ -218,20 +170,22 @@ class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
-        self.collation = Collation(xml, fill_corrector_lacunae=True)
+        self.collation = Collation(
+            xml, missing_reading_types=["overlap", "lac"], manuscript_suffixes=["*", "T"], fill_corrector_lacunae=True
+        )
 
     def test_inactive_corrector(self):
-        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K1V1U24-26")
-        rdg_support = self.collation.readings_by_witness["01C1"][vu_ind]
+        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K4V8U12-18")
+        rdg_support = self.collation.readings_by_witness["06C1"][vu_ind]
         self.assertEqual(
-            rdg_support, [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+            rdg_support, [0, 0, 1, 0, 0, 0, 0, 0, 0]
         )  # this corrector is inactive in this unit and should default to the first-hand reading
 
     def test_active_corrector(self):
-        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K1V1U24-26")
-        rdg_support = self.collation.readings_by_witness["01C2"][vu_ind]
+        vu_ind = self.collation.substantive_variation_unit_ids.index("B10K4V8U12-18")
+        rdg_support = self.collation.readings_by_witness["06C2"][vu_ind]
         self.assertEqual(
-            rdg_support, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            rdg_support, [0, 0, 0, 0, 0, 1, 0, 0, 0]
         )  # this corrector is active in this unit and should have its own reading
 
 
@@ -285,7 +239,7 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_get_nexus_symbols(self):
         nexus_symbols = self.collation.get_nexus_symbols()
-        self.assertEqual(nexus_symbols, ["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+        self.assertEqual(nexus_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_nexus_symbols_empty(self):
         empty_xml = et.fromstring("<TEI/>")
@@ -293,26 +247,26 @@ class CollationOutputTestCase(unittest.TestCase):
         nexus_symbols = empty_collation.get_nexus_symbols()
         self.assertEqual(nexus_symbols, [])
 
-    def test_get_nexus_equates(self):
-        nexus_symbols = self.collation.get_nexus_symbols()
-        equates, equate_mapping = self.collation.get_nexus_equates(nexus_symbols)
-        self.assertEqual(equates, ["9", "a", "b", "c", "d", "e", "f"])
-        self.assertEqual(
-            equate_mapping,
-            {(0, 1): "9", (0, 1, 2): "a", (0, 1, 2, 3): "b", (0, 2): "c", (0, 3): "d", (0, 4): "e", (3, 4): "f"},
-        )
+    # def test_get_nexus_equates(self):
+    #     nexus_symbols = self.collation.get_nexus_symbols()
+    #     equates, equate_mapping = self.collation.get_nexus_equates(nexus_symbols)
+    #     self.assertEqual(equates, ["9", "a", "b", "c", "d", "e", "f"])
+    #     self.assertEqual(
+    #         equate_mapping,
+    #         {(0, 1): "9", (0, 1, 2): "a", (0, 1, 2, 3): "b", (0, 2): "c", (0, 3): "d", (0, 4): "e", (3, 4): "f"},
+    #     )
 
-    def test_get_nexus_equates_empty(self):
-        empty_xml = et.fromstring("<TEI/>")
-        empty_collation = Collation(empty_xml)
-        nexus_symbols = empty_collation.get_nexus_symbols()
-        equates, equate_mapping = empty_collation.get_nexus_equates(nexus_symbols)
-        self.assertEqual(equates, [])
-        self.assertEqual(equate_mapping, {})
+    # def test_get_nexus_equates_empty(self):
+    #     empty_xml = et.fromstring("<TEI/>")
+    #     empty_collation = Collation(empty_xml)
+    #     nexus_symbols = empty_collation.get_nexus_symbols()
+    #     equates, equate_mapping = empty_collation.get_nexus_equates(nexus_symbols)
+    #     self.assertEqual(equates, [])
+    #     self.assertEqual(equate_mapping, {})
 
     def test_get_hennig86_symbols(self):
         hennig86_symbols = self.collation.get_hennig86_symbols()
-        self.assertEqual(hennig86_symbols, ["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+        self.assertEqual(hennig86_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_hennig86_symbols_empty(self):
         empty_xml = et.fromstring("<TEI/>")
@@ -322,14 +276,15 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
+        print(matrix.sum(axis=0))
         self.assertTrue(
-            matrix.sum(axis=0)[0] < len(self.collation.substantive_variation_unit_ids)
+            matrix.sum(axis=0)[5] < len(self.collation.substantive_variation_unit_ids)
         )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
 
     def test_to_numpy_split_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=True)
         self.assertTrue(
-            abs(matrix.sum(axis=0)[0] - len(self.collation.substantive_variation_unit_ids) < 1e-4)
+            abs(matrix.sum(axis=0)[5] - len(self.collation.substantive_variation_unit_ids) < 1e-4)
         )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
 
 

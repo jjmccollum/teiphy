@@ -31,9 +31,17 @@ def to_file(
         False,
         help="Fill in missing readings in witnesses with type \"corrector\" using the witnesses they follow in the TEI XML witness list.",
     ),
+    labels: bool = typer.Option(
+        True,
+        help="Print the CharStateLabels block (containing variation unit labels and reading texts converted to ASCII) in NEXUS output.",
+    ),
     states_present: bool = typer.Option(
         False,
         help="Use the StatesFormat=StatesPresent setting instead of the StatesFormat=Frequency setting (and thus represent all states with single symbols rather than frequency vectors) in NEXUS output.",
+    ),
+    ambiguous_as_missing: bool = typer.Option(
+        False,
+        help="Use the missing symbol instead of Equate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     format: Format = typer.Option(None, case_sensitive=False, help="The output format."),
@@ -70,4 +78,10 @@ def to_file(
         print(f"Error opening input file: {err}")
 
     coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
-    coll.to_file(output, format=format, states_present=states_present)
+    coll.to_file(
+        output,
+        format=format,
+        char_state_labels=labels,
+        states_present=states_present,
+        ambiguous_as_missing=ambiguous_as_missing,
+    )

@@ -3,7 +3,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title>A collation of Ephesians at selected variation units from the United Bible Societies Greek New Testament, 5th Edition</title>
+                <title>A limited collation of Ephesians at selected variation units from the United Bible Societies Greek New Testament, 5th Edition</title>
             </titleStmt>
             <publicationStmt>
                 <authority xml:id="JJM">Edited by Joey McCollum</authority>
@@ -14,236 +14,50 @@
             </publicationStmt>
             <sourceDesc>
                 <listWit>
+                    <!-- Root -->
+                    <witness type="root" n="UBS"/>
                     <!-- Papyri -->
                     <witness n="P46"/>
-                    <witness n="P49"/>
-                    <witness n="P92"/>
-                    <witness n="P132"/>
                     <!-- Majuscules -->
                     <witness n="01"/>
-                    <witness type="corrector" n="01C1"/>
-                    <witness type="corrector" n="01C2"/>
                     <witness n="02"/>
                     <witness n="03"/>
-                    <witness type="corrector" n="03C1"/>
-                    <witness type="corrector" n="03C2"/>
                     <witness n="04"/>
                     <witness n="06"/>
                     <witness type="corrector" n="06C1"/>
                     <witness type="corrector" n="06C2"/>
                     <witness n="010"/>
                     <witness n="012"/>
-                    <witness n="016"/>
-                    <witness type="commentary" n="018"/>
-                    <witness n="020"/>
-                    <witness n="025"/>
-                    <witness n="044"/>
-                    <witness n="048"/>
-                    <witness n="049"/>
-                    <witness type="commentary" n="056"/>
-                    <witness type="commentary" n="075"/>
-                    <witness type="commentary" n="075S"/>
-                    <witness n="082"/>
-                    <witness type="commentary" n="0142"/>
-                    <witness type="commentary" n="0150"/>
-                    <witness type="commentary" n="0151"/>
-                    <witness n="0159"/>
-                    <witness n="0230"/>
-                    <witness n="0278"/>
-                    <witness n="0285"/>
-                    <witness n="0319"/>
-                    <witness n="0320"/>
                     <!-- Minuscules -->
-                    <witness n="1"/>
-                    <witness n="6"/>
                     <witness n="18"/>
                     <witness n="33"/>
                     <witness n="35"/>
-                    <witness n="38"/>
-                    <witness n="61"/>
-                    <witness n="69"/>
-                    <witness n="81"/>
                     <witness n="88"/>
-                    <witness n="93"/>
-                    <witness n="94"/>
-                    <witness n="102"/>
-                    <witness n="104"/>
-                    <witness n="177"/>
-                    <witness n="181"/>
-                    <witness n="203"/>
-                    <witness n="203S"/>
-                    <witness n="218"/>
-                    <witness n="256"/>
-                    <witness n="263"/>
-                    <witness n="296"/>
-                    <witness n="322"/>
-                    <witness n="326"/>
-                    <witness n="330"/>
-                    <witness n="337"/>
-                    <witness n="363"/>
-                    <witness n="365"/>
-                    <witness n="383"/>
-                    <witness n="398"/>
                     <witness n="424"/>
-                    <witness type="corrector" n="424C1"/>
-                    <witness n="436"/>
-                    <witness type="commentary" n="442"/>
-                    <witness n="451"/>
-                    <witness n="459"/>
-                    <witness n="462"/>
-                    <witness n="467"/>
-                    <witness n="506"/>
+                    <witness type="corrector" n="424C"/>
                     <witness type="commentary" n="606"/>
-                    <witness n="629"/>
-                    <witness n="636"/>
-                    <witness n="664"/>
-                    <witness n="665"/>
                     <witness n="915"/>
-                    <witness n="1069"/>
-                    <witness n="1108"/>
-                    <witness n="1115"/>
-                    <witness n="1127"/>
                     <witness n="1175"/>
-                    <witness n="1240"/>
-                    <witness n="1241"/>
-                    <witness n="1245"/>
-                    <witness n="1311"/>
-                    <witness n="1319"/>
-                    <witness n="1398"/>
-                    <witness n="1490"/>
                     <witness n="1505"/>
-                    <witness n="1509"/>
-                    <witness n="1573"/>
                     <witness n="1611"/>
-                    <witness n="1617"/>
-                    <witness n="1678"/>
-                    <witness n="1718"/>
-                    <witness n="1721"/>
-                    <witness n="1729"/>
                     <witness n="1739"/>
-                    <witness n="1751"/>
-                    <witness n="1831"/>
-                    <witness n="1836"/>
-                    <witness n="1837"/>
-                    <witness n="1838"/>
-                    <witness type="commentary" n="1840"/>
-                    <witness n="1851"/>
-                    <witness n="1860"/>
-                    <witness n="1877"/>
                     <witness n="1881"/>
-                    <witness n="1886"/>
-                    <witness n="1893"/>
-                    <witness n="1908"/>
                     <witness type="commentary" n="1910"/>
-                    <witness n="1912"/>
-                    <witness n="1918"/>
-                    <witness type="commentary" n="1939"/>
-                    <witness type="commentary" n="1942"/>
-                    <witness n="1959"/>
-                    <witness type="commentary" n="1962"/>
-                    <witness type="commentary" n="1963"/>
-                    <witness type="commentary" n="1985"/>
-                    <witness type="commentary" n="1987"/>
-                    <witness type="commentary" n="1991"/>
-                    <witness type="commentary" n="1996"/>
-                    <witness type="commentary" n="1999"/>
-                    <witness n="2004"/>
-                    <witness n="2005"/>
-                    <witness type="commentary" n="2008"/>
-                    <witness type="commentary" n="2011"/>
-                    <witness type="commentary" n="2012"/>
-                    <witness n="2127"/>
-                    <witness n="2138"/>
-                    <witness n="2180"/>
-                    <witness n="2243"/>
-                    <witness n="2344"/>
-                    <witness n="2352"/>
-                    <witness n="2400"/>
-                    <witness n="2464"/>
-                    <witness n="2492"/>
                     <witness n="2495"/>
-                    <witness n="2516"/>
-                    <witness n="2523"/>
-                    <witness n="2544"/>
-                    <witness type="commentary" n="2576"/>
-                    <witness n="2805"/>
-                    <witness n="2834"/>
-                    <witness n="2865"/>
-                    <witness n="2865S"/>
-                    <!-- Lectionaries -->
-                    <witness type="lectionary" n="L23"/>
-                    <witness type="lectionary" n="L60"/>
-                    <witness type="lectionary" n="L156"/>
-                    <witness type="lectionary" n="L169"/>
-                    <witness type="lectionary" n="L587"/>
-                    <witness type="lectionary" n="L809"/>
-                    <witness type="lectionary" n="L1126"/>
-                    <witness type="lectionary" n="L1159"/>
-                    <witness type="lectionary" n="L1178"/>
-                    <witness type="lectionary" n="L1188"/>
-                    <witness type="lectionary" n="L1298"/>
-                    <witness type="lectionary" n="L1440"/>
-                    <witness type="lectionary" n="L2010"/>
-                    <witness type="lectionary" n="L2058"/>
-                    <!-- Old Latin manuscripts (see https://itseeweb.cal.bham.ac.uk/vetuslatina/NT-MSS/ for more details)-->
-                    <witness n="VL51"/> <!-- gig -->
-                    <witness n="VL54"/> <!-- p -->
-                    <witness n="VL58"/> <!-- w -->
-                    <witness n="VL59"/> <!-- dem (lost, but collated by Matthaei) -->
-                    <witness n="VL61"/> <!-- ar -->
-                    <witness n="VL62"/> <!-- Biblia de Rosas -->
-                    <witness n="VL64"/> <!-- r3/r (fragments containing Eph 1:1-13; 1:16-2:16; 6:24; transcribed in https://archive.org/details/italafragmented01zieggoog, pp. 46-47)-->
-                    <witness n="VL65"/> <!-- Z -->
-                    <witness n="VL67"/> <!-- l (palimpsested) -->
-                    <witness n="VL75"/> <!-- d = 06lat -->
-                    <witness n="VL76"/> <!-- e = 0319lat -->
-                    <witness n="VL77"/> <!-- g = 012lat -->
-                    <witness n="VL78"/> <!-- f = 010lat -->
-                    <witness n="VL83"/> <!-- w = 0320lat (contains Eph 1:13-19; 2:11-18)-->
-                    <witness n="VL85"/> <!-- 0230lat -->
-                    <witness n="VL86"/> <!-- m (Monza, not Speculum; fragments containing Eph 4:1-6:24; transcribed in https://archive.org/details/altlateinischepa0000fred, pp. 255-259) -->
-                    <witness n="VL89"/> <!-- b -->
                     <!-- Versions -->
-                    <witness type="version" n="vgcl"/>
-                    <witness type="version" n="vgww"/>
-                    <witness type="version" n="vgst"/>
+                    <witness type="version" n="vg"/>
                     <witness type="version" n="syrp"/>
                     <witness type="version" n="syrh"/>
-                    <witness type="version" n="syrhmg"/>
+                    <witness type="corrector" n="syrhmg"/>
                     <witness type="version" n="copsa"/>
                     <witness type="version" n="copbo"/>
-                    <witness type="version" n="gothA"/>
-                    <witness type="version" n="gothB"/>
                     <!-- Church fathers -->
-                    <witness type="father" n="Adamantius"/>
                     <witness type="father" n="Ambrosiaster"/>
-                    <witness type="father" n="AthanasiusOfAlexandria"/>
-                    <witness type="father" n="BasilOfCaesarea"/>
                     <witness type="father" n="Chrysostom"/>
-                    <witness type="father" n="ClementOfAlexandria"/>
-                    <witness type="father" n="Cyprian"/>
-                    <witness type="father" n="CyrilOfAlexandria"/>
-                    <witness type="father" n="CyrilOfJerusalem"/>
-                    <witness type="father" n="Ephrem"/>
-                    <witness type="father" n="Epiphanius"/>
-                    <witness type="father" n="GregoryOfNazianzus"/>
-                    <witness type="father" n="GregoryOfNyssa"/>
-                    <witness type="father" n="GregoryThaumaturgus"/>
-                    <witness type="father" n="Irenaeus"/>
                     <witness type="father" n="Jerome"/>
-                    <witness type="father" n="Lucifer"/>
-                    <witness type="father" n="Marcion"/>
                     <witness type="father" n="MariusVictorinus"/>
-                    <witness type="father" n="Origen"/>
                     <witness type="father" n="Pelagius"/>
-                    <witness type="father" n="Primasius"/>
-                    <witness type="father" n="Procopius"/>
-                    <witness type="father" n="PseudoAthanasius"/>
-                    <witness type="father" n="Severian"/>
-                    <witness type="father" n="Speculum"/>
-                    <witness type="father" n="Tertullian"/>
                     <witness type="father" n="TheodoreOfMopsuestia"/>
-                    <witness type="father" n="Theodoret"/>
                 </listWit>
             </sourceDesc>
         </fileDesc>
@@ -252,690 +66,377 @@
         <body>
             <app xml:id="B10K1V1U24-26">
                 <lem><w>εν</w><w>εφεσω</w></lem>
-                <rdg n="1" wit="01C2 02 03C2 06 012 018 020 025 044 049 056 075S 0142 0150 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 296 322 326 330 337 363 365 383 398 424* 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865S L169 L587 L809 L1159 L1178 L1188 L1440 L2058 VL61 VL64 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo gothA gothB Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius PseudoAthanasius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="L2010"><w>εν</w><w><unclear>ε</unclear>φεσω</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="2344"><w><unclear>εν</unclear></w><w>εφεσω</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="256"><w><supplied reason="lacuna">εν</supplied></w><w><supplied reason="lacuna">εφεσ</supplied>ω</w></rdg>
+                <rdg n="1" wit="UBS 01C2 02 03C2 06 012 18 33 35 88 424* 606 915 1175 1505 1611 1881 1910 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
                 <rdg n="1-f1" type="defective" cause="parablepsis" wit="010"><w>εν</w><w>εφεω</w></rdg>
-                <rdg n="1-f2" type="defective" cause="dittography" wit="263"><w>εν</w><w>νεφεσω</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="0278"><w>εν</w><w>εφεσωι</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit=""><w>εν</w><w>τω</w><w>εφεσω</w></rdg>
-                <rdg n="1-s1-v1" type="reconstructed" wit="1115"><w>εν</w><w>τ<unclear>ω</unclear></w><w>εφεσω</w></rdg>
-                <rdg n="2" wit="P46 01* 03* 6 424C1 1739 BasilOfCaesarea Ephrem Marcion Origen"/>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" cause="commentary" wit="Epiphanius Tertullian"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 04 06C1 06C2 016 048 075 082 0159 0230 0285 0320 203S 1942 2834 2865 L23 L60 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius Severian Speculum Theodoret"/>
+                <rdg n="2" wit="01* 03* P46 424C 1739"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
             </app>
             <app xml:id="B10K1V6U22-26">
                 <lem><w>εν</w><w>τω</w><w>ηγαπημενω</w></lem>
-                <rdg n="1" wit="P46 01 02 03 06C2 018 020 025 044 056 075S 0142 0150 0151 0319C0 1 6 18 33 35 38 61 69 81 93 94 102 104 177 181 203 218 263 296 322 326 337 363 365 383 398 424 436 442 462 467 506 606 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910/1 1910/3 1912 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2464 2492 2523 2544 2805 2865S L156 L169 L587 L809 L1159 L1188 L1440 L2010 L2058 vgww vgst syrp syrhmg Chrysostom Jerome Origen Pelagius TheodoreOfMopsuestia"><w>εν</w><w>τω</w><w>ηγαπημενω</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="459"><w>εν</w><w>τω</w><w>ηγαπ<unclear>η</unclear>μενω</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="256"><w>εν</w><w>τω</w><w>ηγαπη<supplied reason="lacuna">μενω</supplied></w></rdg>
+                <rdg n="1" wit="UBS P46 01 02 03 06C2 18 33 35 424 606 915 1175 1505 1611 1739 1881 1910/1 1910/3 syrp syrhmg Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>εν</w><w>τω</w><w>ηγαπημενω</w></rdg>
                 <rdg n="1-f1" type="defective" cause="linguistic-confusion" wit="2495"><w>εν</w><w>τω</w><w>αγαπημενω</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="88 1918 L1178"><w>εν</w><w>τω</w><w>ηγαπιμενω</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="0278"><w>εν</w><w>τωι</w><w>ηγαπημενωι</w></rdg>
+                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="88"><w>εν</w><w>τω</w><w>ηγαπιμενω</w></rdg>
                 <rdg n="1-s1" type="subreading" cause="commentary" wit="1910/2"><w>δια</w><w>του</w><w>ηγαπημενου</w></rdg>
-                <rdg n="2" wit="06* 010 012 0319* 330 451 629 2400 2516 2576 VL61 VL64 VL77 VL78 VL89 vgcl syrh copsa copbo Adamantius Ambrosiaster MariusVictorinus"><w>εν</w><w>τω</w><w>ηγαπημενω</w><w>υιω</w><w>αυτου</w></rdg>
-                <witDetail n="↑B10K1V4U2-V8U8R1-f1" type="overlap" target="B10K1V4U2-V8U8R1-f1" wit="1398"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 049 075 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL75 VL76 VL83 VL85 VL86 gothA gothB AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="2" wit="06* 010 012 syrh copsa copbo Ambrosiaster MariusVictorinus"><w>εν</w><w>τω</w><w>ηγαπημενω</w><w>υιω</w><w>αυτου</w></rdg>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C1 424C"/>
             </app>
             <app xml:id="B10K1V14U2">
-                <lem><w>ος</w></lem>
-                <rdg n="1" wit="01 06 018 044 056 0142 0150 0151 0319 1 18 33 35 69 88 93 94 102 177 296 322 330 337 363 383 398 424* 436 451 462 467 629 636 664 665 915 1069 1115 1127 1240 1241 1245 1311 1398 1490 1509 1617 1721 1729 1751 1831 1836 1838 1851 1860C 1886 1939 1959 1963 1985 1987 1991 1996 1999 2004 2011 2012 2138 2180 2243* 2344 2352 2400 2492 2576 2805 2865S L156 L169 L587 L809 L1159 L1178 L1440 L2010 L2058 VL61 VL78 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ος</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="0320 1918 L1188"><w>ως</w></rdg>
-                <rdg n="2" wit="P46 02 03 010 012 020 075S 6 38 61 81 104 181 203 218 256 263 326 365 424C1 442 459 506 606 1108 1175 1319 1505 1573 1611 1678 1718 1739 1837 1840 1860* 1877 1881 1893 1908 1910 1912 1962 2005 2008 2127 2243C 2464 2495 2523 2544 VL75 VL77 VL89 vgcl vgww vgst syrp syrh CyrilOfAlexandria Irenaeus"><w>ο</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="025"><w>ω</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" cause="harmonization" wit="2516"><w>οις</w><w>ουκ</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075 082 0159 0230 0278 0285 203S 1942 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg copsa copbo gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <lem><w>ο</w></lem>
+                <rdg n="1" wit="UBS P46 02 03 010 012 424C 606 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh"><w>ο</w></rdg>
+                <rdg n="2" wit="01 06 18 33 35 88 424* 915 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ος</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg copsa copbo"/>
             </app>
             <app xml:id="B10K1V15U26-40">
                 <lem><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></lem>
-                <rdg n="1" wit="01C2 06C2 018 020 044 056 075S 0142 0150 0151 0319 1 6 18 35 88 93 102 177 203 218 296 322 330 337 363 383 398 424 451 506 606 629 636 664 915 1069 1108 1127 1240 1241 1245 1311 1490 1505 1509 1611 1617 1678 1718 1721 1729 1751 1831 1836 1851 1860 1877 1886 1893 1908 1912 1918 1939 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2138 2180 2243 2352 2400 2492 2495 2516 2523 2544 2576 2805 2865S L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrh copsa Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="665"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>το<unclear>υ</unclear>ς</w><w>αγιο<unclear>υ</unclear>ς</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="94"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w><unclear>π</unclear>αντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="L2010"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>π<unclear>αν</unclear><supplied reason="lacuna">τας</supplied></w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="1-v4" type="reconstructed" wit="1115"><w>και</w><w>την</w><w><unclear>αγαπην</unclear></w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="1-s1" type="subreading" wit="38"><w>και</w><w>την</w><w>αμωμον</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="1-s2" type="subreading" wit="181"><w>και</w><w>την</w><w>αγαπην</w><w>της</w><w>κοινωνιας</w><w>αυτου</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="1-s3" type="subreading" cause="commentary" wit="1840"><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="2" wit="06* 010 012 0320 1398"><w>και</w><w>την</w><w>αγαπην</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="3" wit="61 69 81 104 263 326 365 436 442 459 462 467 1175 1319 1573 1837 1838 1910 1959 2127 2344 L60 CyrilOfAlexandria"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w><w>αγαπην</w></rdg>
-                <rdg n="3-v1" type="reconstructed" wit="256"><w>και</w><w>την</w><w>εις</w><w><supplied reason="lacuna">πα</supplied><unclear>ν</unclear>τας</w><w>τους</w><w>αγιους</w><w>αγα<supplied reason="lacuna">πην</supplied></w></rdg>
-                <rdg n="3-f1" type="subreading" cause="parablepsis" wit="2464"><w>και</w><w>εις</w><w>παντας</w><w>τους</w><w>αγι<unclear>ους</unclear></w><w>αγαπην</w></rdg>
-                <rdg n="4" wit="P46 01* 02 03 025 33 1739 1881 Jerome Origen"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
+                <rdg n="1" wit="UBS 01C2 06C2 18 35 88 424 606 915 1505 1611 2495 vg syrh copsa Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
+                <rdg n="2" wit="06* 010 012"><w>και</w><w>την</w><w>αγαπην</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
+                <rdg n="3" wit="1175 1910"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w><w>αγαπην</w></rdg>
+                <rdg n="4" wit="P46 01* 02 03 33 1739 1881 Jerome"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
                 <witDetail n="W1/4" type="ambiguous" target="1 4" wit="copbo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 016 048 049 075 082 0159 0230 0278 0285 203S 424C1 1942 2834 2865 L23 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 424C syrp syrhmg"/>
             </app>
             <app xml:id="B10K1V18U2-12">
                 <lem><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></lem>
-                <rdg n="1" wit="01 02 06 018 020 025 044 056 075S 0142 0150 0151 0278 0319 0320 18 35 38 61A 81 88 93 102 104 177 181 203 218 263 296 326 330 337 363 365 383 398 424 436 442 451 459 462 506 606 629 636C0 664 665 915 1069 1108 1115 1127 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1718 1721 1751 1831 1836 1837 1851 1877 1893 1908 1910 1912 1959 1962 1987 1991 2004 2005 2011 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576A 2805 2865 L23 L156 L156C L169 L587 L809 L1159 L1178 L1188 L1298 L1440 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="1838"><w>πε<unclear>φω</unclear>τισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="94"><w>πεφωτισ<supplied reason="lacuna">μ</supplied><unclear>ε</unclear>νους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w><unclear>υ</unclear>μων</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="2344"><w>πεφωτισμενους</w><w>τους</w><w>ο<unclear>φ</unclear>θαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-v4" type="reconstructed" wit="256"><w>πε<supplied reason="lacuna">φωτ</supplied>ισμενους</w><w>τους</w><w>οφθαλ<supplied reason="lacuna">μου</supplied>ς</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
+                <rdg n="1" wit="UBS 01 02 06 18 35 88 424 606 915 1505 1611 1910 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
                 <rdg n="1-f1" type="defective" cause="aural-confusion" wit="010 012"><w>πεφωτεισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-f2" type="defective" cause="linguistic-confusion" wit="1860"><w>πεφωτισμενοις</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="L60"><w>πεφωτησμενους</w><w>τους</w><w>οφθφλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-f4" type="defective" cause="aural-confusion" wit="1 322 467 1729 1886 1918"><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>ημων</w></rdg>
-                <rdg n="1-f5" type="defective" cause="linguistic-confusion" wit="636*"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμας</w></rdg>
-                <rdg n="1-f6" type="defective" cause="linguistic-confusion" wit="69"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>τους</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-f7" type="defective" wit="1985"><w>πεφωτισμενους</w><w>της</w><w>καρδιας</w><w>τους</w><w>οφθαλμους</w><w>υμιν</w></rdg>
-                <rdg n="1-s1" type="subreading" wit="61T"><w>πεφωτισμενων</w><w>των</w><w>οφθαλμων</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="2" wit="P46 03 6 33 1175 1739 1881 Marcion Origen"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w></rdg>
-                <rdg n="3" wit="1678 1840 1939 1963 1996 2008 2012 2576T L2010 CyrilOfAlexandria CyrilOfJerusalem"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>διανοιας</w><w>υμων</w></rdg>
-                <rdg n="3-v1" type="reconstructed" wit="1999"><w>πεφωτισμεν<unclear>ους</unclear></w><w>τους</w><w>οφθαλμους</w><w>της</w><w>διανοιας</w><w><unclear>υμων</unclear></w></rdg>
-                <rdg n="3-s1" type="subreading" cause="commentary" wit="ClementOfAlexandria"><w>διοιχθεντων</w><w>των</w><w>της</w><w>διανοιας</w><w>ομματων</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" cause="commentary" wit="Cyprian"><gap unit="verse" extent="part" reason="commentary"/><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><gap unit="verse" extent="part" reason="commentary"/></witDetail> <!-- Cyprian alludes to "oculos cordis" and "cordis oculos" in Laps. 35 (CCSL 3:240) and Zel. liv. 5 (CCSL 3A:77); see Murphy, "Cyprian's Use of Paul," 146. -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075 082 0159 0230 0285 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <rdg n="2" wit="P46 03 33 1175 1739 1881"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg TheodoreOfMopsuestia"/>
             </app>
             <app xml:id="B10K2V5U16-18">
                 <lem><w>τω</w><w>χριστω</w></lem>
-                <rdg n="1" wit="01 02 06 010 012 018 020 025 044 056 075 0142 0150 0151 0319 1 6 18 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L23 L156 L169 L587 L809 L1159 L1178 L1188 L1298 L1440 L2010 L2058 VL75 VL77T VL78 VL89 vgww vgst syrp syrh ClementOfAlexandria CyrilOfAlexandria CyrilOfJerusalem Jerome Origen Pelagius TheodoreOfMopsuestia Theodoret"><w>τω</w><w>χριστω</w></rdg>
-                <rdg n="1-f1" type="defective" wit="1831*"><gap unit="char" extent="4" reason="illegible"/></rdg>
-                <rdg n="1-o1" type="orthographic" wit="0278"><w>τωι</w><w>χριστω</w></rdg>
-                <rdg n="2" wit="P46 03 33 442 L60 VL61 VL77A vgcl copsa copbo Ambrosiaster Chrysostom MariusVictorinus"><w>εν</w><w>τω</w><w>χριστω</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="1831C"><w><unclear>εν</unclear></w><w>τω</w><w>χριστω</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 049 075S 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <rdg n="1" wit="UBS 01 02 06 010 012 18 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 syrp syrh Jerome Pelagius TheodoreOfMopsuestia"><w>τω</w><w>χριστω</w></rdg>
+                <rdg n="2" wit="P46 03 33 copsa copbo Ambrosiaster Chrysostom MariusVictorinus"><w>εν</w><w>τω</w><w>χριστω</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K2V5U20-24">
                 <lem><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></lem>
-                <rdg n="1" wit="P46 01 03 06C2 018 020 044 056 075 0142 0150 0151 1 6 18 33 35 61 69* 81 88 93 102 104 177 203 218 263 296 322 326 330 337 363 383 398 424 442 451 459 467 506 606 629 636* 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1398 1490 1505 1509 1611 1617 1678C 1718 1721 1739 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1912 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2138 2180 2243 2344 2352 2400 2492 2495 2516 2523 2544 2576 2805 2865 L23 L156 L169 L587 L809 L1159 L1178 L1188 L1298 L2010 L2058 vgww vgst syrh Jerome TheodoreOfMopsuestia Theodoret"><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="1991"><w>χαριτ<unclear>ι</unclear></w><w><unclear>εστε</unclear></w><w>σεσ<unclear>ωσμεν</unclear>οι</w></rdg>
-                <rdg n="1-f1" type="defective" cause="parablepsis" wit="38"><w>χαριτι</w><w>εστε</w><w>σεσωμενοι</w></rdg>
-                <rdg n="1-f2" type="defective" wit=""><w>χαριτι</w><w>εστε</w><w>σεσωσμεναι</w></rdg>
-                <rdg n="1-f2-v1" type="reconstructed" wit="69C"><w>χαριτι</w><w>εστε</w><w>σεσωσμεν<unclear>α</unclear>ι</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="025 0278C 181 462"><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-f3-v1" type="reconstructed" wit="02"><w>χαριτι</w><w>εσται</w><w>σ<unclear>ε</unclear><supplied reason="lacuna">σω</supplied>σμενοι</w></rdg>
-                <rdg n="1-f4" type="defective" wit="0278*"><w>χαριτι</w><w>εσται</w><w>σεσωσσμενοι</w></rdg>
-                <rdg n="1-f5" type="defective" cause="aural-confusion" wit="L60"><w>χαριτι</w><w>εσται</w><w>σεσοσμενοι</w></rdg>
-                <rdg n="1-f6" type="defective" cause="aural-confusion" wit="1729"><w>χαριτη</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-f7" type="defective" cause="aural-confusion" wit="1838"><w>χαριτη</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-f8" type="defective" cause="aural-confusion" wit="1751"><w>χαριτη</w><w>εστε</w><w>σεσωσμενει</w></rdg>
-                <rdg n="1-f9" type="defective" cause="aural-confusion" wit="1918 L1440"><w>χαρητι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-f10" type="defective" cause="visual-error" wit="664"><w>χαριστε</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit=""><w>χαριτι</w><w>εσμεν</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-s1-v1" type="reconstructed" wit="94"><w>χαρι<unclear>τ</unclear>ι</w><w>εσμεν</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-s2" type="subreading" wit="1831"><w>τη</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="2" wit="636C VL61 VL75 VL77 VL78 VL89 vgcl Ambrosiaster MariusVictorinus Pelagius"><w>ου</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+                <rdg n="1" wit="UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia"><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit=""><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
+                <rdg n="1-f1-v1" type="reconstructed" wit="02"><w>χαριτι</w><w>εσται</w><w>σ<unclear>ε</unclear><supplied reason="lacuna">σω</supplied>σμενοι</w></rdg>
+                <rdg n="2" wit="Ambrosiaster MariusVictorinus Pelagius"><w>ου</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010C 012"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
                 <rdg n="2-f2" type="defective" wit="010*"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεωσμενοι</w></rdg>
                 <rdg n="2-s1" type="subreading" cause="clarification" wit="06*"><w>ου</w><w>τη</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="2-s1-v1" type="reconstructed" wit="0319"><w><unclear>ο</unclear>υ</w><w>τη</w><w>χαριτι</w><w>εστε</w><w><supplied reason="lacuna">σεσ</supplied>ωσμενοι</w></rdg>
-                <rdg n="3" wit="256 365 436 1319 1573 2127 copsa copbo"><w>χαριτι</w><w>γαρ</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="4" wit="1678* 2464"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 049 075S 082 0159 0230 0285 0320 203S 424C1 1910 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Chrysostom ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <rdg n="3" wit="copsa copbo"><w>χαριτι</w><w>γαρ</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C1 424C 1910 syrp syrhmg Chrysostom"/>
             </app>
             <app xml:id="B10K2V21U6-8">
                 <lem><w>πασα</w><w>οικοδομη</w></lem>
-                <rdg n="1" wit="01* 03 06 010 012 018 020 044 049 056 0142 0150 0151 0319 1 6 18 33 35 38 69 88 94 102 104 177 181 203 218 256 263 296 330 337 363 365 383 398 424C1 436 442 451 459 462 467C 506 606 629 636 664 1069 1108 1115 1127 1175 1240 1245 1319 1398 1490 1505 1509 1573 1611 1617 1718 1721 1729 1739* 1751 1831 1836 1838 1851 1860 1877 1886 1893 1908 1910 1939 1959 1962 1963 1996 1999 2004 2011 2127 2138 2180 2243 2352 2400 2464 2495 2516 2523 2544 2805 2865 L23 L60 L156 L169 L587 L809 L1159 L1178 L1188 L1298 L1440 L2010 L2058 syrh BasilOfCaesarea Chrysostom ClementOfAlexandria Origen"><w>πασα</w><w>οικοδομη</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="2492"><w>πασα</w><w>οικο<unclear>δ</unclear><supplied reason="lacuna">ο</supplied>μη</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="2012"><w>πασα</w><w>οικοδομει</w></rdg>
-                <rdg n="1-f2" type="defective" cause="haplography" wit="467*"><w>πα</w><w>οικοδομη</w></rdg>
-                <rdg n="2" wit="01C1 04 025 075 61 81 322 915 1678 1739C 1840 1881 1912 1985 1987 1991 2008 2344 2576 copsa copbo"><w>πασα</w><w>η</w><w>οικοδομη</w></rdg>
+                <rdg n="1" wit="UBS 01* 03 06 010 012 18 33 35 88 424C 606 1175 1505 1611 1739* 1910 2495 syrh Chrysostom"><w>πασα</w><w>οικοδομη</w></rdg>
+                <rdg n="2" wit="01C1 04 915 1739C 1881 copsa copbo"><w>πασα</w><w>η</w><w>οικοδομη</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="02 424*"><w>πασα</w><w><unclear>η</unclear></w><w>οικοδομη</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="326 1837"><w>πασα</w><w>η</w><w>οικοδομει</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="93 665 1241"><w>πασα</w><w>ηκοδομη</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="1311"><w>πασα</w><w>οι</w><w>οικοδομη</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P46 P49 P92 P132 01C2 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1918 1942 2005 2834 2865S L1126 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL75 VL76 VL77 VL78 VL83 VL85 VL86 VL89 vgcl vgww vgst syrp syrhmg gothA gothB Adamantius Ambrosiaster AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Jerome Lucifer Marcion MariusVictorinus Pelagius Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="Z" type="lac" wit="P46 06C1 06C2 vg syrp syrhmg Ambrosiaster Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"/>
             </app>
             <app xml:id="B10K3V1U14-18">
                 <lem><w>του</w><w>χριστου</w><w>ιησου</w></lem>
-                <rdg n="1" wit="P46 01C1 02 03 06C1 018 020 025 049 056 0150 0151 0319 1 18 33 35 69 81 93 102 104 177 181 203 218 263 322 326 337 363 383 398 424* 436 442 462 506 629 636 664 665 1069 1115 1175 1240 1241 1245 1490 1509 1617 1721 1729 1751 1831 1836 1837 1851 1860 1877 1886 1912 1918 1939 1963 1987 1996 1999 2012 2138 2243 2344 2352 2464 2523 2544 2805 L587 L809 L1159 L1178 L1188 L2010 L2058 vgcl vgww vgst copsa copbo Origen Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="1718"><w><unclear>τ</unclear>ου</w><w>χριστου</w><w>ιησου</w></rdg>
-                <rdg n="2" wit="01* 06* 010 012 256 296 330 451 1319 1398 1573 1893 2127 2400 2492 2516 VL75 VL77 Ambrosiaster MariusVictorinus"><w>του</w><w>χριστου</w></rdg>
-                <rdg n="3" wit="075 88 94 424C1 459 467 606 1108 1505 1739 1838 1908 1910 1959 2004 2011 2495 L169"><w>χριστου</w><w>ιησου</w></rdg>
-                <rdg n="4" wit="6 61 915 1127 1311 1611 1678 1840 1881 1962 1985 1991 2008 2576 L1440"><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="5" wit="0142 38 2180 syrp Chrysostom"><w>του</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="6" wit="04 044"><w>του</w><w>κυριου</w><w>ιησου</w></rdg>
-                <rdg n="7" wit="2865"><w>του</w><w>κυριου</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="8" wit="365"><w>εν</w><w>χριστω</w></rdg>
-                <rdg n="9" wit="L156"><w>εν</w><w>χριστω</w><w>ιησου</w></rdg>
+                <rdg n="1" wit="UBS P46 01C1 02 03 06C1 18 33 35 1175 vg copsa copbo Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
+                <rdg n="2" wit="01* 06* 010 012 Ambrosiaster MariusVictorinus"><w>του</w><w>χριστου</w></rdg>
+                <rdg n="3" wit="88 424C 606 1505 1739 1910 2495"><w>χριστου</w><w>ιησου</w></rdg>
+                <rdg n="4" wit="915 1611 1881"><w>ιησου</w><w>χριστου</w></rdg>
+                <rdg n="5" wit="syrp Chrysostom"><w>του</w><w>ιησου</w><w>χριστου</w></rdg>
+                <rdg n="6" wit="04"><w>του</w><w>κυριου</w><w>ιησου</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="copsa"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
                 <witDetail n="W1/3-1" type="ambiguous" target="1 3" cause="translation" xml:lang="syr" wit="syrh"><w>ܕܡܫܝܚܐ</w><w>ܝܫܘܥ</w></witDetail>
-                <witDetail n="W1/3-2" type="ambiguous" target="1 3" cause="translation" xml:lang="la" wit="VL61 VL78 vgcl vgww vgst"><w>christi</w><w>iesu</w></witDetail>
-                <witDetail n="W1/5-1" type="ambiguous" target="1 5" wit="CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="5" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="W1/5-2" type="ambiguous" target="1 5" wit="Jerome"><certainty target="1" locus="value" degree="0.3333"/><certainty target="5" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="W4/5" type="ambiguous" target="4 5" cause="translation" xml:lang="la" wit="VL89"><w>iesu</w><w>christi</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C2 03C1 03C2 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="W1/3-2" type="ambiguous" target="1 3" cause="translation" xml:lang="la" wit="vg"><w>christi</w><w>iesu</w></witDetail>
+                <witDetail n="W1/5" type="ambiguous" target="1 5" wit="Jerome"><certainty target="1" locus="value" degree="0.3333"/><certainty target="5" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="Z" type="lac" wit="06C2 syrhmg TheodoreOfMopsuestia"/>
             </app>
             <app xml:id="B10K3V9U6">
                 <lem><w>παντας</w></lem>
-                <rdg n="1" wit="P46 01C2 03 04 06 010 012 018 020 025 044 049 056 075 0142 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1886 1893 1908 1910 1912 1918 1939 1959 1962 1985 1987 1991C 1996 1999 2004 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo Adamantius Chrysostom Marcion MariusVictorinus Pelagius Tertullian TheodoreOfMopsuestia"><w>παντας</w></rdg>
-                <rdg n="1-f1" type="defective" wit="1963"><w>παντα</w></rdg>
-                <rdg n="1-f2" type="defective" cause="linguistic-confusion" wit="1991"><w>παντων</w></rdg>
-                <rdg n="2" wit="01* 02 0150 6 424C1 1739 1881 Jerome"/>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Origen Primasius Procopius PseudoAthanasius Severian Speculum Theodoret"/>
+                <rdg n="1" wit="UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παντας</w></rdg>
+                <rdg n="2" wit="01* 02 424C 1739 1881 Jerome"/>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="06C1 06C2 syrhmg"/>
             </app>
             <app xml:id="B10K3V13U18-20">
                 <lem><w>υπερ</w><w>υμων</w></lem>
-                <rdg n="1" wit="01 02 03 04 06 010 012 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 18 33 35 38C 61 69 81C 93 94 102 104 177 181 203 256 263 296 322 326 330 337 363 365 383 398 424 442 451 459 462 467 506 606 629 636 664 665 1069 1108 1115 1127 1175 1240 1245 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1751 1831 1836 1837 1838 1840C 1851 1860 1877 1886 1893 1908 1912 1939 1959 1962 1963 1987 1996 1999 2004 2008 2011 2012 2127 2138 2243 2352 2400 2464 2492 2495 2523 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"><w>υπερ</w><w>υμων</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="2344"><w>υπερ</w><w><unclear>υ</unclear>μων</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="0285"><w>υπε<unclear>ρ</unclear></w><w><unclear>υ</unclear><supplied reason="lacuna">μων</supplied></w></rdg>
-                <rdg n="1-f1" type="defective" cause="paleographic-confusion" wit="2516"><w>απερ</w><w>υμων</w></rdg>
-                <rdg n="2" wit="P46 6 81* 88 436 915 1241 1311 1840* 1881 1918 1985 2180"><w>υπερ</w><w>ημων</w></rdg>
-                <rdg n="3" wit="38* 218 1991"/>
+                <rdg n="1" wit="UBS 01 02 03 04 06 010 012 18 33 35 424 606 1175 1505 1611 1739 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>υπερ</w><w>υμων</w></rdg>
+                <rdg n="2" wit="P46 88 915 1881"><w>υπερ</w><w>ημων</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" cause="commentary" wit="1910"><w>υπερ</w><w>εμου</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="06C1 06C2 424C syrhmg"/>
             </app>
-            <app xml:id="B10K3V14U14-28">
-                <lem><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></lem>
-                <rdg n="1" wit="01C2 06 010 012 018 020 044 049 056 075 0142 0151 0278 0319 1 18 35 38 61 88 93 94 102 104 177 181 203 218 296 322 326 330 337 363 383 398 424* 436 442 451 459 462 506 606 629 636 664 665 1069 1108C 1115 1127 1240 1241 1245 1311 1490 1505 1509 1611 1617 1678 1718 1721 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910/2 1912 1939 1959 1963 1985 1987 1991 1996 1999 2004 2008 2011 2012 2138 2180 2243 2352 2400 2464 2495 2523 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia Theodoret"><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="2344"><w><supplied reason="lacuna">προ</supplied><unclear>ς</unclear></w><w>τον</w><w>πατερα</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="467"><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημω<unclear>ν</unclear></w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="1-f1" type="defective" cause="haplography" wit="1108*"><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="915"><w>προς</w><w>τον</w><w>πατερα</w><w>μου</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="paleographic-confusion" wit="69"><w>προς</w><w>το</w><w>πνευμα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="1-s3" type="subreading" cause="clarification" wit="1918"><w>προς</w><w>τον</w><w>πατερα</w><w>τον</w><w>κυριον</w><w>ημων</w><w>ιησου</w><w>χριστον</w></rdg>
-                <rdg n="2" wit="P46 01* 02 03 04 025 0150 6 33 81 256 263 365 424C1 1175 1398 1573 1739 1910/1 1962 2127 2492 copsa copbo CyrilOfAlexandria CyrilOfJerusalem Jerome"><w>προς</w><w>τον</w><w>πατερα</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="0285"><w>προς</w><w>το<unclear>ν</unclear></w><w>πατερα</w></rdg>
-                <rdg n="2-f1" type="defective" cause="parablepsis" wit="2516"><w>τον</w><w>πατερα</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 048 075S 082 0159 0230 0320 203S 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+            <app xml:id="B10K3V14U14-18">
+                <lem><w>προς</w><w>τον</w><w>πατερα</w></lem>
+                <rdg n="1" wit="UBS P46 01* 02 03 04 33 424C 1175 1739 1910/1 copsa copbo Jerome"><w>προς</w><w>τον</w><w>πατερα</w></rdg>
+                <rdg n="2" wit="01C2 06 010 012 18 35 88 424* 606 1505 1611 1881 1910/2 2495 vg syrp syrh Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
+                <rdg n="2-s1" type="subreading" cause="clarification" wit="915"><w>προς</w><w>τον</w><w>πατερα</w><w>μου</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
+                <witDetail n="Z" type="lac" wit="06C1 06C2 syrhmg"/>
             </app>
             <app xml:id="B10K3V19U20-34">
                 <lem><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></lem>
-                <rdg n="1" wit="01 02 04 06 018 020 044 049 056 075 0142 0150 0151 1 6 18 35 38 61 69 88 93 102 104 177 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 451 459 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1240 1241 1245 1311 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1831 1837 1840 1851 1860C 1877 1886 1893 1908 1910 1912 1939 1959 1962 1963 1987 1991 1996 1999 2004 2008 2011 2012 2127 2138 2180 2243 2352 2400 2492 2495 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster AthanasiusOfAlexandria Chrysostom CyrilOfAlexandria GregoryOfNyssa Jerome MariusVictorinus Pelagius Severian TheodoreOfMopsuestia"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="016"><w>ινα</w><w>πληρωθη<supplied reason="lacuna">τε</supplied></w><w><supplied reason="lacuna">εις</supplied></w><w><supplied reason="lacuna">παν</supplied></w><w><supplied reason="lacuna">το</supplied></w><w><supplied reason="lacuna">πλη</supplied><unclear>ρ</unclear>ωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="0319"><w><unclear>ι</unclear>να</w><w>πληρωθητε</w><w><unclear>ε</unclear>ις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="2344"><w>ι<unclear>να</unclear></w><w>π<unclear>λη</unclear>ρω<supplied reason="lacuna">θητε</supplied></w><w><supplied reason="lacuna">παν</supplied></w><w><supplied reason="lacuna">το</supplied></w><w><supplied reason="lacuna">πληρωμα</supplied></w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-v4" type="reconstructed" wit="94"><w>ι<supplied reason="lacuna">ν</supplied>α</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-v5" type="reconstructed" wit="1838"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>πα<unclear>ν</unclear></w><w>τ<unclear>ο</unclear></w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="010 012 025 181 1751 2464"><w>ινα</w><w>πληρωθηται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="1918"><w>ινα</w><w>πληρωθηται</w><w>εις</w><w>παν</w><w>τω</w><w>πληρομα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="1985"><w>ινα</w><w>πληρωθειτε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="81"><w>ινα</w><w>πληροφορηθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-s2" type="subreading" wit=""><w>ινα</w><w>πληρωθησεται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-s2-v1" type="reconstructed" wit="1836C"><w><unclear>ι</unclear>να</w><w>πληρωθησεται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-s2-f1" type="defective" wit=""><w>ενα</w><w>πληρωθησεται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-s2-f1-v1" type="reconstructed" wit="1836*"><w><unclear>ε</unclear>να</w><w>πληρωθησεται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="2" wit="03 0278 442 1175 2523 copsa"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
+                <rdg n="1" wit="UBS 01 02 04 06 18 35 88 424 606 915 1505 1611 1739 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="010 012"><w>ινα</w><w>πληρωθηται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
+                <rdg n="2" wit="03 1175 copsa"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="P46"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w><unclear>τ</unclear>ου</w><w>θεου</w></rdg>
                 <rdg n="2-s1" type="subreading" cause="clarification" wit=""><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w><w>εις</w><w>υμας</w></rdg>
                 <rdg n="2-s1-v1" type="reconstructed" wit="33"><w>ινα</w><w><supplied reason="lacuna">πληρω</supplied>θη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w><w>εις</w><w>υμας</w></rdg>
-                <rdg n="3" wit="1860* 1881 VL61"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>χριστου</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="0285"><gap unit="verse" extent="part" reason="lacuna"/><w>παν</w><w>τ<unclear>ο</unclear></w><w><gap unit="word" extent="part" reason="lacuna"/><unclear>η</unclear>ρω<unclear>μ</unclear><gap unit="word" extent="part" reason="lacuna"/></w><w><gap unit="word" extent="part" reason="lacuna"/><unclear>υ</unclear></w><w>θεου</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="462"><w>ινα</w><w>πληρωθη</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></witDetail><!-- conflation or parablepsis -->
-                <witDetail n="W1/2-3" type="ambiguous" target="1 2" cause="haplography" wit="2516"><w>ινα</w><w>πληρωμα</w><w>του</w><w>θεου</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2005 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Speculum Tertullian Theodoret"/>
+                <rdg n="3" wit="1881"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>χριστου</w></rdg>
+                <witDetail n="Z" type="lac" wit="06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K3V20U8-10">
                 <lem><w>υπερ</w><w>παντα</w></lem>
-                <rdg n="1" wit="01 02 03 04 018 020 025 044 049 056 075 0142 0150 0151 0278 0285 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 629 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1959 1962 1987 1991 2004 2005 2008 2011 2127 2180 2243 2352 2400 2464 2492 2495 2516 2523 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia Theodoret"><w>υπερ</w><w>παντα</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="2138"><w>υπερ</w><w>παντ<unclear>α</unclear></w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="2344"><w>υπ<supplied reason="lacuna">ερ</supplied></w><w><supplied reason="lacuna">παντα</supplied></w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="636"><w>υπερ</w><w>τα</w><w>παντα</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="clarification" wit="1985"><w>υπερ</w><w>παντων</w></rdg>
-                <rdg n="2" wit="P46 06 010 012 2544 VL75 VL77 VL78 VL89 vgcl vgww vgst Pelagius"><w>παντα</w></rdg>
-                <rdg n="2-f1" type="defective" wit="0319"><w>παν</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="016"><gap unit="verse" extent="part" reason="lacuna"/><w>παντα</w></witDetail>
-                <witDetail n="↑B10K3V20U8-18R3" type="overlap" target="B10K3V20U8-18R3" wit="606 1939 1963 1996 1999 2012"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 06C2 048 075S 082 0159 0230 0320 203S 424C1 1319 1729 1942 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 VL86 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <rdg n="1" wit="UBS 01 02 03 04 18 33 35 88 424 915 1175 1505 1611 1739 1881 1910 2495 syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia"><w>υπερ</w><w>παντα</w></rdg>
+                <rdg n="2" wit="P46 06 010 012 vg Pelagius"><w>παντα</w></rdg>
+                <witDetail n="↑B10K3V20U8-18R3" type="overlap" target="B10K3V20U8-18R3" wit="606"/>
+                <witDetail n="Z" type="lac" wit="06C1 06C2 424C syrhmg"/>
             </app>
-            <app xml:id="B10K4V6U24-30">
-                <lem><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></lem>
-                <rdg n="1" wit="06C1 06C2 012 018 020 044 049 056 0142 0151 0278 0319 1 18 35 38 61 93 94 102 177 181 203 218 256 263 326 330 337 365 383 398 424* 451 462 506 606 636 664 665 1069 1108 1115 1127 1175 1240 1319 1398 1490 1505 1509 1573 1611 1617 1718 1751 1831 1836 1837 1851 1860 1877 1886 1893 1908 1910 1912C 1918 1987 2004 2005 2011 2127 2138 2180 2243 2352 2400 2492 2495 2516 2544 2865 L23 L156 L587 L809 L1159 L1178 L1188 L1298 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh Ambrosiaster Chrysostom Irenaeus Pelagius Speculum TheodoreOfMopsuestia Theodoret"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="1721"><w>και</w><w>εν</w><w>πασιν</w><w><unclear>η</unclear>μιν</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="2344"><w>και</w><w>ε<unclear>ν</unclear></w><w>π<unclear>ασι</unclear>ν</w><w>ημιν</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
-                <rdg n="1-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="075"><w>και</w><w>εμπασιν</w><w>ημιν</w></rdg>
-                <rdg n="1-f4" type="defective" cause="aural-confusion" wit="L60"><w>και</w><w>εν</w><w>πασιν</w><w>ημην</w></rdg>
-                <rdg n="1-f5" type="defective" cause="parablepsis" wit="322"><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="dittography" wit="69"><w>και</w><w>επι</w><w>πασιν</w><w>ημιν</w></rdg>
-                <rdg n="2" wit="P46 01 02 04 025 0150 6 33 81 88 104 424C1 436 442 459 467 915 1739* 1881 1912* 1959 1962 2464 2523 2805 copsa copbo CyrilOfAlexandria GregoryThaumaturgus Jerome Marcion Origen"><w>και</w><w>εν</w><w>πασιν</w></rdg>
-                <rdg n="2-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
-                <rdg n="3" wit="296 363 629 1245 1678 1739C 1838 1840 1939 1963 1985 1991 1996 1999 2008 2012 2576 L169 L1440"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
-                <rdg n="4" wit="1241 1311"><w>και</w><w>εν</w><w>πασιν</w><w>αμην</w></rdg>
+            <app xml:id="B10K4V6U24-28">
+                <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+                <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+                <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+                <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+                <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+                <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 016 048 075S 082 0159 0230 0285 0320 203S 1729 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa Lucifer Primasius Procopius PseudoAthanasius Severian Tertullian"/>
+                <witDetail n="Z" type="lac" wit="syrhmg"/>
             </app>
-            <app xml:id="B10K4V8U12-20">
-                <lem><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></lem>
-                <rdg n="1" wit="01C2 03* 04* 06C2 018 044 049 81 93 104* 256 383 665 1175 1718 1739 1851 2004C 2005 syrp syrh Chrysostom CyrilOfAlexandria MariusVictorinus"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="025"><w><supplied reason="illegible">ηχμα</supplied>λωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w><supplied reason="illegible">δοματα</supplied></w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="1838 L1126"><w>αιχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δωματα</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="38 326 398 L156 L2058"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δωματα</w></rdg>
-                <rdg n="1-f2-v1" type="reconstructed" wit="1837"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δ<unclear>ω</unclear>ματα</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="181C"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδοκεν</w><w>δοματα</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="03C2 1 18 35 61* 104C 263 322 330 337 363 424 436 442C 451 459 664 1069 1108 1127 1245 1319C 1398 1490 1509C 1573 1611 1617 1678 1721 1860 1881 1893 1985 1987 1991 2127 2138 2180 2243 2352 2492 2576 L23 L587 L809 L1159 L1298"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-v1" type="reconstructed" wit="075"><w>ηχμαλωτευ<unclear>σ</unclear>εν</w><w><unclear>αι</unclear>χμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-v2" type="reconstructed" wit="177"><w>ηχμαλωτε<unclear>υσ</unclear>εν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-v3" type="reconstructed" wit="1115"><w>ηχμαλωτευσεν</w><w>αιχμαλωσι<unclear>αν</unclear></w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-v4" type="reconstructed" wit="2008"><w>ηχμαλωτευσεν</w><w>αιχμαλωσ<unclear>ι</unclear>αν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-v5" type="reconstructed" wit="462"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δ<unclear>ο</unclear>ματα</w></rdg>
-                <rdg n="1-o1-f1" type="defective" cause="dittography" wit="1509*"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-f2" type="defective" wit="629"><w>ηχμαλωτευσεν</w><w>αιχμα</w><w>λωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-f3" type="defective" cause="aural-confusion" wit="61C1 203 218 365 442* 636 1505 1877 1886 2495 L169 L2010"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="1-o1-f3-v1" type="reconstructed" wit="69"><w>ηχμαλ<unclear>ω</unclear>τευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="1-o1-f4" type="defective" cause="aural-confusion" wit="1751"><w>αιχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="2" wit="01* 04C 010 012 0319 33 606 1910 2805 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst copsa copbo Ambrosiaster Irenaeus Jerome Marcion Pelagius TheodoreOfMopsuestia"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>ηχμαλωτευσεν</w><w>εχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="2-f2" type="defective" cause="haplography" wit="P46"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δομα</w></rdg>
-                <rdg n="2-o1" type="orthographic" wit="296 467 1959 1962"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="2-o1-f1" type="defective" cause="aural-confusion" wit="88 915"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="3" wit="0150 1908 2004*"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="3-v1" type="reconstructed" wit="1311*"><w><unclear>η</unclear>χμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="3-f1" type="defective" cause="aural-confusion" wit="1311C 1912"><w>αιχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="3-f2" type="defective" cause="aural-confusion" wit="181*"><w>αιχμαλωτευσα</w><w>αιχμαλωσιαν</w><w>και</w><w>εδοκεν</w><w>δοματα</w></rdg>
-                <rdg n="3-f3" type="defective" cause="aural-confusion" wit="L60"><w>ηχμαλοτευσας</w><w>εχμαλοσιαν</w><w>και</w><w>εδοκεν</w><w>δωματα</w></rdg>
-                <rdg n="3-f4" type="defective" cause="aural-confusion" wit="1918"><w>ηχμαλοτευσας</w><w>εχμαλοσιαν</w><w>και</w><w>εδωκα</w><w>δοματα</w></rdg>
-                <rdg n="3-f5" type="defective" cause="aural-confusion" wit="L1178"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δωματα</w></rdg>
-                <rdg n="3-f6" type="defective" cause="harmonization" wit="1840 2011 L1440"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκας</w><w>δοματα</w></rdg>
-                <rdg n="3-o1" type="orthographic" wit="056 0142 6 1831C2 1939 1963 1996 1999 2400 2516 2523 2544C0"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="3-o1-v1" type="reconstructed" wit="94"><w>ηχμαλωτευσας</w><w>αιχμαλωσια<supplied reason="illegible">ν</supplied></w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="3-o1-v2" type="reconstructed" wit="1831*"><w>ηχμαλωτευσας</w><w>αι<supplied reason="illegible">χμαλωσιαν</supplied></w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="3-o1-f1" type="defective" cause="aural-confusion" wit="2012*"><w>αιχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="3-o1-f2" type="defective" cause="aural-confusion" wit="1831C1"><w>ηχμαλωτευσας</w><w>αιχμαλοσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="3-o1-f3" type="defective" cause="aural-confusion" wit="020 102 506 1240 1836 2012C"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="3-s1" type="subreading" cause="harmonization" wit="2544*"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>και</w><w>ελαβε</w><w>δοματα</w></rdg>
-                <rdg n="4" wit="02"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="4-f1" type="defective" cause="aural-confusion" wit="2464"><w>ηχμαλωτευσας</w><w>εχμαλωσιαν</w><w>εδοκεν</w><w>δοματα</w></rdg>
-                <rdg n="4-o1" type="orthographic" wit="2865"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="4-o1-f1" type="defective" cause="aural-confusion" wit=""><w>ηχμαλωτευσας</w><w>εχμαλωσιαν</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="4-o1-f1-v1" type="reconstructed" wit="1241"><w><unclear>η</unclear>χμαλωτευσας</w><w>εχμαλωσιαν</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <witDetail n="W1/2/3/4" type="ambiguous" target="1 2 3 4" wit="0285"><gap unit="verse" extent="part" reason="lacuna"/><w>εδω<gap unit="word" extent="part" reason="lacuna"/><unclear>ε</unclear>ν</w><w>δομα<gap unit="word" extent="part" reason="lacuna"/></w></witDetail>
-                <witDetail n="W1/3" type="ambiguous" target="1 3" cause="haplography" wit="1319*"><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δ<unclear>ω</unclear>ματα</w></witDetail>
-                <witDetail n="↑B10K4V8U12-24R1-s1" type="ambiguous" target="1 2" wit="2344"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 06C1 016 048 075S 082 0151 0159 0230 0278 0320 203S 424C1 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+            <app xml:id="B10K4V8U12-18">
+                <lem><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></lem>
+                <rdg n="1" wit="UBS 01* 04C 010 012 33 606 1910 vg copsa copbo Ambrosiaster Jerome Pelagius TheodoreOfMopsuestia"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
+                <rdg n="1-f1" type="defective" cause="haplography" wit="P46"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δομα</w></rdg>
+                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="06*"><w>ηχμαλωτευσεν</w><w>εχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
+                <rdg n="1-o1" type="orthographic" wit="03C2"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δοματα</w></rdg>
+                <rdg n="1-o1-f1" type="defective" cause="aural-confusion" wit="88 915"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δωματα</w></rdg>
+                <rdg n="2" wit="01C2 03* 04* 06C2 1175 1739 syrp syrh Chrysostom MariusVictorinus"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></rdg>
+                <rdg n="2-o1" type="orthographic" wit="18 35 424 1611 1881"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>               
+                <rdg n="2-o1-f1" type="defective" cause="aural-confusion" wit="1505 2495"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
+                <rdg n="3" wit="02"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
+                <witDetail n="Z" type="lac" wit="06C1 424C syrhmg"/>
             </app>
             <app xml:id="B10K4V9U21">
                 <lem/>
-                <rdg n="1" wit="P46 01* 02 04 06 010 012 0319 6 33 81 424C1 442 1240* 1241 1739 1881 1910 VL61 VL75 VL77 VL86 VL89 copbo Ambrosiaster ClementOfAlexandria CyrilOfAlexandria Irenaeus Jerome Lucifer MariusVictorinus Origen Pelagius Tertullian"/>
-                <rdg n="2" wit="01C2 03 018 020 044 049 056 075 0142 0150 0151 1 18 35 38 61 69 88 93 102 104 177 181 203 218 256 263 296 322 326 330 337 365 383 398 424* 436 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240C 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1751 1831 1836 1838 1840 1851 1860 1877 1886 1893 1908 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L23 L156 L169 L587 L809 L1126 L1159 L1178 L1298 L1440 L2010 L2058 VL78 vgcl vgww vgst syrp syrh copsa Chrysostom TheodoreOfMopsuestia Theodoret"><w>πρωτον</w></rdg>
-                <rdg n="2-v2" type="reconstructed" wit="94"><w><unclear>π</unclear><supplied reason="lacuna">ρω</supplied>τον</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="1837"><w><unclear>πρω</unclear>τον</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="L60"><w>προτον</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="clarification" wit="363"><w>προτερον</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 06C1 06C2 016 025 048 075S 082 0159 0230 0278 0285 0320 203S 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Marcion Primasius Procopius PseudoAthanasius Severian Speculum"/>
+                <rdg n="1" wit="UBS P46 01* 02 04 06 010 012 33 424C 1739 1881 1910 copbo Ambrosiaster Jerome MariusVictorinus Pelagius"/>
+                <rdg n="2" wit="01C2 03 18 35 88 424* 606 915 1175 1505 1611 2495 vg syrp syrh copsa Chrysostom TheodoreOfMopsuestia"><w>πρωτον</w></rdg>
+                <witDetail n="Z" type="lac" wit="06C1 06C2 syrhmg"/>
             </app>
             <app xml:id="B10K4V9U22-28">
                 <lem><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερη</w></lem>
-                <rdg n="1" wit="01 02 03 04 06C2 018 020 025 044 056 075 0142 0151 0319 1 6 18 33 35 38 61 69 81 88 93 94C 102 177 181 203 218 256 263 296 322 330 337 363 365 383 398 424 436 442 451 467 506 606 629 636 664 665 1069 1108 1115 1127 1175 1240 1241 1245 1311C 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1836 1838 1840 1851 1860 1881 1893 1908 1910 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2352 2400 2492 2495 2516 2523 2544 2576 2805 2865 L23 L156 L169 L587 L809 L1159 L1178 L1298 L2010 L2058 VL78 vgcl vgww vgst syrh copbo Chrysostom CyrilOfAlexandria Pelagius TheodoreOfMopsuestia Theodoret"><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερη</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="016"><w><supplied reason="lacuna">εις</supplied></w><w>τα</w><w>κατωτερα</w><w>μερη</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="1837"><w>εις</w><w>τα</w><w>κατω<unclear>τερα</unclear></w><w>μερη</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="2344"><w>εις</w><w>τα</w><w>κατωτερα</w><w><unclear>με</unclear>ρη</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="049 0150 104 459 915 1311* 1831 1877C 1912 L60"><w>εις</w><w>τα</w><w>κατοτερα</w><w>μερη</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="1877* 2464"><w>εις</w><w>τα</w><w>κατοτερα</w><w>μερι</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="326"><w>εις</w><w>τα</w><w>κατοτερα</w><w>μερει</w></rdg>
-                <rdg n="1-f4" type="defective" cause="aural-confusion" wit="462 1751 L1126 L1440"><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερει</w></rdg>
-                <rdg n="1-f5" type="defective" wit="1918"><w>εις</w><w>το</w><w>κατοτεως</w><w>μερει</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="commentary" wit="AthanasiusOfAlexandria"><w>κατωτερων</w><w>μερων</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="clarification" wit="1886"><w>εις</w><w>τα</w><w>κατωτατα</w><w>μερη</w></rdg>
-                <rdg n="1-s3" type="subreading" cause="parablepsis" wit="94* 2243"><w>εις</w><w>κατωτερα</w><w>μερη</w></rdg>
-                <rdg n="2" wit="06* 010 012 VL61 VL75 VL77 VL86 VL89 copsa Ambrosiaster Irenaeus Jerome Lucifer MariusVictorinus Origen Tertullian"><w>εις</w><w>τα</w><w>κατωτερα</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="commentary" wit="ClementOfAlexandria"><w>εις</w><w>τα</w><w>κατωτατα</w></rdg>
+                <rdg n="1" wit="UBS 01 02 03 04 06C2 18 33 35 88 424 606 1175 1505 1611 1739 1881 1910 2495 vg syrh copbo Chrysostom Pelagius TheodoreOfMopsuestia"><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερη</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="915"><w>εις</w><w>τα</w><w>κατοτερα</w><w>μερη</w></rdg>
+                <rdg n="2" wit="06* 010 012 copsa Ambrosiaster Jerome MariusVictorinus"><w>εις</w><w>τα</w><w>κατωτερα</w></rdg>
                 <rdg n="3" wit="P46"><w>εις</w><w>κατωτερα</w></rdg>
                 <witDetail n="W1/2/3" type="ambiguous" target="1 2 3" cause="translation" xml:lang="syr" wit="syrp"><w>ܠܬܚܬܝܬܗ</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 06C1 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1729 1942 2834 2865S L1188 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius BasilOfCaesarea Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Marcion Primasius Procopius PseudoAthanasius Severian Speculum"/>
+                <witDetail n="Z" type="lac" wit="06C1 424C syrhmg"/>
             </app>
             <app xml:id="B10K4V19U4">
                 <lem><w>απηλγηκοτες</w></lem>
-                <rdg n="1" wit="P46 P49 01 02 03 018 020 044 049 056 075 0142 0151 1 6 18 33 35 38 61 69 81 93 94 102 104 177 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451* 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240* 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1837 1840 1851 1860 1881 1886 1893 1908 1910 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2005 2008 2011 2012 2127 2180 2243 2352 2400C0 2492 2495 2516 2523 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 syrh copsa copbo Chrysostom ClementOfAlexandria Origen"><w>απηλγηκοτες</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="0150 88 1836 1838 1912 2004 2138 2464"><w>απηλγικοτες</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="181"><w>απηλγηκωτες</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="1877"><w>απηλγικωτες</w></rdg>
-                <rdg n="1-f4" type="defective" cause="aural-confusion" wit="2400*"><w>απηγηκοτες</w></rdg>
-                <rdg n="2" wit="06 025 0319 1241 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp Ambrosiaster Irenaeus Jerome MariusVictorinus Pelagius Speculum"><w>απηλπικοτες</w></rdg>
+                <rdg n="1" wit="UBS P46 01 02 03 18 33 35 424 606 915 1175 1505 1611 1739 1881 1910 2495 syrh copsa copbo Chrysostom"><w>απηλγηκοτες</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="88"><w>απηλγικοτες</w></rdg>
+                <rdg n="2" wit="06 vg syrp Ambrosiaster Jerome MariusVictorinus Pelagius"><w>απηλπικοτες</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010 012"><w>αφηλπικοτες</w></rdg>
-                <rdg n="2-f2" type="defective" cause="aural-confusion" wit="451C"><w>απηλπηκοτες</w></rdg>
-                <rdg n="2-s1" type="subreading" wit="1240C"><w>απογνοντες</w></rdg><!-- correction towards a Latin text? -->
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2344 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Tertullian TheodoreOfMopsuestia Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg TheodoreOfMopsuestia"/>
             </app>
             <!-- a large transposition is encoded as an overlapping unit below -->
-            <app xml:id="B10K4V28U18-24">
-                <rdg n="1" wit="018 020 044 049 056 0142 0151 1 18 35 61 88 93 102 177 181 203 296 322 326 337 363 383 398 424* 436 506 606 636 664 665 915 1069 1108 1115 1240 1245 1311 1490 1505 1509 1611 1617 1718 1721 1729 1751 1831 1836 1837 1840 1851 1860 1877 1886 1910 1912 1918 1939 1962 1963 1985 1987 1996 1999 2005 2008 2012 2138 2180 2243 2352 2495 2544 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 syrh Chrysostom Origen TheodoreOfMopsuestia">
+            <app xml:id="B10K4V28U18-26">
+                <rdg n="1" wit="UBS P46 01 02 03 06 010 012 1175 vg copbo Ambrosiaster Jerome MariusVictorinus Pelagius">
+                    <ref target="#B10K4V28U18-22">[B10K4V28U18-22]</ref>
+                    <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
+                </rdg>
+                <rdg n="2" wit="18 35 88 424* 606 915 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia">
+                    <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
+                    <ref target="#B10K4V28U18-22">[B10K4V28U18-22]</ref>
+                </rdg>
+                
+                <rdg xml:id="B10K4V28U18-24R3" n="3" wit="33 424C 1739 1881">
                     <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
+                </rdg>
+                <rdg xml:id="B10K4V28U18-24R4" n="4" wit="copsa">
                     <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
                 </rdg>
-                <rdg n="2" wit="P46 P49 01 02 03 06 010 012 075 0150 0319 38 69 81 94 104 218 256 263 330 365 442 451 459 462 467 629 1127 1175 1241 1319 1398 1573 1678C 1838 1893 1908 1959 2004 2011 2127 2344 2400 2464 2492 2516 2523 2576 2805 2865 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst copbo Ambrosiaster Jerome MariusVictorinus Pelagius">
-                    <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
-                    <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
-                </rdg>
-                <rdg xml:id="B10K4V28U18-24R3" n="3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum">
-                    <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
-                </rdg>
-                <rdg xml:id="B10K4V28U18-24R4" n="4" wit="1678* 1991 copsa Tertullian">
-                    <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
-                </rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrp syrhmg"/>
             </app>
-            <!-- this unit should be ignored if defective readings are treated as trivial -->
-            <app xml:id="B10K4V28U18-20">
-                <lem><w>το</w><w>αγαθον</w></lem>
-                <rdg n="1" wit="P46 P49 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678C 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster BasilOfCaesarea Chrysostom ClementOfAlexandria Jerome MariusVictorinus Origen Pelagius Speculum TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="L60"><w>τω</w><w>αγαθων</w></rdg>
-                <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="1678* 1991 copsa Tertullian"/>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
-            </app>
-            <app xml:id="B10K4V28U22-24">
-                <lem><w>ταις</w><w>χερσιν</w></lem>
-                <rdg n="1" wit="P46 01C2 03 020 044 049 0151 1 18 35 61 88 102 177 203 296 322 326 337 363 398 424* 506 636 664 1069 1108 1115 1240 1245 1617 1678* 1718 1729 1837 1840 1886 1910 1985 1987 2008 2138 2243 2352 L169 L587 L1159 L1178 L1188 L2010 L2058 VL61 vgww vgst copsa Ambrosiaster Chrysostom Origen Pelagius Tertullian"><w>ταις</w><w>χερσιν</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="P49"><w><supplied reason="lacuna">ταις</supplied></w><w><supplied reason="lacuna">χερσι</supplied><unclear>ν</unclear></w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="1851 L809 L1440"><w>ταις</w><w>χερσι</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="1918"><w>εν</w><w>ταις</w><w>χερσιν</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="clarification" wit="181"><w>ταις</w><w>χερσιν</w><w>αυτου</w></rdg>
-                <rdg n="1-s3" type="subreading" cause="clarification" wit="629"><w>εν</w><w>ταις</w><w>χερσιν</w><w>αυτου</w></rdg>
-                <rdg n="2" wit="01* 02 03C2 06C1 06C2 010 012 018 056 0142 0150 0319 38 81 93 104* 436 459 467 606 665 915 1175 1311 1490 1505 1509 1678C 1721 1751 1860 1877 1912 1939 1959 1962 1963 1991 1996 1999 2004 2005 2012 2180 2495 2544 VL75 VL77 VL78 VL86 VL89 vgcl copbo Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="1838"><w>ταις</w><w>ιδ<unclear>ιαις</unclear></w><w>χερσιν</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>ταις</w><w>ιδιαις</w><w>χιρσιν</w></rdg>
-                <rdg n="2-f2" type="defective" cause="aural-confusion" wit="383"><w>ταις</w><w>ιδειαις</w><w>χερσιν</w></rdg>
-                <rdg n="2-f3" type="defective" cause="aural-confusion" wit="2464"><w>ταις</w><w>ειδιαις</w><w>χερσιν</w></rdg>
-                <rdg n="2-f4" type="defective" cause="aural-confusion" wit="L60"><w>ταις</w><w>ιδιες</w><w>χερσιν</w></rdg>
-                <rdg n="2-o1" type="orthographic" wit="075 69 94 104C 218 256 263 330 365 442 451 462 1127 1241 1319 1398 1573 1611 1893 2011 2127 2344 2400 2492 2516 2523 2576 2805 2865"><w>ταις</w><w>ιδιαις</w><w>χερσι</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="parablepsis" wit="1831"><w>ιδιαις</w><w>χερσιν</w></rdg>
-                <rdg n="2-s2" type="subreading" cause="parablepsis" wit="1908"><w>ταις</w><w>ιδιαις</w></rdg>
+            <app xml:id="B10K4V28U18-22">
+                <lem><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></lem>
+                <rdg n="1" wit="UBS 01* 02 03C2 06C1 06C2 010 012 606 915 1175 1505 2495 copbo Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="06*"><w>ταις</w><w>ιδιαις</w><w>χιρσιν</w></rdg>
+                <rdg n="1-o1" type="orthographic" wit="1611"><w>ταις</w><w>ιδιαις</w><w>χερσι</w></rdg>
+                <rdg n="2" wit="P46 01C2 03* 18 35 88 424* 1910 copsa Ambrosiaster Chrysostom Pelagius"><w>ταις</w><w>χερσιν</w></rdg>
                 <!-- the following reading should target readings 1 and 2 if subreadings are treated as trivial -->
-                <witDetail n="W1-s3/2" type="ambiguous" target="1-s3 2" wit="1836"><w>εν</w><w>ταις</w><w>ιδιαις</w><w>χερσιν</w><w>αυτου</w></witDetail><!-- conflation or a superfluous clarification to the longer reading-->
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum"/>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 03C1 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="33 424C 1739 1881"/>
+                <witDetail n="Z" type="lac" wit="04 syrhmg"/>
+            </app>
+            <!-- this unit should be ignored -->
+            <app xml:id="B10K4V28U24-26">
+                <lem><w>το</w><w>αγαθον</w></lem>
+                <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
+                <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="copsa"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K4V29U32-34">
                 <lem><w>της</w><w>χρειας</w></lem>
-                <rdg n="1" wit="P46 03 06C2 018 020 025 044 049 056 075 0142 0150 0151 0319C0 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1837 1840 1851 1860 1877 1881 1886 1893 1908 1912 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2492 2495 2516 2523 2544* 2576 2865 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 vgww vgst syrh copsa copbo Chrysostom ClementOfAlexandria Jerome Origen TheodoreOfMopsuestia Theodoret"><w>της</w><w>χρειας</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="016"><w>τη<unclear>ς</unclear></w><w><unclear>χρε</unclear><supplied reason="lacuna">ιας</supplied></w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="01 02 1175 1918 2464 L60"><w>της</w><w>χριας</w></rdg>
-                <rdg n="1-f2" type="defective" cause="dittography" wit="1838"><w>της</w><w>χρειαις</w></rdg>
-                <rdg n="1-f3" type="defective" wit="2805"><w>τη</w><w>χρειας</w></rdg>
-                <rdg n="2" wit="06* 010 012 0319* 181 1836 2544C VL61 VL75 VL77 VL78 VL86 VL89 vgcl Ambrosiaster BasilOfCaesarea Cyprian GregoryOfNyssa MariusVictorinus Pelagius Speculum Tertullian"><w>της</w><w>πιστεως</w></rdg>
+                <rdg n="1" wit="UBS P46 03 06C2 18 33 35 88 424 606 915 1505 1611 1739 1881 2495 syrh copsa copbo Chrysostom Jerome TheodoreOfMopsuestia"><w>της</w><w>χρειας</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="01 02 1175"><w>της</w><w>χριας</w></rdg>
+                <rdg n="2" wit="06* 010 012 Ambrosiaster MariusVictorinus Pelagius"><w>της</w><w>πιστεως</w></rdg>
                 <rdg n="3" wit="syrp"/>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1910 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian"/>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C1 424C 1910 syrhmg"/>
             </app>
             <app xml:id="B10K4V32U30-32">
-                <lem><w>εχαρισατο</w><w>ημιν</w></lem>
-                <rdg n="1" wit="03 06C2 018 020 044 049 056 075 0142 0151 0278 0319 1 33 88 93 102 104 177 203 322 337 398* 424 436 459 467 506 606 665 1069 1108 1115 1175 1240 1241 1490 1505 1509 1718 1721 1739 1831 1836 1838 1851 1860 1877 1881 1886 1893 1908 1910 1912 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2011 2012 2138 2180 2243 2495 2523 2544 2805 2865 L169 L587 L809 L1178 L1188 vgww vgst syrp syrh Chrysostom Jerome"><w>εχαρισατο</w><w>ημιν</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="P49"><w><supplied reason="lacuna">εχα</supplied>ρισατο</w><w>η<unclear>μ</unclear><supplied reason="lacuna">ιν</supplied></w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="94"><w>εχαρισατο</w><w>ημι<unclear>ν</unclear></w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="1611"><w><unclear>ε</unclear>χαρισατο</w><w>ημιν</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="06*"><w>εχαρισατο</w><w>ημειν</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="181 915 L1440"><w>εχαρησατο</w><w>ημιν</w></rdg>
-                <rdg n="1-f3" type="defective" cause="linguistic-confusion" wit="1311"><w>εχαρισατω</w><w>ημας</w></rdg>
-                <rdg n="1-f4" type="defective" cause="aural-confusion" wit="1918"><w>εχαρησατω</w><w>ημην</w></rdg>
-                <rdg n="1-f5" type="defective" cause="aural-confusion" wit="2464"><w>εχαρισατω</w><w>ημιν</w></rdg>
-                <rdg n="1-f6" type="defective" cause="aural-confusion" wit="L60"><w>εχαρισατω</w><w>ημην</w></rdg>
-                <rdg n="2" wit="01 010 012 025 0150 6 18 35 38 61 69 81 218 256 296 326 330 363 365 383 398C 442 462 629 636 664 1127 1245 1319 1398 1573 1617 1678 1729 1837 1840 2008 2127 2344 2352 2400 2492 2576 L1159 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl copsa copbo Ambrosiaster BasilOfCaesarea ClementOfAlexandria MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εχαρισατο</w><w>υμιν</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="02"><w>εχαρισατο</w><w>υμι<unclear>ν</unclear></w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="P46"><w>εχαρισατο</w><w>υμειν</w></rdg>
-                <rdg n="2-f2" type="defective" cause="linguistic-confusion" wit="451 2516"><w>εχαρισατο</w><w>υμων</w></rdg>
-                <rdg n="2-f3" type="defective" cause="aural-confusion" wit="263 1751"><w>εχαρησατο</w><w>υμιν</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="1991"><w>εχ<gap unit="word" extent="part" reason="lacuna"/>το</w><gap unit="verse" extent="part" reason="lacuna"/></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen Tertullian"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 075S 082 0159 0230 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Theodoret"/>
+                <lem><w>εχαρισατο</w><w>υμιν</w></lem>
+                <rdg n="1" wit="UBS 01 010 012 18 35 copsa copbo Ambrosiaster MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εχαρισατο</w><w>υμιν</w></rdg>
+                <rdg n="1-v1" type="reconstructed" wit="02"><w>εχαρισατο</w><w>υμι<unclear>ν</unclear></w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="P46"><w>εχαρισατο</w><w>υμειν</w></rdg>
+                <rdg n="2" wit="03 06C2 33 88 424* 606 1175 1505 1739 1881 1910 2495 syrp syrh Chrysostom Jerome"><w>εχαρισατο</w><w>ημιν</w></rdg>
+                <rdg n="2-v1" type="reconstructed" wit="1611"><w><unclear>ε</unclear>χαρισατο</w><w>ημιν</w></rdg>
+                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>εχαρισατο</w><w>ημειν</w></rdg>
+                <rdg n="2-f2" type="defective" cause="aural-confusion" wit="915"><w>εχαρησατο</w><w>ημιν</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg"/>
             </app>
             <app xml:id="B10K5V2U18-20">
                 <lem><w>ηγαπησεν</w><w>ημας</w></lem>
-                <rdg n="1" wit="P46 01C2a 06 010 012 018 020 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 88 93 94 102 104 177 181 203 256 263 296 322 330 337 363 365 383 398 424 436 451 459 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1240 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1721 1729 1739 1751 1831 1836 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1959 1962 1985 1987 2004 2005 2008 2011 2127 2138 2180 2243 2344C 2352 2400C0 2464 2492 2495 2516 2523 2544 2805 2865 L23 L156 L587 L809 L1159 L1298 L2010 L2058 VL75 VL77 vgcl vgww vgst syrp syrh AthanasiusOfAlexandria BasilOfCaesarea Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>ηγαπησεν</w><w>ημας</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="1991"><w>ηγ<unclear>απη</unclear>σεν</w><w>ημας</w></rdg>
-                <rdg n="1-f1" type="defective" cause="linguistic-confusion" wit="1718"><w>ηγαπησε</w><w>ημας</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="L1178"><w>ηγαπισεν</w><w>ημας</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="L1188"><w>ημας</w><w>ηγαπησεν</w></rdg>
-                <rdg n="2" wit="01* 01C2b 03 025 0159 61 69 81 218 326 442 462 1175 1241 1678 1837 1912 1918 1939 1963 1996 1999 2012 2344* 2400* 2576 L60 L169 L1440 VL61 VL78 VL86 VL89 copsa copbo Ambrosiaster MariusVictorinus Speculum"><w>ηγαπησεν</w><w>υμας</w></rdg>
+                <rdg n="1" wit="UBS P46 01C2a 06 010 012 18 33 35 88 424 606 915 1505 1611 1739 1881 1910 2495 vg syrp syrh Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>ηγαπησεν</w><w>ημας</w></rdg>
+                <rdg n="2" wit="01* 01C2b 03 1175 copsa copbo Ambrosiaster MariusVictorinus"><w>ηγαπησεν</w><w>υμας</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="02"><w><supplied reason="lacuna">ηγα</supplied><unclear>π</unclear>ησεν</w><w>υμας</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="P49"><w>ηγαπησ<unclear>ε</unclear><gap unit="word" extent="part" reason="lacuna"/></w><w><gap unit="word" extent="part" reason="lacuna"/>ας</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" cause="commentary" wit="ClementOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K5V2U28-40">
                 <lem><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></lem>
-                <rdg n="1" wit="010C 012 018 020 025 044 049 075 0150 0151 0159 1 6 18 33 35 38 61* 81 88 93 102 104 177 181 203 256 263 296 322 326 330 337 363 365 383 398 424 436 451 459 467 506 606 629 636 664 665 1069 1108 1115 1127 1240 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1939 1959 1962 1963 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L23 L60 L156 L587 L809 L1159 L1178 L1188 L2010 L2058 VL61 VL75 VL77 VL78 vgcl vgww vgst syrp syrh BasilOfCaesarea Chrysostom ClementOfAlexandria CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="P49"><w><supplied reason="lacuna">υπερ</supplied></w><w>ημων</w><w>π<unclear>ρο</unclear><supplied reason="lacuna">σφορα</supplied><unclear>ν</unclear></w><w><unclear>και</unclear></w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="02"><w>υπερ</w><w>ημων</w><w>προσ<supplied reason="lacuna">φορ</supplied>αν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="94"><w>υπερ</w><w>ημων</w><w>προσφ<unclear>ο</unclear>ραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v4" type="reconstructed" wit="915"><w>υπ<unclear>ερ</unclear></w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v5" type="reconstructed" wit="L1298"><w>υπερ</w><w>ημων</w><w>προσφορ<unclear>αν</unclear></w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="1" wit="UBS 010C 012 18 33 35 88 424 606 1505 1611 1739 1881 1910 2495 vg syrp syrh Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="1-v1" type="reconstructed" wit="02"><w>υπερ</w><w>ημων</w><w>προσ<supplied reason="lacuna">φορ</supplied>αν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="1-v2" type="reconstructed" wit="915"><w>υπ<unclear>ερ</unclear></w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
                 <rdg n="1-f1" type="defective" cause="visual-error" wit="P46"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>οσμην</w><w>τω</w><w>θεω</w></rdg>
                 <rdg n="1-f2" type="defective" wit="010*"><w>υπερ</w><w>ημεν</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-f3" type="defective" wit="1918"><w>υπερ</w><w>εμου</w><w>ημων</w><w>προσφορα</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="056 0142 0278*"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τωι</w><w>θεω</w></rdg>
-                <rdg n="1-s1" type="subreading" wit="1241"><w>υπερ</w><w>ημων</w><w>εν</w><w>φθορα</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="parablepsis" wit="L169"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>θεω</w></rdg>
-                <rdg n="2" wit="03 61C1 69 218 442 462 1175 1729 2344 L1440 VL86 VL89 copsa copbo Ambrosiaster MariusVictorinus Speculum"><w>υπερ</w><w>υμων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="2-o1" type="orthographic" wit=""><w>υπερ</w><w>υμων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τωι</w><w>θεω</w></rdg>
-                <rdg n="2-o1-v1" type="reconstructed" wit="0278C"><w>υπερ</w><w><unclear>υ</unclear>μων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τωι</w><w>θεω</w></rdg>
+                <rdg n="2" wit="03 1175 copsa copbo Ambrosiaster MariusVictorinus"><w>υπερ</w><w>υμων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
                 <rdg n="3" wit="01"><w>υπερ</w><w>ημων</w><w>θυσιαν</w><w>και</w><w>προσφοραν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="4" wit="06 0319"><w>προσφοραν</w><w>υπερ</w><w>ημων</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="5" type="reconstructed" wit=""><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="5-v1" type="reconstructed" wit="1991"><w>προσφορ<unclear>α</unclear>ν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="5-s1" type="subreading" wit="1985"><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>θεου</w></rdg>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0230 0285 0320 203S 424C1 1942 2834 2865S L1126 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Tertullian Theodoret"/>
+                <rdg n="4" wit="06"><w>προσφοραν</w><w>υπερ</w><w>ημων</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K5V9U2-10">
                 <lem><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>φωτος</w></lem>
-                <rdg n="1" wit="01 02 03 06* 010 012 025 0278 0319* 6 33 81 256 296 330 424C1 467 629 1175C 1319 1739 1881 1908 1959 1962 2127 2400 2464 2492 2516* 2523 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp copsa copbo gothB Ambrosiaster Ephrem GregoryThaumaturgus Jerome Lucifer MariusVictorinus Origen Pelagius"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>φωτος</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="P49"><w><supplied reason="lacuna">ο</supplied></w><w><supplied reason="lacuna">γαρ</supplied></w><w><supplied reason="lacuna">καρπ</supplied><unclear>ος</unclear></w><w><unclear>το</unclear>υ</w><w>φωτος</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="1240"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w><unclear>φ</unclear><supplied reason="lacuna">ωτος</supplied></w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="048"><w>ο</w><w><unclear>γα</unclear><supplied reason="lacuna">ρ</supplied></w><w><supplied reason="lacuna">κ</supplied><unclear>αρπος</unclear></w><w>του</w><w>φω<supplied reason="lacuna">τος</supplied></w></rdg>
-                <rdg n="2" wit="P46 06C2 018 020 044 049 056 075 0142 0150 0151 0319C0 1 18 35 38 61 69 88 93 102 104 177 181 203S 218 263 322 326 337 363 365 383 398 424* 436 442 451 459 462 506 606 636 664 665 915 1069 1108 1115 1127 1175* 1241 1245 1311 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1831 1836 1837 1838 1840 1851 1860 1877 1886 1893 1910 1939 1963 1985 1987 1991 1996 1999 2004 2005 2012 2138 2180 2243 2344 2352 2495 2516C 2544 2576 2805 2865S L23 L156 L169 L1126 L1159 L1178 L1188 L1298 L1440 L2058 syrh Chrysostom TheodoreOfMopsuestia Theodoret"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>πνευματος</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="94"><w>ο</w><w>γαρ</w><w>καρπος</w><w><supplied reason="lacuna">τ</supplied><unclear>ο</unclear>υ</w><w>πνευματος</w></rdg>
-                <rdg n="2-f1" type="defective" cause="dittography" wit="1918"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>του</w><w>πνευματος</w></rdg>
-                <rdg n="2-f2" type="defective" cause="aural-confusion" wit="1729 1751"><w>ο</w><w>γαρ</w><w>καρπως</w><w>του</w><w>πνευματος</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="conflation" wit="1912"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>πνευματος</w><w>φως</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="2008"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w></witDetail>
-                <witDetail n="W1/2-3" type="ambiguous" target="1 2" wit="016"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><gap unit="verse" extent="part" reason="lacuna"/></witDetail>
-                <witDetail n="W1/2-4" type="ambiguous" target="1 2" wit="CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 075S 082 0159 0230 0285 0320 203 1942 2011 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfJerusalem Epiphanius GregoryOfNazianzus GregoryOfNyssa Irenaeus Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian"/>
+                <rdg n="1" wit="UBS 01 02 03 06* 010 012 33 424C 1175C 1739 1881 vg syrp copsa copbo Ambrosiaster Jerome MariusVictorinus Pelagius"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>φωτος</w></rdg>
+                <rdg n="2" wit="P46 06C2 18 35 88 424* 606 915 1175* 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>πνευματος</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 syrhmg"/>
             </app>
             <app xml:id="B10K5V14U34-42">
                 <lem><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></lem>
-                <rdg n="1" wit="P46 02 03 06C2 010 012 018 020 025 044 056 075 0142 0150 0151C 0319 1 6 18 33 35 38 61C0 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1836 1837 1838 1840 1851 1860 1881 1886 1893 1908 1912 1939C 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2492 2495 2516 2523 2544 2576 2865S L23 L169 L1126 L1159 L1178 L1188 L1298 L1440 L2058 VL61 VL77 VL78 VL86 vgcl vgww vgst syrp syrh copsa copbo AthanasiusOfAlexandria Chrysostom CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus Jerome Marcion Origen Pelagius Primasius Procopius TheodoreOfMopsuestia"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="048"><w><supplied reason="lacuna">και</supplied></w><w>επι<unclear>φαυ</unclear>σ<supplied reason="lacuna">ει</supplied></w><w><supplied reason="lacuna">σοι</supplied></w><w><supplied reason="lacuna">ο</supplied></w><w><supplied reason="lacuna">χριστος</supplied></w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="049*"><w><unclear>κ</unclear>αι</w><w><unclear>επι</unclear>φ<unclear>α</unclear>υ<unclear>σει</unclear></w><w><unclear>σοι</unclear></w><w><unclear>ο</unclear></w><w>χριστος</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="049C"><w><supplied reason="lacuna">κ</supplied>αι</w><w>επιφαυ<supplied reason="lacuna">σ</supplied>ει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-v4" type="reconstructed" wit="2400 L156"><w>και</w><w>επ<unclear>ι</unclear>φαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-v5" type="reconstructed" wit="2464"><w><supplied reason="lacuna">και</supplied></w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="01 0278 1245 1918"><w>και</w><w>επιφαυσι</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-f2" type="defective" wit="61*"><w>και</w><w>επιφαυσε</w><w>ο</w><w>χριστος</w></rdg><!-- the first hand produced και επιφαυσε ο χς, presumably from haplography while copying και επιφαυσει σε ο χς; the same hand subsequently restored the intended reading and then corrected σε to σοι -->
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="1241"><w>και</w><w>επιπαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-f4" type="defective" cause="aural-confusion" wit="1831"><w>και</w><w>επειφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-f5" type="defective" cause="aural-confusion" wit=""><w>και</w><w>επιφαυσει</w><w>συ</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-f5-v1" type="reconstructed" wit="1939*"><w>και</w><w>επιφαυσει</w><w>σ<unclear>υ</unclear></w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="commentary" wit="ClementOfAlexandria"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w><w>κυριος</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="parablepsis" wit="0151*"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>χριστος</w></rdg>
-                <rdg n="1-s3" type="subreading" cause="aural-confusion" wit="1751 1877"><w>και</w><w>επιφαυση</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="2" wit="1910 VL75 VL89"><w>και</w><w>επιψαυσεις</w><w>του</w><w>χριστου</w></rdg>
+                <rdg n="1" wit="UBS P46 02 03 06C2 010 012 18 33 35 88 424 915 1175 1505 1611 1739 1881 2495 vg syrp syrh copsa copbo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="01"><w>και</w><w>επιφαυσι</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
+                <rdg n="2" wit="1910"><w>και</w><w>επιψαυσεις</w><w>του</w><w>χριστου</w></rdg>
                 <rdg n="2-v1" type="reconstructed" wit="06*"><w>και</w><w>επι<unclear>ψ</unclear>αυσεις</w><w>του</w><w>χριστου</w></rdg>
                 <rdg n="2-f1" type="defective" cause="aural-confusion" wit="606"><w>και</w><w>επιφαυσεις</w><w>του</w><w>χριστου</w></rdg>
-                <rdg n="3" wit="Ambrosiaster MariusVictorinus Theodoret"><w>και</w><w>επιψαυσει</w><w>σου</w><w>ο</w><w>χριστος</w></rdg><!-- known to be in some manuscripts contemporary with Chrysostom, Theodore of Mopsuestia, and Jerome; Theodoret is also aware of the common reading in some manuscripts of his time -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius BasilOfCaesarea Cyprian CyrilOfJerusalem GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer PseudoAthanasius Severian Speculum Tertullian"/>
+                <rdg n="3" wit="Ambrosiaster MariusVictorinus"><w>και</w><w>επιψαυσει</w><w>σου</w><w>ο</w><w>χριστος</w></rdg><!-- known to be in some manuscripts contemporary with Chrysostom, Theodore of Mopsuestia, and Jerome; Theodoret is also aware of the common reading in some manuscripts of his time -->
+                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg"/>
             </app>
             <app xml:id="B10K5V15U5">
                 <lem/>
-                <rdg n="1" wit="P46 01* 03 06 010 012 018 020 025 044 048 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2492 2495 2516 2523 2544 2576 2865S L23 L156 L169 L1159 L1178 L1188 L1298 L1440 L2058 VL75 VL77 VL78 VL86 VL89 syrp syrh copsa Ambrosiaster Chrysostom Jerome Lucifer MariusVictorinus TheodoreOfMopsuestia"/>
-                <rdg n="2" wit="01C2 02 629 1942 L1126 VL61 vgcl vgww vgst copbo Pelagius"><w>αδελφοι</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="2464"><w><supplied reason="lacuna">αδελ</supplied>φοι</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="1" wit="UBS P46 01* 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 syrp syrh copsa Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia"/>
+                <rdg n="2" wit="02 vg copbo Pelagius"><w>αδελφοι</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K5V15U6-8">
-                <lem><w>πως</w><w>ακριβως</w></lem>
-                <rdg n="1" wit="01C2 02 06 010 012 018 020 025 044 056 075 0142 0151 1 6 18 35 38 61 69 88 93 94 102 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 451 462 467 506 606 629 636 664 665 1069 1108 1115 1127 1240 1245 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1908 1910 1912 1918 1939 1942 1959 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2865S L23 L156 L169 L1126 L1159 L1178 L1188 L1298 L1440 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster BasilOfCaesarea Chrysostom Jerome Lucifer MariusVictorinus TheodoreOfMopsuestia"><w>πως</w><w>ακριβως</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="049*"><w>πω<unclear>ς</unclear></w><w>ακ<unclear>ρι</unclear>β<unclear>ως</unclear></w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="049C"><w><supplied reason="lacuna">π</supplied>ως</w><w>ακριβως</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="0319"><w>πως</w><w>ακρ<unclear>ιβ</unclear>ως</w></rdg>
-                <rdg n="1-v4" type="reconstructed" wit="1838"><w><unclear>πως</unclear></w><w><unclear>α</unclear>κριβως</w></rdg>
-                <rdg n="2" wit="01* 03C2 0150 0278 33 81 104 436 442 459 915 1175 1241 1311 1739 1893 1962 copsa"><w>ακριβως</w><w>πως</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="048"><w>ακριβω<supplied reason="lacuna">ς</supplied></w><w><supplied reason="lacuna">πω</supplied>ς</w></rdg>
-                <rdg n="2-v2" type="reconstructed" wit="2344"><w>ακριβως</w><w><supplied reason="lacuna">π</supplied>ως</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="P46 03*"><w>ακρειβως</w><w>πως</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 424C1 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Marcion Origen Pelagius Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <lem><w>ακριβως</w><w>πως</w></lem>
+                <rdg n="1" wit="UBS 01* 03C2 33 915 1175 1739 copsa"><w>ακριβως</w><w>πως</w></rdg>
+                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="P46 03*"><w>ακρειβως</w><w>πως</w></rdg>
+                <rdg n="2" wit="01C2 02 06 010 012 18 35 88 424 606 1505 1611 1881 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia"><w>πως</w><w>ακριβως</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg Pelagius"/>
             </app>
             <app xml:id="B10K5V19U12-16">
                 <lem><w>και</w><w>ωδαις</w><w>πνευματικαις</w></lem>
-                <rdg n="1" wit="01C1 02 06 010 012 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 35 38 61 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1939 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2865S L23 L156 L169 L1126 L1159 L1178 L1188 L1298 L1440 L2058 VL61 VL77 VL78 VL86 vgcl vgww vgst syrp syrh copsa copbo BasilOfCaesarea Chrysostom CyrilOfJerusalem Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"><w>και</w><w>ωδαις</w><w>πνευματικαις</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="048"><w>και</w><w><supplied reason="lacuna">ωδ</supplied>αις</w><w>πνευματικαις</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="33"><w>και</w><w><supplied reason="lacuna">ω</supplied>δαις</w><w>πνευματικαις</w></rdg>
+                <rdg n="1" wit="UBS 01C1 02 06 010 012 18 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copsa copbo Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>και</w><w>ωδαις</w><w>πνευματικαις</w></rdg>
+                <rdg n="1-v1" type="reconstructed" wit="33"><w>και</w><w><supplied reason="lacuna">ω</supplied>δαις</w><w>πνευματικαις</w></rdg>
                 <rdg n="1-f1" type="defective" cause="dittography" wit="01*"><w>και</w><w>ωδαις</w><w>κα</w><w>πνευματικαις</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="1729"><w>και</w><w>οδαις</w><w>πνευματικαις</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="1918"><w>και</w><w>ωδες</w><w>πνευματικες</w></rdg>
-                <rdg n="2" wit="P46 03 VL75 VL89 Ambrosiaster"><w>και</w><w>ωδαις</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C2 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 256 424C1 1838 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="2" wit="P46 03 Ambrosiaster"><w>και</w><w>ωδαις</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
             <app xml:id="B10K5V19U17">
                 <lem/>
-                <rdg n="1" wit="P46 01 03 06 010 012 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2865S L23 L156 L169 L1126 L1159 L1178 L1188 L1298 L1440 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copsa copbo Ambrosiaster BasilOfCaesarea Chrysostom CyrilOfJerusalem Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"/>
+                <rdg n="1" wit="UBS P46 01 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"/>
                 <rdg n="2" wit="02"><w>εν</w><w>χαριτι</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0285 0320 203 256 424C1 1838 2805 2834 2865 L60 L587 L809 L2010 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
             </app>
-            <app xml:id="B10K5V22U6-12">
-                <lem><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></lem>
-                <rdg n="1" wit="01 02 025 0278 6 33 81 88 104 218 256 263 296 365 424C1 436 442 459 467 506 606 1108 1115 1127 1175 1319 1398 1505 1573 1611 1739 1877 1910 1939 1942 1959 1962 1963 1996 1999 2005 2012 2127 2138 2400 2492 2495 2516 VL61 VL77A VL86 VL89 vgcl vgww vgst syrhmg copsa copbo Ambrosiaster BasilOfCaesarea MariusVictorinus Origen Pelagius"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="016"><w>τοις</w><w>ιδιοις</w><w>α<supplied reason="lacuna">νδρασιν</supplied></w><w>υποτασσεσθωσαν</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="048"><w><supplied reason="lacuna">τοις</supplied></w><w><supplied reason="lacuna">ιδι</supplied>οις</w><w>ανδρα<unclear>σιν</unclear></w><w><supplied reason="lacuna">υποτασσεσθ</supplied>ω<supplied reason="lacuna">σαν</supplied></w></rdg>
-                <rdg n="1-f1" type="defective" wit="38 330 451 1241 1881 2464"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθωσαν</w></rdg>
-                <rdg n="1-f2" type="defective" wit="664"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθω</w></rdg>
-                <rdg n="1-f3" type="defective" wit="L1178"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθω</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="044"><w>υποτασσεσθωσαν</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="2" wit="018 020 056 075 0142 0150 0151 1 18 35 61 69 93 102 177C 322 326 337 363 398 424* 636 665 915C 1069 1240 1245 1311 1490 1509 1617 1678 1718 1836 1837 1840 1860 1893 1908 1912 1987 1991 2004 2008 2011 2180 2243 2352 2523 2544 2576 2865S L156 L169 L587 L809 L1159 L1188 L2010 L2058 VL78 syrh Chrysostom"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="94"><w>τ<supplied reason="lacuna">οις</supplied></w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
-                <rdg n="2-v2" type="reconstructed" wit="2344"><w>τοις</w><w>ιδ<unclear>ι</unclear>οις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
-                <rdg n="2-f1" type="defective" wit="049 203S 383 1721 1751 1886"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθε</w></rdg>
-                <rdg n="2-f2" type="defective" wit="629"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσσθε</w></rdg>
-                <rdg n="2-f3" type="defective" cause="aural-confusion" wit="1729"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθαι</w></rdg>
-                <rdg n="2-f4" type="defective" cause="aural-confusion" wit="181 462 915* L1440"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθαι</w></rdg>
-                <rdg n="2-f4-v1" type="reconstructed" wit="177*"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθ<unclear>αι</unclear></w></rdg>
-                <rdg n="2-f5" type="defective" cause="dittography" wit="1831"><w>τοις</w><w>ιδιοις</w><w>ανδρασιιν</w><w>υποτασσεσθε</w></rdg>
-                <rdg n="2-f6" type="defective" cause="aural-confusion" wit="1918"><w>τοις</w><w>ιδιης</w><w>ανδρασην</w><w>υποτασεσθαι</w></rdg>
-                <rdg n="3" wit="06C1 1985 VL75 VL77T"><w>υποτασσεσθε</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="3-f1" type="defective" cause="aural-confusion" wit="06* 012"><w>υποτασσεσθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="3-f2" type="defective" cause="aural-confusion" wit="010"><w>υποτασεθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="3-f3" type="defective" cause="conflation" wit="0319"><w>υποτασσεσθαε</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="4" wit="P46 03 Jerome TheodoreOfMopsuestia"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="5" wit="1851"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσομεναι</w></rdg>
-                <witDetail n="W1/4" type="ambiguous" target="1 4" cause="commentary" wit="ClementOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C2 075S 082 0159 0230 0285 0320 203 256 1838 2805 2834 2865 L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+            <app xml:id="B10K5V22U6-10">
+                <lem><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></lem>
+                <rdg n="1" wit="UBS P46 03 Jerome TheodoreOfMopsuestia"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
+                <rdg n="2" wit="01 02 33 88 424C 606 1175 1505 1611 1739 1910 2495 vg syrhmg copsa copbo Ambrosiaster MariusVictorinus Pelagius"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></rdg>
+                <rdg n="2-f1" type="defective" wit="1881"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθωσαν</w></rdg>
+                <rdg n="3" wit="18 35 424* 915C syrh Chrysostom"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
+                <rdg n="3-f1" type="defective" cause="aural-confusion" wit="915*"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθαι</w></rdg>
+                <rdg n="4" wit="06C1"><w>υποτασσεσθε</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
+                <rdg n="4-f1" type="defective" cause="aural-confusion" wit="06* 012"><w>υποτασσεσθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
+                <rdg n="4-f2" type="defective" cause="aural-confusion" wit="010"><w>υποτασεθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C2 syrp"/>
             </app>
-            <app xml:id="B10K5V30U14-30">
-                <lem><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></lem>
-                <rdg n="1" wit="01C2 06 020 025 044 049 056 075 0142 0278 0319 1 18 35 38 61 69 88 93 102 104 177 181 218 256 263 296 322 326 337 363 365 383 398 424 436 442 451 459 462 467 506 629 636 664 665 915 1069 1108 1115 1127 1175 1245 1311 1319 1398 1490 1505 1573 1611 1617 1678 1718 1721 1739C 1831 1836 1837 1840 1851 1860 1877 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2012 2127 2138 2180 2243 2344 2352 2400 2492 2516 2523 2544 2576 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh Ambrosiaster Chrysostom Irenaeus MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="330"><w>ε<unclear>κ</unclear></w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="1241"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστ<unclear>ε</unclear>ων</w><w>αυτου</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="010 012"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οσταιων</w><w>αυτου</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="1729"><w>εκ</w><w>της</w><w>σαρκως</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>ωστεων</w><w>αυτου</w></rdg>
-                <rdg n="1-f3" type="defective" cause="haplography" wit="0150"><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="203S"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστων</w><w>αυτου</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="commentary" wit="Severian"><w>σαρξ</w><w>εκ</w><w>της</w><w>σαρκος</w><w>και</w><w>οστουν</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg><!-- alluded to in Severian's commentary on 5:32-33 (Staab, 312) -->
-                <rdg n="1-s2" type="subreading" cause="parablepsis" wit="1240 1509 2495"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
-                <rdg n="1-s3" type="subreading" wit=""><w>και</w><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg><!-- dittography or a stylistic improvement to make this an explicit "both-and" construction -->
-                <rdg n="1-s3-v1" type="reconstructed" wit="1942"><w>και</w><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυ<supplied reason="lacuna">του</supplied></w></rdg>
-                <rdg n="2" wit="018 0151"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>του</w><w>σωματος</w><w>αυτου</w></rdg>
+            <app xml:id="B10K5V30U13">
+                <lem/>
+                <rdg n="1" wit="UBS P46 01* 02 03 33 424C 1739* 1881 copsa copbo Jerome"/>
+                <rdg n="2" wit="01C2 06 18 35 88 424 915 1175 1505 1611 1739C 1910 vg syrp syrh Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
+                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010 012"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οσταιων</w><w>αυτου</w></rdg>
+                <rdg n="2-s1" type="subreading" cause="parablepsis" wit="2495"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
                 <rdg n="3" wit="606"><w>εκ</w><w>της</w><w>γαστρος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστων</w><w>αυτου</w></rdg>
-                <rdg n="4" wit="2011"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w></rdg><!-- probably haplography from one of the longer readings -->
-                <rdg n="4-v1" type="reconstructed" wit="94"><w>εκ</w><w>της</w><w><supplied reason="lacuna">σαρ</supplied>κος</w><w>αυτου</w></rdg>
-                <rdg n="5" wit="P46 01* 02 03 048 6 33 81 424C1 1739* 1881 1991 2464 copsa copbo Jerome Origen"/>
-                <witDetail n="W1/3" type="ambiguous" target="1 3" cause="haplography" wit="1751"><w>εκ</w><w>των</w><w>αυτου</w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 075S 082 0159 0230 0285 0320 203 256 1838 2805 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Lucifer Marcion Primasius Procopius PseudoAthanasius Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
             </app>
             <app xml:id="B10K6V1U14-16">
                 <lem><w>εν</w><w>κυριω</w></lem>
-                <rdg n="1" wit="P46 01 02 06C2 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203S 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1942 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL86 vgcl vgww vgst syrp syrh copsa copbo BasilOfCaesarea Chrysostom CyrilOfAlexandria Jerome Origen Pelagius TheodoreOfMopsuestia"><w>εν</w><w>κυριω</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="0285"><w><supplied reason="lacuna">ε</supplied>ν</w><w>κυριω</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="1991"><w><unclear>εν</unclear></w><w>κυριω</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="harmonization" wit="664"><w>ως</w><w>τω</w><w>κυριω</w></rdg>
-                <rdg n="1-s2" type="subreading" cause="haplography" wit="1573"><w>κυριω</w></rdg>
-                <rdg n="2" wit="03 06* 010 012 VL75 VL77 VL78 VL89 Ambrosiaster Cyprian Marcion"/><!-- Western contamination in 03? -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 016 048 075S 082 0159 0230 0320 203 424C1 1838 2805 2834 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer MariusVictorinus Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="1" wit="UBS P46 01 02 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copsa copbo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>εν</w><w>κυριω</w></rdg>
+                <rdg n="2" wit="03 06* 010 012 Ambrosiaster"/><!-- Western contamination in 03? -->
+                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg MariusVictorinus"/>
             </app>
             <app xml:id="B10K6V12U2-12">
-                <lem><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμιν</w><w>η</w><w>παλη</w></lem>
-                <rdg n="1" wit="03 06* 010 012 044 81 363 636 1175 1509 1729 1831 2008 2180 L1440 L2058 VL75 VL77C2 VL78 VL86 VL89 syrp Ambrosiaster Lucifer Speculum"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμιν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="P46"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμειν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="61*"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμων</w><w>η</w><w>παλη</w></rdg><!-- constructio ad sensum -->
-                <rdg n="2" wit="01 02 06C2 018 020 025 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61C1 69 88 93 102 104 177C0 181 203S 218 256 263 296 322 326 337 365 383 398 424 436 442 451 459 462 467 506 606 629 664 665 915 1069 1108 1115 1127 1240 1245 1311 1319 1398 1490 1505 1573 1611 1617 1678 1718 1721 1739 1751 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1942 1959 1962 1963 1985 1987 1991 1999 2004 2005 2011 2012 2127 2138 2243 2344 2352 2400 2464 2492 2495 2523 2544 2576 2805 2834 2865 L23 L156 L169 L587 L809 L1126 L1159 L1178 L1188 L1298 VL61 VL77* vgcl vgww vgst syrh copsa copbo AthanasiusOfAlexandria Chrysostom ClementOfAlexandria Cyprian CyrilOfAlexandria Irenaeus Jerome Marcion Pelagius Tertullian TheodoreOfMopsuestia Theodoret"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="016"><w>οτι</w><w>ουκ</w><w>εστιν</w><w><unclear>ημι</unclear><supplied reason="lacuna">ν</supplied></w><w><supplied reason="lacuna">η</supplied></w><w><supplied reason="lacuna">παλη</supplied></w></rdg>
-                <rdg n="2-v2" type="reconstructed" wit="0230"><w><supplied reason="lacuna">οτι</supplied></w><w><supplied reason="lacuna">ου</supplied>κ</w><w>εστιν</w><w>η<unclear>μι</unclear>ν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="2-v3" type="reconstructed" wit="94"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>πα<supplied reason="lacuna">λ</supplied>η</w></rdg>
-                <rdg n="2-f1" type="defective" cause="linguistic-confusion" wit="L2010"><w>οτι</w><w>ουκ</w><w>εστι</w><w>ημιν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="2-f2" type="defective" wit="330 1241C 2516"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλιν</w></rdg>
-                <rdg n="2-f3" type="defective" wit="1241*"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>παλιν</w></rdg>
-                <rdg n="2-f4" type="defective" wit="1918"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλην</w></rdg>
-                <rdg n="2-f5" type="defective" cause="aural-confusion" wit="L60"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημην</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="clarification" wit="1939 1996"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημων</w><w>η</w><w>παλη</w></rdg><!-- constructio ad sensum -->
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="177*"><w>οτι</w><w>ουκ</w><w>εστιν</w><gap unit="char" extent="7-9" reason="illegible"/></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.0476"/><certainty target="2" locus="value" degree="0.9524"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 048 075S 082 0159 0285 0320 203 424C1 1838 2865S VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius BasilOfCaesarea CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus MariusVictorinus Primasius Procopius PseudoAthanasius Severian"/>
+                <lem><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλη</w></lem>
+                <rdg n="1" wit="UBS 01 02 06C2 18 33 35 88 424 606 915 1505 1611 1739 1881 1910 2495 vg syrh copsa copbo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλη</w></rdg>
+                <rdg n="2" wit="03 06* 010 012 1175 syrp Ambrosiaster"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμιν</w><w>η</w><w>παλη</w></rdg>
+                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="P46"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμειν</w><w>η</w><w>παλη</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg MariusVictorinus"/>
             </app>
             <app xml:id="B10K6V19U32-38">
                 <lem><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></lem>
-                <rdg n="1" wit="01 02 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636C 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1739 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1910 1910 1912 1939 1942 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2834 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL78 VL86C vgcl vgww vgst syrp syrh copsa copbo gothB Chrysostom Jerome Origen Pelagius Speculum TheodoreOfMopsuestia Theodoret"><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></rdg>
+                <rdg n="1" wit="UBS 01 02 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 1910 2495 vg syrp syrh copsa copbo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></rdg>
                 <rdg n="1-v1" type="reconstructed" wit="06C1"><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελ<supplied reason="illegible">ιου</supplied></w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="016"><w>το</w><w>μυστηρι<supplied reason="lacuna">ον</supplied></w><w><supplied reason="lacuna">του</supplied></w><w><supplied reason="lacuna">ε</supplied>υαγγελιου</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="1729"><w>τω</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="1751"><w>το</w><w>μηστυριον</w><w>του</w><w>ευαγγελιου</w></rdg>
-                <rdg n="1-f3" type="defective" cause="dittography" wit="1918"><w>το</w><w>μηστυριον</w><w>του</w><w>ευαγγελλιου</w></rdg>
-                <rdg n="1-f4" type="reconstructed" wit=""><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελλιου</w></rdg>
-                <rdg n="1-f4-v1" type="reconstructed" wit="1991"><w>το</w><w>μ<unclear>υ</unclear>στηριον</w><w>του</w><w>ευαγγελλιου</w></rdg>
-                <rdg n="1-f5" type="defective" cause="haplography" wit=""><w>το</w><w>μηστυριον</w><w>του</w><w>αγγελλιου</w></rdg>
-                <rdg n="1-f5-v1" type="reconstructed" wit="06C0"><w>το</w><w>μυστηριον</w><w>του</w><w>αγγελ<supplied reason="illegible">ιου</supplied></w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="636*"><w>το</w><w>ευαγγελιον</w></rdg>
-                <rdg n="2" wit="03 06* 010 012 VL77 VL86* VL89 Ambrosiaster Ephrem MariusVictorinus Tertullian"><w>το</w><w>μυστηριον</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="P46"><certainty target="1" locus="value" degree="0.0148"/><certainty target="2" locus="value" degree="0.9852"/></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Marcion"><certainty target="1" locus="value" degree="0.2500"/><certainty target="2" locus="value" degree="0.7500"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL75 VL76 VL83 VL85 syrhmg gothA Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Primasius Procopius PseudoAthanasius Severian Speculum"/>
+                <rdg n="1-f2" type="defective" cause="haplography" wit=""><w>το</w><w>μηστυριον</w><w>του</w><w>αγγελλιου</w></rdg>
+                <rdg n="1-f2-v1" type="reconstructed" wit="06C0"><w>το</w><w>μυστηριον</w><w>του</w><w>αγγελ<supplied reason="illegible">ιου</supplied></w></rdg>
+                <rdg n="2" wit="03 06* 010 012 Ambrosiaster MariusVictorinus"><w>το</w><w>μυστηριον</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="P46"><certainty target="1" locus="value" degree="0.0148"/><certainty target="2" locus="value" degree="0.9852"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C2 424C syrhmg"/>
             </app>
             <!-- transposition of εν αυτω -->
             <app xml:id="B10K6V20U12-18">
-                <rdg n="1" wit="P46 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 177 181 203 218 256 263 322 326 330 337 363 365 383 398 424 436 442 451 462 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1912 1918 1939 1942 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2834 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh Ambrosiaster BasilOfCaesarea Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia">
+                <rdg n="1" wit="UBS P46 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 vg syrp syrh Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia">
                     <ref target="#B10K6V20U12">[B10K6V20U12]</ref>
                     <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
                     <ref target="#B10K6V20U18">[B10K6V20U18]</ref>
                 </rdg>
-                <rdg n="2" wit="01 104 296 459 467 1959 copsa copbo">
+                <rdg n="2" wit="01 copsa copbo">
                     <ref target="#B10K6V20U12">[B10K6V20U12]</ref>
                     <ref target="#B10K6V20U18">[B10K6V20U18]</ref>
                     <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
                 </rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" cause="conflation" wit="1573">
-                    <ref target="#B10K6V20U12">[B10K6V20U12]</ref>
-                    <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
-                    <ref target="#B10K6V20U18">[B10K6V20U18]</ref>
-                    <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
-                </witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg"/>
             </app>
             <!-- this unit should always be ignored -->
             <app xml:id="B10K6V20U12">
                 <lem><w>ινα</w></lem>
-                <rdg n="1" wit="P46 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1881 1886 1893 1908 1912 1918 1939 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2834 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copsa copbo Ambrosiaster BasilOfCaesarea Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w></rdg>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg MariusVictorinus"/>
             </app>
             <app xml:id="B10K6V20U14-16">
                 <lem><w>εν</w><w>αυτω</w></lem>
-                <rdg n="1" wit="01 02 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0278 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263C 296 322 326 330 337 363 365 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1319 1398 1490 1505 1509 1573/1 1611 1617 1718 1721 1729 1751 1831 1837 1840 1851 1860 1877 1886 1893 1908 1912 1918 1939 1942 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2523 2544 2576 2805 2834 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrh Ambrosiaster BasilOfCaesarea Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>αυτω</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="1678"><w>εν</w><w>αυτ<supplied reason="lacuna">ω</supplied></w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="1991"><w><unclear>εν</unclear></w><w>α<unclear>υ</unclear>τω</w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="2344"><w><supplied reason="lacuna">ε</supplied>ν</w><w>αυτω</w></rdg>
-                <rdg n="1-f1" type="defective" cause="parablepsis" wit="263*"><w>εν</w><w>τω</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="383"><w>εν</w><w>εαυτω</w></rdg><!-- the result of a more literal reading ("in myself")? -->
-                <rdg n="2" wit="1311 1573/2 1836"><w>αυτω</w></rdg>
-                <rdg n="3" wit="P46 03 1739 1881 syrp"><w>αυτο</w></rdg><!-- some potential examples of this verb with an accusative object occur in LSJ, s.v. "παρρησιάζομαι" -->
-                <rdg n="4" wit="2516"><w>και</w><w>αυτος</w></rdg><!-- intelligible as "even I"? -->
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg copsa copbo gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="1" wit="UBS 01 02 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 2495 vg syrh Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>αυτω</w></rdg>
+                <rdg n="2" wit="P46 03 1739 1881 syrp"><w>αυτο</w></rdg><!-- some potential examples of this verb with an accusative object occur in LSJ, s.v. "παρρησιάζομαι" -->
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg copsa copbo MariusVictorinus"/>
             </app>
             <app xml:id="B10K6V20U18">
                 <lem><w>παρρησιασωμαι</w></lem>
-                <rdg n="1" wit="01 02 03 018 020 044 049 056 075 0142 0150 0151 1 18 33 35 38 61 69 93 104 177 181 218 256 296 322 326 330 337 363 365 398 424 442 451 462 467C 606 629 636 664 665 1069 1108 1127 1175 1240 1241 1311C 1398 1490 1509 1573 1611 1617 1678 1718 1721 1729 1739 1831 1837 1840 1851 1860 1881 1886 1893 1908C 1959 1962 1963 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2180 2243* 2352 2400 2492 2495 2523 2544 2805 2865 L156 L587 L809 L1159 L1178 L2010 L2058 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh Ambrosiaster BasilOfCaesarea Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παρρησιασωμαι</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="94"><w>πα<supplied reason="lacuna">ρ</supplied>ρησιασωμαι</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="436"><w>παρρησιασωμ<unclear>αι</unclear></w></rdg>
-                <rdg n="1-v3" type="reconstructed" wit="1939"><w>παρρησιασ<unclear>ω</unclear>μαι</w></rdg>
-                <rdg n="1-f1" type="defective" wit="P46 06 0319"><w>παρησιασωμαι</w></rdg>
+                <rdg n="1" wit="UBS 01 02 03 18 33 35 424 606 1175 1611 1739 1881 2495 vg syrp syrh Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παρρησιασωμαι</w></rdg>
+                <rdg n="1-f1" type="defective" wit="P46 06"><w>παρησιασωμαι</w></rdg>
                 <rdg n="1-f2" type="defective" cause="parablepsis" wit="1505"><w>παρρηασωμαι</w></rdg>
-                <rdg n="1-f3" type="defective" cause="aural-confusion" wit="1751"><w>παρισιασωμαι</w></rdg>
-                <rdg n="2" wit="010C 012 025 0278 6 81 88 102 203 263 383 459 467* 506 915 1115 1245 1319 1836 1877 1908* 1918 1942 1985 2138 2243C 2516 2576 2834 L169 L1188 L1440"><w>παρρησιασομαι</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="1311*"><w>παρρησιασ<unclear>ο</unclear>μαι</w></rdg>
-                <rdg n="2-v2" type="reconstructed" wit="2344"><w>παρ<unclear>ρησ</unclear><supplied reason="lacuna">ια</supplied>σομαι</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010* 1912"><w>παρρισιασομαι</w></rdg>
-                <rdg n="2-f2" type="defective" wit="2464"><w>παρησιασομαι</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="016"><w>παρ<gap unit="word" extent="part" reason="lacuna"/></w></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0285 0320 203S 424C1 1838 1910 2865S L23 L60 L1126 L1298 VL51 VL54 VL58 VL59 VL61 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg copsa copbo gothA gothB Adamantius AthanasiusOfAlexandria ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion MariusVictorinus Origen Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+                <rdg n="2" wit="010C 012 88 915"><w>παρρησιασομαι</w></rdg>
+                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010*"><w>παρρισιασομαι</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg copsa copbo MariusVictorinus"/>
             </app>
-            <app xml:id="B10K6V24U28">
-                <lem><w>αμην</w></lem>
-                <rdg n="1" wit="01C2 06 018 020 025 044 049 056 075 0142 0150 0151 0319 1 18 35 38 61 69 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424* 436 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1240 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1739 1751 1831 1836 1837 1840 1851 1860 1877 1886 1893 1908 1912 1939 1942 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL64 VL75 VL86C VL89 vgcl vgww syrp syrh Chrysostom MariusVictorinus"><w>αμην</w></rdg>
-                <rdg n="1-s1" type="subreading" wit="1918"><w>αμην</w><w>αμην</w><w>αμην</w></rdg> <!-- pious expansion -->
-                <rdg n="2" wit="P46 01* 02 03 010 012 0278 6 33 81 424C1 442 1175 1241 1881 1910 VL77 VL78 VL86* vgst copsa Ambrosiaster Jerome Origen Pelagius TheodoreOfMopsuestia"/>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="copbo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="P49 P92 P132 01C1 03C1 03C2 04 06C1 06C2 016 048 075S 082 0159 0230 0285 0320 203S 1838 2834 2865S L23 L60 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria BasilOfCaesarea ClementOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Speculum Tertullian Theodoret"/>
+            <app xml:id="B10K6V24U27">
+                <lem/>
+                <rdg n="1" wit="UBS P46 01* 02 03 010 012 33 424C 1175 1881 1910 copsa Ambrosiaster Jerome Pelagius TheodoreOfMopsuestia"/>
+                <rdg n="2" wit="01C2 06 18 35 88 424* 606 915 1505 1611 1739 2495 syrp syrh Chrysostom MariusVictorinus"><w>αμην</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="copbo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
             </app>
         </body>
     </text>
