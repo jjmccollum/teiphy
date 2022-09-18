@@ -26,7 +26,7 @@ jobs:
         git clone https://github.com/stemmatic/stemma.git
         cd stemma
         export HOME=
-        make
+        sudo make
     - name: Phylogenetics Run
       run: |
         stemma stemma_example
