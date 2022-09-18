@@ -25,6 +25,7 @@ jobs:
       run: |
         git clone https://github.com/NBISweden/MrBayes.git
         cd MrBayes
+        ./configure
         make && sudo make install
     - name: Phylogenetics Run
       run: |
