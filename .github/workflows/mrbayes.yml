@@ -29,5 +29,6 @@ jobs:
         make && sudo make install
     - name: Phylogenetics Run
       run: |
+        cp mrbayes_example.nexus MrBayes
         cd MrBayes
-        exec ../mrbayes_example.nexus
+        exec mrbayes_example.nexus
