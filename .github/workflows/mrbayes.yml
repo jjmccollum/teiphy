@@ -25,4 +25,4 @@ jobs:
       run: sudo apt-get install -y mrbayes
     - name: Phylogenetics Run
       run: |
-        mrbayes execute example.nexus
+        MrBayes > exe example.nexus

@@ -46,9 +46,7 @@ The software can be installed using ``pip``
 
 .. code-block:: bash
 
-    pip install git+https://github.com/jjmccollum/teiphy.git
-
-It is also available on PyPI (https://pypi.org/project/teiphy/).
+    pip install teiphy
 
 Usage
 ============
