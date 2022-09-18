@@ -25,7 +25,7 @@ jobs:
       run: |
         git clone https://github.com/stemmatic/stemma.git
         cd stemma
-        echo "$PATH"
+        export HOME=/home/.local
         make
     - name: Phylogenetics Run
       run: |
