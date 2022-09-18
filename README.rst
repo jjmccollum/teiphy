@@ -42,7 +42,7 @@ It can also convert to other formats as well.
 Installation
 ============
 
-The software can be installed using ``pip``
+The software can be installed using ``pip``:
 
 .. code-block:: bash
 
