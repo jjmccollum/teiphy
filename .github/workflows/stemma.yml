@@ -28,4 +28,4 @@ jobs:
         make
     - name: Phylogenetics Run
       run: |
-        stemma ../stemma_example
+        stemma stemma_example
