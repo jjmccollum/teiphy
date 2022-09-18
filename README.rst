@@ -48,10 +48,7 @@ The software can be installed using ``pip``
 
     pip install git+https://github.com/jjmccollum/teiphy.git
 
-.. note ::
-
-    Soon the package will be able to be installed using PyPI.
-
+It is also available on PyPI (https://pypi.org/project/teiphy/).
 
 Usage
 ============

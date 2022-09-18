@@ -431,6 +431,7 @@ class Collation:
             # Write the format subblock:
             f.write("\tFormat\n")
             f.write("\t\tDataType=Standard\n")
+            f.write("\t\tMissing=%s\n" % missing_symbol)
             if states_present:
                 # There's no need to write StatesFormat=StatesPresent\n")
                 f.write("\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
