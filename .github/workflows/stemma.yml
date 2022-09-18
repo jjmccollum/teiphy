@@ -1,4 +1,4 @@
-name: mrbayes
+name: stemma
 
 on: [push]
 jobs:
@@ -20,13 +20,12 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml example.nexus
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml example
     - name: Install Phylogenetics Package
       run: |
-        git clone --depth 1 https://github.com/NBISweden/MrBayes.git
-        cd MrBayes
-        ./configure
-        make && sudo make install
+        git clone https://github.com/stemmatic/stemma.git
+        cd stemma
+        make
     - name: Phylogenetics Run
       run: |
-        exec ../example.nexus
+        stemma ../example
