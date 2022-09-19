@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 from pathlib import Path
+import numpy as np
 from lxml import etree as et
 
 from teiphy import Collation
@@ -276,7 +277,6 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
-        print(matrix.sum(axis=0))
         self.assertTrue(
             matrix.sum(axis=0)[5] < len(self.collation.substantive_variation_unit_ids)
         )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
@@ -286,6 +286,24 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(
             abs(matrix.sum(axis=0)[5] - len(self.collation.substantive_variation_unit_ids) < 1e-4)
         )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
+
+    def test_to_distance_matrix(self):
+        matrix, witness_labels = self.collation.to_distance_matrix()
+        self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], 13
+        )  # entry for UBS and P46 should be 13 (remember not to count P46 lacunae and ambiguities, P46 defective readings under the UBS reading, and non-substantive variation units)
+
+    def test_to_distance_matrix_proportion(self):
+        matrix, witness_labels = self.collation.to_distance_matrix(proportion=True)
+        self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
+        print(matrix[0, 1], 13 / 38)
+        self.assertTrue(
+            abs(matrix[0, 1] - 13 / 38) < 1e-4
+        )  # entry for UBS and P46 should be close to 13/38 (of 40 substantive variation units, P46 is lacunose at one and ambiguous at another)
 
 
 if __name__ == '__main__':

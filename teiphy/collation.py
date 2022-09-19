@@ -50,8 +50,8 @@ class Collation:
             manuscript_suffixes: An optional list of suffixes used to distinguish manuscript subwitnesses like first hands, correctors, main texts, alternate texts, and multiple attestations from their base witnesses.
             trivial_reading_types: An optional set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
             missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
-            fill_corrector_lacunae: An optional boolean flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
-            verbose: An optional boolean flag indicating whether or not to print timing and debugging details for the user.
+            fill_corrector_lacunae: An optional flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+            verbose: An optional flag indicating whether or not to print timing and debugging details for the user.
         """
         self.manuscript_suffixes = manuscript_suffixes
         self.trivial_reading_types = set(trivial_reading_types)
@@ -587,7 +587,7 @@ class Collation:
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
         Args:
-            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
 
         Returns:
             A NumPy array with a row for each substantive reading and a column for each witness.
@@ -626,11 +626,55 @@ class Collation:
                         row_ind += 1
         return matrix, reading_labels, witness_labels
 
+    def to_distance_matrix(self, proportion=False):
+        """Transforms this Collation into a NumPy distance matrix between witnesses, along with an array of its labels for the witnesses.
+        Distances can be computed either as counts of disagreements (the default setting), or as proportions of disagreements over all variation units where both witnesses have singleton readings.
+
+        Args:
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+
+        Returns:
+            A NumPy distance matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        matrix = np.zeros((len(witness_labels), len(witness_labels)), dtype=float)
+        for i, wit_1 in enumerate(witness_labels):
+            for j, wit_2 in enumerate(witness_labels):
+                extant_units = 0
+                disagreements = 0
+                # If both witnesses are the same, then the matrix entry is trivially 0:
+                if j == i:
+                    matrix[i, j] = 0
+                    continue
+                # If either of the cells for this pair of witnesses has been populated already, then just copy the distance without recalculating:
+                if i > j:
+                    matrix[i, j] = matrix[j, i]
+                    continue
+                for vu_ind in range(len(self.substantive_variation_unit_ids)):
+                    wit_1_rdg_support = self.readings_by_witness[wit_1][vu_ind]
+                    wit_2_rdg_support = self.readings_by_witness[wit_2][vu_ind]
+                    wit_1_rdg_inds = [k for k, w in enumerate(wit_1_rdg_support) if w > 0]
+                    wit_2_rdg_inds = [k for k, w in enumerate(wit_2_rdg_support) if w > 0]
+                    if len(wit_1_rdg_inds) != 1 or len(wit_2_rdg_inds) != 1:
+                        continue
+                    extant_units += 1
+                    if wit_1_rdg_inds[0] != wit_2_rdg_inds[0]:
+                        disagreements += 1
+                if proportion:
+                    matrix[i, j] = disagreements / max(
+                        extant_units, 1
+                    )  # the max in the denominator is to prevent division by 0; the distance entry will be 0 if the two witnesses have no overlap
+                else:
+                    matrix[i, j] = disagreements
+        return matrix, witness_labels
+
     def to_dataframe(self, split_missing: bool = True):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
-            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
 
         Returns:
             A Pandas DataFrame with a row for each substantive reading and a column for each witness.
@@ -647,7 +691,7 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
-            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
             **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
@@ -661,7 +705,7 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
-            split_missing: An optional boolean flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
         """
         # Convert the collation to a Pandas DataFrame first:
         df = self.to_dataframe(split_missing)
