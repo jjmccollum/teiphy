@@ -23,10 +23,13 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
     - name: Install Phylogenetics Package
       uses: egor-tensin/setup-gcc@v1
+      with:
+        version: latest
+        platform: x64
     - run: |
         git clone https://github.com/stemmatic/prep.git
         cd prep
-        sudo make
+        sudo make install
     - name: Phylogenetics Run
       run: |
         prep stemma_example
