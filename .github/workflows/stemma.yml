@@ -35,4 +35,4 @@ jobs:
         sudo make
     - name: Phylogenetics Run
       run: |
-        /root/bin/prep stemma_example
+        prep stemma_example
