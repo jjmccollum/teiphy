@@ -26,11 +26,11 @@ jobs:
         sudo mkdir /home/runner/bin
         git clone https://github.com/stemmatic/prep.git
         cd prep
-        make
+        sudo make
         cd ..
         git clone https://github.com/stemmatic/stemma.git
         cd stemma
-        make
+        sudo make
     - name: Phylogenetics Run
       run: |
         sudo /home/runner/bin/prep stemma_example
