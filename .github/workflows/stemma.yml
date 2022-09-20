@@ -23,7 +23,7 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
     - name: Install Phylogenetics Packages
       run: |
-        sudo mkdir /home/runner/bin
+        sudo mkdir /root/bin
         git clone https://github.com/stemmatic/prep.git
         cd prep
         sudo make
@@ -33,5 +33,5 @@ jobs:
         sudo make
     - name: Phylogenetics Run
       run: |
-        sudo /home/runner/bin/prep stemma_example
-        sudo /home/runner/bin/stemma stemma_example
+        sudo /root/bin/prep stemma_example
+        sudo /root/bin/stemma stemma_example
