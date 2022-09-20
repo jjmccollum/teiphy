@@ -32,7 +32,7 @@ jobs:
         sed -i "/BIN=$(HOME)\/bin/d" Makefile
         sed -i "/$(BIN)\//d" Makefile
         head Makefile
-        sudo make
+        sudo make prep
     - name: Phylogenetics Run
       run: |
         prep stemma_example
