@@ -29,7 +29,8 @@ jobs:
     - run: |
         git clone https://github.com/stemmatic/prep.git
         cd prep
-        sudo make install
+        mkdir -p $HOME/bin
+        sudo make
     - name: Phylogenetics Run
       run: |
         prep stemma_example
