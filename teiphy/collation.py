@@ -715,7 +715,7 @@ class Collation:
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
             f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
-            f.write("^ %s" % chron_file_addr)
+            f.write("^ %s\n\n" % chron_file_addr)
             # Then add a line indicating that all witnesses are lacunose unless they are specified explicitly:
             f.write("= $? $* ;\n\n")
             # Then proceed for each variation unit:
