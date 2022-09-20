@@ -29,7 +29,7 @@ jobs:
     - run: |
         git clone https://github.com/stemmatic/prep.git
         cd prep
-        mkdir -p /root/bin
+        sudo mkdir -p /root/bin
         sudo make
     - name: Phylogenetics Run
       run: |
