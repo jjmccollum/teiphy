@@ -22,7 +22,7 @@ jobs:
       run: |
         poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
     - name: Install Phylogenetics Packages
-    - run: |
+      run: |
         git clone https://github.com/stemmatic/prep.git
         cd prep
         make
