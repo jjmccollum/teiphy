@@ -1,7 +1,7 @@
 import unittest
 from lxml import etree as et
 
-from teiphy import Witness
+from teiphy import tei_ns, Witness
 
 
 class WitnessTestCase(unittest.TestCase):
@@ -29,6 +29,48 @@ class WitnessTestCase(unittest.TestCase):
         xml = et.fromstring("<witness n=\"424C1\" type=\"corrector\"/>")
         witness = Witness(xml)
         self.assertEqual(witness.type, "corrector")
+
+    def test_init_date_range_when(self):
+        xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"18\"><tei:origDate when=\"1364\"/></witness>" % tei_ns)
+        witness = Witness(xml)
+        self.assertEqual(witness.date_range[0], 1364)
+        self.assertEqual(witness.date_range[1], 1364)
+
+    def test_init_date_range_from_to(self):
+        xml = et.fromstring(
+            "<witness xmlns:tei=\"%s\" type=\"father\" n=\"Ambrosiaster\"><tei:origDate from=\"366\" to=\"384\"/></witness>"
+            % tei_ns
+        )
+        witness = Witness(xml)
+        self.assertEqual(witness.date_range[0], 366)
+        self.assertEqual(witness.date_range[1], 384)
+
+    def test_init_date_range_not_before_not_after(self):
+        xml = et.fromstring(
+            "<witness xmlns:tei=\"%s\" type=\"father\" n=\"Ambrosiaster\"><tei:origDate notBefore=\"366\" notAfter=\"384\"/></witness>"
+            % tei_ns
+        )
+        witness = Witness(xml)
+        self.assertEqual(witness.date_range[0], 366)
+        self.assertEqual(witness.date_range[1], 384)
+
+    def test_init_date_range_empty(self):
+        xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"/>" % tei_ns)
+        witness = Witness(xml)
+        self.assertIsNone(witness.date_range[0])
+        self.assertIsNone(witness.date_range[1])
+
+    def test_init_date_range_start_only(self):
+        xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"><tei:origDate notBefore=\"50\"/></witness>" % tei_ns)
+        witness = Witness(xml)
+        self.assertEqual(witness.date_range[0], 50)
+        self.assertEqual(witness.date_range[1], 50)
+
+    def test_init_date_range_end_only(self):
+        xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"><tei:origDate notAfter=\"100\"/></witness>" % tei_ns)
+        witness = Witness(xml)
+        self.assertEqual(witness.date_range[0], 100)
+        self.assertEqual(witness.date_range[1], 100)
 
 
 if __name__ == '__main__':

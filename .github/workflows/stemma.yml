@@ -1,0 +1,38 @@
+name: stemma
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - name: Install dependencies for Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'poetry'
+    - run: poetry install
+    - name: Testing
+      run: |
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
+    - name: Install Phylogenetics Packages
+      run: |
+        sudo mkdir /root/bin
+        git clone https://github.com/stemmatic/prep.git
+        cd prep
+        sudo make
+        cd ..
+        git clone https://github.com/stemmatic/stemma.git
+        cd stemma
+        sudo make
+    - name: Phylogenetics Run
+      run: |
+        sudo /root/bin/prep stemma_example
+        sudo /root/bin/stemma stemma_example a 100
+        sudo /root/bin/soln stemma_example SOLN

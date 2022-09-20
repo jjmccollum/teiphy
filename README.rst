@@ -45,16 +45,11 @@ It can also convert to other formats as well.
 Installation
 ============
 
-The software can be installed using ``pip``
+The software can be installed using ``pip``:
 
 .. code-block:: bash
 
-    pip install git+https://github.com/jjmccollum/teiphy.git
-
-.. note ::
-
-    Soon the package will be able to be installed using PyPI.
-
+    pip install teiphy
 
 Usage
 ============

@@ -9,7 +9,7 @@ quantifiable way. Mechanisms for accommodating such situations exist in
 both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
 “soft decisions” about the states at the leaves and even the root of the
 tree can provide useful information to the inference process. For these
-reasons, teiphy ensures that these types of judgments, as well as
+reasons, ``teiphy`` ensures that these types of judgments, as well as
 other rich features from TEI XML, can be respected (and, where,
 necessary, preserved) in the conversion process.
 
@@ -43,63 +43,57 @@ considered uninformative “noise” that is better left filtered out.
 In TEI XML, variant reading types are naturally encoded using ``@type``
 attribute of the ``rdg`` or ``rdgGrp`` element. To support treating
 different types of readings as substantive for the purposes of analysis,
-we assume a hierarchical ordering of reading types (e.g., ``subreading``
-> ``orthographic`` > ``defective`` > ``reconstructed``) so we can “roll
+a hierarchical ordering of reading types (e.g., ``subreading``
+> ``orthographic`` > ``defective`` > ``reconstructed``) is assumed, so you can “roll
 up” readings with types lower in the hierarchy into their “parent”
 readings with types higher in the hierarchy. This can be done with a
 flat list of ``rdg`` elements alone, as follows:
 
 .. code:: xml
 
-   <app xml:id="B10K1V1U24-26">
-       <lem><w>εν</w><w>εφεσω</w></lem>
-       <rdg n="1" wit="01C2 02 03C2 06 012 018 020 025 044 049 056 075S 0142 0150 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 296 322 326 330 337 363 365 383 398 424* 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865S L169 L587 L809 L1159 L1178 L1188 L1440 L2058 VL61 VL64 VL75 VL77 VL78 VL89 vgcl vgst vgww syrh syrp copsa copbo gothA gothB Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius PseudoAthanasius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
-       <rdg n="1-v1" type="reconstructed" wit="L2010"><w>εν</w><w><unclear>ε</unclear>φεσω</w></rdg>
-       <rdg n="1-v2" type="reconstructed" wit="2344"><w><unclear>εν</unclear></w><w>εφεσω</w></rdg>
-       <rdg n="1-v3" type="reconstructed" wit="256"><w><supplied reason="lacuna">εν</supplied></w><w><supplied reason="lacuna">εφεσ</supplied>ω</w></rdg>
-       <rdg n="1-f1" type="defective" cause="parablepsis" wit="010"><w>εν</w><w>εφεω</w></rdg>
-       <rdg n="1-f2" type="defective" cause="dittography" wit="263"><w>εν</w><w>νεφεσω</w></rdg>
-       <rdg n="1-o1" type="orthographic" wit="0278"><w>εν</w><w>εφεσωι</w></rdg>
-       <rdg n="1-s1" type="subreading" cause="clarification" wit=""><w>εν</w><w>τω</w><w>εφεσω</w></rdg>
-       <rdg n="1-s1-v1" type="reconstructed" wit="1115"><w>εν</w><w>τ<unclear>ω</unclear></w><w>εφεσω</w></rdg>
-       <rdg n="2" wit="P46 01* 03* 6 424C1 1739 BasilOfCaesarea Ephrem Marcion Origen"/>
-   </app>
+    <app xml:id="B10K2V5U20-24">
+        <lem><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></lem>
+        <rdg n="1" wit="UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia"><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+        <rdg n="1-f1" type="defective" cause="aural-confusion" wit=""><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
+        <rdg n="1-f1-v1" type="reconstructed" wit="02"><w>χαριτι</w><w>εσται</w><w>σ<unclear>ε</unclear><supplied reason="lacuna">σω</supplied>σμενοι</w></rdg>
+        <rdg n="2" wit="Ambrosiaster MariusVictorinus Pelagius"><w>ου</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+        <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010C 012"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
+        <rdg n="2-f2" type="defective" wit="010*"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεωσμενοι</w></rdg>
+        <rdg n="2-s1" type="subreading" cause="clarification" wit="06*"><w>ου</w><w>τη</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+        <rdg n="3" wit="copsa copbo"><w>χαριτι</w><w>γαρ</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+    </app>
 
 Alternatively, this can be done in a more precise and hierarchical
 fashion using ``rdgGrp`` elements with the appropriate types:
 
 .. code:: xml
 
-   <app xml:id="B10K1V1U24-26">
-       <lem><w>εν</w><w>εφεσω</w></lem>
-       <rdg n="1" wit="01C2 02 03C2 06 012 018 020 025 044 049 056 075S 0142 0150 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 296 322 326 330 337 363 365 383 398 424* 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1991 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865S L169 L587 L809 L1159 L1178 L1188 L1440 L2058 VL61 VL64 VL75 VL77 VL78 VL89 vgcl vgst vgww syrh syrp copsa copbo gothA gothB Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius PseudoAthanasius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
-       <rdgGrp type="reconstructed">
-           <rdg n="1-v1" wit="L2010"><w>εν</w><w><unclear>ε</unclear>φεσω</w></rdg>
-           <rdg n="1-v2" wit="2344"><w><unclear>εν</unclear></w><w>εφεσω</w></rdg>
-           <rdg n="1-v3" wit="256"><w><supplied reason="lacuna">εν</supplied></w><w><supplied reason="lacuna">εφεσ</supplied>ω</w></rdg>
-       </rdgGrp>
-       <rdgGrp type="defective">
-           <rdg n="1-f1" cause="parablepsis" wit="010"><w>εν</w><w>εφεω</w></rdg>
-           <rdg n="1-f2" cause="dittography" wit="263"><w>εν</w><w>νεφεσω</w></rdg>
-       </rdgGrp>
-       <rdgGrp type="orthographic">
-           <rdg n="1-o1" wit="0278"><w>εν</w><w>εφεσωι</w></rdg>
-       </rdgGrp>
-       <rdgGrp type="subreading">
-           <rdg n="1-s1" cause="clarification" wit=""><w>εν</w><w>τω</w><w>εφεσω</w></rdg>
-           <rdgGrp type="reconstructed">
-               <rdg n="1-s1-v1" wit="1115"><w>εν</w><w>τ<unclear>ω</unclear></w><w>εφεσω</w></rdg>
-           </rdgGrp>
-       </rdgGrp>
-       <rdg n="2" wit="P46 01* 03* 6 424C1 1739 BasilOfCaesarea Ephrem Marcion Origen"/>
-   </app>
+    <app xml:id="B10K2V5U20-24">
+        <lem><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></lem>
+        <rdg n="1" wit="UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia"><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+        <rdgGrp type="defective">
+            <rdg n="1-f1" cause="aural-confusion" wit=""><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
+            <rdgGrp type="reconstructed">
+                <rdg n="1-f1-v1" wit="02"><w>χαριτι</w><w>εσται</w><w>σ<unclear>ε</unclear><supplied reason="lacuna">σω</supplied>σμενοι</w></rdg>
+            </rdgGrp>
+        </rdgGrp>
+        <rdg n="2" wit="Ambrosiaster MariusVictorinus Pelagius"><w>ου</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+        <rdgGrp type="defective">
+            <rdg n="2-f1" cause="aural-confusion" wit="010C 012"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
+            <rdg n="2-f2" wit="010*"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεωσμενοι</w></rdg>
+        </rdgGrp>
+        <rdgGrp type="subreading">
+            <rdg n="2-s1" cause="clarification" wit="06*"><w>ου</w><w>τη</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+        </rdgGrp>
+        <rdg n="3" wit="copsa copbo"><w>χαριτι</w><w>γαρ</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+    </app>
 
 This utility is designed to accept both types of input. Readings without
 a ``@type`` attribute are assumed to be substantive. In both cases, the
 ``rdg`` or ``rdgGrp`` elements should be placed according to where their
-type falls in the hierarchy; a reconstruction of a subreading (e.g.,
-reading ``1-s1-v1`` should be placed directly after the subreading
-itself (e.g., ``1-s1``). Likewise, for the purposes of resolving
+type falls in the hierarchy; a reconstruction of a defective reading (e.g.,
+reading ``1-f1-v1``) should be placed directly after the defective reading
+itself (e.g., ``1-f1``). Likewise, for the purposes of resolving
 ambiguous readings, no two readings in the same ``app`` element should
 be assigned the same ``@xml:id`` or ``@n`` attribute, even if they are
 under different ``rdgGrp`` elements.
@@ -111,22 +105,22 @@ flags
 
 ::
 
-   -t"reconstructed" -t"defective" -t"orthographic" -t"subreading"
+   -t reconstructed -t defective -t orthographic -t subreading
 
-the variation unit illustrated above would have only two substantive
-readings (``1`` and ``2``), while with the flags
+the variation unit illustrated above would have only three substantive
+readings (``1``, ``2``, and ``3``), while with the flags
 
 ::
 
-   -t"reconstructed" -t"defective"
+   -t reconstructed -t defective -t orthographic
 
-it would have four substantive readings (``1``, ``1-o1``, ``1-s1``, and
-``2``).
+it would have four substantive readings (``1``, ``2``, ``2-s1``, and
+``3``).
 
 Ambiguities and Judgments of Certainty
 --------------------------------------
 
-When we have one or more witnesses with an ambiguous attestation, we may
+When you have one or more witnesses with an ambiguous attestation, you may
 wish to express which readings the witness(es) in question might have.
 The TEI Guidelines
 (https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPWD)
@@ -137,16 +131,14 @@ one or more readings these witnesses might have). For example:
 
 .. code:: xml
 
-   <app xml:id="B10K3V9U6">
-       <lem><w>παντας</w></lem>
-       <rdg xml:id="B10K3V9U6R1" wit="P46 01C2 03 04 06 010 012 018 020 025 044 049 056 075 0142 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1886 1893 1908 1910 1912 1918 1939 1959 1962 1985 1987 1991C 1996 1999 2004 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo Adamantius Chrysostom Marcion MariusVictorinus Pelagius Tertullian TheodoreOfMopsuestia"><w>παντας</w></rdg>
-       <rdg xml:id="B10K3V9U6R1-f1" type="defective" wit="1963"><w>παντα</w></rdg>
-       <rdg xml:id="B10K3V9U6R1-f2" type="defective" cause="linguistic-confusion" wit="1991"><w>παντων</w></rdg>
-       <rdg xml:id="B10K3V9U6R2" wit="01* 02 0150 6 424C1 1739 1881 Jerome"/>
-       <witDetail n="W1/2" type="ambiguous" target="#B10K3V9U6R1 #B10K3V9U6R2" wit="Ambrosiaster CyrilOfAlexandria"><certainty target="#B10K3V9U6R1" locus="value" degree="0.5000"/><certainty target="#B10K3V9U6R2" locus="value" degree="0.5000"/></witDetail>
-   </app>
+    <app xml:id="B10K3V9U6">
+        <lem><w>παντας</w></lem>
+        <rdg xml:id="B10K3V9U6R1" wit="UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παντας</w></rdg>
+        <rdg xml:id="B10K3V9U6R2" wit="01* 02 424C 1739 1881 Jerome"/>
+        <witDetail n="W1/2" type="ambiguous" target="#B10K3V9U6R1 #B10K3V9U6R2" wit="Ambrosiaster"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+    </app>
 
-Underneath this element, we can optionally include ``certainty``
+Underneath this element, you can optionally include ``certainty``
 elements (also depicted in the above example), which can indicate
 different probabilities associated with their respective targeted
 readings. If these are not specified, then the readings referenced by
@@ -178,14 +170,12 @@ XML:
 
 .. code:: xml
 
-   <app xml:id="B10K3V9U6">
-       <lem><w>παντας</w></lem>
-       <rdg n="1" wit="P46 01C2 03 04 06 010 012 018 020 025 044 049 056 075 0142 0151 0319 1 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678 1718 1721 1729 1751 1831 1836 1837 1838 1840 1851 1860 1877 1886 1893 1908 1910 1912 1918 1939 1959 1962 1985 1987 1991C 1996 1999 2004 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L156 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL89 vgcl vgww vgst syrp syrh copsa copbo Adamantius Chrysostom Marcion MariusVictorinus Pelagius Tertullian TheodoreOfMopsuestia"><w>παντας</w></rdg>
-       <rdg n="1-f1" type="defective" wit="1963"><w>παντα</w></rdg>
-       <rdg n="1-f2" type="defective" cause="linguistic-confusion" wit="1991"><w>παντων</w></rdg>
-       <rdg n="2" wit="01* 02 0150 6 424C1 1739 1881 Jerome"/>
-       <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-   </app>
+    <app xml:id="B10K3V9U6">
+        <lem><w>παντας</w></lem>
+        <rdg n="1" wit="UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παντας</w></rdg>
+        <rdg n="2" wit="01* 02 424C 1739 1881 Jerome"/>
+        <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+    </app>
 
 The only condition is that you must use these attributes consistently:
 if you label a ``rdg`` element with an ``@xml:id`` attribute, then you
@@ -209,63 +199,49 @@ are entirely lacunose, illegible, or otherwise unavailable (e.g., due to
 missing images or irrelevance due to a different reading in an
 overlapping passage) at each point of variation. As long as these
 placeholders are labeled with ``@type`` elements, you can specify that
-they mark missing data using the ``-m`` argument with any command
+they correspond to missing data using the ``-m`` argument with any command
 invoked through the CLI.
 
 Consider the following set of variation units:
 
 .. code:: xml
 
-   <!-- a large transposition is encoded as an overlapping unit below -->
-   <app xml:id="B10K4V28U18-24">
-       <rdg n="1" wit="018 020 044 049 056 0142 0151 1 18 35 61 88 93 102 177 181 203 296 322 326 337 363 383 398 424* 436 506 606 636 664 665 915 1069 1108 1115 1240 1245 1311 1490 1505 1509 1611 1617 1718 1721 1729 1751 1831 1836 1837 1840 1851 1860 1877 1886 1910 1912 1918 1939 1962 1963 1985 1987 1996 1999 2005 2008 2012 2138 2180 2243 2352 2495 2544 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 syrh Chrysostom Origen TheodoreOfMopsuestia">
-           <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
-           <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
-       </rdg>
-       <rdg n="2" wit="P46 P49 01 02 03 06 010 012 075 0150 0319 38 69 81 94 104 218 256 263 330 365 442 451 459 462 467 629 1127 1175 1241 1319 1398 1573 1678C 1838 1893 1908 1959 2004 2011 2127 2344 2400 2464 2492 2516 2523 2576 2805 2865 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst copbo Ambrosiaster Jerome MariusVictorinus Pelagius">
-           <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
-           <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
-       </rdg>
-       <rdg xml:id="B10K4V28U18-24R3" n="3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum">
-           <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
-       </rdg>
-       <rdg xml:id="B10K4V28U18-24R4" n="4" wit="1678* 1991 copsa Tertullian">
-           <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
-       </rdg>
-       <witDetail n="W1/2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-       <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrp syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
-   </app>
-   <app xml:id="B10K4V28U18-20">
-       <lem><w>το</w><w>αγαθον</w></lem>
-       <rdg n="1" wit="P46 P49 01 02 03 06 010 012 016 018 020 025 044 049 056 075 0142 0150 0151 0319 1 6 18 33 35 38 61 69 81 88 93 94 102 104 177 181 203 218 256 263 296 322 326 330 337 363 365 383 398 424 436 442 451 459 462 467 506 606 629 636 664 665 915 1069 1108 1115 1127 1175 1240 1241 1245 1311 1319 1398 1490 1505 1509 1573 1611 1617 1678C 1718 1721 1729 1739 1751 1831 1836 1837 1838 1840 1851 1860 1877 1881 1886 1893 1908 1910 1912 1918 1939 1959 1962 1963 1985 1987 1996 1999 2004 2005 2008 2011 2012 2127 2138 2180 2243 2344 2352 2400 2464 2492 2495 2516 2523 2544 2576 2805 2865 L60 L169 L587 L809 L1159 L1178 L1188 L1440 L2010 L2058 VL61 VL75 VL77 VL78 VL86 VL89 vgcl vgww vgst syrp syrh copbo Ambrosiaster BasilOfCaesarea Chrysostom ClementOfAlexandria Jerome MariusVictorinus Origen Pelagius Speculum TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
-       <rdg n="1-f1" type="defective" cause="aural-confusion" wit="L60"><w>τω</w><w>αγαθων</w></rdg>
-       <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="1678* 1991 copsa Tertullian"/>
-       <witDetail n="Z" type="lac" wit="P92 P132 01C1 01C2 03C1 03C2 04 06C1 06C2 048 075S 082 0159 0230 0278 0285 0320 203S 424C1 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
-   </app>
-   <app xml:id="B10K4V28U22-24">
-       <lem><w>ταις</w><w>χερσιν</w></lem>
-       <rdg n="1" wit="P46 01C2 03 020 044 049 0151 1 18 35 61 88 102 177 203 296 322 326 337 363 398 424* 506 636 664 1069 1108 1115 1240 1245 1617 1678* 1718 1729 1837 1840 1886 1910 1985 1987 2008 2138 2243 2352 L169 L587 L1159 L1178 L1188 L2010 L2058 VL61 vgww vgst copsa Ambrosiaster Chrysostom Origen Pelagius Tertullian"><w>ταις</w><w>χερσιν</w></rdg>
-       <rdg n="1-v1" type="reconstructed" wit="P49"><w><supplied reason="lacuna">ταις</supplied></w><w><supplied reason="lacuna">χερσι</supplied><unclear>ν</unclear></w></rdg>
-       <rdg n="1-o1" type="orthographic" wit="1851 L809 L1440"><w>ταις</w><w>χερσι</w></rdg>
-       <rdg n="1-s1" type="subreading" cause="clarification" wit="1918"><w>εν</w><w>ταις</w><w>χερσιν</w></rdg>
-       <rdg n="1-s2" type="subreading" cause="clarification" wit="181"><w>ταις</w><w>χερσιν</w><w>αυτου</w></rdg>
-       <rdg n="1-s3" type="subreading" cause="clarification" wit="629"><w>εν</w><w>ταις</w><w>χερσιν</w><w>αυτου</w></rdg>
-       <rdg n="2" wit="01* 02 03C2 06C1 06C2 010 012 018 056 0142 0150 0319 38 81 93 104* 436 459 467 606 665 915 1175 1311 1490 1505 1509 1678C 1721 1751 1860 1877 1912 1939 1959 1962 1963 1991 1996 1999 2004 2005 2012 2180 2495 2544 VL75 VL77 VL78 VL86 VL89 vgcl copbo Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></rdg>
-       <rdg n="2-v1" type="reconstructed" wit="1838"><w>ταις</w><w>ιδ<unclear>ιαις</unclear></w><w>χερσιν</w></rdg>
-       <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>ταις</w><w>ιδιαις</w><w>χιρσιν</w></rdg>
-       <rdg n="2-f2" type="defective" cause="aural-confusion" wit="383"><w>ταις</w><w>ιδειαις</w><w>χερσιν</w></rdg>
-       <rdg n="2-f3" type="defective" cause="aural-confusion" wit="2464"><w>ταις</w><w>ειδιαις</w><w>χερσιν</w></rdg>
-       <rdg n="2-f4" type="defective" cause="aural-confusion" wit="L60"><w>ταις</w><w>ιδιες</w><w>χερσιν</w></rdg>
-       <rdg n="2-o1" type="orthographic" wit="075 69 94 104C 218 256 263 330 365 442 451 462 1127 1241 1319 1398 1573 1611 1893 2011 2127 2344 2400 2492 2516 2523 2576 2805 2865"><w>ταις</w><w>ιδιαις</w><w>χερσι</w></rdg>
-       <rdg n="2-s1" type="subreading" cause="parablepsis" wit="1831"><w>ιδιαις</w><w>χερσιν</w></rdg>
-       <rdg n="2-s2" type="subreading" cause="parablepsis" wit="1908"><w>ταις</w><w>ιδιαις</w></rdg>
-       <!-- the following reading should target readings 1 and 2 if subreadings are treated as trivial -->
-       <witDetail n="W1-s3/2" type="ambiguous" target="1-s3 2" wit="1836"><w>εν</w><w>ταις</w><w>ιδιαις</w><w>χερσιν</w><w>αυτου</w></witDetail><!-- conflation or a superfluous clarification to the longer reading-->
-       <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
-       <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="BasilOfCaesarea"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-       <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="016 025 6 33 424C1 1739 1881 ClementOfAlexandria Speculum"/>
-       <witDetail n="Z" type="lac" wit="P92 P132 01C1 03C1 04 048 075S 082 0159 0230 0278 0285 0320 203S 1942 2834 2865S L23 L156 L1126 L1298 VL51 VL54 VL58 VL59 VL62 VL64 VL65 VL67 VL76 VL83 VL85 syrhmg gothA gothB Adamantius AthanasiusOfAlexandria Cyprian CyrilOfAlexandria CyrilOfJerusalem Ephrem Epiphanius GregoryOfNazianzus GregoryOfNyssa GregoryThaumaturgus Irenaeus Lucifer Marcion Primasius Procopius PseudoAthanasius Severian Theodoret"/>
-   </app>
+    <!-- a large transposition is encoded as an overlapping unit below -->
+    <app xml:id="B10K4V28U18-26">
+        <rdg n="1" wit="UBS P46 01 02 03 06 010 012 1175 vg copbo Ambrosiaster Jerome MariusVictorinus Pelagius">
+            <ref target="#B10K4V28U18-22">[B10K4V28U18-22]</ref>
+            <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
+        </rdg>
+        <rdg n="2" wit="18 35 88 424* 606 915 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia">
+            <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
+            <ref target="#B10K4V28U18-22">[B10K4V28U18-22]</ref>
+        </rdg>
+        <rdg xml:id="B10K4V28U18-24R3" n="3" wit="33 424C 1739 1881">
+            <ref target="#B10K4V28U18-20">[B10K4V28U18-20]</ref>
+        </rdg>
+        <rdg xml:id="B10K4V28U18-24R4" n="4" wit="copsa">
+            <ref target="#B10K4V28U22-24">[B10K4V28U22-24]</ref>
+        </rdg>
+        <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrp syrhmg"/>
+    </app>
+    <app xml:id="B10K4V28U18-22">
+        <lem><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></lem>
+        <rdg n="1" wit="UBS 01* 02 03C2 06C1 06C2 010 012 606 915 1175 1505 2495 copbo Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></rdg>
+        <rdg n="1-f1" type="defective" cause="aural-confusion" wit="06*"><w>ταις</w><w>ιδιαις</w><w>χιρσιν</w></rdg>
+        <rdg n="1-o1" type="orthographic" wit="1611"><w>ταις</w><w>ιδιαις</w><w>χερσι</w></rdg>
+        <rdg n="2" wit="P46 01C2 03* 18 35 88 424* 1910 copsa Ambrosiaster Chrysostom Pelagius"><w>ταις</w><w>χερσιν</w></rdg>
+        <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
+        <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+        <witDetail n="↑B10K4V28U18-24R3" type="overlap" target="#B10K4V28U18-24R3" wit="33 424C 1739 1881"/>
+        <witDetail n="Z" type="lac" wit="04 syrhmg"/>
+    </app>
+    <!-- this unit should be ignored -->
+    <app xml:id="B10K4V28U24-26">
+        <lem><w>το</w><w>αγαθον</w></lem>
+        <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
+        <witDetail n="↑B10K4V28U18-24R4" type="overlap" target="#B10K4V28U18-24R4" wit="copsa"/>
+        <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
+    </app>
 
 In the first variation unit, readings ``3`` and ``4`` omit one of the
 phrases covered in the next two variation units. (They are assigned
@@ -281,7 +257,7 @@ arguments when invoking any conversion command through the CLI:
 
 ::
 
-   -m"lac" -m"overlap"
+   -m lac -m overlap
 
 Correctors’ Hands
 -----------------
@@ -293,9 +269,9 @@ manuscripts include multiple layers of correction, where each corrector
 can be assumed to have had knowledge of any previous correctors’ notes.
 Since the activity of most correctors is sporadic, the average corrector
 will effectively be a fragmentary witness in the places where he or she
-is cited in the apparatus. But if we wish to assume that each corrector
+is cited in the apparatus. But if you wish to assume that each corrector
 approved of all the readings from the previous hand that he or she did
-not change, then we can “fill out” each corrector’s text using the text
+not change, then you can “fill out” each corrector’s text using the text
 of the first hand (for the first corrector) or the filled-out text of
 the previous corrector (for all subsequent correctors). Under this
 assumption, the placement of the corrector on a phylogenetic tree will
@@ -306,13 +282,13 @@ To enable this behavior, you first have to ensure that the desired
 correctors have their own ``witness`` elements in the collation
 ``listWit`` element and that they have a ``@type`` value of
 ``corrector``. An example for the first hand and the first two
-correctors of Codex Sinaiticus follows:
+correctors of Codex Bezae follows:
 
 .. code:: xml
 
-   <witness n="01"/>
-   <witness type="corrector" n="01C1"/>
-   <witness type="corrector" n="01C2"/>
+   <witness n="06"/>
+   <witness type="corrector" n="06C1"/>
+   <witness type="corrector" n="06C2"/>
 
 Then, when you invoke any conversion command through the CLI, make sure that you include the ``--fill-correctors`` argument.
 
@@ -335,26 +311,28 @@ suffixes ``/1``, ``/2``, etc. The inclusion of these suffixes in the
 TEI Guidelines, but for the sake of convenience, this behavior is
 supported by this utility.
 
-For the purposes of analysis, we will usually want to strip the
+For the purposes of analysis, you will usually want to strip the
 first-hand suffixes, leaving just the base sigla for the witnesses
-themselves. In addition, we may wish to merge multiple attestations of a
+themselves. In addition, you may wish to merge multiple attestations of a
 passage in the same witness, effectively treating multiple attestations
 as ambiguous readings. Both can be accomplished using the ``-s``
-argument with any conversion command invoked through the CLI. If we
-want to strip first-hand suffixes only, then we can do this via
+argument with any conversion command invoked through the CLI. If you
+want to strip first-hand suffixes only, then you can do this via
 
 ::
 
-   -s"*" -s"T"
+   -s"*" -s T
 
 This will ignore multiple attestations (i.e., treat the units where they
 occur as missing characters for the base witnesses with multiple
 attestations at those units), unless the sigla with multiple attestation
 suffixes are included as distinct ``witness`` elements in the
 collation’s ``listWit`` element.
+Note that the ``*`` character must be passed as an option in a special way (i.e., as ``-s"*"``, with no space after the argument and surrounding quotation marks)
+because it is a reserved character on the command line and must be escaped properly.
 
-If we want to strip first-hand suffixes and merge all multiple
-attestations, then we can do so via
+If you want to strip first-hand suffixes and merge all multiple
+attestations, then you can do so via
 
 ::
 
@@ -366,11 +344,15 @@ Supported Output Formats and Options
 ------------------------------------
 
 You can specify a preferred output format for the conversion explicitly with the ``--format`` flag.
-Supported options include ``nexus``, ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
+Supported options include ``nexus``, ``hennig86``, ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
 If you do not supply a ``--format`` argument, then ``teiphy`` will attempt to infer the correct format from the file extension of the output file name.
 
-For ``nexus`` outputs, you can also include a ``--states-present`` flag, which will convert your collation data for each witness to a string of single-state symbols, 
-including symbols that represent ambiguous readings (e.g., ``P46 1013110?00111111020100100100110340090201``).
+For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-readable labels for variation units and readings) is included in the output file by default, but you can disable it by specifying the ``--no-labels`` flag.
+This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
+Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.
+
+For ``nexus`` outputs, you can also include a ``--states-present`` flag, which will convert your collation data for each witness to a string of mostly single-state symbols, 
+including symbols that represent missing readings, as well as some multi-state symbols in braces representing ambiguous readings (e.g., ``P46 1003110?001011000200100001000100001{01}0100``).
 The ``StatesFormat=StatesPresent`` NEXUS setting produces more compact outputs and is the expected states format for PAUP*.
 The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
 If the ``--states-present`` flag is not supplied, then the more precise ``StatesFormat=Frequency`` setting is used by default, which encodes reading states as frequency vectors:
@@ -378,21 +360,27 @@ If the ``--states-present`` flag is not supplied, then the more precise ``States
 ::
 
     P46
-		(0:0.0000 1:1.0000)
-		(0:1.0000 1:0.0000)
-		(0:0.0000 1:1.0000)
-		(0:0.0000 1:0.0000 2:0.0000 3:1.0000)
-		(0:0.0000 1:1.0000 2:0.0000)
-		(0:0.0000 1:1.0000)
-		(0:1.0000 1:0.0000 2:0.0000 3:0.0000)
-		?
-		(0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000 6:0.0000 7:0.0000 8:0.0000)
+        (0:0.0000 1:1.0000)
+        (0:1.0000 1:0.0000 2:0.0000)
+        (0:1.0000 1:0.0000)
+        (0:0.0000 1:0.0000 2:0.0000 3:1.0000)
+        (0:0.0000 1:1.0000)
+        (0:0.0000 1:1.0000)
+        (0:1.0000 1:0.0000 2:0.0000 3:0.0000)
+        ?
+        (0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000)
         ...
         (0:0.0148 1:0.9852)
         (0:1.0000 1:0.0000)
-        (0:0.0000 1:0.0000 2:1.0000 3:0.0000)
-        (0:1.0000 1:0.0000)
         (0:0.0000 1:1.0000)
+        (0:1.0000 1:0.0000)
+        (0:1.0000 1:0.0000)
+
+For ``nexus`` outputs with the ``--states-present`` flag set, you can also include the ``--ambiguous-as-missing`` flag if you want to treat all ambiguous states as missing states.
+If your NEXUS-formatted output is to be used by a phylogenetic software that ignores or does not recognize ambiguous states, you may want or need to use this option.
+
+Note that for both ``nexus`` and ``hennig86`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
+This is a requirement for Hennig86 format, and some phylogenetic programs that use NEXUS format (such as IQTREE) do not support symbols outside of the basic 36 alphanumeric characters at this time.
 
 Other Options
 -------------
@@ -402,12 +390,10 @@ performance or validating your collation, you can include the
 ``--verbose`` flag when you invoke any conversion command through
 the CLI.
 
-To run this script with the example input in verbose mode with all of
-the settings described above enabled, enter ``teiphy`` directory and
-enter the command
+To run this script with the example input in verbose mode with the settings described above enabled, enter ``teiphy`` directory and enter the command
 
 ::
 
-   teiphy -t"reconstructed" -t"defective" -t"orthographic" -t"subreading" -m"lac" -m"overlap" -s"*" -s"T" -s"/1" -s"/2" -s"/3" --fill-correctors --states-present --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+   teiphy -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s"*" -s T -s /1 -s /2 -s /3 --fill-correctors --states-present --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.
