@@ -9,6 +9,7 @@ jobs:
       matrix:
         python-version: ["3.10"]
     steps:
+    - uses: egor-tensin/setup-gcc@v1
     - uses: actions/checkout@v3
     - name: Install poetry
       run: pipx install poetry
