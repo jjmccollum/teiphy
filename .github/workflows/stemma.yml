@@ -25,6 +25,7 @@ jobs:
       run: |
         git clone https://github.com/stemmatic/prep.git
         cd prep
+        echo $HOME$
         export HOME=/home/runner/.local
         make
     - name: Phylogenetics Run
