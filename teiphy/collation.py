@@ -736,6 +736,7 @@ class Collation:
                     # The first reading should not be preceded by anything:
                     if rdg_ind == 0:
                         f.write(text)
+                        f.write(" |")
                     # Every subsequent reading should be preceded by a space:
                     elif rdg_ind > 0:
                         f.write(" %s" % text)
