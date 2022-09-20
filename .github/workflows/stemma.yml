@@ -31,7 +31,7 @@ jobs:
         cd prep
         mkdir build
         mkdir build/bin
-        EXPORT HOME=build
+        export HOME=build
         sudo make
     - name: Phylogenetics Run
       run: |
