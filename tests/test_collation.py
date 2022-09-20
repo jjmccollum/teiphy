@@ -211,33 +211,6 @@ class CollationOutputTestCase(unittest.TestCase):
             fill_corrector_lacunae=True,
         )
 
-    def test_replace_forbidden_chars(self):
-        text = "(this)[is]{a}/bad\\,unacceptable;:nexus-string"
-        forbidden_chars = [
-            '(',
-            ')',
-            '[',
-            ']',
-            '{',
-            '}',
-            '/',
-            '\\',
-            ',',
-            ';',
-            ':',
-            '-',
-            '=',
-            '*',
-            '\'',
-            '"',
-            '*',
-            '<',
-            '>',
-        ]
-        replacement_char = '_'
-        new_text = self.collation.replace_forbidden_chars(text, forbidden_chars, replacement_char)
-        self.assertEqual(new_text, "_this__is__a__bad__unacceptable__nexus_string")
-
     def test_get_nexus_symbols(self):
         nexus_symbols = self.collation.get_nexus_symbols()
         self.assertEqual(nexus_symbols, ["0", "1", "2", "3", "4", "5"])
@@ -300,7 +273,6 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
-        print(matrix[0, 1], 13 / 38)
         self.assertTrue(
             abs(matrix[0, 1] - 13 / 38) < 1e-4
         )  # entry for UBS and P46 should be close to 13/38 (of 40 substantive variation units, P46 is lacunose at one and ambiguous at another)

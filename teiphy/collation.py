@@ -346,23 +346,6 @@ class Collation:
         hennig86_symbols = possible_symbols[:nsymbols]
         return hennig86_symbols
 
-    def replace_forbidden_chars(self, text: str, forbidden_chars: List[str], replacement_char: str):
-        """Replaces all characters in the given text that belong to a given list of forbidden characters with a specified replacement character.
-
-        Args:
-            text: A string that potentially contains forbidden characters to be replaced.
-            forbidden_chars: A list of forbidden_characters to replace in the target string.
-            replacement_char: A character that will replace the forbidden characters in the target string.
-
-        Returns:
-            A copy of the text input with all forbidden characters replaced with the replacement character.
-        """
-        new_text = text
-        for c in forbidden_chars:
-            if c in new_text:
-                new_text = new_text.replace(c, replacement_char)
-        return new_text
-
     def to_nexus(
         self,
         file_addr: Union[Path, str],
@@ -388,34 +371,11 @@ class Collation:
         nchar = (
             len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
         )  # if the number of taxa is 0, then the number of characters is irrelevant
-        forbidden_chars = [
-            '(',
-            ')',
-            '[',
-            ']',
-            '{',
-            '}',
-            '/',
-            '\\',
-            ',',
-            ';',
-            ':',
-            '-',
-            '=',
-            '*',
-            '\'',
-            '"',
-            '*',
-            '<',
-            '>',
-        ]
-        taxlabels = [self.replace_forbidden_chars(wit.id, forbidden_chars, '_') for wit in self.witnesses]
+        taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
         )  # keep track of the longest taxon label for tabular alignment purposes
-        charlabels = [
-            self.replace_forbidden_chars(vu_id, forbidden_chars, '_') for vu_id in self.substantive_variation_unit_ids
-        ]
+        charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in self.substantive_variation_unit_ids]
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
         # equates, equate_mapping = [], {}
@@ -461,15 +421,17 @@ class Collation:
                     if vu.id not in substantive_variation_unit_ids_set:
                         continue
                     if vu_ind == 1:
-                        f.write("\n\t\t%d %s /" % (vu_ind, self.replace_forbidden_chars(vu.id, forbidden_chars, '_')))
+                        f.write("\n\t\t%d %s /" % (vu_ind, slugify(vu.id, lowercase=False, separator='_')))
                     else:
-                        f.write(",\n\t\t%d %s /" % (vu_ind, self.replace_forbidden_chars(vu.id, forbidden_chars, '_')))
+                        f.write(",\n\t\t%d %s /" % (vu_ind, slugify(vu.id, lowercase=False, separator='_')))
                     rdg_ind = 0
                     for rdg in vu.readings:
                         key = tuple([vu.id, rdg.id])
                         if key not in substantive_variation_unit_reading_tuples_set:
                             continue
-                        ascii_rdg_text = slugify(rdg.text, separator='_', replacements=[['η', 'h'], ['ω', 'w']])
+                        ascii_rdg_text = slugify(
+                            rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']]
+                        )
                         if ascii_rdg_text == "":
                             ascii_rdg_text = "om."
                         f.write(" %s" % ascii_rdg_text)
@@ -535,10 +497,6 @@ class Collation:
         nchar = (
             len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
         )  # if the number of taxa is 0, then the number of characters is irrelevant
-        forbidden_chars = [
-            ' ',
-            '.',
-        ]
         taxlabels = []
         for wit in self.witnesses:
             taxlabel = wit.id
@@ -546,7 +504,7 @@ class Collation:
             if taxlabel[0] not in string.ascii_letters:
                 taxlabel = "WIT_" + taxlabel
             # Then replace any disallowed characters in the string with an underscore:
-            taxlabel = self.replace_forbidden_chars(taxlabel, forbidden_chars, '_')
+            taxlabel = slugify(taxlabel, lowercase=False, separator='_')
             taxlabels.append(taxlabel)
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
@@ -712,12 +670,13 @@ class Collation:
         return df.to_excel(file_addr)
 
     def to_stemma(self, file_addr: Union[Path, str]):
-        """Writes this Collation to an STEMMA file with the given address.
+        """Writes this Collation to a STEMMA file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.
 
         Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.
 
         Args:
             file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
+            The accompanying chron file will match this file name, except that it will have "_chron" appended to the end.
         """
         # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
         # to the readings' texts:
@@ -755,6 +714,8 @@ class Collation:
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
             f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
+            # Then add a line indicating that all witnesses are lacunose unless they are specified explicitly:
+            f.write("= $? $* ;\n\n")
             # Then proceed for each variation unit:
             for vu_ind, vu_id in enumerate(self.substantive_variation_unit_ids):
                 # Print the variation unit ID first:
@@ -766,31 +727,76 @@ class Collation:
                     indices = tuple([vu_ind, rdg_ind])
                     if indices not in reading_texts_by_indices:
                         break
-                    text = reading_texts_by_indices[indices]
+                    text = slugify(
+                        reading_texts_by_indices[indices], lowercase=False, allow_unicode=True, separator='.'
+                    )
                     # Denote omissions by en-dashes:
                     if text == "":
                         text = "\u2013"
-                    # TODO: We may need to reformat some serializations from Reading here, as some characters may be reserved for other purposes in this format.
-                    if rdg_ind == 1:
-                        f.write("\n| ")
-                    elif rdg_ind > 1:
-                        f.write("/")
-                    f.write(text)
+                    # The first reading should not be preceded by anything:
+                    if rdg_ind == 0:
+                        f.write(text)
+                    # Every subsequent reading should be preceded by a space:
+                    elif rdg_ind > 0:
+                        f.write(" %s" % text)
                     rdg_ind += 1
                 f.write(" ]\n")
-                # In a second pass, print the indices and witnesses for all readings enclosed in diagonal brackets:
-                f.write("\t< ")
+                # In a second pass, print the indices and witnesses for all readings enclosed in angle brackets:
                 rdg_ind = 0
+                f.write("\t< ")
                 while True:
                     indices = tuple([vu_ind, rdg_ind])
                     if indices not in reading_wits_by_indices:
                         break
                     wits = " ".join(reading_wits_by_indices[indices])
-                    if rdg_ind > 0:
-                        f.write("\t| ")
-                    f.write("%d %s\n" % (rdg_ind, wits))
+                    # Open the variant reading support block with an angle bracket:
+                    if rdg_ind == 0:
+                        f.write("%d %s" % (rdg_ind, wits))
+                    # Open all subsequent variant reading support blocks with pipes on the next line:
+                    else:
+                        f.write("\n\t| %d %s" % (rdg_ind, wits))
                     rdg_ind += 1
-                f.write("\t>\n")
+                f.write(" >\n")
+        # In a fourth pass, write to the chron file:
+        chron_file_addr = str(file_addr) + "_chron"
+        max_id_length = max(
+            [len(slugify(wit.id, lowercase=False, allow_unicode=True, separator='_')) for wit in self.witnesses]
+        )
+        max_date_length = 0
+        for wit in self.witnesses:
+            if wit.date_range[0] is not None:
+                max_date_length = max(max_date_length, len(str(wit.date_range[0])))
+            if wit.date_range[1] is not None:
+                max_date_length = max(max_date_length, len(str(wit.date_range[1])))
+        # Attempt to get the minimum and maximum dates for witnesses; if we can't do this, then don't write a chron file:
+        min_date = None
+        max_date = None
+        try:
+            min_date = min([wit.date_range[0] for wit in self.witnesses if wit.date_range[0] is not None])
+            max_date = max([wit.date_range[1] for wit in self.witnesses if wit.date_range[1] is not None])
+        except Exception as e:
+            print("WARNING: no witnesses have date ranges; no chron file will be written!")
+            return
+        with open(chron_file_addr, "w", encoding="utf-8") as f:
+            for wit in self.witnesses:
+                wit_label = slugify(wit.id, lowercase=False, allow_unicode=True, separator='_')
+                f.write(wit_label)
+                f.write(" " * (max_id_length - len(wit.id) + 1))
+                # If this witness's date range is empty, then use the min and max dates over all witnesses as a default date range:
+                date_range = wit.date_range
+                if date_range[0] is None and date_range[1] is None:
+                    date_range = tuple([min_date, max_date])
+                # Then write the date range minimum, average, and maximum to the chron file:
+                low_date = str(date_range[0])
+                f.write(" " * (max_date_length - len(low_date) + 2))
+                f.write(low_date)
+                avg_date = str(int(((date_range[0] + date_range[1]) / 2)))
+                f.write(" " * (max_date_length - len(str(avg_date)) + 2))
+                f.write(avg_date)
+                high_date = str(date_range[1])
+                f.write(" " * (max_date_length - len(high_date) + 2))
+                f.write(high_date)
+                f.write("\n")
         return
 
     def to_file(

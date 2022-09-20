@@ -19,121 +19,47 @@
                         <origDate when="50"/>
                     </witness>
                     <!-- Papyri -->
-                    <witness n="P46">
-                        <origDate notBefore="175" notAfter="225"/>
-                    </witness>
+                    <witness n="P46"/>
                     <!-- Majuscules -->
-                    <witness n="01">
-                        <origDate notBefore="300" notAfter="400"/>
-                    </witness>
-                    <witness n="02">
-                        <origDate notBefore="400" notAfter="500"/>
-                    </witness>
-                    <witness n="03">
-                        <origDate notBefore="300" notAfter="400"/>
-                    </witness>
-                    <witness n="04">
-                        <origDate notBefore="400" notAfter="500"/>
-                    </witness>
-                    <witness n="06">
-                        <origDate notBefore="500" notAfter="600"/>
-                    </witness>
-                    <witness type="corrector" n="06C1">
-                        <origDate notBefore="600" notAfter="700"/>
-                    </witness>
-                    <witness type="corrector" n="06C2">
-                        <origDate notBefore="800" notAfter="900"/>
-                    </witness>
-                    <witness n="010">
-                        <origDate notBefore="800" notAfter="900"/>
-                    </witness>
-                    <witness n="012">
-                        <origDate notBefore="800" notAfter="900"/>
-                    </witness>
+                    <witness n="01"/>
+                    <witness n="02"/>
+                    <witness n="03"/>
+                    <witness n="04"/>
+                    <witness n="06"/>
+                    <witness type="corrector" n="06C1"/>
+                    <witness type="corrector" n="06C2"/>
+                    <witness n="010"/>
+                    <witness n="012"/>
                     <!-- Minuscules -->
-                    <witness n="18">
-                        <origDate when="1364"/>
-                    </witness>
-                    <witness n="33">
-                        <origDate notBefore="800" notAfter="900"/>
-                    </witness>
-                    <witness n="35">
-                        <origDate notBefore="1000" notAfter="1100"/>
-                    </witness>
-                    <witness n="88">
-                        <origDate notBefore="1100" notAfter="1200"/>
-                    </witness>
-                    <witness n="424">
-                        <origDate notBefore="1150" notAfter="1250"/>
-                    </witness>
-                    <witness type="corrector" n="424C">
-                        <origDate notBefore="1150" notAfter="1250"/>
-                    </witness>
-                    <witness type="commentary" n="606">
-                        <origDate notBefore="1000" notAfter="1100"/>
-                    </witness>
-                    <witness n="915">
-                        <origDate notBefore="1200" notAfter="1300"/>
-                    </witness>
-                    <witness n="1175">
-                        <origDate notBefore="1000" notAfter="1100"/>
-                    </witness>
-                    <witness n="1505">
-                        <origDate notBefore="1100" notAfter="1200"/>
-                    </witness>
-                    <witness n="1611">
-                        <origDate notBefore="900" notAfter="1000"/>
-                    </witness>
-                    <witness n="1739">
-                        <origDate notBefore="900" notAfter="1000"/>
-                    </witness>
-                    <witness n="1881">
-                        <origDate notBefore="1300" notAfter="1400"/>
-                    </witness>
-                    <witness type="commentary" n="1910">
-                        <origDate notBefore="1000" notAfter="1100"/>
-                    </witness>
-                    <witness n="2495">
-                        <origDate notBefore="1400" notAfter="1500"/>
-                    </witness>
+                    <witness n="18"/>
+                    <witness n="33"/>
+                    <witness n="35"/>
+                    <witness n="88"/>
+                    <witness n="424"/>
+                    <witness type="corrector" n="424C"/>
+                    <witness type="commentary" n="606"/>
+                    <witness n="915"/>
+                    <witness n="1175"/>
+                    <witness n="1505"/>
+                    <witness n="1611"/>
+                    <witness n="1739"/>
+                    <witness n="1881"/>
+                    <witness type="commentary" n="1910"/>
+                    <witness n="2495"/>
                     <!-- Versions -->
-                    <witness type="version" n="vg">
-                        <origDate notBefore="400" notAfter="700"/>
-                    </witness>
-                    <witness type="version" n="syrp">
-                        <origDate notBefore="450" notAfter="550"/>
-                    </witness>
-                    <witness type="version" n="syrh">
-                        <origDate notBefore="616" notAfter="715"/>
-                    </witness>
-                    <witness type="corrector" n="syrhmg">
-                        <origDate notBefore="616" notAfter="715"/>
-                    </witness>
-                    <witness type="version" n="copsa">
-                        <origDate notBefore="300" notAfter="400"/>
-                    </witness>
-                    <witness type="version" n="copbo">
-                        <origDate notBefore="800" notAfter="900"/>
-                    </witness>
+                    <witness type="version" n="vg"/>
+                    <witness type="version" n="syrp"/>
+                    <witness type="version" n="syrh"/>
+                    <witness type="corrector" n="syrhmg"/>
+                    <witness type="version" n="copsa"/>
+                    <witness type="version" n="copbo"/>
                     <!-- Church fathers -->
-                    <witness type="father" n="Ambrosiaster">
-                        <origDate notBefore="366" notAfter="384"/>
-                    </witness>
-                    <witness type="father" n="Chrysostom">
-                        <origDate when="407"/>
-                    </witness>
-                    <witness type="father" n="Jerome">
-                        <origDate notBefore="390" notAfter="420"/>
-                    </witness>
-                    <witness type="father" n="MariusVictorinus">
-                        <origDate notBefore="360" notAfter="362"/>
-                    </witness>
-                    <witness type="father" n="Pelagius">
-                        <origDate notBefore="390" notAfter="418"/>
-                    </witness>
-                    <witness type="father" n="TheodoreOfMopsuestia">
-                        <origDate notBefore="392" notAfter="428"/>
-                    </witness>
+                    <witness type="father" n="Ambrosiaster"/>
+                    <witness type="father" n="Chrysostom"/>
+                    <witness type="father" n="Jerome"/>
+                    <witness type="father" n="MariusVictorinus"/>
+                    <witness type="father" n="Pelagius"/>
+                    <witness type="father" n="TheodoreOfMopsuestia"/>
                 </listWit>
             </sourceDesc>
         </fileDesc>

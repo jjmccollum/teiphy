@@ -12,6 +12,8 @@ root_dir = test_dir.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
 non_xml_example = root_dir / "pyproject.toml"
 malformed_example = test_dir / "malformed_example.xml"
+no_dates_example = test_dir / "no_dates_example.xml"
+some_dates_example = test_dir / "some_dates_example.xml"
 
 
 def test_non_xml_input():
@@ -138,6 +140,40 @@ def test_to_stemma():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("* UBS P46 01 02 03 04 06")
+        chron_output = Path(str(output) + "_chron")
+        assert chron_output.exists()
+        chron_text = chron_output.read_text(encoding="utf-8")
+        assert chron_text.startswith("UBS")
+        assert "50    50    50" in chron_text
+
+
+def test_to_stemma_no_dates():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test"
+        result = runner.invoke(app, ["--format", "stemma", str(no_dates_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("* UBS P46 01 02 03 04 06")
+        chron_output = Path(str(output) + "_chron")
+        assert not chron_output.exists()
+
+
+def test_to_stemma_some_dates():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test"
+        result = runner.invoke(app, ["--format", "stemma", str(some_dates_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("* UBS P46 01 02 03 04 06")
+        chron_output = Path(str(output) + "_chron")
+        assert chron_output.exists()
+        chron_text = chron_output.read_text(encoding="utf-8")
+        assert chron_text.startswith("UBS")
+        assert (
+            chron_text.count("50  50  50") > 1
+        )  # space between columns should be reduced because all dates are now at most 2 digits long
 
 
 def test_to_file_bad_format():
