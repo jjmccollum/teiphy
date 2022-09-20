@@ -36,4 +36,3 @@ jobs:
         sudo /root/bin/prep stemma_example
         sudo /root/bin/stemma stemma_example a 100
         sudo /root/bin/soln stemma_example SOLN
-        tail SOLN.STEM
