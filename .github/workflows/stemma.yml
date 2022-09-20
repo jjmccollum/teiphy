@@ -34,4 +34,5 @@ jobs:
     - name: Phylogenetics Run
       run: |
         sudo /root/bin/prep stemma_example
-        sudo /root/bin/stemma stemma_example
+        sudo /root/bin/stemma stemma_example r 100
+        sudo /root/bin/soln stemma_example SOLN
