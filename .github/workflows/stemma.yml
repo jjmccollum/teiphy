@@ -29,7 +29,9 @@ jobs:
     - run: |
         git clone https://github.com/stemmatic/prep.git
         cd prep
-        sudo mkdir /root/bin
+        sed -i "/BIN=$(HOME)\/bin/d" Makefile
+        sed -i "/$(BIN)\//d" Makefile
+        head Makefile
         sudo make
     - name: Phylogenetics Run
       run: |
