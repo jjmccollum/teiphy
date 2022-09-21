@@ -1,5 +1,5 @@
 ---
-title: 'teiphy: A Python Package for Converting TEI XML Collations to NEXUS and Other Formats'
+title: '`teiphy`: A Python Package for Converting TEI XML Collations to NEXUS and Other Formats'
 tags:
   - Python
   - phylogenetics
