@@ -100,7 +100,9 @@ For conciseness, we use the `@n` attribute for each reading as a local identifie
 For witnesses with missing or ambiguous readings at a given variation unit, we use the `witDetail` element.
 For ambiguous readings, we specify their possible disambiguations with the `@target` attribute and express our degrees of certainty about these disambiguations using `certainty` elements under the `witDetail` element. 
 
-The [TEI XML file](https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml) for this example is available in the examples directory in the GitHub repository.
+The [TEI XML file](https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml) for this example is available in the examples directory in the GitHub repository. Instructions for converting this file using ``teipy`` and analyzing it with several different phylogenetic packages are provided in the documentation. Functional tests where this example file is converted and run through IQ-TREE [@10.1093/molbev/msaa015], MrBayes [@10.1093/bioinformatics/btg180], and STEMMA [@@carlson_text_2015] are part of the continuous integration (CI) pipeline. An example of the tree inferred with IQ-TREE with support values from 1000 bootstrap replicates is shown in figure 1.
+
+![A phylogenetic tree from the Ephesians example file created using IQ-TREE.](docs/img/iqtree.pdf)
 
 # Availability
 
