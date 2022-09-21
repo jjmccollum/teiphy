@@ -27,19 +27,11 @@ designed to work with either identifying attribute (preferring
 ``@xml:id`` if both are provided), and we have left things as they are
 to demonstrate this feature.
 
-The ``witness`` elements in the example collation also contain ``origDate`` elements
-that provide dates or date ranges for the corresponding witnesses.
-Where a witness can be dated to a specific year, 
-the ``@when`` attribute is sufficient to specify this;
-if it can be dated within a range of years, 
-the ``@from`` and ``@to`` attributes 
-or the ``@notBefore`` and ``@notAfter`` attributes should be used;
-the software will work with any of these options.
-This is to encourage users to preserve more detail on the collation side
-and to facilitate the inclusion of dates in the conversion process
-to output formats that might use them 
-as constraints on interior stemmatic nodes (as in `STEMMA <https://github.com/stemmatic/stemma>`_)
-or clock models (as in `BEAST2 <https://github.com/CompEvol/beast2>`_)
+The ``witness`` elements in the example collation also contain ``origDate`` elements that provide dates or date ranges for the corresponding witnesses.
+Where a witness can be dated to a specific year, the ``@when`` attribute is sufficient to specify this; if it can be dated within a range of years,
+the ``@from`` and ``@to`` attributes or the ``@notBefore`` and ``@notAfter`` attributes should be used; the software will work with any of these options.
+While such dating elements are not required, our software includes them in the conversion process whenever possible.
+This way, phylogenetic methods that employ clock models and other chronolological constraints can benefit from this information when it is provided.
 
 Each variation unit is encoded as an ``app`` element with a unique
 ``@xml:id`` attribute. Within a variation unit, a ``lem`` element
