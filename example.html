@@ -49,7 +49,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Example</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#iq-tree">IQ-TREE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mrbayes">MrBayes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">STEMMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stemma">STEMMA</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
@@ -130,19 +130,11 @@ identify such elements by <code class="docutils literal notranslate"><span class
 designed to work with either identifying attribute (preferring
 <code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> if both are provided), and we have left things as they are
 to demonstrate this feature.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">witness</span></code> elements in the example collation also contain <code class="docutils literal notranslate"><span class="pre">origDate</span></code> elements
-that provide dates or date ranges for the corresponding witnesses.
-Where a witness can be dated to a specific year,
-the <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> attribute is sufficient to specify this;
-if it can be dated within a range of years,
-the <code class="docutils literal notranslate"><span class="pre">&#64;from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;to</span></code> attributes
-or the <code class="docutils literal notranslate"><span class="pre">&#64;notBefore</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;notAfter</span></code> attributes should be used;
-the software will work with any of these options.
-This is to encourage users to preserve more detail on the collation side
-and to facilitate the inclusion of dates in the conversion process
-to output formats that might use them
-as constraints on interior stemmatic nodes (as in <a class="reference external" href="https://github.com/stemmatic/stemma">STEMMA</a>)
-or clock models (as in <a class="reference external" href="https://github.com/CompEvol/beast2">BEAST2</a>)</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">witness</span></code> elements in the example collation also contain <code class="docutils literal notranslate"><span class="pre">origDate</span></code> elements that provide dates or date ranges for the corresponding witnesses.
+Where a witness can be dated to a specific year, the <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> attribute is sufficient to specify this; if it can be dated within a range of years,
+the <code class="docutils literal notranslate"><span class="pre">&#64;from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;to</span></code> attributes or the <code class="docutils literal notranslate"><span class="pre">&#64;notBefore</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;notAfter</span></code> attributes should be used; the software will work with any of these options.
+While such dating elements are not required, our software includes them in the conversion process whenever possible.
+This way, phylogenetic methods that employ clock models and other chronolological constraints can benefit from this information when it is provided.</p>
 <p>Each variation unit is encoded as an <code class="docutils literal notranslate"><span class="pre">app</span></code> element with a unique
 <code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> attribute. Within a variation unit, a <code class="docutils literal notranslate"><span class="pre">lem</span></code> element
 without a <code class="docutils literal notranslate"><span class="pre">&#64;wit</span></code> attribute presents the main text, and it is followed
@@ -203,8 +195,8 @@ convert the TEI XML to NEXUS format using <code class="docutils literal notransl
 <p>More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the <a class="reference external" href="https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf">MrBayes manual</a>.</p>
 <p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
 </section>
-<section id="id3">
-<h2>STEMMA<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<section id="stemma">
+<h2>STEMMA<a class="headerlink" href="#stemma" title="Permalink to this heading"></a></h2>
 <p><a class="reference external" href="https://github.com/stemmatic/stemma">STEMMA</a> is a phylogenetic analysis program written by Stephen C. Carlson.
 It searches for an optimal stemma topology according to the maximum-parsimony criterion
 and uses reticulating links to model contamination between branches to form a phylogenetic network.</p>
