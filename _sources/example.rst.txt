@@ -79,7 +79,7 @@ This file can then be run in IQ-TREE with the following command:
 
 This uses the Lewis Mk substitution model with ascertainment bias correction and with 1000 bootstrap replicates.
 
-An example of the tree produced by IQ-TREE is found below:
+An example of a tree produced by IQ-TREE is found below:
 
 .. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg
 
@@ -140,6 +140,11 @@ The analysis is run with these commands:
     soln stemma_example SOLN
 
 This begins a heuristic search for the optimal stemma using a simulated annealing approach (option ``a``) for 100 iterations.
+
+An example of a tree produced by STEMMA is found below:
+
+.. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg
+
 
 Running this example with STEMMA is part of the continuous integration pipeline: |stemma badge|
 
