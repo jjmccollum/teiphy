@@ -17,6 +17,7 @@ teiphy
 
    quickstart
    advanced
+   example
    reference
    cli
    contributing

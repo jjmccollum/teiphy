@@ -4,13 +4,14 @@ teiphy
 
 .. start-badges
 
-|license badge| |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge|
+|license badge| |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge| 
+|iqtree badge| |mrbayes badge| |stemma badge|
 
 .. |license badge| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
     :target: https://choosealicense.com/licenses/mit/
 
 .. |testing badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/testing.yml/badge.svg
-    :target: https://github.com/jjmccollum/teiphy/actions
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/testing.yml
 
 .. |docs badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/docs.yml/badge.svg
     :target: https://jjmccollum.github.io/teiphy
@@ -23,6 +24,15 @@ teiphy
 
 .. |git3moji badge| image:: https://img.shields.io/badge/git3moji-%E2%9A%A1%EF%B8%8F%F0%9F%90%9B%F0%9F%93%BA%F0%9F%91%AE%F0%9F%94%A4-fffad8.svg
     :target: https://robinpokorny.github.io/git3moji/
+
+.. |iqtree badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml
+
+.. |mrbayes badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml
+
+.. |stemma badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml
 
 .. end-badges
 
