@@ -28,7 +28,7 @@ Textual scholars have been using phylogenetics to analyze manuscript traditions 
 Many standard phylogenetic software packages accept as input the NEXUS file format [@msm_nexus_1997]. 
 The `teiphy` program takes a collation of texts encoded using the Text Encoding Initiative (TEI) guidelines and converts it to a NEXUS file
 that can be used for phylogenetic analysis.
-The package can also convert to other formats such as Stephen C. Carlson's [STEMMA](https://github.com/stemmatic/stemma) format or to a NumPy array [@numpy_2020].
+The package can also convert to other formats such as Stephen C. Carlson’s [STEMMA](https://github.com/stemmatic/stemma) format or to a NumPy array [@numpy_2020].
 
 # Statement of Need
 
@@ -40,7 +40,7 @@ Its expressive power has proven increasingly valuable since its release, as scho
 
 1. preserve as much detail as they can from their material sources, including paratextual features; 
 2. reproduce the text of their sources as closely as possible, with editorial regularizations to things like orthography, accentuation, and scribal shorthand encoded alongside rather than in place of the source text; and
-3. describe uncertainties about a source's contents as accurately as possible, allowing for degrees of uncertainty and multiple choices for disambiguations if necessary.
+3. describe uncertainties about a source’s contents as accurately as possible, allowing for degrees of uncertainty and multiple choices for disambiguations if necessary.
 
 These principles have much bearing on the editing of critical texts, a task fundamental to both digital humanities and classical philology.
 Within the digital humanities, phylogenetic algorithms have been popular approaches to this task.
@@ -58,10 +58,10 @@ Thus, a great chasm has been fixed between the two formats, and the only way to 
 
 The problem is compounded by the fact that other tools for phylogenetic and other analyses anticipate input formats other than NEXUS.
 A noteworthy alternative is Hennig86, which is the format of choice for the TNT phylogenetic software [@farris_hennig86_1988; @gc_tnt_2016].
-While this format does not allow for as much flexibility in the input as NEXUS does (e.g., it does not support ambiguities that can be disambiguated as some states and not others), TNT's remarkable performance in tree search makes support for this format a desirable option on practical grounds.
+While this format does not allow for as much flexibility in the input as NEXUS does (e.g., it does not support ambiguities that can be disambiguated as some states and not others), TNT’s remarkable performance in tree search makes support for this format a desirable option on practical grounds.
 
 Another format of value for text-critical phylogenetics is the input format associated with the [STEMMA software](https://github.com/stemmatic/stemma) developed by Stephen C. Carlson for his phylogenetic analysis of the Epistle to the Galatians [@carlson_text_2015].
-Carlson's software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
+Carlson’s software expands on traditional maximum parsimony-based phylogenetic algorithms with rules to account for contamination or mixture in the manuscript tradition.
 While it has so far only been applied to books of the New Testament, it is just as applicable to other traditions, and a way of converting TEI XML collations of other texts to a format that can be used by this software could help bridge this gap.
 
 Other basic machine-learning approaches to textual criticism, which are frequently based on clustering and biclustering algorithms [@thorpe_multivariate2002; @finney_discover_2018; @mccollum_biclustering_2019], expect the collation data to be encoded as a matrix with a row for each variant reading and a column for each witness.
@@ -74,7 +74,7 @@ Mechanisms for accommodating such situations exist in both TEI XML and NEXUS, an
 For these reasons, we wanted to ensure that these types of judgments, as well as other rich features from TEI XML, could be respected (and, where, necessary, preserved) in the conversion process.
 
 Collations should preserve as much detail as possible, including information on how certain types of data can be normalized and collapsed for analysis. Since one might want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for use in any case, and only the output of teh conversion should reflect changes in the desired level of detail.
-Likewise, as noted in the previous section, uncertainty about witnesses' attestations should be encoded in the collation and preserved in the conversion of the collation.
+Likewise, as noted in the previous section, uncertainty about witnesses’ attestations should be encoded in the collation and preserved in the conversion of the collation.
 
 For text-critical purposes, differences in granularity typically concern which types of variant readings we consider important for analysis.
 At the lowest level, readings with uncertain or reconstructed portions are almost always considered identical with their reconstructions (provided these reconstructions can be made unambiguously) for the purpose of analysis.
@@ -108,7 +108,7 @@ Instructions for converting this file using `teiphy` and analyzing it with sever
 Functional tests where this example file is converted and run through IQ-TREE [@mscswhl_iqtree_2020], MrBayes [@rtmadhllsh_mrbayes_2012], and STEMMA [@carlson_text_2015] are part of the continuous integration (CI) pipeline.
 An example of the tree inferred with IQ-TREE with support values from 1000 bootstrap replicates is shown in Figure 1.
 
-![A phylogenetic tree from the Ephesians example file created using IQ-TREE.](docs/img/iqtree.pdf)
+![A phylogenetic tree inferred by IQ-TREE for the Ephesians example data. Reconstructed, defective, and orthographic sub-variants were treated as identical to their parent readings, and the text of each corrector (e.g., 06C1, 06C2) was filled in with the readings of the first hand or the previous corrector where the corrector was not active. All of these settings can be enabled or disabled in our software.](docs/img/iqtree.pdf)
 
 # Availability
 
