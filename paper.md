@@ -104,7 +104,7 @@ For witnesses with missing or ambiguous readings at a given variation unit, we u
 For ambiguous readings, we specify their possible disambiguations with the `@target` attribute and express our degrees of certainty about these disambiguations using `certainty` elements under the `witDetail` element. 
 
 The [TEI XML file](https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml) for this example is available in the `example` directory of the GitHub repository.
-Instructions for converting this file using ``teiphy`` and analyzing it with several different phylogenetic packages are provided in the documentation.
+Instructions for converting this file using `teiphy` and analyzing it with several different phylogenetic packages are provided in the documentation.
 Functional tests where this example file is converted and run through IQ-TREE [@mscswhl_iqtree_2020], MrBayes [@rtmadhllsh_mrbayes_2012], and STEMMA [@carlson_text_2015] are part of the continuous integration (CI) pipeline.
 An example of the tree inferred with IQ-TREE with support values from 1000 bootstrap replicates is shown in Figure 1.
 
