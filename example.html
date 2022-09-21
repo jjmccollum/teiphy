@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example &mdash; teiphy  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Advanced Usage" href="advanced.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> teiphy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#iq-tree">IQ-TREE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mrbayes">MrBayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">STEMMA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">teiphy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/example.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="example">
+<h1>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h1>
+<p>Due to the availability of extensive collation data for the Greek New
+Testament, and because this project was originally developed for use
+with such data, we tested this library on a sample collation of the book of
+Ephesians in thirty-eight textual witnesses (including manuscripts,
+correctors’ hands, translations to other languages, and quotations from
+church fathers). The manuscript transcriptions used for this collation
+were those produced by the University of Birmingham’s Institute for
+Textual Scholarship and Electronic Editing (ITSEE) for the International
+Greek New Testament Project (IGNTP); they are freely accessible at
+<a class="reference external" href="https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml">https://itseeweb.cal.bham.ac.uk/epistulae/XML/igntp.xml</a>. To achieve a
+balance between variety and conciseness, we restricted the collation to
+a set of forty-two variation units in Ephesians corresponding to
+variation units in the United Bible Societies Greek New Testament,
+which highlights variation units that affect substantive
+matters of translation.</p>
+<p>In our example collation, witnesses are described in the <code class="docutils literal notranslate"><span class="pre">listWit</span></code>
+element under the <code class="docutils literal notranslate"><span class="pre">teiHeader</span></code>. Because most New Testament witnesses
+are identified by numerical Gregory-Aland identifiers, these witnesses
+are identified with <code class="docutils literal notranslate"><span class="pre">&#64;n</span></code> attributes; the recommended practice is to
+identify such elements by <code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> attributes, but this software is
+designed to work with either identifying attribute (preferring
+<code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> if both are provided), and we have left things as they are
+to demonstrate this feature.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">witness</span></code> elements in the example collation also contain <code class="docutils literal notranslate"><span class="pre">origDate</span></code> elements
+that provide dates or date ranges for the corresponding witnesses.
+Where a witness can be dated to a specific year,
+the <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> attribute is sufficient to specify this;
+if it can be dated within a range of years,
+the <code class="docutils literal notranslate"><span class="pre">&#64;from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;to</span></code> attributes
+or the <code class="docutils literal notranslate"><span class="pre">&#64;notBefore</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;notAfter</span></code> attributes should be used;
+the software will work with any of these options.
+This is to encourage users to preserve more detail on the collation side
+and to facilitate the inclusion of dates in the conversion process
+to output formats that might use them
+as constraints on interior stemmatic nodes (as in <a class="reference external" href="https://github.com/stemmatic/stemma">STEMMA</a>)
+or clock models (as in <a class="reference external" href="https://github.com/CompEvol/beast2">BEAST2</a>)</p>
+<p>Each variation unit is encoded as an <code class="docutils literal notranslate"><span class="pre">app</span></code> element with a unique
+<code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> attribute. Within a variation unit, a <code class="docutils literal notranslate"><span class="pre">lem</span></code> element
+without a <code class="docutils literal notranslate"><span class="pre">&#64;wit</span></code> attribute presents the main text, and it is followed
+by <code class="docutils literal notranslate"><span class="pre">rdg</span></code> elements that describe variant readings (with the first
+<code class="docutils literal notranslate"><span class="pre">rdg</span></code> duplicating the <code class="docutils literal notranslate"><span class="pre">lem</span></code> reading and detailing its witnesses) and
+their attestations among the witnesses. (Situations where the <code class="docutils literal notranslate"><span class="pre">lem</span></code>
+reading is not duplicated by the first <code class="docutils literal notranslate"><span class="pre">rdg</span></code> element, but has its own
+<code class="docutils literal notranslate"><span class="pre">&#64;wit</span></code> attribute, are also supported.) For conciseness, we use the
+<code class="docutils literal notranslate"><span class="pre">&#64;n</span></code> attribute for each reading as a local identifier; the recommended
+practice for readings that will be referenced elsewhere is to use the
+<code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> attribute, and this software will use this as the identifier
+if it is specified, but we have only specified <code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> attributes
+for <code class="docutils literal notranslate"><span class="pre">rdg</span></code> elements referenced in other variation units to demonstrate
+the flexibility of the software. For witnesses with missing or ambiguous
+readings at a given variation unit, we use the <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> element.
+For ambiguous readings, we specify their possible disambiguations with
+the <code class="docutils literal notranslate"><span class="pre">&#64;target</span></code> attribute and express our degrees of certainty about
+these disambiguations using <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements under the
+<code class="docutils literal notranslate"><span class="pre">witDetail</span></code> element.</p>
+<p>The <a class="reference external" href="https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml">TEI XML file</a>
+for this example is available in the <code class="docutils literal notranslate"><span class="pre">example</span></code> directory in the GitHub repository.</p>
+<section id="iq-tree">
+<h2>IQ-TREE<a class="headerlink" href="#iq-tree" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="http://www.iqtree.org/">IQ-TREE</a> is a popular phylogenetic analysis package.
+To use it to perform a maximum likelihood phylogenetic analysis of the Ephesians example,
+convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --states-present example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>IQ-TREE requires the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag.</p>
+</div>
+<p>This file can then be run in IQ-TREE with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians-iqtree.nexus -m MK+ASC -bb <span class="m">1000</span>
+</pre></div>
+</div>
+<p>This uses the Lewis Mk substitution model with ascertainment bias correction and with 1000 bootstrap replicates.</p>
+<p>An example of the tree produced by IQ-TREE is found below:</p>
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" /><p>Running this example with IQ-TREE is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml"><img alt="iqtree badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg" /></a></p>
+</section>
+<section id="mrbayes">
+<h2>MrBayes<a class="headerlink" href="#mrbayes" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://nbisweden.github.io/MrBayes/">MrBayes</a> is a Bayesian phylogenetic software package.
+To use it to perform a phylogenetic analysis of the Ephesians example,
+convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Like IQ-TREE, MrBayes requires the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag. It also requires the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.</p>
+</div>
+<p>This file can then be used with MrBayes as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb ubs_ephesians-mrbayes.nexus
+</pre></div>
+</div>
+<p>More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the <a class="reference external" href="https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf">MrBayes manual</a>.</p>
+<p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
+</section>
+<section id="id3">
+<h2>STEMMA<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://github.com/stemmatic/stemma">STEMMA</a> is a phylogenetic analysis program written by Stephen C. Carlson.
+It searches for an optimal stemma topology according to the maximum-parsimony criterion
+and uses reticulating links to model contamination between branches to form a phylogenetic network.</p>
+<p>To create the files required for STEMMA, run this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
+</pre></div>
+</div>
+<p>This will create two files: <code class="docutils literal notranslate"><span class="pre">stemma_example</span></code> (containing the textual information from the collation) and <code class="docutils literal notranslate"><span class="pre">stemma_example_chron</span></code> (containing date ranges for witnesses).</p>
+<p>These can be used with Carlson’s <a class="reference external" href="https://github.com/stemmatic/prep">prep</a> program to prepare the file for phylogenetic analysis:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prep stemma_example
+</pre></div>
+</div>
+<p>The analysis is run with these commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>stemma stemma_example a <span class="m">100</span>
+soln stemma_example SOLN
+</pre></div>
+</div>
+<p>This begins a heuristic search for the optimal stemma using a simulated annealing approach (option <code class="docutils literal notranslate"><span class="pre">a</span></code>) for 100 iterations.</p>
+<p>Running this example with STEMMA is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml"><img alt="stemma badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg" /></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="advanced.html" class="btn btn-neutral float-left" title="Advanced Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Joey McCollum and Robert Turnbull.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
