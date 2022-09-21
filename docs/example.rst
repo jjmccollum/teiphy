@@ -4,8 +4,8 @@ Example
 
 Due to the availability of extensive collation data for the Greek New
 Testament, and because this project was originally developed for use
-with such data, we tested this library on a collation of the book of
-Ephesians in over 200 textual witnesses (including manuscripts,
+with such data, we tested this library on a sample collation of the book of
+Ephesians in thirty-eight textual witnesses (including manuscripts,
 correctors’ hands, translations to other languages, and quotations from
 church fathers). The manuscript transcriptions used for this collation
 were those produced by the University of Birmingham’s Institute for
@@ -16,10 +16,7 @@ balance between variety and conciseness, we restricted the collation to
 a set of forty-two variation units in Ephesians corresponding to
 variation units in the United Bible Societies Greek New Testament, 
 which highlights variation units that affect substantive
-matters of translation. As a result, this collation is by no means
-complete, and some witnesses are lacunose for the entirety of the
-collation. Still, it is complete enough to serve as a sufficient example
-of the types of details outlined in previous sections.
+matters of translation.
 
 In our example collation, witnesses are described in the ``listWit``
 element under the ``teiHeader``. Because most New Testament witnesses
@@ -29,6 +26,20 @@ identify such elements by ``@xml:id`` attributes, but this software is
 designed to work with either identifying attribute (preferring
 ``@xml:id`` if both are provided), and we have left things as they are
 to demonstrate this feature.
+
+The ``witness`` elements in the example collation also contain ``origDate`` elements
+that provide dates or date ranges for the corresponding witnesses.
+Where a witness can be dated to a specific year, 
+the ``@when`` attribute is sufficient to specify this;
+if it can be dated within a range of years, 
+the ``@from`` and ``@to`` attributes 
+or the ``@notBefore`` and ``@notAfter`` attributes should be used;
+the software will work with any of these options.
+This is to encourage users to preserve more detail on the collation side
+and to facilitate the inclusion of dates in the conversion process
+to output formats that might use them 
+as constraints on interior stemmatic nodes (as in `STEMMA <https://github.com/stemmatic/stemma>`_)
+or clock models (as in `BEAST2 <https://github.com/CompEvol/beast2>`_)
 
 Each variation unit is encoded as an ``app`` element with a unique
 ``@xml:id`` attribute. Within a variation unit, a ``lem`` element
@@ -51,14 +62,14 @@ these disambiguations using ``certainty`` elements under the
 ``witDetail`` element.
 
 The `TEI XML file <https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml>`__
-for this example is available in the examples directory in the GitHub repository.
+for this example is available in the ``example`` directory in the GitHub repository.
 
 IQ-TREE
 =======
 
 `IQ-TREE <http://www.iqtree.org/>`_ is a popular phylogenetic analysis package. 
 To use it to perform a maximum likelihood phylogenetic analysis of the Ephesians example, 
-convert the TEI XML to NEXUS format using ``teiphy`` with this command:
+convert the TEI XML to NEXUS format using ``teiphy`` with the command
 
 .. code:: bash
 
@@ -111,8 +122,9 @@ Running this example with MrBayes is part of the continuous integration pipeline
 STEMMA
 =======
 
-STEMMA is a phylogenetic analysis program written by Stephen Carlson. 
-It uses reticulating links to model contamination between branches to form a phylogenetic network.
+`STEMMA <https://github.com/stemmatic/stemma>`_ is a phylogenetic analysis program written by Stephen C. Carlson. 
+It searches for an optimal stemma topology according to the maximum-parsimony criterion
+and uses reticulating links to model contamination between branches to form a phylogenetic network.
 
 To create the files required for STEMMA, run this command:
 
@@ -120,7 +132,7 @@ To create the files required for STEMMA, run this command:
 
     teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
 
-This will create two files: ``stemma_example`` and ``stemma_example_chron``. 
+This will create two files: ``stemma_example`` (containing the textual information from the collation) and ``stemma_example_chron`` (containing date ranges for witnesses). 
 
 These can be used with Carlson's `prep <https://github.com/stemmatic/prep>`_ program to prepare the file for phylogenetic analysis:
 
@@ -134,6 +146,8 @@ The analysis is run with these commands:
 
     stemma stemma_example a 100
     soln stemma_example SOLN
+
+This begins a heuristic search for the optimal stemma using a simulated annealing approach (option ``a``) for 100 iterations.
 
 Running this example with STEMMA is part of the continuous integration pipeline: |stemma badge|
 
