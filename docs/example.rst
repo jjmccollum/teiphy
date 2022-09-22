@@ -100,11 +100,21 @@ convert the TEI XML to NEXUS format using ``teiphy`` with this command:
 
     Like IQ-TREE, MrBayes requires the ``--states-present`` flag. It also requires the ``--no-labels`` flag.
 
-This file can then be used with MrBayes as follows:
+This file can then be read into MrBayes as follows:
 
 .. code:: bash
 
-    mb ubs_ephesians-mrbayes.nexus
+    mb -i ubs_ephesians-mrbayes.nexus
+
+The ``-i`` flag will open the MrBayes interactive shell after the input has been validated.
+To run the analysis from there, enter the command
+
+.. code:: bash
+
+    mcmc
+
+This will run the analysis for several minutes, after which it will prompt you if you want to continue the analyis.
+At this point, the variance should be low enough that you can enter ``no`` and exit the interactive shell by entering ``quit``.
 
 More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the `MrBayes manual <https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf>`_.
 
@@ -126,13 +136,13 @@ To create the files required for STEMMA, run this command:
 
 This will create two files: ``stemma_example`` (containing the textual information from the collation) and ``stemma_example_chron`` (containing date ranges for witnesses). 
 
-These can be used with Carlson's `prep <https://github.com/stemmatic/prep>`_ program to prepare the file for phylogenetic analysis:
+These can then be used with Carlson's `prep <https://github.com/stemmatic/prep>`_ program to prepare the file for phylogenetic analysis:
 
 .. code:: bash
 
     prep stemma_example
 
-The analysis is run with these commands:
+Finally, the analysis is run with these commands:
 
 .. code:: bash
 
@@ -145,6 +155,9 @@ An example of a tree produced by STEMMA is found below:
 
 .. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg
 
+Note that some witnesses (e.g., 012, 35) from the collation are excluded from this tree by STEMMA
+because they have the same reading sequence as another witness
+after their reconstructed, defective, and orthographic readings have been regularized.
 
 Running this example with STEMMA is part of the continuous integration pipeline: |stemma badge|
 
