@@ -1,7 +1,3 @@
-======
-teiphy
-======
-
 .. include:: ../README.rst
    :start-after: start-badges
    :end-before: end-badges

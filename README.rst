@@ -1,10 +1,6 @@
-.. image:: https://github.com/jjmccollum/teiphy/blob/main/docs/img/teiphy-logo.png
-
-======
-teiphy
-======
-
 .. start-badges
+
+.. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/teiphy-logo.svg
 
 |license badge| |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge| 
 |iqtree badge| |mrbayes badge| |stemma badge|
