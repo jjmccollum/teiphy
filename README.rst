@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/teiphy-logo.png?sanitize=true
+.. image:: https://github.com/jjmccollum/teiphy/blob/main/docs/img/teiphy-logo.png
 
 ======
 teiphy
