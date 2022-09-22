@@ -1,3 +1,5 @@
+.. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/teiphy-logo?sanitize=true
+
 ======
 teiphy
 ======
