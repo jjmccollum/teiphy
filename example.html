@@ -188,10 +188,17 @@ convert the TEI XML to NEXUS format using <code class="docutils literal notransl
 <p class="admonition-title">Note</p>
 <p>Like IQ-TREE, MrBayes requires the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag. It also requires the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.</p>
 </div>
-<p>This file can then be used with MrBayes as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb ubs_ephesians-mrbayes.nexus
+<p>This file can then be read into MrBayes as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb -i ubs_ephesians-mrbayes.nexus
 </pre></div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">-i</span></code> flag will open the MrBayes interactive shell after the input has been validated.
+To run the analysis from there, enter the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcmc
+</pre></div>
+</div>
+<p>This will run the analysis for several minutes, after which it will prompt you if you want to continue the analyis.
+At this point, the variance should be low enough that you can enter <code class="docutils literal notranslate"><span class="pre">no</span></code> and exit the interactive shell by entering <code class="docutils literal notranslate"><span class="pre">quit</span></code>.</p>
 <p>More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the <a class="reference external" href="https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf">MrBayes manual</a>.</p>
 <p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
 </section>
@@ -205,18 +212,21 @@ and uses reticulating links to model contamination between branches to form a ph
 </pre></div>
 </div>
 <p>This will create two files: <code class="docutils literal notranslate"><span class="pre">stemma_example</span></code> (containing the textual information from the collation) and <code class="docutils literal notranslate"><span class="pre">stemma_example_chron</span></code> (containing date ranges for witnesses).</p>
-<p>These can be used with Carlson’s <a class="reference external" href="https://github.com/stemmatic/prep">prep</a> program to prepare the file for phylogenetic analysis:</p>
+<p>These can then be used with Carlson’s <a class="reference external" href="https://github.com/stemmatic/prep">prep</a> program to prepare the file for phylogenetic analysis:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prep stemma_example
 </pre></div>
 </div>
-<p>The analysis is run with these commands:</p>
+<p>Finally, the analysis is run with these commands:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>stemma stemma_example a <span class="m">100</span>
 soln stemma_example SOLN
 </pre></div>
 </div>
 <p>This begins a heuristic search for the optimal stemma using a simulated annealing approach (option <code class="docutils literal notranslate"><span class="pre">a</span></code>) for 100 iterations.</p>
 <p>An example of a tree produced by STEMMA is found below:</p>
-<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" /><p>Running this example with STEMMA is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml"><img alt="stemma badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg" /></a></p>
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" /><p>Note that some witnesses (e.g., 012, 35) from the collation are excluded from this tree by STEMMA
+because they have the same reading sequence as another witness
+after their reconstructed, defective, and orthographic readings have been regularized.</p>
+<p>Running this example with STEMMA is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml"><img alt="stemma badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg" /></a></p>
 </section>
 </section>
 
