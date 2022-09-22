@@ -118,8 +118,12 @@ At this point, the variance should be low enough that you can enter ``no`` and e
 
 More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the `MrBayes manual <https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf>`_.
 
-Running this example with MrBayes is part of the continuous integration pipeline: |mrbayes badge|
+An example of a maximum clade credibility tree produced by MrBayes is found below. 
+The labels on the internal nodes is the probability of the clade being present in the posterior:
 
+.. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg
+
+Running this example with MrBayes is part of the continuous integration pipeline: |mrbayes badge|
 
 STEMMA
 =======
