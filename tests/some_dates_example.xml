@@ -21,11 +21,17 @@
                     <!-- Papyri -->
                     <witness n="P46"/>
                     <!-- Majuscules -->
-                    <witness n="01"/>
-                    <witness n="02"/>
+                    <witness n="01">
+                        <origDate notBefore="300"/>
+                    </witness>
+                    <witness n="02">
+                        <origDate notAfter="500"/>
+                    </witness>
                     <witness n="03"/>
                     <witness n="04"/>
-                    <witness n="06"/>
+                    <witness n="06">
+                        <origDate notBefore="500" notAfter="600"/>
+                    </witness>
                     <witness type="corrector" n="06C1"/>
                     <witness type="corrector" n="06C2"/>
                     <witness n="010"/>

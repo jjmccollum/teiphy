@@ -41,7 +41,11 @@ def to_file(
     ),
     ambiguous_as_missing: bool = typer.Option(
         False,
-        help="Use the missing symbol instead of Equate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
+        help="Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
+    ),
+    calibrate_dates: bool = typer.Option(
+        False,
+        help="Add an Assumptions block containing date distributions for witnesses to NEXUS output; this option is intended for inputs to BEAST2.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     format: Format = typer.Option(None, case_sensitive=False, help="The output format."),
@@ -84,4 +88,5 @@ def to_file(
         char_state_labels=labels,
         states_present=states_present,
         ambiguous_as_missing=ambiguous_as_missing,
+        calibrate_dates=calibrate_dates,
     )
