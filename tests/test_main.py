@@ -119,6 +119,47 @@ def test_to_nexus_calibrate_dates_some_dates():
         assert "CALIBRATE 06 = uniform(500,600)" in text  # both ends of date range specified and distinct
 
 
+def test_to_nexus_mrbayes():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--mrbayes", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert "calibrate UBS = fixed(1450);" in text
+        assert "calibrate P46 = uniform(1275,1325);" in text
+
+
+def test_to_nexus_mrbayes_no_dates():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--mrbayes", str(no_dates_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text  # the MRBAYES block is still included, but no calibrations are
+        assert "calibrate" not in text
+
+
+def test_to_nexus_mrbayes_some_dates():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--mrbayes", str(some_dates_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert "calibrate UBS = fixed(550)" in text  # both ends of date range specified and identical
+        assert "calibrate P46 = uniform(0,550)" in text  # neither end of date range specified
+        assert "calibrate 01 = uniform(0,300)" in text  # lower bound but no upper bound
+        assert "calibrate 02 = uniform(100,550)" in text  # upper bound but no lower bound
+        assert "calibrate 06 = uniform(0,100)" in text  # both ends of date range specified and distinct
+
+
 def test_to_hennig86():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.tnt"

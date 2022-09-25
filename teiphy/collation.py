@@ -324,28 +324,6 @@ class Collation:
     #     nexus_equate_mapping = {t: possible_symbols[i] for i, t in enumerate(reading_ind_tuples)}
     #     return nexus_equates, nexus_equate_mapping
 
-    def get_hennig86_symbols(self):
-        """Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.
-
-        The number of symbols equals the maximum number of substantive readings at any variation unit.
-
-        Returns:
-            A list of individual characters representing states in readings.
-        """
-        possible_symbols = (
-            list(string.digits) + list(string.ascii_uppercase)[:22]
-        )  # NOTE: the maximum number of symbols allowed in Hennig86 format is 32
-        # The number of symbols needed is equal to the length of the longest substantive reading vector:
-        nsymbols = 0
-        # If there are no witnesses, then no symbols are needed at all:
-        if len(self.witnesses) == 0:
-            return []
-        wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
-            nsymbols = max(nsymbols, len(rdg_support))
-        hennig86_symbols = possible_symbols[:nsymbols]
-        return hennig86_symbols
-
     def to_nexus(
         self,
         file_addr: Union[Path, str],
@@ -353,6 +331,7 @@ class Collation:
         states_present: bool = False,
         ambiguous_as_missing: bool = False,
         calibrate_dates: bool = False,
+        mrbayes: bool = False,
     ):
         """Writes this Collation to a NEXUS file with the given address.
 
@@ -368,6 +347,8 @@ class Collation:
                 It is only applied if the states_present option is True.
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses.
                 This option is intended for inputs to BEAST2.
+            mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses.
+                This option is intended for inputs to MrBayes.
         """
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
@@ -524,7 +505,79 @@ class Collation:
                 f.write("%s;\n\n" % ",\n".join(calibrate_strings))
                 # End the assumptions block:
                 f.write("End;")
+            # If mrbayes is set, then add the mrbayes block:
+            if mrbayes:
+                f.write("\n\n")
+                f.write("Begin MRBAYES;\n")
+                # Turn on the autoclose feature by default:
+                f.write("\tset autoclose=yes;\n")
+                # Attempt to get the minimum and maximum dates for witnesses; if we can't do this, then don't write any age calibration settings:
+                min_date = None
+                max_date = None
+                try:
+                    min_date = min([wit.date_range[0] for wit in self.witnesses if wit.date_range[0] is not None])
+                    max_date = max([wit.date_range[1] for wit in self.witnesses if wit.date_range[1] is not None])
+                except Exception as e:
+                    print(
+                        "WARNING: no witnesses have date ranges; no clock model will be assumed and no date calibrations will be used!"
+                    )
+                if min_date is not None and max_date is not None:
+                    f.write("\n")
+                    f.write("\tprset brlenspr = clock:uniform;\n")
+                    f.write("\tprset nodeagepr = calibrated;\n")
+                    # Then calibrate the date distributions for each witness that has date information specified:
+                    calibrate_strings = []
+                    for i, wit in enumerate(self.witnesses):
+                        taxlabel = taxlabels[i]
+                        # If either end of this witness's date range is empty, then use the min and max dates over all witnesses as defaults:
+                        date_range = wit.date_range
+                        if date_range[0] is None and date_range[1] is None:
+                            date_range = tuple([min_date, max_date])
+                        elif date_range[0] is None:
+                            date_range = tuple([min_date, date_range[1]])
+                        elif date_range[1] is None:
+                            date_range = tuple([date_range[0], max_date])
+                        # If both ends of the date range are the same, then use a fixed distribution:
+                        if date_range[0] == date_range[1]:
+                            f.write(
+                                "\tcalibrate %s = fixed(%d);\n" % (taxlabel, max_date - date_range[0])
+                            )  # get age by subtracting date from latest date:
+                        # If they are different, then use a uniform distribution:
+                        else:
+                            f.write(
+                                "\tcalibrate %s = uniform(%d,%d);\n"
+                                % (taxlabel, max_date - date_range[1], max_date - date_range[0])
+                            )  # get age range by subtracting start and end dates from latest date:
+                    f.write("\n")
+                # Add default settings for MCMC estimation of posterior distribution:
+                f.write("\tmcmcp ngen=100000;\n")
+                # Write the command to run MrBayes:
+                f.write("\tmcmc;\n")
+                # End the assumptions block:
+                f.write("End;")
         return
+
+    def get_hennig86_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_uppercase)[:22]
+        )  # NOTE: the maximum number of symbols allowed in Hennig86 format is 32
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        hennig86_symbols = possible_symbols[:nsymbols]
+        return hennig86_symbols
 
     def to_hennig86(self, file_addr: Union[Path, str]):
         """Writes this Collation to a file in Hennig86 format with the given address.
@@ -855,6 +908,7 @@ class Collation:
         states_present: bool = False,
         ambiguous_as_missing: bool = False,
         calibrate_dates: bool = False,
+        mrbayes: bool = False,
     ):
         """Writes this Collation to the file with the given address.
 
@@ -883,6 +937,9 @@ class Collation:
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
                 This option is intended for inputs to BEAST2.
+            mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
+                in NEXUS output.
+                This option is intended for inputs to MrBayes.
         """
         file_addr = Path(file_addr)
         format = format or Format.infer(
@@ -896,6 +953,7 @@ class Collation:
                 states_present=states_present,
                 ambiguous_as_missing=ambiguous_as_missing,
                 calibrate_dates=calibrate_dates,
+                mrbayes=mrbayes,
             )
 
         if format == format.HENNIG86:

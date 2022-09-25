@@ -47,6 +47,10 @@ def to_file(
         False,
         help="Add an Assumptions block containing date distributions for witnesses to NEXUS output; this option is intended for inputs to BEAST2.",
     ),
+    mrbayes: bool = typer.Option(
+        False,
+        help="Add a MrBayes block containing model settings and age calibrations for witnesses to NEXUS output; this option is intended for inputs to MrBayes.",
+    ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     format: Format = typer.Option(None, case_sensitive=False, help="The output format."),
     input: Path = typer.Argument(
@@ -89,4 +93,5 @@ def to_file(
         states_present=states_present,
         ambiguous_as_missing=ambiguous_as_missing,
         calibrate_dates=calibrate_dates,
+        mrbayes=mrbayes,
     )
