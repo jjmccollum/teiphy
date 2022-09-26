@@ -35,4 +35,5 @@ jobs:
     - run: tar -zxvf BEAST.v2.7.0.Linux.x86.tgz
     - name: Phylogenetics Run
       run: |
-        beast/bin/beauti --help
+        cd beast/lib
+        java -jar beauti.jar
