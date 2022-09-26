@@ -30,8 +30,8 @@ jobs:
       run: |
         git clone https://github.com/CompEvol/beast2.git
         cd beast2
-        docker build
+        docker build -t beast2
     - name: Phylogenetics Run
       run: |
         cd beast2
-        docker run beast2-test test-beauti
+        docker run beast2-test
