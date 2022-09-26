@@ -33,4 +33,4 @@ jobs:
         ant
     - name: Phylogenetics Run
       run: |
-        ls -l beast-mcmc
+        beast-mcmc/release_beastgen/common/bin/beastgen -chain_length 100000 beast_example.template beast_example.nex beast_example.xml
