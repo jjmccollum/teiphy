@@ -1,4 +1,4 @@
-name: beast2
+name: beast
 
 on: [push]
 jobs:
