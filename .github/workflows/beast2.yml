@@ -34,4 +34,4 @@ jobs:
         ant compile-all
     - name: Phylogenetics Run
       run: |
-        ls -l beast2
+        ls -l beast2/build
