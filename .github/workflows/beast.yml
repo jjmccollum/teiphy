@@ -28,6 +28,7 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present --calibrate-dates example/ubs_ephesians.xml beast_example.nexus
     - name: Install Phylogenetics Package
       run: |
+        git clone https://github.com/CompEvol/BeastFX.git
         git clone https://github.com/CompEvol/beast2.git
         cd beast2
         ant compile-all
