@@ -29,6 +29,7 @@ jobs:
     - name: Install Phylogenetics Package
       run: |
         git clone https://github.com/CompEvol/beast2.git
+        git clone https://github.com/CompEvol/BeastFX.git
         cd beast2
         ant
     - name: Phylogenetics Run
