@@ -36,4 +36,5 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast/lib
+        ls -l
         java -jar beauti.jar
