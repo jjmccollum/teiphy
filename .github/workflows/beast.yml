@@ -35,4 +35,4 @@ jobs:
       run: |
         cp beast_example.nexus beast-mcmc/release_beastgen/common/bin
         cd beast-mcmc/release_beastgen/common/bin
-        beastgen -chain_length 100000 beast_example.template beast_example.nexus beast_example.xml
+        ./beastgen -chain_length 100000 beast_example.template beast_example.nexus beast_example.xml
