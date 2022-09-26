@@ -29,7 +29,8 @@ jobs:
     - name: Install Phylogenetics Package
       run: |
         git clone https://github.com/CompEvol/beast2.git
+        cd beast2
+        ant
     - name: Phylogenetics Run
       run: |
-        cd beast2
         ./release/Linux/jrebin/beauti --help
