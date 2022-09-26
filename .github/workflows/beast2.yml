@@ -36,4 +36,4 @@ jobs:
     - name: Phylogenetics Run
       run: |
         ls -l beast/lib/
-        java -cp beast/lib/launcher.jar beast.app.beauti.BeautiLauncher --help
+        java -cp beast/lib/launcher.jar BEAST.app.jar --help
