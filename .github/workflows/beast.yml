@@ -34,5 +34,5 @@ jobs:
         ant compile-all
     - name: Phylogenetics Run
       run: |
-        find "beast.jar" -r .
+        find -name "beast.jar" .
         java -cp /path/to/beast.jar beast.app.beauti.Beauti -template your_template.xml -nex your_nexus.nex -out out.xml -exitaction writexml
