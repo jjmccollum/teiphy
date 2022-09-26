@@ -31,7 +31,7 @@ jobs:
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd beast2
-        ant
+        ant compile-all
     - name: Phylogenetics Run
       run: |
         ./release/Linux/jrebin/beauti --help
