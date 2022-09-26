@@ -25,14 +25,11 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present --calibrate-dates example/ubs_ephesians.xml beast2_example.nexus
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present --calibrate-dates example/ubs_ephesians.xml beast_example.nexus
     - name: Install Phylogenetics Package
-      uses: dsaltares/fetch-gh-release-asset@master
-      with:
-        repo: 'CompEvol/beast2'
-        version: 'tags/v2.7.0'
-        file: 'BEAST.v2.7.0.Linux.x86.tgz'
-    - run: tar -zxvf BEAST.v2.7.0.Linux.x86.tgz
+      run: |
+        git clone https://github.com/beast-dev/beast-mcmc
     - name: Phylogenetics Run
       run: |
-        ls beast/bin
+        beast-mcmc/release_beastgen/common/bin/beastgen -chain_length=100000 beast_example.template beast_example.nexus beast_example.xml
+        tail beast_example.xml
