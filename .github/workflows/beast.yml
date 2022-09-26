@@ -30,7 +30,7 @@ jobs:
       run: |
         git clone https://github.com/beast-dev/beast-mcmc.git
         cd beast-mcmc
-        ant -pre-compile
+        ant
     - name: Phylogenetics Run
       run: |
         ls -l beast-mcmc
