@@ -17,6 +17,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script src="_static/clipboard.min.js"></script>
         <script src="_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -48,10 +49,70 @@
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Example</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#collation">Collation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#variation-unit">Variation Unit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#witness">Witness</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#reading">Reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#collation">Collation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#teiphy.Collation"><code class="docutils literal notranslate"><span class="pre">Collation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.manuscript_suffixes"><code class="docutils literal notranslate"><span class="pre">Collation.manuscript_suffixes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.trivial_reading_types"><code class="docutils literal notranslate"><span class="pre">Collation.trivial_reading_types</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.missing_reading_types"><code class="docutils literal notranslate"><span class="pre">Collation.missing_reading_types</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.fill_corrector_lacunae"><code class="docutils literal notranslate"><span class="pre">Collation.fill_corrector_lacunae</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.witnesses"><code class="docutils literal notranslate"><span class="pre">Collation.witnesses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.witness_index_by_id"><code class="docutils literal notranslate"><span class="pre">Collation.witness_index_by_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.variation_units"><code class="docutils literal notranslate"><span class="pre">Collation.variation_units</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.readings_by_witness"><code class="docutils literal notranslate"><span class="pre">Collation.readings_by_witness</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.substantive_variation_unit_ids"><code class="docutils literal notranslate"><span class="pre">Collation.substantive_variation_unit_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.substantive_variation_unit_reading_tuples"><code class="docutils literal notranslate"><span class="pre">Collation.substantive_variation_unit_reading_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.verbose"><code class="docutils literal notranslate"><span class="pre">Collation.verbose</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_base_wit"><code class="docutils literal notranslate"><span class="pre">Collation.get_base_wit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_hennig86_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_hennig86_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_nexus_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_nexus_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_readings_by_witness_for_unit"><code class="docutils literal notranslate"><span class="pre">Collation.get_readings_by_witness_for_unit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_apps"><code class="docutils literal notranslate"><span class="pre">Collation.parse_apps()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_list_wit"><code class="docutils literal notranslate"><span class="pre">Collation.parse_list_wit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_readings_by_witness"><code class="docutils literal notranslate"><span class="pre">Collation.parse_readings_by_witness()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_csv"><code class="docutils literal notranslate"><span class="pre">Collation.to_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_dataframe"><code class="docutils literal notranslate"><span class="pre">Collation.to_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_distance_matrix"><code class="docutils literal notranslate"><span class="pre">Collation.to_distance_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_excel"><code class="docutils literal notranslate"><span class="pre">Collation.to_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_file"><code class="docutils literal notranslate"><span class="pre">Collation.to_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_hennig86"><code class="docutils literal notranslate"><span class="pre">Collation.to_hennig86()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_nexus"><code class="docutils literal notranslate"><span class="pre">Collation.to_nexus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_numpy"><code class="docutils literal notranslate"><span class="pre">Collation.to_numpy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_stemma"><code class="docutils literal notranslate"><span class="pre">Collation.to_stemma()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#variation-unit">Variation Unit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#teiphy.VariationUnit"><code class="docutils literal notranslate"><span class="pre">VariationUnit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.VariationUnit.id"><code class="docutils literal notranslate"><span class="pre">VariationUnit.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.VariationUnit.readings"><code class="docutils literal notranslate"><span class="pre">VariationUnit.readings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.VariationUnit.parse"><code class="docutils literal notranslate"><span class="pre">VariationUnit.parse()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#witness">Witness</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#teiphy.Witness"><code class="docutils literal notranslate"><span class="pre">Witness</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Witness.id"><code class="docutils literal notranslate"><span class="pre">Witness.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Witness.type"><code class="docutils literal notranslate"><span class="pre">Witness.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Witness.date_range"><code class="docutils literal notranslate"><span class="pre">Witness.date_range</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reading">Reading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#teiphy.Reading"><code class="docutils literal notranslate"><span class="pre">Reading</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.id"><code class="docutils literal notranslate"><span class="pre">Reading.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.type"><code class="docutils literal notranslate"><span class="pre">Reading.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.text"><code class="docutils literal notranslate"><span class="pre">Reading.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.wits"><code class="docutils literal notranslate"><span class="pre">Reading.wits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.targets"><code class="docutils literal notranslate"><span class="pre">Reading.targets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.certainties"><code class="docutils literal notranslate"><span class="pre">Reading.certainties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Reading.parse"><code class="docutils literal notranslate"><span class="pre">Reading.parse()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface Reference</a></li>
