@@ -632,7 +632,10 @@ class Collation:
                         continue
                     # For multiple readings, print the missing symbol:
                     sequence += missing_symbol
-                f.write("%s\n" % (sequence))
+                f.write(sequence)
+                # If this is not the last witness, then add a line break:
+                if i < len(self.witnesses) - 1:
+                    f.write("\n")
         return
 
     def get_fasta_symbols(self):
