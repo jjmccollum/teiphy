@@ -250,7 +250,7 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_get_phylip_symbols(self):
         phylip_symbols = self.collation.get_phylip_symbols()
-        self.assertEqual(phylip_symbols, ["A", "C", "D", "E", "F", "G"])
+        self.assertEqual(phylip_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_phylip_symbols_empty(self):
         empty_xml = et.fromstring("<TEI/>")
