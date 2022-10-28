@@ -131,7 +131,7 @@ def test_to_phylip():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="ascii")
-        assert text.startswith("40 38")
+        assert text.startswith("38 40")
 
 
 def test_to_fasta():
