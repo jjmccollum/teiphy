@@ -16,6 +16,12 @@ no_dates_example = test_dir / "no_dates_example.xml"
 some_dates_example = test_dir / "some_dates_example.xml"
 
 
+def test_version():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        result = runner.invoke(app, ["--version"])
+        assert result.stdout != ""
+
+
 def test_non_xml_input():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"

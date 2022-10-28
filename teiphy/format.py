@@ -8,8 +8,8 @@ class FormatUnknownException(Exception):
 class Format(Enum):
     NEXUS = 'NEXUS'
     HENNIG86 = 'HENNIG86'
-    PHYLIP = ('PHYLIP',)
-    FASTA = ('FASTA',)
+    PHYLIP = 'PHYLIP'
+    FASTA = 'FASTA'
     CSV = 'CSV'
     TSV = 'TSV'
     EXCEL = 'EXCEL'
