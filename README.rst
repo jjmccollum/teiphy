@@ -62,6 +62,20 @@ The software can be installed using ``pip``:
 
     pip install teiphy
 
+Alternatively, you can install the package by cloning this repository and installing it with poetry:
+
+.. code-block:: bash
+
+    git clone https://github.com/jjmccollum/teiphy.git
+    cd teiphy
+    poetry install
+
+Once the package is installed, you can run all unit tests via the command
+
+.. code-block:: bash
+
+    poetry run pytest
+
 Usage
 ============
 
@@ -71,9 +85,9 @@ To use the software, run the ``teiphy`` command line tool:
 
     teiphy <input TEI XML> <output file>
 
-``teiphy`` can export to NEXUS, Hennig86 (TNT), CSV, TSV, Excel and STEMMA formats. 
+``teiphy`` can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, CSV, TSV, Excel and STEMMA formats. 
 ``teiphy`` will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
-".nex", ".nexus", ".nxs", ".tnt", ".csv", ".tsv", ".xlsx".
+".nex", ".nexus", ".nxs", ".ph", ".phy", ".fa", ".fasta", ".tnt", ".csv", ".tsv", ".xlsx".
 
 To explicitly say which format you wish to export to, use the ``--format`` option. For example:
 
