@@ -549,28 +549,9 @@ class Collation:
         Returns:
             A list of individual characters representing states in readings.
         """
-        possible_symbols = [
-            "A",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "K",
-            "L",
-            "M",
-            "N",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "V",
-            "W",
-            "Y",
-        ]  # NOTE: the maximum number of symbols allowed in PHYLIP format is 20, corresponding to the number of unambiguous amino acids
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_lowercase)[:22]
+        )  # NOTE: for RAxML, multistate characters with an alphabet sizes up to 32 are supported
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
@@ -603,11 +584,6 @@ class Collation:
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
         )  # keep track of the longest taxon label for tabular alignment purposes
-        # If the longest taxon label exceeds 10, then warn the user, as this may result in an unreadable file in some programs:
-        if max_taxlabel_length > 10:
-            print(
-                "WARNING: One or more taxon labels are longer than 10 characters. They will be printed as they are, but some programs may not be able to read the alignment file. Consider modifying the taxon names in the output file."
-            )
         missing_symbol = '?'
         symbols = self.get_phylip_symbols()
         with open(file_addr, "w", encoding="ascii") as f:
