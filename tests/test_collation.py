@@ -248,6 +248,26 @@ class CollationOutputTestCase(unittest.TestCase):
         hennig86_symbols = empty_collation.get_hennig86_symbols()
         self.assertEqual(hennig86_symbols, [])
 
+    def test_get_phylip_symbols(self):
+        phylip_symbols = self.collation.get_phylip_symbols()
+        self.assertEqual(phylip_symbols, ["A", "C", "D", "E", "F", "G"])
+
+    def test_get_phylip_symbols_empty(self):
+        empty_xml = et.fromstring("<TEI/>")
+        empty_collation = Collation(empty_xml)
+        phylip_symbols = empty_collation.get_phylip_symbols()
+        self.assertEqual(phylip_symbols, [])
+
+    def test_get_fasta_symbols(self):
+        fasta_symbols = self.collation.get_fasta_symbols()
+        self.assertEqual(fasta_symbols, ["A", "C", "D", "E", "F", "G"])
+
+    def test_get_fasta_symbols_empty(self):
+        empty_xml = et.fromstring("<TEI/>")
+        empty_collation = Collation(empty_xml)
+        fasta_symbols = empty_collation.get_fasta_symbols()
+        self.assertEqual(fasta_symbols, [])
+
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
         self.assertTrue(

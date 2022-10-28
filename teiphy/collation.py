@@ -541,6 +541,188 @@ class Collation:
             f.write(";")
         return
 
+    def get_phylip_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in PHYLIP format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "V",
+            "W",
+            "Y",
+        ]  # NOTE: the maximum number of symbols allowed in PHYLIP format is 20, corresponding to the number of unambiguous amino acids
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        phylip_symbols = possible_symbols[:nsymbols]
+        return phylip_symbols
+
+    def to_phylip(self, file_addr: Union[Path, str]):
+        """Writes this Collation to a file in PHYLIP format with the given address.
+        Note that because PHYLIP format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.
+
+        Args:
+            file_addr: A string representing the path to an output file.
+        """
+        # Start by calculating the values we will be using here:
+        ntax = len(self.witnesses)
+        nchar = (
+            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
+        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        taxlabels = []
+        for wit in self.witnesses:
+            taxlabel = wit.id
+            # Then replace any disallowed characters in the string with an underscore:
+            taxlabel = slugify(taxlabel, lowercase=False, separator='_')
+            taxlabels.append(taxlabel)
+        max_taxlabel_length = max(
+            [len(taxlabel) for taxlabel in taxlabels]
+        )  # keep track of the longest taxon label for tabular alignment purposes
+        # If the longest taxon label exceeds 10, then warn the user, as this may result in an unreadable file in some programs:
+        if max_taxlabel_length > 10:
+            print(
+                "WARNING: One or more taxon labels are longer than 10 characters. They will be printed as they are, but some programs may not be able to read the alignment file. Consider modifying the taxon names in the output file."
+            )
+        missing_symbol = '?'
+        symbols = self.get_phylip_symbols()
+        with open(file_addr, "w", encoding="ascii") as f:
+            # Write the dimensions:
+            f.write("%d %d\n" % (nchar, ntax))
+            # Now write the matrix:
+            for i, wit in enumerate(self.witnesses):
+                taxlabel = taxlabels[i]
+                # Add enough space after this label ensure that all sequences are nicely aligned:
+                sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel) + 1))
+                for rdg_support in self.readings_by_witness[wit.id]:
+                    # If this reading is lacunose in this witness, then use the missing character:
+                    if sum(rdg_support) == 0:
+                        sequence += missing_symbol
+                        continue
+                    rdg_inds = [
+                        i for i, w in enumerate(rdg_support) if w > 0
+                    ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                    # For singleton readings, just print the symbol:
+                    if len(rdg_inds) == 1:
+                        sequence += symbols[rdg_inds[0]]
+                        continue
+                    # For multiple readings, print the missing symbol:
+                    sequence += missing_symbol
+                f.write("%s\n" % (sequence))
+        return
+
+    def get_fasta_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in FASTA format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = [
+            "A",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "K",
+            "L",
+            "M",
+            "N",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "Y",
+        ]  # NOTE: the maximum number of symbols allowed in FASTA format is 21, corresponding to the number of unambiguous amino acids plus an additional character (U)
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        fasta_symbols = possible_symbols[:nsymbols]
+        return fasta_symbols
+
+    def to_fasta(self, file_addr: Union[Path, str]):
+        """Writes this Collation to a file in FASTA format with the given address.
+        Note that because FASTA format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.
+
+        Args:
+            file_addr: A string representing the path to an output file.
+        """
+        # Start by calculating the values we will be using here:
+        ntax = len(self.witnesses)
+        nchar = (
+            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
+        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        taxlabels = []
+        for wit in self.witnesses:
+            taxlabel = wit.id
+            # Then replace any disallowed characters in the string with an underscore:
+            taxlabel = slugify(taxlabel, lowercase=False, separator='_')
+            taxlabels.append(taxlabel)
+        max_taxlabel_length = max(
+            [len(taxlabel) for taxlabel in taxlabels]
+        )  # keep track of the longest taxon label for tabular alignment purposes
+        missing_symbol = 'X'
+        symbols = self.get_fasta_symbols()
+        with open(file_addr, "w", encoding="ascii") as f:
+            # Now write the matrix:
+            for i, wit in enumerate(self.witnesses):
+                taxlabel = taxlabels[i]
+                # Add enough space after this label ensure that all sequences are nicely aligned:
+                sequence = ">%s\n" % taxlabel
+                for rdg_support in self.readings_by_witness[wit.id]:
+                    # If this reading is lacunose in this witness, then use the missing character:
+                    if sum(rdg_support) == 0:
+                        sequence += missing_symbol
+                        continue
+                    rdg_inds = [
+                        i for i, w in enumerate(rdg_support) if w > 0
+                    ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                    # For singleton readings, just print the symbol:
+                    if len(rdg_inds) == 1:
+                        sequence += symbols[rdg_inds[0]]
+                        continue
+                    # For multiple readings, print the missing symbol:
+                    sequence += missing_symbol
+                f.write("%s\n" % (sequence))
+        return
+
     def to_numpy(self, split_missing: bool = True):
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
@@ -820,7 +1002,7 @@ class Collation:
             split_missing (bool, optional): An optional flag indicating whether to treat
                 missing characters/variation units as having a contribution of 1 split over all states/readings;
                 if False, then missing data is ignored (i.e., all states are 0).
-                Not applicable for NEXUS, HENNIG86, or STEMMA format.
+                Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
                 Default value is True.
             char_state_labels (bool, optional): An optional flag indicating whether to print
                 the CharStateLabels block in NEXUS output.
@@ -850,6 +1032,12 @@ class Collation:
 
         if format == format.HENNIG86:
             return self.to_hennig86(file_addr)
+
+        if format == format.PHYLIP:
+            return self.to_phylip(file_addr)
+
+        if format == format.FASTA:
+            return self.to_fasta(file_addr)
 
         if format == Format.CSV:
             return self.to_csv(file_addr, split_missing=split_missing)

@@ -104,6 +104,54 @@ def test_to_hennig86():
         assert "xread" in text
 
 
+def test_to_phylip():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.phy"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="ascii")
+        assert text.startswith("40 38")
+
+
+def test_to_fasta():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.fa"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="ascii")
+        assert text.startswith(">UBS")
+
+
 def test_to_csv():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
