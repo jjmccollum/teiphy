@@ -1,0 +1,36 @@
+name: raxml
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - name: Install dependencies for Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'poetry'
+    - run: poetry install
+    - name: Testing
+      run: |
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml mrbayes_example.phy
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml mrbayes_example.fasta
+    - name: Install Phylogenetics Package
+      run: |
+        git clone https://github.com/stamatak/standard-RAxML
+        cd standard-RAxML
+        make -f Makefile.gcc
+        rm *.o
+    - name: Phylogenetics Run
+      run: |
+        cd standard-RAxML
+        raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.phy -K MK -n T1
+        raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.fasta -K MK -n T2
+
