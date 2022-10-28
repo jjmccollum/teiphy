@@ -612,7 +612,7 @@ class Collation:
         symbols = self.get_phylip_symbols()
         with open(file_addr, "w", encoding="ascii") as f:
             # Write the dimensions:
-            f.write("%d %d\n" % (nchar, ntax))
+            f.write("%d %d\n" % (ntax, nchar))
             # Now write the matrix:
             for i, wit in enumerate(self.witnesses):
                 taxlabel = taxlabels[i]
