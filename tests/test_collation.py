@@ -260,7 +260,7 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_get_fasta_symbols(self):
         fasta_symbols = self.collation.get_fasta_symbols()
-        self.assertEqual(fasta_symbols, ["A", "C", "D", "E", "F", "G"])
+        self.assertEqual(fasta_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_fasta_symbols_empty(self):
         empty_xml = et.fromstring("<TEI/>")

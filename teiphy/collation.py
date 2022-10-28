@@ -324,28 +324,6 @@ class Collation:
     #     nexus_equate_mapping = {t: possible_symbols[i] for i, t in enumerate(reading_ind_tuples)}
     #     return nexus_equates, nexus_equate_mapping
 
-    def get_hennig86_symbols(self):
-        """Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.
-
-        The number of symbols equals the maximum number of substantive readings at any variation unit.
-
-        Returns:
-            A list of individual characters representing states in readings.
-        """
-        possible_symbols = (
-            list(string.digits) + list(string.ascii_uppercase)[:22]
-        )  # NOTE: the maximum number of symbols allowed in Hennig86 format is 32
-        # The number of symbols needed is equal to the length of the longest substantive reading vector:
-        nsymbols = 0
-        # If there are no witnesses, then no symbols are needed at all:
-        if len(self.witnesses) == 0:
-            return []
-        wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
-            nsymbols = max(nsymbols, len(rdg_support))
-        hennig86_symbols = possible_symbols[:nsymbols]
-        return hennig86_symbols
-
     def to_nexus(
         self,
         file_addr: Union[Path, str],
@@ -484,6 +462,28 @@ class Collation:
             # End the characters block:
             f.write("End;")
         return
+
+    def get_hennig86_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_uppercase)[:22]
+        )  # NOTE: the maximum number of symbols allowed in Hennig86 format is 32
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        hennig86_symbols = possible_symbols[:nsymbols]
+        return hennig86_symbols
 
     def to_hennig86(self, file_addr: Union[Path, str]):
         """Writes this Collation to a file in Hennig86 format with the given address.
@@ -643,29 +643,9 @@ class Collation:
         Returns:
             A list of individual characters representing states in readings.
         """
-        possible_symbols = [
-            "A",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "K",
-            "L",
-            "M",
-            "N",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "Y",
-        ]  # NOTE: the maximum number of symbols allowed in FASTA format is 21, corresponding to the number of unambiguous amino acids plus an additional character (U)
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_lowercase)[:22]
+        )  # NOTE: for RAxML, multistate characters with an alphabet sizes up to 32 are supported
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:

@@ -31,6 +31,5 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd standard-RAxML
-        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../raxml_example.phy -K MK -n T1
         ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../raxml_example.fasta -K MK -n T2
 
