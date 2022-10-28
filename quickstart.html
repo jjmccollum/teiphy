@@ -113,6 +113,16 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install teiphy
 </pre></div>
 </div>
+<p>Alternatively, you can install the package by cloning this repository and installing it with poetry:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/jjmccollum/teiphy.git
+<span class="nb">cd</span> teiphy
+poetry install
+</pre></div>
+</div>
+<p>Once the package is installed, you can run all unit tests via the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run pytest
+</pre></div>
+</div>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
@@ -120,9 +130,9 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy &lt;input TEI XML&gt; &lt;output file&gt;
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can export to NEXUS, Hennig86 (TNT), CSV, TSV, Excel and STEMMA formats.
+<p><code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, CSV, TSV, Excel and STEMMA formats.
 <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
-“.nex”, “.nexus”, “.nxs”, “.tnt”, “.csv”, “.tsv”, “.xlsx”.</p>
+“.nex”, “.nexus”, “.nxs”, “.ph”, “.phy”, “.fa”, “.fasta”, “.tnt”, “.csv”, “.tsv”, “.xlsx”.</p>
 <p>To explicitly say which format you wish to export to, use the <code class="docutils literal notranslate"><span class="pre">--format</span></code> option. For example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy &lt;input TEI XML&gt; &lt;output file&gt; --format nexus
 </pre></div>
