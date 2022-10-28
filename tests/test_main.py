@@ -16,6 +16,12 @@ no_dates_example = test_dir / "no_dates_example.xml"
 some_dates_example = test_dir / "some_dates_example.xml"
 
 
+def test_version():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        result = runner.invoke(app, ["--version"])
+        assert result.stdout != ""
+
+
 def test_non_xml_input():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
@@ -102,6 +108,54 @@ def test_to_hennig86():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("nstates")
         assert "xread" in text
+
+
+def test_to_phylip():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.phy"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="ascii")
+        assert text.startswith("38 40")
+
+
+def test_to_fasta():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.fa"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="ascii")
+        assert text.startswith(">UBS")
 
 
 def test_to_csv():
