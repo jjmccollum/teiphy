@@ -678,7 +678,7 @@ class Collation:
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
         )  # keep track of the longest taxon label for tabular alignment purposes
-        missing_symbol = 'X'
+        missing_symbol = '?'
         symbols = self.get_fasta_symbols()
         with open(file_addr, "w", encoding="ascii") as f:
             # Now write the matrix:
