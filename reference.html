@@ -63,8 +63,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.substantive_variation_unit_reading_tuples"><code class="docutils literal notranslate"><span class="pre">Collation.substantive_variation_unit_reading_tuples</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.verbose"><code class="docutils literal notranslate"><span class="pre">Collation.verbose</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_base_wit"><code class="docutils literal notranslate"><span class="pre">Collation.get_base_wit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_fasta_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_fasta_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_hennig86_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_hennig86_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_nexus_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_nexus_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_phylip_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_phylip_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_readings_by_witness_for_unit"><code class="docutils literal notranslate"><span class="pre">Collation.get_readings_by_witness_for_unit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_apps"><code class="docutils literal notranslate"><span class="pre">Collation.parse_apps()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_list_wit"><code class="docutils literal notranslate"><span class="pre">Collation.parse_list_wit()</span></code></a></li>
@@ -73,10 +75,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_dataframe"><code class="docutils literal notranslate"><span class="pre">Collation.to_dataframe()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_distance_matrix"><code class="docutils literal notranslate"><span class="pre">Collation.to_distance_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_excel"><code class="docutils literal notranslate"><span class="pre">Collation.to_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_fasta"><code class="docutils literal notranslate"><span class="pre">Collation.to_fasta()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_file"><code class="docutils literal notranslate"><span class="pre">Collation.to_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_hennig86"><code class="docutils literal notranslate"><span class="pre">Collation.to_hennig86()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_nexus"><code class="docutils literal notranslate"><span class="pre">Collation.to_nexus()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_numpy"><code class="docutils literal notranslate"><span class="pre">Collation.to_numpy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_phylip"><code class="docutils literal notranslate"><span class="pre">Collation.to_phylip()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_stemma"><code class="docutils literal notranslate"><span class="pre">Collation.to_stemma()</span></code></a></li>
 </ul>
 </li>
@@ -254,6 +258,18 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_fasta_symbols">
+<span class="sig-name descname"><span class="pre">get_fasta_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_fasta_symbols" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in FASTA format.</p>
+<p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of individual characters representing states in readings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_hennig86_symbols">
 <span class="sig-name descname"><span class="pre">get_hennig86_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_hennig86_symbols" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in Hennig86 format.</p>
@@ -269,6 +285,18 @@
 <dt class="sig sig-object py" id="teiphy.Collation.get_nexus_symbols">
 <span class="sig-name descname"><span class="pre">get_nexus_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_nexus_symbols" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in NEXUS.</p>
+<p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of individual characters representing states in readings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_phylip_symbols">
+<span class="sig-name descname"><span class="pre">get_phylip_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_phylip_symbols" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in PHYLIP format.</p>
 <p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -381,6 +409,18 @@ A list of witness ID strings.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_fasta">
+<span class="sig-name descname"><span class="pre">to_fasta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_fasta" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to a file in FASTA format with the given address.
+Note that because FASTA format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_file">
 <span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Format</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">char_state_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states_present</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ambiguous_as_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_file" title="Permalink to this definition"></a></dt>
 <dd><p>Writes this Collation to the file with the given address.</p>
@@ -394,7 +434,7 @@ Defaults to None.</p></li>
 <li><p><strong>split_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to treat
 missing characters/variation units as having a contribution of 1 split over all states/readings;
 if False, then missing data is ignored (i.e., all states are 0).
-Not applicable for NEXUS, HENNIG86, or STEMMA format.
+Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
 Default value is True.</p></li>
 <li><p><strong>char_state_labels</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to print
 the CharStateLabels block in NEXUS output.
@@ -458,6 +498,18 @@ It is only applied if the states_present option is True.</p></li>
 <dd class="field-even"><p>A NumPy array with a row for each substantive reading and a column for each witness.
 A list of substantive reading ID strings.
 A list of witness ID strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_phylip">
+<span class="sig-name descname"><span class="pre">to_phylip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_phylip" title="Permalink to this definition"></a></dt>
+<dd><p>Writes this Collation to a file in PHYLIP format with the given address.
+Note that because PHYLIP format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_addr</strong> – A string representing the path to an output file.</p>
 </dd>
 </dl>
 </dd></dl>
