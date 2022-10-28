@@ -31,6 +31,6 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd standard-RAxML
-        raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.phy -K MK -n T1
-        raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.fasta -K MK -n T2
+        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.phy -K MK -n T1
+        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.fasta -K MK -n T2
 
