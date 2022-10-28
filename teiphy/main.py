@@ -1,4 +1,5 @@
 from typing import List  # for list-like inputs
+from importlib.metadata import version # for checking package version
 from pathlib import Path  # for validating file address inputs
 from lxml import etree as et  # for parsing XML input
 import typer
@@ -9,6 +10,11 @@ from .collation import Collation
 
 app = typer.Typer(rich_markup_mode="rich")
 
+def version_callback(value: bool):
+    if value:
+        teiphy_version = version("teiphy")
+        typer.echo(teiphy_version)
+        raise typer.Exit()
 
 @app.command()
 def to_file(
@@ -44,6 +50,12 @@ def to_file(
         help="Use the missing symbol instead of Equate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
+    version: bool = typer.Option(
+        False,
+        callback=version_callback,
+        is_eager=True,
+        help="Print the current version.",
+    ),
     format: Format = typer.Option(None, case_sensitive=False, help="The output format."),
     input: Path = typer.Argument(
         ...,
