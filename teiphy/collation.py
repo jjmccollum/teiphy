@@ -617,7 +617,7 @@ class Collation:
             for i, wit in enumerate(self.witnesses):
                 taxlabel = taxlabels[i]
                 # Add enough space after this label ensure that all sequences are nicely aligned:
-                sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel)))
+                sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel))) + "\t"
                 for rdg_support in self.readings_by_witness[wit.id]:
                     # If this reading is lacunose in this witness, then use the missing character:
                     if sum(rdg_support) == 0:
