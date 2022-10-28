@@ -617,7 +617,7 @@ class Collation:
             for i, wit in enumerate(self.witnesses):
                 taxlabel = taxlabels[i]
                 # Add enough space after this label ensure that all sequences are nicely aligned:
-                sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel) + 1))
+                sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel)))
                 for rdg_support in self.readings_by_witness[wit.id]:
                     # If this reading is lacunose in this witness, then use the missing character:
                     if sum(rdg_support) == 0:
@@ -632,10 +632,7 @@ class Collation:
                         continue
                     # For multiple readings, print the missing symbol:
                     sequence += missing_symbol
-                f.write(sequence)
-                # If this is not the last witness, then add a line break:
-                if i < len(self.witnesses) - 1:
-                    f.write("\n")
+                f.write("%s\n" % (sequence))
         return
 
     def get_fasta_symbols(self):
