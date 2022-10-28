@@ -344,7 +344,7 @@ Supported Output Formats and Options
 ------------------------------------
 
 You can specify a preferred output format for the conversion explicitly with the ``--format`` flag.
-Supported options include ``nexus``, ``hennig86``, ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
+Supported options include ``nexus``, ``hennig86``, ``phylip`` (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), ``fasta``, ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
 If you do not supply a ``--format`` argument, then ``teiphy`` will attempt to infer the correct format from the file extension of the output file name.
 
 For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-readable labels for variation units and readings) is included in the output file by default, but you can disable it by specifying the ``--no-labels`` flag.
@@ -379,8 +379,8 @@ If the ``--states-present`` flag is not supplied, then the more precise ``States
 For ``nexus`` outputs with the ``--states-present`` flag set, you can also include the ``--ambiguous-as-missing`` flag if you want to treat all ambiguous states as missing states.
 If your NEXUS-formatted output is to be used by a phylogenetic software that ignores or does not recognize ambiguous states, you may want or need to use this option.
 
-Note that for both ``nexus`` and ``hennig86`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
-This is a requirement for Hennig86 format, and some phylogenetic programs that use NEXUS format (such as IQTREE) do not support symbols outside of the basic 36 alphanumeric characters at this time.
+Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
+This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
 
 Other Options
 -------------
