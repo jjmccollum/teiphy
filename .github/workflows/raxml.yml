@@ -20,8 +20,8 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml mrbayes_example.phy
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml mrbayes_example.fasta
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml raxml_example.phy
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml raxml_example.fasta
     - name: Install Phylogenetics Package
       run: |
         git clone https://github.com/stamatak/standard-RAxML
@@ -31,6 +31,6 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd standard-RAxML
-        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.phy -K MK -n T1
-        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../ubs_ephesians.fasta -K MK -n T2
+        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../raxml_example.phy -K MK -n T1
+        ./raxmlHPC -p 12345 -m MULTIGAMMA -s  ../raxml_example.fasta -K MK -n T2
 
