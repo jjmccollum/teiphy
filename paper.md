@@ -71,7 +71,7 @@ Given the prevalence of efforts like these, the need for a means of converting T
 
 While the conversion process is a straightforward one for most collation data, various sources of ambiguity can make a one-to-one mapping of witnesses to readings impossible.
 One such source of ambiguity is lacunae, or gaps in the text due to erasure, faded ink, or damage to the page.
-Another is retroversions, or reconstructed readings in the original language of the text resulting from the back-translation subsequent translations of the text into other languages.
+Another is retroversions, or readings in the original language of the text reconstructed through the back-translation of subsequent versions of the text in other languages.
 Mechanisms for modeling ambiguous states resulting from situations like these exist in both TEI XML and NEXUS, and in both parsimony- and likelihood-based phylogenetic methods, ambiguities about the states at the leaves and even at the root of the tree can be encoded and leveraged in the inference process.
 For these reasons, it is imperative to ensure that these types of judgments, as well as other rich features from TEI XML, can be respected (and, where necessary, preserved) in the conversion process.
 
@@ -127,7 +127,7 @@ If, in variation units where manuscripts are corrected or have alternate reading
 (Note that because the `*` character is reserved on the command-line, we must place it between quotation marks directly after the `-s` flag.)
 
 When corrections are made to a manuscript, they are typically sporadic, and as a result, the text of corrector witnesses like 06C1 and 06C2 will tend to be too fragmentary to be useful for analysis.
-But if we wish to assume that each corrector tacitly adopted of all the readings from the previous hand that he or she did not change, then `teiphy` can “fill out” each corrector’s text using the text of the first hand (in the case of the first corrector) or the filled-out text of the previous corrector (for all subsequent correctors).
+But if we wish to assume that each corrector tacitly adopted all of the readings from the previous hand that he or she did not change, then `teiphy` can “fill out” each corrector’s text using the text of the first hand (in the case of the first corrector) or the filled-out text of the previous corrector (for all subsequent correctors).
 Thus, 06C1 would replicate the text of 06* (i.e., the first hand responsible for the text of 06) where it does not introduce its own readings, and 06C2 would then replicate the text of 06C1 where it does not introduce its own readings.
 If we want to apply this transformation during the conversion process, then we can specify this with the `--fill-correctors` flag.
 
@@ -137,7 +137,8 @@ Finally, we must specify the required arguments to `teiphy`, which are the input
 Note that we do not have to specify the desired output format explicitly; `teiphy` will determine from the output filename that it should write a NEXUS file.
 Combining the previous options and arguments, the complete command is
 ```
-teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --states-present example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
+teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac
+-s"*" -s T --fill-correctors --states-present example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
 ```
 
 If we pass the resulting NEXUS file to IQ-TREE and specify appropriate settings for our textual data (in this case, the Lewis Mk substitution model with ascertainment bias correction), we will get an output tree like the one shown in Figure 1.
@@ -153,7 +154,8 @@ Second, since multiple files are written for STEMMA input (namely, a collation f
 
 Combining the options and arguments we used before with these changes, the complete command is
 ```
-teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
+teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac
+-s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
 ```
 
 If we process the output files with the PREP utility that accompanies STEMMA and then pass the resulting files to STEMMA, we will get an output tree like the one shown in Figure 2.
@@ -161,7 +163,8 @@ If we process the output files with the PREP utility that accompanies STEMMA and
 ![A phylogenetic tree inferred by STEMMA for the UBS Ephesians example data using 100 iterations of simulated annealing. Mixed witnesses are split (with proportions of their readings indicated by the percentages before their sigla) and located at different parts of the tree. Note that some witnesses (e.g., 012, 35) from the collation are excluded from this tree by STEMMA because they have the same reading sequence as another witness after their reconstructed, defective, and orthographic readings have been regularized.](docs/img/stemma.pdf)
 
 For the small sample of variation units covered in the UBS apparatus for Ephesians, the phylogenetic results depicted in Figures 1 and 2 are impressive.
-The trees produced by IQ-TREE and STEMMA agree on several traditionally established groupings of manuscripts, including Family 1739 (1739, 1881, and the corrections to 424); the “Western” tradition (as preserved in the Greek-Latin diglots 06, 010, and 012, the Latin Vulgate, and the early Latin church fathers Ambrosiaster, Marius Victorinus, and Pelagius); and the later Byzantine tradition (with representative manuscripts 18 and 35 and church fathers Chrysostom and Theodore of Mopsuestia), which itself includes the Harklean Syriac translation (syrh) and the witnesses to its Greek _Vorlage_ (1505, 1611, 2495).
+The trees produced by IQ-TREE and STEMMA agree on several traditionally established groupings of manuscripts, including Family 1739 (1739, 1881, and the corrections to 424); the “Western” tradition (as preserved in the Greek-Latin diglots 06, 010, and 012, the Latin Vulgate, and the early Latin church fathers Ambrosiaster, Marius Victorinus, and Pelagius); and the later Byzantine tradition (with representative manuscripts 18 and 35 and church fathers Chrysostom and Theodore of Mopsuestia).
+The Harklean Syriac translation (syrh) and the witnesses to its Greek _Vorlage_ (1505, 1611, 2495) are correctly placed within the Byzantine tradition, although the two programs disagree on how to describe their relationships within that tradition.
 While IQ-TREE does not account for mixture complicating the tradition, STEMMA identifies three witnesses suspected to exhibit Byzantine contamination: 1175, 1881, and the second corrector of 06.
 Both programs also identify the Codex Alexandrinus (02) as closely related to both the Sahidic and Bohairic Coptic translations of Ephesians (copsa, copbo), although they disagree on where this clade is located in the larger tradition.
 Despite their discrepancies regarding certain subtrees, the extent of their agreements speaks to the level of genealogically significant detail preserved in the TEI XML apparatus and the NEXUS and STEMMA inputs generated from it.
