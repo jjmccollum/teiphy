@@ -138,7 +138,8 @@ Note that we do not have to specify the desired output format explicitly; `teiph
 Combining the previous options and arguments, the complete command is
 ```
 teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac
--s"*" -s T --fill-correctors --states-present example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
+-s"*" -s T --fill-correctors --states-present
+example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
 ```
 
 If we pass the resulting NEXUS file to IQ-TREE and specify appropriate settings for our textual data (in this case, the Lewis Mk substitution model with ascertainment bias correction), we will get an output tree like the one shown in Figure 1.
@@ -155,7 +156,8 @@ Second, since multiple files are written for STEMMA input (namely, a collation f
 Combining the options and arguments we used before with these changes, the complete command is
 ```
 teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac
--s"*" -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
+-s"*" -s T --fill-correctors --format stemma
+example/ubs_ephesians.xml stemma_example
 ```
 
 If we process the output files with the PREP utility that accompanies STEMMA and then pass the resulting files to STEMMA, we will get an output tree like the one shown in Figure 2.
