@@ -26,9 +26,8 @@ bibliography: docs/references.bib
 
 Textual scholars have been using phylogenetics to analyze manuscript traditions since the early 1990s [@roh_report_1992].
 Many standard phylogenetic software packages accept as input the NEXUS file format [@msm_nexus_1997]. 
-The `teiphy` program takes a collation of texts encoded in TEI XML format and converts it to a NEXUS file (among other formats)
-amenable to phylogenetic analysis.
-The package can also convert to other formats such as Stephen C. Carlson’s [STEMMA](https://github.com/stemmatic/stemma) format or to a NumPy array [@numpy_2020].
+The `teiphy` program takes a collation of texts encoded in TEI XML format and can convert it to any of the following formats amenable to phylogenetic analysis: NEXUS (with support for ambiguous states and clock model calibration data blocks for MrBayes or BEAST2), Hennig86, PHYLIP (relaxed for use with RAxML), FASTA (relaxed for use with RAxML), STEMMA (a unique format designed for Stephen C. Carlson's stemmatic software tailored for textual data).
+For machine learning-based analyses, `teiphy` can also convert a TEI XML collation to a collation matrix in NumPy, Pandas DataFrame, CSV, TSV, or Excel format.
 
 # Statement of Need
 
@@ -63,9 +62,10 @@ Finally, for phylogenetic programs that attempt to estimate the posterior distri
 
 Furthermore, end users of textual collations may be interested in non-phylogenetic analyses.
 In this case, the desired input format is often not a NEXUS-style sequence alignment, but a collation matrix with a row for each variant reading and a column for each witness.
-For Python machine-learning libraries like Scikit-learn [@pedregosa_scikit-learn_2011], NIMFA [@zb_nimfa_2012], and TensorFlow [@abadi_tensorflow_2015], the standard input format is a NumPy array [@numpy_2020].
+For Python machine-learning libraries like Scikit-learn [@pedregosa_scikit-learn_2011], NIMFA [@zb_nimfa_2012], and TensorFlow [@abadi_tensorflow_2015], the standard input format is a NumPy array [@numpy_2020], although Pandas DataFrames, which support row and column labels [@reback_pandas_2020; @mckinney_scipy_2010], may also be supported.
+(The latter format also extends the conversion pipeline to many other formats, including CSV, TSV, and Excel files; Pandas DataFrames can even write their contents to database tables.)
 To give an example, the text of the New Testament has served as a testbed for multiple analyses of this type, which have generally applied clustering and biclustering algorithms to collation matrices [@thorpe_multivariate2002; @willker_pca_2008; @baldwin_fa_2010; @finney_discover_2018; @mccollum_biclustering_2019].
-Given the prevalence of efforts like these, the need for a means of converting TEI XML collations to NumPy collation matrices is clear.
+Given the prevalence of efforts like these, the need for a means of converting TEI XML collations to NumPy collation matrices or labeled Pandas DataFrames is clear.
 
 # Design
 
