@@ -178,7 +178,29 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-ambiguous-as-missing">
 <span class="sig-name descname"><span class="pre">--ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-ambiguous-as-missing" title="Permalink to this definition"></a></dt>
-<dd><p>Use the missing symbol instead of Equate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the –states-present option is also set.</p>
+<dd><p>Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the –states-present option is also set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-calibrate-dates">
+<span class="sig-name descname"><span class="pre">--calibrate-dates</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-calibrate-dates</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-calibrate-dates" title="Permalink to this definition"></a></dt>
+<dd><p>Add an Assumptions block containing date distributions for witnesses to NEXUS output; this option is intended for inputs to BEAST2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-mrbayes">
+<span class="sig-name descname"><span class="pre">--mrbayes</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-mrbayes</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-mrbayes" title="Permalink to this definition"></a></dt>
+<dd><p>Add a MrBayes block containing model settings and age calibrations for witnesses to NEXUS output; this option is intended for inputs to MrBayes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default</dt>
 <dd class="field-odd"><p>False</p>
@@ -245,13 +267,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7fe29d4fe1c0&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f6a4ca43580&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7fe29d4fe2b0&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f6a4ca43670&gt;</p>
 </dd></dl>
 
 </section>
