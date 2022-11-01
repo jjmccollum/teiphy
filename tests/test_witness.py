@@ -64,12 +64,12 @@ class WitnessTestCase(unittest.TestCase):
         xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"><tei:origDate notBefore=\"50\"/></witness>" % tei_ns)
         witness = Witness(xml)
         self.assertEqual(witness.date_range[0], 50)
-        self.assertEqual(witness.date_range[1], 50)
+        self.assertIsNone(witness.date_range[1])
 
     def test_init_date_range_end_only(self):
         xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"><tei:origDate notAfter=\"100\"/></witness>" % tei_ns)
         witness = Witness(xml)
-        self.assertEqual(witness.date_range[0], 100)
+        self.assertIsNone(witness.date_range[0])
         self.assertEqual(witness.date_range[1], 100)
 
 

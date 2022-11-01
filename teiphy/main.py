@@ -47,7 +47,15 @@ def to_file(
     ),
     ambiguous_as_missing: bool = typer.Option(
         False,
-        help="Use the missing symbol instead of Equate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
+        help="Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
+    ),
+    calibrate_dates: bool = typer.Option(
+        False,
+        help="Add an Assumptions block containing date distributions for witnesses to NEXUS output; this option is intended for inputs to BEAST2.",
+    ),
+    mrbayes: bool = typer.Option(
+        False,
+        help="Add a MrBayes block containing model settings and age calibrations for witnesses to NEXUS output; this option is intended for inputs to MrBayes.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     version: bool = typer.Option(
@@ -96,4 +104,6 @@ def to_file(
         char_state_labels=labels,
         states_present=states_present,
         ambiguous_as_missing=ambiguous_as_missing,
+        calibrate_dates=calibrate_dates,
+        mrbayes=mrbayes,
     )

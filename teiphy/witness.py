@@ -53,11 +53,6 @@ class Witness:
                     date_range[0] = int(orig_date.get("notBefore"))
                 if orig_date.get("notAfter") is not None:
                     date_range[1] = int(orig_date.get("notAfter"))
-            # If, at this point, only one end of the date range is defined, then set the other end to match it:
-            if date_range[0] is None and date_range[1] is not None:
-                date_range[0] = date_range[1]
-            elif date_range[0] is not None and date_range[1] is None:
-                date_range[1] = date_range[0]
             self.date_range = tuple(date_range)
             break
 
