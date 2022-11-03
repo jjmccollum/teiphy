@@ -3,7 +3,7 @@
 .. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/teiphy-logo.svg
 
 |license badge| |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge| 
-|iqtree badge| |mrbayes badge| |stemma badge| |joss badge|
+|iqtree badge| |raxml badge| |mrbayes badge| |stemma badge| |joss badge|
 
 .. |license badge| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
     :target: https://choosealicense.com/licenses/mit/
@@ -25,6 +25,9 @@
 
 .. |iqtree badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml
+
+.. |raxml badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/raxml.yml/badge.svg
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/raxml.yml
 
 .. |mrbayes badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml
