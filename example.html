@@ -162,12 +162,8 @@ for this example is available in the <code class="docutils literal notranslate">
 <p><a class="reference external" href="http://www.iqtree.org/">IQ-TREE</a> is a popular phylogenetic analysis package.
 To use it to perform a maximum likelihood phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --states-present example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>IQ-TREE requires the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag.</p>
 </div>
 <p>This file can then be run in IQ-TREE with the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians-iqtree.nexus -m MK+ASC -bb <span class="m">1000</span>
@@ -182,12 +178,12 @@ convert the TEI XML to NEXUS format using <code class="docutils literal notransl
 <p><a class="reference external" href="https://nbisweden.github.io/MrBayes/">MrBayes</a> is a Bayesian phylogenetic software package.
 To use it to perform a phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Like IQ-TREE, MrBayes requires the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag. It also requires the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.</p>
+<p>MrBayes requires the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.</p>
 </div>
 <p>This file can then be read into MrBayes as follows:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb -i ubs_ephesians-mrbayes.nexus

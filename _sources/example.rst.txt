@@ -65,11 +65,7 @@ convert the TEI XML to NEXUS format using ``teiphy`` with the command
 
 .. code:: bash
 
-    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --states-present example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
-
-.. note::
-
-    IQ-TREE requires the ``--states-present`` flag.
+    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
 
 This file can then be run in IQ-TREE with the following command:
 
@@ -94,11 +90,11 @@ convert the TEI XML to NEXUS format using ``teiphy`` with this command:
 
 .. code:: bash
 
-    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
+    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
 
 .. note::
 
-    Like IQ-TREE, MrBayes requires the ``--states-present`` flag. It also requires the ``--no-labels`` flag.
+    MrBayes requires the ``--no-labels`` flag.
 
 This file can then be read into MrBayes as follows:
 

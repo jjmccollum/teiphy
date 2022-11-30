@@ -184,11 +184,13 @@ must reference that attribute’s value in the ``witDetail`` and
 attribute.
 
 For NEXUS output, the character states for each witness is encoded using
-``StatesFormat=Frequency``, meaning that each non-missing character is
-represented as a vector of frequencies for each reading/state. For
-unambiguous readings, this vector should have a value of 1 for a single
+``StatesFormat=StatesPresent`` by default, meaning that each non-missing character is
+represented by a single symbol or by a set of symbols between braces (in the case of ambiguous readings).
+But if you want to encode the character states for each witness using ``StatesFormat=Frequency``,
+with each character represented by a vector of frequencies for each reading/state, you can do this with the ``--frequency`` option to ``teiphy``.
+For unambiguous readings, the corresponding state vector will have a value of 1 for a single
 reading/state, while for ambiguous readings, it should have multiple
-values for different readings/states.
+values for different readings/states that sum to 1.
 
 Lacunae and Other Missing Data
 ------------------------------
@@ -351,11 +353,13 @@ For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-reada
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.
 
-For ``nexus`` outputs, you can also include a ``--states-present`` flag, which will convert your collation data for each witness to a string of mostly single-state symbols, 
-including symbols that represent missing readings, as well as some multi-state symbols in braces representing ambiguous readings (e.g., ``P46 1003110?001011000200100001000100001{01}0100``).
-The ``StatesFormat=StatesPresent`` NEXUS setting produces more compact outputs and is the expected states format for PAUP*.
+For ``nexus`` outputs, the output uses the ``StatesFormat=StatesPresent`` encoding option by default.
+With this setting, witness character states are encoded as a series of single symbols for unambiguous readings and multi-state symbols in braces representing ambiguous readings
+(e.g., ``P46 1003110?001011000200100001000100001{01}0100``).
+This setting produces more compact outputs and is the expected states format for PAUP*.
 The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
-If the ``--states-present`` flag is not supplied, then the more precise ``StatesFormat=Frequency`` setting is used by default, which encodes reading states as frequency vectors:
+If you wish to capture unequal degrees of certainty more precisely, then you can also include the ``--frequency`` flag,
+which will use the ``StatesFormat=Frequency`` setting in the NEXUS output and encode reading states as frequency vectors:
 
 ::
 
@@ -376,7 +380,7 @@ If the ``--states-present`` flag is not supplied, then the more precise ``States
         (0:1.0000 1:0.0000)
         (0:1.0000 1:0.0000)
 
-For ``nexus`` outputs with the ``--states-present`` flag set, you can also include the ``--ambiguous-as-missing`` flag if you want to treat all ambiguous states as missing states.
+For ``nexus`` outputs with the default ``StatesPresent`` encoding, you can also include the ``--ambiguous-as-missing`` flag if you want to treat all ambiguous states as missing states.
 If your NEXUS-formatted output is to be used by a phylogenetic software that ignores or does not recognize ambiguous states, you may want or need to use this option.
 
 Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
@@ -394,6 +398,6 @@ To run this script with the example input in verbose mode with the settings desc
 
 ::
 
-   teiphy -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s"*" -s T -s /1 -s /2 -s /3 --fill-correctors --states-present --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
+   teiphy -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s"*" -s T -s /1 -s /2 -s /3 --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.

@@ -273,11 +273,13 @@ must reference that attribute’s value in the <code class="docutils literal not
 <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements; otherwise, you must use and reference the <code class="docutils literal notranslate"><span class="pre">&#64;n</span></code>
 attribute.</p>
 <p>For NEXUS output, the character states for each witness is encoded using
-<code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code>, meaning that each non-missing character is
-represented as a vector of frequencies for each reading/state. For
-unambiguous readings, this vector should have a value of 1 for a single
+<code class="docutils literal notranslate"><span class="pre">StatesFormat=StatesPresent</span></code> by default, meaning that each non-missing character is
+represented by a single symbol or by a set of symbols between braces (in the case of ambiguous readings).
+But if you want to encode the character states for each witness using <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code>,
+with each character represented by a vector of frequencies for each reading/state, you can do this with the <code class="docutils literal notranslate"><span class="pre">--frequency</span></code> option to <code class="docutils literal notranslate"><span class="pre">teiphy</span></code>.
+For unambiguous readings, the corresponding state vector will have a value of 1 for a single
 reading/state, while for ambiguous readings, it should have multiple
-values for different readings/states.</p>
+values for different readings/states that sum to 1.</p>
 </section>
 <section id="lacunae-and-other-missing-data">
 <h2>Lacunae and Other Missing Data<a class="headerlink" href="#lacunae-and-other-missing-data" title="Permalink to this heading"></a></h2>
@@ -421,11 +423,13 @@ If you do not supply a <code class="docutils literal notranslate"><span class="p
 <p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs, the <code class="docutils literal notranslate"><span class="pre">CharStateLabels</span></code> block (which provides human-readable labels for variation units and readings) is included in the output file by default, but you can disable it by specifying the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs, you can also include a <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag, which will convert your collation data for each witness to a string of mostly single-state symbols,
-including symbols that represent missing readings, as well as some multi-state symbols in braces representing ambiguous readings (e.g., <code class="docutils literal notranslate"><span class="pre">P46</span> <span class="pre">1003110?001011000200100001000100001{01}0100</span></code>).
-The <code class="docutils literal notranslate"><span class="pre">StatesFormat=StatesPresent</span></code> NEXUS setting produces more compact outputs and is the expected states format for PAUP*.
+<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs, the output uses the <code class="docutils literal notranslate"><span class="pre">StatesFormat=StatesPresent</span></code> encoding option by default.
+With this setting, witness character states are encoded as a series of single symbols for unambiguous readings and multi-state symbols in braces representing ambiguous readings
+(e.g., <code class="docutils literal notranslate"><span class="pre">P46</span> <span class="pre">1003110?001011000200100001000100001{01}0100</span></code>).
+This setting produces more compact outputs and is the expected states format for PAUP*.
 The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
-If the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag is not supplied, then the more precise <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code> setting is used by default, which encodes reading states as frequency vectors:</p>
+If you wish to capture unequal degrees of certainty more precisely, then you can also include the <code class="docutils literal notranslate"><span class="pre">--frequency</span></code> flag,
+which will use the <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code> setting in the NEXUS output and encode reading states as frequency vectors:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>P46
     (0:0.0000 1:1.0000)
     (0:1.0000 1:0.0000 2:0.0000)
@@ -444,7 +448,7 @@ If the <code class="docutils literal notranslate"><span class="pre">--states-pre
     (0:1.0000 1:0.0000)
 </pre></div>
 </div>
-<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs with the <code class="docutils literal notranslate"><span class="pre">--states-present</span></code> flag set, you can also include the <code class="docutils literal notranslate"><span class="pre">--ambiguous-as-missing</span></code> flag if you want to treat all ambiguous states as missing states.
+<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs with the default <code class="docutils literal notranslate"><span class="pre">StatesPresent</span></code> encoding, you can also include the <code class="docutils literal notranslate"><span class="pre">--ambiguous-as-missing</span></code> flag if you want to treat all ambiguous states as missing states.
 If your NEXUS-formatted output is to be used by a phylogenetic software that ignores or does not recognize ambiguous states, you may want or need to use this option.</p>
 <p>Note that for the <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">hennig86</span></code>, <code class="docutils literal notranslate"><span class="pre">phylip</span></code>, and <code class="docutils literal notranslate"><span class="pre">fasta</span></code> output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.</p>
@@ -456,7 +460,7 @@ performance or validating your collation, you can include the
 <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> flag when you invoke any conversion command through
 the CLI.</p>
 <p>To run this script with the example input in verbose mode with the settings described above enabled, enter <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> directory and enter the command</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">teiphy</span> <span class="o">-</span><span class="n">t</span> <span class="n">reconstructed</span> <span class="o">-</span><span class="n">t</span> <span class="n">defective</span> <span class="o">-</span><span class="n">t</span> <span class="n">orthographic</span> <span class="o">-</span><span class="n">t</span> <span class="n">subreading</span> <span class="o">-</span><span class="n">m</span> <span class="n">lac</span> <span class="o">-</span><span class="n">m</span> <span class="n">overlap</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span> <span class="n">T</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="mi">1</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="mi">2</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="mi">3</span> <span class="o">--</span><span class="n">fill</span><span class="o">-</span><span class="n">correctors</span> <span class="o">--</span><span class="n">states</span><span class="o">-</span><span class="n">present</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">example</span>\<span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">xml</span> <span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">nxs</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">teiphy</span> <span class="o">-</span><span class="n">t</span> <span class="n">reconstructed</span> <span class="o">-</span><span class="n">t</span> <span class="n">defective</span> <span class="o">-</span><span class="n">t</span> <span class="n">orthographic</span> <span class="o">-</span><span class="n">t</span> <span class="n">subreading</span> <span class="o">-</span><span class="n">m</span> <span class="n">lac</span> <span class="o">-</span><span class="n">m</span> <span class="n">overlap</span> <span class="o">-</span><span class="n">s</span><span class="s2">&quot;*&quot;</span> <span class="o">-</span><span class="n">s</span> <span class="n">T</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="mi">1</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="mi">2</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="mi">3</span> <span class="o">--</span><span class="n">fill</span><span class="o">-</span><span class="n">correctors</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">example</span>\<span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">xml</span> <span class="n">ubs_ephesians</span><span class="o">.</span><span class="n">nxs</span>
 </pre></div>
 </div>
 <p>from the command line.</p>

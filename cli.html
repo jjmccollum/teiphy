@@ -165,9 +165,9 @@
 </dd></dl>
 
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-teiphy-states-present">
-<span class="sig-name descname"><span class="pre">--states-present</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-states-present</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-states-present" title="Permalink to this definition"></a></dt>
-<dd><p>Use the StatesFormat=StatesPresent setting instead of the StatesFormat=Frequency setting (and thus represent all states with single symbols rather than frequency vectors) in NEXUS output.</p>
+<dt class="sig sig-object std" id="cmdoption-teiphy-frequency">
+<span class="sig-name descname"><span class="pre">--frequency</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-frequency</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-frequency" title="Permalink to this definition"></a></dt>
+<dd><p>Use the StatesFormat=Frequency setting instead of the StatesFormat=StatesPresent setting (and thus represent all states with frequency vectors rather than symbols) in NEXUS output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default</dt>
 <dd class="field-odd"><p>False</p>
@@ -178,7 +178,7 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-ambiguous-as-missing">
 <span class="sig-name descname"><span class="pre">--ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-ambiguous-as-missing" title="Permalink to this definition"></a></dt>
-<dd><p>Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the –states-present option is also set.</p>
+<dd><p>Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the –frequency option is not set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default</dt>
 <dd class="field-odd"><p>False</p>
@@ -267,13 +267,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7ff09bcf0280&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f576d8fae20&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7ff09bcf0370&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f576d8faf10&gt;</p>
 </dd></dl>
 
 </section>
