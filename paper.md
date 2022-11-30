@@ -26,7 +26,7 @@ bibliography: docs/references.bib
 
 Textual scholars have been using phylogenetics to analyze manuscript traditions since the early 1990s [@roh_report_1992].
 Many standard phylogenetic software packages accept as input the NEXUS file format [@msm_nexus_1997]. 
-The `teiphy` program takes a collation of texts encoded in TEI XML format and can convert it to any of the following formats amenable to phylogenetic analysis: NEXUS (with support for ambiguous states and clock model calibration data blocks for MrBayes or BEAST2), Hennig86, PHYLIP (relaxed for use with RAxML), FASTA (relaxed for use with RAxML), STEMMA (a unique format designed for Stephen C. Carlson's stemmatic software tailored for textual data).
+The `teiphy` program takes a collation of texts encoded in TEI XML format and can convert it to any of the following formats amenable to phylogenetic analysis: NEXUS (with support for ambiguous states and clock model calibration data blocks for MrBayes or BEAST2), Hennig86, PHYLIP (relaxed for use with RAxML), FASTA (relaxed for use with RAxML), STEMMA (designed for Stephen C. Carlson’s stemmatic software tailored for textual data).
 For machine learning-based analyses, `teiphy` can also convert a TEI XML collation to a collation matrix in NumPy, Pandas DataFrame, CSV, TSV, or Excel format.
 
 # Statement of Need
@@ -40,28 +40,29 @@ Its expressive power has proven increasingly valuable since its release, as scho
 2. reproduce the text of their sources as closely as possible, with editorial regularizations to things like orthography, accentuation, and scribal shorthand encoded alongside rather than in place of the source text; and
 3. describe uncertainties about a source’s contents as accurately as possible, allowing for degrees of uncertainty and multiple choices for disambiguations if necessary.
 
-These principles have much bearing on the editing of critical texts, a task fundamental to both digital humanities and classical philology.
-Within the digital humanities, phylogenetic algorithms developed in the context of evolutionary biology have been popular approaches to this task.
+These principles have much bearing on the editing of critical texts, a task fundamental to the field of philology.
+Phylogenetic algorithms developed in the context of evolutionary biology have been popular approaches to this task, especially as philology itself has taken a digital turn over the years.
 Taking the most arduous part of reconstructing a textual tradition and delegating it to a computer proved to be a promising technique, and its successful demonstration with a portion of _The Canterbury Tales_ was a milestone in the development of the field [@bhbr_phylogeny_1998].
 Soon after this, the same methods were applied more comprehensively to the tradition of _Lanseloet van Denemerken_ in a work that would formalize many practical rules for computer-assisted textual criticism [@salemans_building_2000].
 Over the decades preceding and following these developments, biologists have continued to develop and improve phylogenetic methods [@felsenstein_inferring_2004], and textual critics have adapted these improvements and even added their own innovations to make the process more suitable for their purposes [@swh_vorlage_2002; @swh_pathways_2004; @carlson_text_2015; @edmondson_analysis_2019; @turnbull_history_2020; @hyytiainen_acts_2021].
 
 Phylogenetic algorithms have a natural place in textual criticism given the deep analogy between textual traditions and evolutionary trees of life: a sequence alignment, which consists of taxa, sites or characters, and the states of taxa at those characters, corresponds almost identically to a collation, which consists of witnesses to the text, locations of textual variation (which we will call “variation units” from here on), and the variant readings attested by witnesses at those points.
 
-Most phylogenetic software, however, expects inputs not in TEI XML format, but in NEXUS format [@msm_nexus_1997].
-This format was conceived with versatility in mind, and this design choice has been vindicated in its applicability with textual data, but NEXUS is neither equipped nor meant to express the same kinds of details that TEI XML is.
+The problem is that no currently available phylogenetic software accepts inputs in TEI XML format.
+Instead, most phylogenetic programs expect inputs in NEXUS format [@msm_nexus_1997].
+This format was conceived with versatility—including use in stemmatic and non-biological applications—in mind, and this design choice has been vindicated in its general applicability, but NEXUS is neither equipped nor meant to express the same kinds of details that TEI XML is.
 Conversely, for those interested primarily in working with the collation as an alignment, TEI XML is overkill.
 Thus, a chasm continues to separate data born in the digital humanities from phylogenetic tools born in the biological sciences, and the only way to bridge it is by conversion.
 
 The challenge is made more daunting by the variety of tools available for phylogenetic and other analyses, some of which expect inputs other than NEXUS files or NEXUS files augmented in different ways.
-For instance, the cladistic software PAUP\*, which has historically been the tool of choice for text-critical applications that evaluate candidate trees using the criterion of maximum parsimony, reads inputs in NEXUS format, but the TNT software, its main competitor among maximum parsimony-based programs, expects inputs in Hennig86 format [@farris_hennig86_1988; @gc_tnt_2016].
+For instance, the cladistic software PAUP\*, which has historically been the tool of choice for text-critical applications that evaluate candidate trees using the criterion of maximum parsimony, reads inputs in NEXUS format [@swofford_paup_2003], but the TNT software, its main competitor among maximum parsimony-based programs, expects inputs in Hennig86 format [@farris_hennig86_1988; @gc_tnt_2016].
 While Hennig86 format does not allow for as much flexibility in the input as NEXUS does (e.g., it does not support ambiguous character states that can be disambiguated as some states but not others), TNT’s extensive support for morphological state models makes it potentially more suitable for textual data, and textual critics may prefer it to PAUP\*.
-In the same regime, Stephen C. Carlson’s [STEMMA software](https://github.com/stemmatic/stemma), initially developed for the cladistic analysis of biblical texts known to be affected by contamination, makes substantial adaptations to the basic maximum-parsimony phylogenetic approach to account for this problem and other constraints common in a text-critical setting [@carlson_text_2015]; however, the input collation data must be provided in a unique STEMMA-specific format.
+In the same regime, Stephen C. Carlson’s [STEMMA software](https://github.com/stemmatic/stemma), initially developed for the cladistic analysis of biblical texts known to be affected by contamination, makes substantial adaptations to the basic maximum-parsimony phylogenetic approach to account for this problem and other constraints common in a text-critical setting [@carlson_text_2015]; however, the input collation data must be provided in a STEMMA-specific format.
 Likewise, among programs that use the maximum likelihood criterion instead of maximum parsimony, IQ-TREE accepts inputs in NEXUS format [@mscswhl_iqtree_2020], but RAxML interfaces primarily with inputs in PHYLIP and FASTA format [@stamatakis_raxml_2014].
 Finally, for phylogenetic programs that attempt to estimate the posterior distribution of candidate trees in a Bayesian fashion, MrBayes and BEAST2 both accept inputs in NEXUS format (or can convert NEXUS inputs to their standard input format), but they expect taxon dates (for the calibration of evolutionary clock models) to be specified in the NEXUS file in different code blocks [@rtmadhllsh_mrbayes_2012; @bouckaert_beast_2019].
 
 Furthermore, end users of textual collations may be interested in non-phylogenetic analyses.
-In this case, the desired input format is often not a NEXUS-style sequence alignment, but a collation matrix with a row for each variant reading and a column for each witness.
+In this case, the desired input format is often not a NEXUS-style sequence alignment, but a collation matrix with a row for each variant reading and a column for each witness (or vice-versa).
 For Python machine-learning libraries like Scikit-learn [@pedregosa_scikit-learn_2011], NIMFA [@zb_nimfa_2012], and TensorFlow [@abadi_tensorflow_2015], the standard input format is a NumPy array [@numpy_2020], although Pandas DataFrames, which support row and column labels [@reback_pandas_2020; @mckinney_scipy_2010], may also be supported.
 (The latter format also extends the conversion pipeline to many other formats, including CSV, TSV, and Excel files; Pandas DataFrames can even write their contents to database tables.)
 To give an example, the text of the New Testament has served as a testbed for multiple analyses of this type, which have generally applied clustering and biclustering algorithms to collation matrices [@thorpe_multivariate2002; @willker_pca_2008; @baldwin_fa_2010; @finney_discover_2018; @mccollum_biclustering_2019].
@@ -106,9 +107,15 @@ For witnesses with missing or ambiguous readings at a given variation unit, we u
 For ambiguous readings, we specify their possible disambiguations with the `@target` attribute and express our degrees of certainty about these disambiguations using `certainty` elements under the `witDetail` element. 
 
 The [TEI XML file](https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml) for this example is available in the `example` directory of the GitHub repository.
-Full instructions for converting this file using `teiphy` and analyzing it with several different phylogenetic packages are provided in the documentation, but here, we will walk through the command-line arguments involved in converting our example TEI XML collation (1) to a NEXUS file suitable for use with IQ-TREE, and (2) to input for the STEMMA program.
+Full instructions for converting this file using `teiphy` and analyzing it with several different phylogenetic packages are provided in the documentation, but here, we will walk through the command-line arguments involved in installing `teiphy` and using it to convert our example TEI XML collation (1) to a NEXUS file suitable for use with IQ-TREE, and (2) to input for the STEMMA program.
 
-For the first case, let us suppose that we would like to treat reconstructions of unclear or missing text, defective spellings, and orthographic variations in spelling as trivial variants for the purposes of our phylogenetic analysis.
+Because `teiphy` is published in the [Python Package Index (PyPI)](https://pypi.org/project/teiphy/), it can be installed via the command
+```
+pip install teiphy
+```
+
+Now we are ready to convert our TEI XML collation to a NEXUS file for IQ-TREE.
+Let us suppose that we would like to treat reconstructions of unclear or missing text, defective spellings, and orthographic variations in spelling as trivial variants for the purposes of our phylogenetic analysis.
 We can specify this to `teiphy` with the `-t` flag for each trivial type of reading as follows:
 ```
 -t reconstructed -t defective -t orthographic
@@ -131,14 +138,12 @@ But if we wish to assume that each corrector tacitly adopted all of the readings
 Thus, 06C1 would replicate the text of 06* (i.e., the first hand responsible for the text of 06) where it does not introduce its own readings, and 06C2 would then replicate the text of 06C1 where it does not introduce its own readings.
 If we want to apply this transformation during the conversion process, then we can specify this with the `--fill-correctors` flag.
 
-Because IQ-TREE expects its NEXUS input to contain sequence alignments with single-character symbols representing character states, we must tell `teiphy` to write the collation data in this format with the `--states-present` flag.
-
 Finally, we must specify the required arguments to `teiphy`, which are the input TEI XML file (`example/ubs_ephesians.xml`) and the name of the output NEXUS file (`ubs_ephesians-iqtree.nexus`).
 Note that we do not have to specify the desired output format explicitly; `teiphy` will determine from the output filename that it should write a NEXUS file.
 Combining the previous options and arguments, the complete command is
 ```
 teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac
--s"*" -s T --fill-correctors --states-present
+-s"*" -s T --fill-correctors
 example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
 ```
 
@@ -147,8 +152,8 @@ If we pass the resulting NEXUS file to IQ-TREE and specify appropriate settings 
 ![A phylogenetic tree inferred by IQ-TREE for the UBS Ephesians example data with support values on the branches based on 1000 bootstrap replicates. Reconstructed, defective, and orthographic sub-variants were treated as identical to their parent readings, and changes made to the text by later correctors (represented as distinct witnesses with sigla like 06C1 and 06C2) were filled in with the readings of the first hand or the previous corrector where the corrector was not active.](docs/img/iqtree.pdf)
 
 If we want to generate input files for the STEMMA program using the same options, only a few adjustments are required.
-First, the `--states-present` argument is no longer needed, as this is only applicable for NEXUS outputs.
-Second, since multiple files are written for STEMMA input (namely, a collation file with no file extension and a `.chron` file containing information about witness dates), we only specify the base of the filename for our output, and we must therefore specify the desired output format to `teiphy` explicitly with the argument
+First, since multiple files are written for STEMMA input (namely, a collation file with no file extension and a `.chron` file containing information about witness dates), we only specify the base of the filename for our output.
+Second, since the filename now has no extension, we must specify the desired output format to `teiphy` with the argument
 ```
 --format stemma
 ```
@@ -173,7 +178,8 @@ Despite their discrepancies regarding certain subtrees, the extent of their agre
 
 # Availability
 
-The software can be installed through the Python Package Index (PyPI), and the source code is available under the MIT license from the [GitHub repository](https://github.com/jjmccollum/teiphy). 
+As noted above, the software is published in [PyPI](https://pypi.org/project/teiphy/) and can be installed from there using `pip`.
+The source code is available under the MIT license from the [GitHub repository](https://github.com/jjmccollum/teiphy). 
 The automated testing suite has 100% coverage, and functional tests where our example TEI XML file is converted and run through RAxML, IQ-TREE, MrBayes, and STEMMA are part of `teiphy`’s continuous integration (CI) pipeline.
 
 # Acknowledgements and Funding
