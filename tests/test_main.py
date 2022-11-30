@@ -47,7 +47,7 @@ def test_to_nexus():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" in text
-        assert "StatesFormat=Frequency" in text
+        assert "StatesFormat=Frequency" not in text
 
 
 def test_to_nexus_no_labels():
@@ -59,24 +59,24 @@ def test_to_nexus_no_labels():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" not in text
-        assert "StatesFormat=Frequency" in text
+        assert "StatesFormat=Frequency" not in text
 
 
-def test_to_nexus_states_present():
+def test_to_nexus_frequency():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
-        result = runner.invoke(app, ["--states-present", str(input_example), str(output)])
+        result = runner.invoke(app, ["--frequency", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "StatesFormat=Frequency" not in text
+        assert "StatesFormat=Frequency" in text
 
 
-def test_to_nexus_states_present_ambiguous_as_missing():
+def test_to_nexus_ambiguous_as_missing():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
-        result = runner.invoke(app, ["--states-present", "--ambiguous-as-missing", str(input_example), str(output)])
+        result = runner.invoke(app, ["--ambiguous-as-missing", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8")

@@ -41,13 +41,13 @@ def to_file(
         True,
         help="Print the CharStateLabels block (containing variation unit labels and reading texts converted to ASCII) in NEXUS output.",
     ),
-    states_present: bool = typer.Option(
+    frequency: bool = typer.Option(
         False,
-        help="Use the StatesFormat=StatesPresent setting instead of the StatesFormat=Frequency setting (and thus represent all states with single symbols rather than frequency vectors) in NEXUS output.",
+        help="Use the StatesFormat=Frequency setting instead of the StatesFormat=StatesPresent setting (and thus represent all states with frequency vectors rather than symbols) in NEXUS output.",
     ),
     ambiguous_as_missing: bool = typer.Option(
         False,
-        help="Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --states-present option is also set.",
+        help="Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --frequency option is not set.",
     ),
     calibrate_dates: bool = typer.Option(
         False,
@@ -102,7 +102,7 @@ def to_file(
         output,
         format=format,
         char_state_labels=labels,
-        states_present=states_present,
+        frequency=frequency,
         ambiguous_as_missing=ambiguous_as_missing,
         calibrate_dates=calibrate_dates,
         mrbayes=mrbayes,

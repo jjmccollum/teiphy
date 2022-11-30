@@ -290,45 +290,11 @@ class Collation:
         nexus_symbols = possible_symbols[:nsymbols]
         return nexus_symbols
 
-    # def get_nexus_equates(self, nexus_symbols: List[str]):
-    #     """Returns a list of one-character multiple-reading symbols for the NEXUS Equate block and a dictionary mapping multistate reading index lists to these symbols.
-
-    #     Note that this will ignore any certainty degrees assigned to these states in the collation.
-
-    #     Args:
-    #         nexus_symbols: A list of nexus symbols for the singleton states.
-
-    #     Returns:
-    #         A dictionary mapping tuples of multiple reading indices to their corresponding symbols in the equate block.
-    #     """
-    #     # NOTE: EQUATE symbols are allowed to be case-sensitive, so we can use uppercase characters for these:
-    #     possible_symbols = (
-    #         list(string.ascii_uppercase)
-    #     )
-    #     # First, populate a set of all reading index tuples that we encounter in the collation:
-    #     reading_ind_tuples_set = set()
-    #     # If there are no witnesses, then no symbols are needed at all:
-    #     if len(self.witnesses) == 0:
-    #         return [], {}
-    #     for wit in self.witnesses:
-    #         for rdg_support in self.readings_by_witness[wit.id]:
-    #             rdg_inds = [
-    #                 i for i, w in enumerate(rdg_support) if w > 0
-    #             ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
-    #             if len(rdg_inds) > 1:
-    #                 rdg_ind_tuple = tuple(rdg_inds)
-    #                 reading_ind_tuples_set.add(rdg_ind_tuple)
-    #     # Sort the reading index tuples in lexicographical order and map them to the remaining symbols:
-    #     reading_ind_tuples = sorted(list(reading_ind_tuples_set))
-    #     nexus_equates = possible_symbols[: len(reading_ind_tuples)]
-    #     nexus_equate_mapping = {t: possible_symbols[i] for i, t in enumerate(reading_ind_tuples)}
-    #     return nexus_equates, nexus_equate_mapping
-
     def to_nexus(
         self,
         file_addr: Union[Path, str],
         char_state_labels: bool = True,
-        states_present: bool = False,
+        frequency: bool = False,
         ambiguous_as_missing: bool = False,
         calibrate_dates: bool = False,
         mrbayes: bool = False,
@@ -338,13 +304,13 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output NEXUS file; the file type should be .nex, .nexus, or .nxs.
             char_state_labels: An optional flag indicating whether or not to include the CharStateLabels block.
-            states_present: An optional flag indicating whether to use the StatesFormat=StatesPresent setting
-                instead of the StatesFormat=Frequency setting
-                (and thus represent all states with single symbols rather than frequency vectors).
-                Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.
+            frequency: An optional flag indicating whether to use the StatesFormat=Frequency setting
+                instead of the StatesFormat=StatesPresent setting
+                (and thus represent all states with frequency vectors rather than symbols).
+                Note that this setting is necessary to make use of certainty degrees assigned to multiple ambiguous states in the collation.
             ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
                 If this flag is set, then only base symbols will be generated for the NEXUS file.
-                It is only applied if the states_present option is True.
+                It is only applied if the frequency option is False.
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses.
                 This option is intended for inputs to BEAST2.
             mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses.
@@ -362,9 +328,6 @@ class Collation:
         charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in self.substantive_variation_unit_ids]
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
-        # equates, equate_mapping = [], {}
-        # if states_present and not ambiguous_as_missing:
-        #     equates, equate_mapping = self.get_nexus_equates(symbols)
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the NEXUS header:
             f.write("#NEXUS\n\n")
@@ -376,25 +339,9 @@ class Collation:
             f.write("\tFormat\n")
             f.write("\t\tDataType=Standard\n")
             f.write("\t\tMissing=%s\n" % missing_symbol)
-            if states_present:
-                # There's no need to write StatesFormat=StatesPresent\n")
-                f.write("\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
-                # if not ambiguous_as_missing:
-                #     f.write("\t\tEquate=\"")
-                #     # Populate a reverse dictionary mapping the equate symbols to their reading index tuples:
-                #     equate_to_symbols = {}
-                #     for rdg_ind_tuple, e in equate_mapping.items():
-                #         equate_to_symbols[e] = rdg_ind_tuple
-                #     # Then for each symbol, write its mapping:
-                #     for i, e in enumerate(equates):
-                #         if i == 0:
-                #             f.write("%s=(%s)" % (e, "".join([symbols[j] for j in equate_to_symbols[e]])))
-                #         else:
-                #             f.write(" %s=(%s)" % (e, "".join([symbols[j] for j in equate_to_symbols[e]])))
-                #     f.write("\"\n")
-            else:
+            if frequency:
                 f.write("\t\tStatesFormat=Frequency\n")
-                f.write("\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
+            f.write("\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
             # If the char_state_labels is set, then write the labels for character-state labels, with each on its own line:
             if char_state_labels:
                 f.write("\tCharStateLabels")
@@ -427,7 +374,22 @@ class Collation:
             f.write("\tMatrix")
             for i, wit in enumerate(self.witnesses):
                 taxlabel = taxlabels[i]
-                if states_present:
+                if frequency:
+                    sequence = "\n\t\t" + taxlabel
+                    for rdg_support in self.readings_by_witness[wit.id]:
+                        sequence += "\n\t\t\t"
+                        # If this reading is lacunose in this witness, then use the missing character:
+                        if sum(rdg_support) == 0:
+                            sequence += missing_symbol
+                            continue
+                        # Otherwise, print out its frequencies for different readings in parentheses:
+                        sequence += "("
+                        for j, w in enumerate(rdg_support):
+                            sequence += "%s:%0.4f" % (symbols[j], w)
+                            if j < len(rdg_support) - 1:
+                                sequence += " "
+                        sequence += ")"
+                else:
                     sequence = "\n\t\t" + taxlabel
                     # Add enough space after this label ensure that all sequences are nicely aligned:
                     sequence += " " * (max_taxlabel_length - len(taxlabel) + 1)
@@ -443,26 +405,11 @@ class Collation:
                         if len(rdg_inds) == 1:
                             sequence += symbols[rdg_inds[0]]
                             continue
-                        # For multiple readings, print the corresponding equate symbol or the missing symbol depending on input settings:
+                        # For multiple readings, print the corresponding readings in braces or the missing symbol depending on input settings:
                         if ambiguous_as_missing:
                             sequence += missing_symbol
                         else:
                             sequence += "{%s}" % "".join([str(rdg_ind) for rdg_ind in rdg_inds])
-                else:
-                    sequence = "\n\t\t" + taxlabel
-                    for rdg_support in self.readings_by_witness[wit.id]:
-                        sequence += "\n\t\t\t"
-                        # If this reading is lacunose in this witness, then use the missing character:
-                        if sum(rdg_support) == 0:
-                            sequence += missing_symbol
-                            continue
-                        # Otherwise, print out its frequencies for different readings in parentheses:
-                        sequence += "("
-                        for j, w in enumerate(rdg_support):
-                            sequence += "%s:%0.4f" % (symbols[j], w)
-                            if j < len(rdg_support) - 1:
-                                sequence += " "
-                        sequence += ")"
                 f.write("%s" % (sequence))
             f.write(";\n")
             # End the data block:
@@ -1043,7 +990,7 @@ class Collation:
         format: Format = None,
         split_missing: bool = True,
         char_state_labels: bool = True,
-        states_present: bool = False,
+        frequency: bool = False,
         ambiguous_as_missing: bool = False,
         calibrate_dates: bool = False,
         mrbayes: bool = False,
@@ -1063,15 +1010,15 @@ class Collation:
             char_state_labels (bool, optional): An optional flag indicating whether to print
                 the CharStateLabels block in NEXUS output.
                 Default value is True.
-            states_present (bool, optional): An optional flag indicating whether to use the StatesFormat=StatesPresent setting
-                instead of the StatesFormat=Frequency setting
-                (and thus represent all states with single symbols rather than frequency vectors)
+            frequency (bool, optional): An optional flag indicating whether to use the StatesFormat=Frequency setting
+                instead of the StatesFormat=StatesPresent setting
+                (and thus represent all states with frequency vectors rather than symbols)
                 in NEXUS output.
-                Note that this setting will ignore any certainty degrees assigned to multiple ambiguous states in the collation.
+                Note that this setting is necessary to make use of certainty degrees assigned to multiple ambiguous states in the collation.
                 Default value is False.
             ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
                 If this flag is set, then only base symbols will be generated for the NEXUS file.
-                It is only applied if the states_present option is True.
+                It is only applied if the frequency option is False.
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
                 This option is intended for inputs to BEAST2.
@@ -1088,7 +1035,7 @@ class Collation:
             return self.to_nexus(
                 file_addr,
                 char_state_labels=char_state_labels,
-                states_present=states_present,
+                frequency=frequency,
                 ambiguous_as_missing=ambiguous_as_missing,
                 calibrate_dates=calibrate_dates,
                 mrbayes=mrbayes,

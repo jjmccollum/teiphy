@@ -20,8 +20,8 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml raxml_example.phy
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present example/ubs_ephesians.xml raxml_example.fasta
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels example/ubs_ephesians.xml raxml_example.phy
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels example/ubs_ephesians.xml raxml_example.fasta
     - name: Install Phylogenetics Package
       run: |
         git clone https://github.com/stamatak/standard-RAxML

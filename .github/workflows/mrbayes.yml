@@ -20,7 +20,7 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --states-present --mrbayes example/ubs_ephesians.xml mrbayes_example.nexus
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --mrbayes example/ubs_ephesians.xml mrbayes_example.nexus
     - name: Install Phylogenetics Package
       run: |
         git clone --depth 1 https://github.com/NBISweden/MrBayes.git
