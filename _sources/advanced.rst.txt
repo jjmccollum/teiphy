@@ -401,3 +401,14 @@ To run this script with the example input in verbose mode with the settings desc
    teiphy -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s"*" -s T -s /1 -s /2 -s /3 --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.
+
+Ascertainment Bias
+------------------
+
+If the apparatus in TEI only includes locations in the textual tradition where the readings differ, 
+then it will be important to correct for ascertainment bias when performing phylogenetic analysis which utilizes the branch lengths 
+(such as when using maximum likelihood or Bayesian techniques). 
+This is because the data is filtered to only include locations where changes have occurred and this leads the analysis to have a bias towards longer branch lengths.
+There are methods to correct for this, for example, as discussed in Lewis, 2001 :cite:p:`lewis_likelihood_2001`. 
+``teiphy`` will not perform this correction itself and you should consult the documentation for the phylogenetic software package being used to 
+determine how. For example, `IQ-TREE <http://www.iqtree.org/doc/Substitution-Models#ascertainment-bias-correction>`_ allows users to correct for ascertainment bias by adding ``+ASC`` to the model name.
