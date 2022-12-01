@@ -209,6 +209,28 @@
 </dd></dl>
 
 <dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-long-table">
+<span class="sig-name descname"><span class="pre">--long-table</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-long-table</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-long-table" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format. Note that if this option is set, ambiguous readings will be treated as missing data, and the –split-missing option will be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-split-missing">
+<span class="sig-name descname"><span class="pre">--split-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-split-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-split-missing" title="Permalink to this definition"></a></dt>
+<dd><p>Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default</dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-verbose">
 <span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-verbose" title="Permalink to this definition"></a></dt>
 <dd><p>Enable verbose logging (mostly for debugging purposes).</p>
@@ -267,13 +289,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f1757031cd0&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7fba8eea3580&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f1757031dc0&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7fba8eea3670&gt;</p>
 </dd></dl>
 
 </section>
