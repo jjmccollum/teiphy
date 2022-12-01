@@ -1,5 +1,5 @@
 from typing import List  # for list-like inputs
-from importlib.metadata import version # for checking package version
+from importlib.metadata import version  # for checking package version
 from pathlib import Path  # for validating file address inputs
 from lxml import etree as et  # for parsing XML input
 import typer
@@ -10,11 +10,13 @@ from .collation import Collation
 
 app = typer.Typer(rich_markup_mode="rich")
 
+
 def version_callback(value: bool):
     if value:
         teiphy_version = version("teiphy")
         typer.echo(teiphy_version)
         raise typer.Exit()
+
 
 @app.command()
 def to_file(
@@ -56,6 +58,14 @@ def to_file(
     mrbayes: bool = typer.Option(
         False,
         help="Add a MrBayes block containing model settings and age calibrations for witnesses to NEXUS output; this option is intended for inputs to MrBayes.",
+    ),
+    long_table: bool = typer.Option(
+        False,
+        help="Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format. Note that if this option is set, ambiguous readings will be treated as missing data, and the --split-missing option will be ignored.",
+    ),
+    split_missing: bool = typer.Option(
+        False,
+        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     version: bool = typer.Option(
@@ -106,4 +116,6 @@ def to_file(
         ambiguous_as_missing=ambiguous_as_missing,
         calibrate_dates=calibrate_dates,
         mrbayes=mrbayes,
+        long_table=long_table,
+        split_missing=split_missing,
     )

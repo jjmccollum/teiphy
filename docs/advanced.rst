@@ -386,6 +386,19 @@ If your NEXUS-formatted output is to be used by a phylogenetic software that ign
 Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
 
+Collations can also be converted to tabular formats.
+Within Python, the ``collation`` class's ``to_numpy`` method can be invoked to convert a collation to a NumPy matrix with rows for variant readings, columns for witnesses, and frequency values in the cells.
+Where a witness has missing data at a variation, its frequencies for different readings at this unit can be split evenly over 1 using the ``split_missing`` argument; otherwise, the witness will have frequencies of 0 for all readings at that unit.
+The same class's ``to_distance_matrix`` method produces a NumPy matrix with rows and columns for witnesses, where each cell contains the number of units where the row witness and column witness both have unambiguous readings and these readings disagree.
+The cells can instead be populated with the proportion of disagreements to units where the row and column witnesses have readings with the ``proportion`` argument.
+The same class's ``to_long_table`` method produces a NumPy matrix with columns for witness ID, variation unit ID, reading index, and reading text and rows for all combinations of these values found in the collation.
+The ``to_dataframe`` method invokes either ``to_numpy`` or ``to_long_table`` (depending on whether its ``long_table`` argument is true) and returns a Pandas ``DataFrame`` augmented with row and column labels (or, in the case of a long table, just column labels). 
+
+From the command line, the standard reading-witness matrix or long table can be written to a specified CSV, TSV, or Excel (.xlsx) file.
+If you specify the output filename with its extension, ``teiphy`` will infer which format to use. 
+If you are writing a reading-witness matrix to output, you can set the method's ``split_missing`` argument using the ``--split-missing`` command-line flag.
+If you want to write a long table to output instead of a reading-witness matrix, then you can do so by including the ``--long-table`` command-line flag.
+
 Other Options
 -------------
 

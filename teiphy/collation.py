@@ -756,7 +756,7 @@ class Collation:
                             row_ind += 1
                     else:
                         row_ind += len(rdg_support)
-                # Otherwise, adds its coefficients normally:
+                # Otherwise, add its coefficients normally:
                 else:
                     for i in range(len(rdg_support)):
                         matrix[row_ind, col_ind] = rdg_support[i]
@@ -807,45 +807,117 @@ class Collation:
                     matrix[i, j] = disagreements
         return matrix, witness_labels
 
-    def to_dataframe(self, split_missing: bool = True):
+    def to_long_table(self):
+        """Returns this Collation in the form of a long table with columns for taxa, characters, reading indices, and reading values.
+        Note that this method treats ambiguous readings as missing data.
+
+        Returns:
+            A NumPy array with columns for taxa, characters, reading indices, and reading values, and rows for each combination of these values in the matrix.
+            A list of column label strings.
+        """
+        # Initialize the outputs:
+        column_labels = ["taxon", "character", "state", "value"]
+        long_table_list = []
+        # First, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
+        # to the readings' texts:
+        reading_texts_by_indices = {}
+        substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        vu_ind = 0
+        for vu in self.variation_units:
+            if vu.id not in substantive_variation_unit_ids_set:
+                continue
+            rdg_ind = 0
+            for rdg in vu.readings:
+                key = tuple([vu.id, rdg.id])
+                if key not in substantive_variation_unit_reading_tuples_set:
+                    continue
+                indices = tuple([vu_ind, rdg_ind])
+                reading_texts_by_indices[indices] = rdg.text
+                rdg_ind += 1
+            if rdg_ind > 0:
+                vu_ind += 1
+        # Then populate the output list with the appropriate values:
+        witness_labels = [wit.id for wit in self.witnesses]
+        missing_symbol = '?'
+        for wit_id in witness_labels:
+            for vu_ind, rdg_support in enumerate(self.readings_by_witness[wit_id]):
+                # Get the variation unit label for this unit:
+                vu_label = self.substantive_variation_unit_ids[vu_ind]
+                # Populate a list of nonzero coefficients for this reading support vector:
+                rdg_inds = [k for k, w in enumerate(rdg_support) if w > 0]
+                # If this list does not consist of exactly one reading, then treat it as missing data:
+                if len(rdg_inds) != 1:
+                    long_table_list.append([wit_id, vu_label, missing_symbol, missing_symbol])
+                    continue
+                rdg_ind = rdg_inds[0]
+                rdg_text = reading_texts_by_indices[(vu_ind, rdg_ind)]
+                # Replace empty reading texts with the omission placeholder:
+                if rdg_text == "":
+                    rdg_text = "om."
+                long_table_list.append([wit_id, vu_label, rdg_ind, rdg_text])
+        # Then convert the long table entries list to a NumPy array:
+        long_table = np.array(long_table_list)
+        return long_table, column_labels
+
+    def to_dataframe(self, long_table: bool = False, split_missing: bool = True):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
+            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
+            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
 
         Returns:
-            A Pandas DataFrame with a row for each substantive reading and a column for each witness.
+            A Pandas DataFrame corresponding to a collation matrix with reading frequencies or a long table with discrete reading states.
         """
-        # Convert the collation to a NumPy array and get its row and column labels first:
-        matrix, reading_labels, witness_labels = self.to_numpy(split_missing)
-        df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
+        df = None
+        # Proceed based on whether the long_table option is set:
+        if long_table:
+            # Convert the collation to a long table and get its column labels first:
+            long_table, column_labels = self.to_long_table()
+            df = pd.DataFrame(long_table, columns=column_labels)
+        else:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, reading_labels, witness_labels = self.to_numpy(split_missing)
+            df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         return df
 
-    def to_csv(self, file_addr: Union[Path, str], split_missing: bool = True, **kwargs):
+    def to_csv(self, file_addr: Union[Path, str], long_table: bool = False, split_missing: bool = True, **kwargs):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
 
         If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
 
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
+            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
+            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
             **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(split_missing)
+        df = self.to_dataframe(long_table, split_missing)
+        # If this is a long table, then do not include row indices:
+        if long_table:
+            return df.to_csv(file_addr, encoding="utf-8", index=False, **kwargs)
         return df.to_csv(file_addr, encoding="utf-8", **kwargs)
 
-    def to_excel(self, file_addr: Union[Path, str], split_missing: bool = True):
+    def to_excel(self, file_addr: Union[Path, str], long_table: bool = False, split_missing: bool = True):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
         Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.
 
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
+            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
+            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(split_missing)
+        df = self.to_dataframe(long_table, split_missing)
+        # If this is a long table, then do not include row indices:
+        if long_table:
+            return df.to_excel(file_addr, index=False)
         return df.to_excel(file_addr)
 
     def to_stemma(self, file_addr: Union[Path, str]):
@@ -988,6 +1060,7 @@ class Collation:
         self,
         file_addr: Union[Path, str],
         format: Format = None,
+        long_table: bool = False,
         split_missing: bool = True,
         char_state_labels: bool = True,
         frequency: bool = False,
@@ -1002,6 +1075,11 @@ class Collation:
             format (Format, optional): The desired output format.
                 If None then it is infered from the file suffix.
                 Defaults to None.
+            long_table (bool, optional): An optional flag indicating whether or not to generate a long table
+                with columns for taxa, characters, reading indices, and reading values.
+                Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
+                Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
+                Defaults to False.
             split_missing (bool, optional): An optional flag indicating whether to treat
                 missing characters/variation units as having a contribution of 1 split over all states/readings;
                 if False, then missing data is ignored (i.e., all states are 0).
@@ -1051,13 +1129,13 @@ class Collation:
             return self.to_fasta(file_addr)
 
         if format == Format.CSV:
-            return self.to_csv(file_addr, split_missing=split_missing)
+            return self.to_csv(file_addr, long_table=long_table, split_missing=split_missing)
 
         if format == Format.TSV:
-            return self.to_csv(file_addr, split_missing=split_missing, sep="\t")
+            return self.to_csv(file_addr, long_table=long_table, split_missing=split_missing, sep="\t")
 
         if format == Format.EXCEL:
-            return self.to_excel(file_addr, split_missing=split_missing)
+            return self.to_excel(file_addr, long_table=long_table, split_missing=split_missing)
 
         if format == Format.STEMMA:
             return self.to_stemma(file_addr)

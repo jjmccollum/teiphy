@@ -297,6 +297,16 @@ class CollationOutputTestCase(unittest.TestCase):
             abs(matrix[0, 1] - 13 / 38) < 1e-4
         )  # entry for UBS and P46 should be close to 13/38 (of 40 substantive variation units, P46 is lacunose at one and ambiguous at another)
 
+    def test_to_long_table(self):
+        long_table, column_labels = self.collation.to_long_table()
+        self.assertEqual(
+            column_labels, ["taxon", "character", "state", "value"]
+        )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
+        self.assertEqual(long_table[0, 0], "UBS")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
+        self.assertEqual(long_table[0, 1], "B10K1V1U24-26")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
+        self.assertEqual(long_table[0, 2], "0")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
+        self.assertEqual(long_table[0, 3], "εν εφεσω")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
+
 
 if __name__ == '__main__':
     unittest.main()
