@@ -249,6 +249,16 @@ def test_to_csv():
         assert text.startswith(",UBS,P46,01,02,03,04,06")
 
 
+def test_to_csv_long_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--long-table", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("taxon,character,state,value")
+
+
 def test_to_tsv():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.tsv"
@@ -259,10 +269,28 @@ def test_to_tsv():
         assert text.startswith("\tUBS\tP46\t01\t02\t03\t04\t06")
 
 
+def test_to_tsv_long_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.tsv"
+        result = runner.invoke(app, ["--long-table", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("taxon\tcharacter\tstate\tvalue")
+
+
 def test_to_excel():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xlsx"
         result = runner.invoke(app, [str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+
+
+def test_to_excel_long_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xlsx"
+        result = runner.invoke(app, ["--long-table", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
 
