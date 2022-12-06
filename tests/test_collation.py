@@ -106,7 +106,7 @@ class CollationTrivialSubreadingTestCase(unittest.TestCase):
 
     def test_substantive_reading_ids(self):
         self.assertEqual(
-            len(self.collation.substantive_variation_unit_reading_tuples), 100
+            len(self.collation.substantive_variation_unit_reading_tuples), 98
         )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U24-26 and all readings that have non-substantive types
 
 
