@@ -23,7 +23,6 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml iqtree_example.nexus
     - name: Install Phylogenetics Package
       run: |
-        sudo sed -i 's/azure\.//' /etc/apt/sources.list
         sudo apt-get install -y iqtree
     - name: Phylogenetics Run
       run: |
