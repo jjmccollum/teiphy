@@ -21,13 +21,10 @@ jobs:
     - name: Testing
       run: |
         poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml iqtree_example.nexus
-    - name: Check available versions
-      run: |
-        sudo apt-cache madison iqtree
     - name: Install Phylogenetics Package
       run: |
-        sudo apt-get install -y iqtree=1.6.12+dfsg-1build1
+        sudo apt-get install -y iqtree
     - name: Phylogenetics Run
       run: |
-        iqtree -s iqtree_example.nexus -m MK+ASC -bb 1000
+        iqtree2 -s iqtree_example.nexus -m MK+ASC -bb 1000
       
