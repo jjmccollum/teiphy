@@ -38,8 +38,8 @@
 .. |joss badge| image:: https://joss.theoj.org/papers/e0a813f4cdf56e9f6ae5d555ce6ed93b/status.svg
     :target: https://joss.theoj.org/papers/e0a813f4cdf56e9f6ae5d555ce6ed93b
     
-.. |doi badge| image:: https://zenodo.org/badge/528629686.svg
-    :target: https://zenodo.org/badge/latestdoi/528629686
+.. |doi badge| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7455638.svg
+   :target: https://doi.org/10.5281/zenodo.7455638
 
 .. end-badges
 
