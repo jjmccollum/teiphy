@@ -26,7 +26,7 @@ bibliography: docs/references.bib
 
 Textual scholars have been using phylogenetics to analyze manuscript traditions since the early 1990s [@roh_report_1992].
 Many standard phylogenetic software packages accept as input the NEXUS file format [@msm_nexus_1997]. 
-The `teiphy` program takes a collation of texts encoded in TEI XML format and can convert it to any of the following formats amenable to phylogenetic analysis: NEXUS (with support for ambiguous states and clock model calibration data blocks for MrBayes or BEAST2), Hennig86, PHYLIP (relaxed for use with RAxML), FASTA (relaxed for use with RAxML), STEMMA (designed for Stephen C. Carlson’s stemmatic software tailored for textual data).
+The `teiphy` program takes a collation of texts encoded in TEI XML format and can convert it to any of the following formats amenable to phylogenetic analysis: NEXUS (with support for ambiguous states and clock model calibration data blocks for MrBayes or BEAST2), Hennig86, PHYLIP (relaxed for use with RAxML), FASTA (relaxed for use with RAxML), and STEMMA (designed for Stephen C. Carlson’s stemmatic software tailored for textual data).
 For machine learning-based analyses, `teiphy` can also convert a TEI XML collation to a collation matrix in NumPy, Pandas DataFrame, CSV, TSV, or Excel format.
 
 # Statement of Need
