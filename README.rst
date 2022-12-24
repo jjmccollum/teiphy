@@ -124,4 +124,20 @@ We received additional help from Stephen C. Carlson (Australian Catholic Univers
 
 If you use this software, please cite the paper: Joey McCollum and Robert Turnbull, "``teiphy``: A Python Package for Converting TEI XML Collations to NEXUS and Other Formats," *JOSS* 7.80 (2022): 4879, DOI: 10.21105/joss.04879.
 
+.. code-block:: bibtex
+
+    @article{McCollum2022, 
+        author = {Joey McCollum and Robert Turnbull}, 
+        title = {{teiphy: A Python Package for Converting TEI XML Collations to NEXUS and Other Formats}}, 
+        journal = {Journal of Open Source Software},
+        year = {2022}, 
+        volume = {7}, 
+        number = {80}, 
+        pages = {4879},
+        publisher = {The Open Journal}, 
+        doi = {10.21105/joss.04879}, 
+        url = {https://doi.org/10.21105/joss.04879}
+    }
+
+
 .. end-credits
