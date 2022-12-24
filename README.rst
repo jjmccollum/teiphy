@@ -122,6 +122,6 @@ Credits
 ``teiphy`` was designed by Joey McCollum (Australian Catholic University) and Robert Turnbull (University of Melbourne).
 We received additional help from Stephen C. Carlson (Australian Catholic University).
 
-If you use this software, please cite the forthcoming paper.
+If you use this software, please cite the paper: Joey McCollum and Robert Turnbull, "``teiphy``: A Python Package for Converting TEI XML Collations to NEXUS and Other Formats," *JOSS* 7.80 (2022): 4879, DOI: 10.21105/joss.04879.
 
 .. end-credits
