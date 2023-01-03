@@ -216,8 +216,8 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(nexus_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_nexus_symbols_empty(self):
-        empty_xml = et.fromstring("<TEI/>")
-        empty_collation = Collation(empty_xml)
+        empty_collation = self.collation
+        empty_collation.witnesses = []
         nexus_symbols = empty_collation.get_nexus_symbols()
         self.assertEqual(nexus_symbols, [])
 
@@ -231,8 +231,8 @@ class CollationOutputTestCase(unittest.TestCase):
     #     )
 
     # def test_get_nexus_equates_empty(self):
-    #     empty_xml = et.fromstring("<TEI/>")
-    #     empty_collation = Collation(empty_xml)
+    #     empty_collation = self.collation
+    #     empty_collation.witnesses = []
     #     nexus_symbols = empty_collation.get_nexus_symbols()
     #     equates, equate_mapping = empty_collation.get_nexus_equates(nexus_symbols)
     #     self.assertEqual(equates, [])
@@ -243,8 +243,8 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(hennig86_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_hennig86_symbols_empty(self):
-        empty_xml = et.fromstring("<TEI/>")
-        empty_collation = Collation(empty_xml)
+        empty_collation = self.collation
+        empty_collation.witnesses = []
         hennig86_symbols = empty_collation.get_hennig86_symbols()
         self.assertEqual(hennig86_symbols, [])
 
@@ -253,8 +253,8 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(phylip_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_phylip_symbols_empty(self):
-        empty_xml = et.fromstring("<TEI/>")
-        empty_collation = Collation(empty_xml)
+        empty_collation = self.collation
+        empty_collation.witnesses = []
         phylip_symbols = empty_collation.get_phylip_symbols()
         self.assertEqual(phylip_symbols, [])
 
@@ -263,8 +263,8 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(fasta_symbols, ["0", "1", "2", "3", "4", "5"])
 
     def test_get_fasta_symbols_empty(self):
-        empty_xml = et.fromstring("<TEI/>")
-        empty_collation = Collation(empty_xml)
+        empty_collation = self.collation
+        empty_collation.witnesses = []
         fasta_symbols = empty_collation.get_fasta_symbols()
         self.assertEqual(fasta_symbols, [])
 

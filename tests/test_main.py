@@ -12,6 +12,8 @@ root_dir = test_dir.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
 non_xml_example = root_dir / "pyproject.toml"
 malformed_example = test_dir / "malformed_example.xml"
+no_listwit_example = test_dir / "no_listwit_example.xml"
+extra_sigla_example = test_dir / "extra_sigla_example.xml"
 no_dates_example = test_dir / "no_dates_example.xml"
 some_dates_example = test_dir / "some_dates_example.xml"
 
@@ -36,6 +38,22 @@ def test_malformed_input():
         output = Path(tmp_dir) / "test.nexus"
         result = runner.invoke(app, [str(malformed_example), str(output)])
         assert result.stdout.startswith("Error opening input file:")
+
+
+def test_no_listwit_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, [str(no_listwit_example), str(output)])
+        assert isinstance(result.exception, Exception)
+        assert "An explicit listWit element must be included in the TEI XML collation." in str(result.exception)
+
+
+def test_extra_sigla_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, [str(extra_sigla_example), str(output)])
+        assert "WARNING" in result.stdout
+        assert "TheodoreOfMopsuestia" in result.stdout
 
 
 def test_to_nexus():
