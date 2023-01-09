@@ -15,6 +15,10 @@ from .witness import Witness
 from .variation_unit import VariationUnit
 
 
+class ParsingException(Exception):
+    pass
+
+
 class Collation:
     """Base class for storing TEI XML collation data internally.
 
@@ -69,50 +73,12 @@ class Collation:
             print("Initializing collation...")
         t0 = time.time()
         self.parse_list_wit(xml)
+        self.validate_wits(xml)
         self.parse_apps(xml)
         self.parse_readings_by_witness()
         t1 = time.time()
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
-
-    def parse_list_wit(self, xml: et.ElementTree):
-        """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
-
-        Args:
-            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
-        """
-        if self.verbose:
-            print("Parsing witness list...")
-        t0 = time.time()
-        self.witnesses = []
-        self.witness_index_by_id = {}
-        for w in xml.xpath(
-            "/tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:listWit/tei:witness", namespaces={"tei": tei_ns}
-        ):
-            wit = Witness(w, self.verbose)
-            self.witness_index_by_id[wit.id] = len(self.witnesses)
-            self.witnesses.append(wit)
-        t1 = time.time()
-        if self.verbose:
-            print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
-        return
-
-    def parse_apps(self, xml: et.ElementTree):
-        """Given an XML tree for a collation, populates its list of variation units from its app elements.
-
-        Args:
-            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
-        """
-        if self.verbose:
-            print("Parsing variation units...")
-        t0 = time.time()
-        for a in xml.xpath('//tei:app', namespaces={'tei': tei_ns}):
-            vu = VariationUnit(a, self.verbose)
-            self.variation_units.append(vu)
-        t1 = time.time()
-        if self.verbose:
-            print("Finished processing %d variation units in %0.4fs." % (len(self.variation_units), t1 - t0))
-        return
 
     def get_base_wit(self, wit: str):
         """Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.
@@ -139,6 +105,102 @@ class Collation:
                 return base_wit
         # If we get here, then all possible manuscript suffixes have been stripped, and the resulting siglum does not correspond to a siglum in the witness list:
         return base_wit
+
+    def parse_list_wit(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
+        If the XML tree does not contain a listWit element, then an Exception is thrown listing all distinct witness sigla encountered in the collation.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Parsing witness list...")
+        t0 = time.time()
+        self.witnesses = []
+        self.witness_index_by_id = {}
+        list_wits = xml.xpath("/tei:TEI//tei:listWit", namespaces={"tei": tei_ns})
+        if len(list_wits) == 0:
+            # There is no listWit element: collect all distinct witness sigla in the collation and raise a ParsingException listing them:
+            distinct_sigla = set()
+            sigla = []
+            # Proceed for each rdg, rdgGrp, or witDetail element:
+            for rdg in xml.xpath("//tei:rdg|//tei:rdgGrp|//tei:witDetail", namespaces={"tei": tei_ns}):
+                wit_str = rdg.get("wit") if rdg.get("wit") is not None else ""
+                wits = wit_str.split()
+                for wit in wits:
+                    siglum = wit.strip("#")  # remove the URI prefix, if there is one
+                    if siglum not in distinct_sigla:
+                        distinct_sigla.add(siglum)
+                        sigla.append(siglum)
+            sigla.sort()
+            msg = ""
+            msg += "An explicit listWit element must be included in the TEI XML collation.\n"
+            msg += "The following sigla occur in the collation and should be included as the @xml:id or @n attributes of witness elements under the listWit element:\n"
+            msg += ", ".join(sigla)
+            raise ParsingException(msg)
+        # Otherwise, take the first listWit element as the list of all witnesses and process it:
+        list_wit = list_wits[0]
+        for witness in list_wit.xpath("./tei:witness", namespaces={"tei": tei_ns}):
+            wit = Witness(witness, self.verbose)
+            self.witness_index_by_id[wit.id] = len(self.witnesses)
+            self.witnesses.append(wit)
+        t1 = time.time()
+        if self.verbose:
+            print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
+        return
+
+    def validate_wits(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, checks if any witness sigla listed in a rdg, rdgGrp, or witDetail element,
+        once stripped of ignored suffixes, is not found in the witness list.
+        A warning will be issued for each distinct siglum like this.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Validating witness list against collation...")
+        t0 = time.time()
+        # There is no listWit element: collect all distinct witness sigla in the collation and raise an exception listing them:
+        distinct_extra_sigla = set()
+        extra_sigla = []
+        # Proceed for each rdg, rdgGrp, or witDetail element:
+        for rdg in xml.xpath("//tei:rdg|//tei:rdgGrp|//tei:witDetail", namespaces={"tei": tei_ns}):
+            wit_str = rdg.get("wit") if rdg.get("wit") is not None else ""
+            wits = wit_str.split()
+            for wit in wits:
+                siglum = wit.strip("#")  # remove the URI prefix, if there is one
+                base_siglum = self.get_base_wit(siglum)
+                if base_siglum not in self.witness_index_by_id:
+                    if base_siglum not in distinct_extra_sigla:
+                        distinct_extra_sigla.add(base_siglum)
+                        extra_sigla.append(base_siglum)
+        if len(extra_sigla) > 0:
+            extra_sigla.sort()
+            msg = ""
+            msg += "WARNING: The following sigla occur in the collation that do not have corresponding witness entries in the listWit:\n"
+            msg += ", ".join(extra_sigla)
+            print(msg)
+        t1 = time.time()
+        if self.verbose:
+            print("Finished witness validation in %0.4fs." % (t1 - t0))
+        return
+
+    def parse_apps(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, populates its list of variation units from its app elements.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Parsing variation units...")
+        t0 = time.time()
+        for a in xml.xpath('//tei:app', namespaces={'tei': tei_ns}):
+            vu = VariationUnit(a, self.verbose)
+            self.variation_units.append(vu)
+        t1 = time.time()
+        if self.verbose:
+            print("Finished processing %d variation units in %0.4fs." % (len(self.variation_units), t1 - t0))
+        return
 
     def get_readings_by_witness_for_unit(self, vu: VariationUnit):
         """Returns a dictionary mapping witness IDs to a list of their reading coefficients for a given variation unit.
