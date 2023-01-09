@@ -15,6 +15,10 @@ from .witness import Witness
 from .variation_unit import VariationUnit
 
 
+class ParsingException(Exception):
+    pass
+
+
 class Collation:
     """Base class for storing TEI XML collation data internally.
 
@@ -116,7 +120,7 @@ class Collation:
         self.witness_index_by_id = {}
         list_wits = xml.xpath("/tei:TEI//tei:listWit", namespaces={"tei": tei_ns})
         if len(list_wits) == 0:
-            # There is no listWit element: collect all distinct witness sigla in the collation and raise an exception listing them:
+            # There is no listWit element: collect all distinct witness sigla in the collation and raise a ParsingException listing them:
             distinct_sigla = set()
             sigla = []
             # Proceed for each rdg, rdgGrp, or witDetail element:
@@ -133,7 +137,7 @@ class Collation:
             msg += "An explicit listWit element must be included in the TEI XML collation.\n"
             msg += "The following sigla occur in the collation and should be included as the @xml:id or @n attributes of witness elements under the listWit element:\n"
             msg += ", ".join(sigla)
-            raise Exception(msg)
+            raise ParsingException(msg)
         # Otherwise, take the first listWit element as the list of all witnesses and process it:
         list_wit = list_wits[0]
         for witness in list_wit.xpath("./tei:witness", namespaces={"tei": tei_ns}):

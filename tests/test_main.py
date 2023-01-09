@@ -3,6 +3,7 @@ import tempfile
 from typer.testing import CliRunner
 
 from teiphy.main import app
+from teiphy.collation import ParsingException
 
 runner = CliRunner()
 
@@ -44,7 +45,7 @@ def test_no_listwit_input():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
         result = runner.invoke(app, [str(no_listwit_example), str(output)])
-        assert isinstance(result.exception, Exception)
+        assert isinstance(result.exception, ParsingException)
         assert "An explicit listWit element must be included in the TEI XML collation." in str(result.exception)
 
 
