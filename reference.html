@@ -83,6 +83,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_numpy"><code class="docutils literal notranslate"><span class="pre">Collation.to_numpy()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_phylip"><code class="docutils literal notranslate"><span class="pre">Collation.to_phylip()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_stemma"><code class="docutils literal notranslate"><span class="pre">Collation.to_stemma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.validate_wits"><code class="docutils literal notranslate"><span class="pre">Collation.validate_wits()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -334,7 +335,8 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.parse_list_wit">
 <span class="sig-name descname"><span class="pre">parse_list_wit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_list_wit" title="Permalink to this definition"></a></dt>
-<dd><p>Given an XML tree for a collation, populates its list of witnesses from its listWit element.</p>
+<dd><p>Given an XML tree for a collation, populates its list of witnesses from its listWit element.
+If the XML tree does not contain a listWit element, then an Exception is thrown listing all distinct witness sigla encountered in the collation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
@@ -569,6 +571,19 @@ Note that because PHYLIP format does not support NEXUS-style ambiguities, such a
 <li><p><strong>name</strong> (<em>The accompanying chron file will match this file</em>) – </p></li>
 <li><p><strong>end.</strong> (<em>except that it will have &quot;_chron&quot; appended to the</em>) – </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.validate_wits">
+<span class="sig-name descname"><span class="pre">validate_wits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.validate_wits" title="Permalink to this definition"></a></dt>
+<dd><p>Given an XML tree for a collation, checks if any witness sigla listed in a rdg, rdgGrp, or witDetail element,
+once stripped of ignored suffixes, is not found in the witness list.
+A warning will be issued for each distinct siglum like this.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
 </dd>
 </dl>
 </dd></dl>
