@@ -342,6 +342,23 @@ attestations, then you can do so via
 
 assuming that there are at most three multiple attestations in any unit.
 
+Ascertainment Bias
+------------------
+
+To facilitate accurate branch length estimation, ``teiphy`` includes all constant sites (i.e., variation units with only one substantive reading after trivial readings have been merged with their parents) in its output by default.
+(The only exception is output for the STEMMA program, which is parsimony-based and does not estimate branch lengths.)
+If you want only informative sites to be included in your output, then you can ensure that this happens by including the ``--drop-constant`` flag in your command.
+
+Note that if you do exclude constant sites, or if your TEI XML collation only includes locations in the textual tradition where the readings differ, 
+then it will be important to correct for ascertainment bias when performing phylogenetic analysis which utilizes the branch lengths 
+(such as maximum-likelihood or Bayesian techniques).
+This is because when the data is filtered to only include locations where changes have occurred, the analysis can be biased towards longer branch lengths.
+There are methods to correct for this, for example, as discussed in Lewis, 2001 :cite:p:`lewis_likelihood_2001`.
+Because this correction is amply supported by existing phylogenetic software packages, ``teiphy`` will not perform this correction itself.
+You should consult the documentation for your phylogenetic software package to determine how it applies ascertainment bias correction.
+For example, `IQ-TREE <http://www.iqtree.org/doc/Substitution-Models#ascertainment-bias-correction>`_ allows users to correct for ascertainment bias by adding ``+ASC`` to the model name.
+(Just keep in mind that your input must be free of constant sites for this to work!)
+
 Supported Output Formats and Options
 ------------------------------------
 
@@ -414,14 +431,3 @@ To run this script with the example input in verbose mode with the settings desc
    teiphy -t reconstructed -t defective -t orthographic -t subreading -m lac -m overlap -s"*" -s T -s /1 -s /2 -s /3 --fill-correctors --verbose example\ubs_ephesians.xml ubs_ephesians.nxs
 
 from the command line.
-
-Ascertainment Bias
-------------------
-
-If the apparatus in TEI only includes locations in the textual tradition where the readings differ, 
-then it will be important to correct for ascertainment bias when performing phylogenetic analysis which utilizes the branch lengths 
-(such as when using maximum likelihood or Bayesian techniques). 
-This is because the data is filtered to only include locations where changes have occurred and this leads the analysis to have a bias towards longer branch lengths.
-There are methods to correct for this, for example, as discussed in Lewis, 2001 :cite:p:`lewis_likelihood_2001`. 
-``teiphy`` will not perform this correction itself and you should consult the documentation for the phylogenetic software package being used to 
-determine how. For example, `IQ-TREE <http://www.iqtree.org/doc/Substitution-Models#ascertainment-bias-correction>`_ allows users to correct for ascertainment bias by adding ``+ASC`` to the model name.
