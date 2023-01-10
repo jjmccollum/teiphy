@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 from lxml import etree as et
 
-from teiphy import Collation
+from teiphy import tei_ns, Collation
 
 root_dir = Path("__file__").parent.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
@@ -15,99 +15,85 @@ class CollationDefaultTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
+        self.xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+        self.xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+        self.xml_readings = xml.xpath("//tei:rdg", namespaces={"tei": tei_ns})
         self.collation = Collation(xml)
 
     def test_witnesses(self):
-        self.assertEqual(len(self.collation.witnesses), 38)
+        self.assertEqual(len(self.collation.witnesses), len(self.xml_witnesses))
 
     def test_witness_index_by_id(self):
-        self.assertEqual(len(self.collation.witness_index_by_id), 38)
+        self.assertEqual(len(self.collation.witness_index_by_id), len(self.xml_witnesses))
 
     def test_variation_units(self):
-        self.assertEqual(len(self.collation.variation_units), 42)
+        self.assertEqual(len(self.collation.variation_units), len(self.xml_variation_units))
 
     def test_readings_by_witness(self):
-        self.assertEqual(len(self.collation.readings_by_witness), 38)
+        self.assertEqual(len(self.collation.readings_by_witness), len(self.xml_witnesses))
 
     def test_substantive_variation_unit_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 40
-        )  # apps B10K4V28U24-26 and B10K6V20U12 should always be ignored
+        self.assertEqual(len(self.collation.substantive_variation_unit_ids), len(self.xml_variation_units))
 
-    def test_substantive_reading_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_reading_tuples), 160
-        )  # all readings except for the ones in apps B10K4V28U24-26 and B10K6V20U12
+    def test_substantive_readings_by_variation_unit_id(self):
+        self.assertEqual(len(self.collation.substantive_readings_by_variation_unit_id), len(self.xml_variation_units))
+
+    def test_substantive_variation_unit_reading_tuples(self):
+        self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
+        self.xml_readings = xml.xpath("//tei:rdg[not(@type) or @type!=\"reconstructed\"]", namespaces={"tei": tei_ns})
         self.collation = Collation(xml, trivial_reading_types=["reconstructed"])
 
-    def test_substantive_variation_unit_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 40
-        )  # apps B10K4V28U24-26 and B10K6V20U12 should always be ignored
-
-    def test_substantive_reading_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_reading_tuples), 147
-        )  # all readings except for the ones in apps B10K4V28U24-26 and B10K6V20U12 and all reconstructed readings
+    def test_substantive_variation_unit_reading_tuples(self):
+        self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
 
 
 class CollationTrivialDefectiveTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
+        self.xml_readings = xml.xpath(
+            "//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\")]", namespaces={"tei": tei_ns}
+        )
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective"])
 
-    def test_substantive_variation_unit_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 40
-        )  # apps B10K4V28U24-26 and B10K6V20U12 should always be ignored
-
-    def test_substantive_reading_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_reading_tuples), 108
-        )  # all readings except for the ones in apps B10K4V28U24-26 and B10K6V20U12 and all reconstructed and defective readings
+    def test_substantive_variation_unit_reading_tuples(self):
+        self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
 
 
 class CollationTrivialOrthographicTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
+        self.xml_readings = xml.xpath(
+            "//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\" and @type !=\"orthographic\")]",
+            namespaces={"tei": tei_ns},
+        )
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective", "orthographic"])
 
-    def test_substantive_variation_unit_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 40
-        )  # all units except B10K6V20U12 and B10K4V28U24-26
-
-    def test_substantive_reading_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_reading_tuples), 105
-        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U24-26 and all reconstructed, defective, and orthographic readings
+    def test_substantive_variation_unit_reading_tuples(self):
+        self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
 
 
 class CollationTrivialSubreadingTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
+        self.xml_readings = xml.xpath(
+            "//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\" and @type !=\"orthographic\" and @type !=\"subreading\")]",
+            namespaces={"tei": tei_ns},
+        )
         self.collation = Collation(
             xml, trivial_reading_types=["reconstructed", "defective", "orthographic", "subreading"]
         )
 
-    def test_substantive_variation_unit_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_ids), 40
-        )  # all units except B10K6V20U12 and B10K4V28U24-26
-
-    def test_substantive_reading_ids(self):
-        self.assertEqual(
-            len(self.collation.substantive_variation_unit_reading_tuples), 98
-        )  # all readings except for the ones in app B10K6V20U12 and B10K4V28U24-26 and all readings that have non-substantive types
+    def test_substantive_variation_unit_reading_tuples(self):
+        self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
 
 
 class CollationMissingTestCase(unittest.TestCase):

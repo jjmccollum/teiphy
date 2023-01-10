@@ -606,7 +606,6 @@
                     </listRelation>
                 </note>
             </app>
-            <!-- this unit should be ignored -->
             <app xml:id="B10K4V28U24-26">
                 <lem><w>το</w><w>αγαθον</w></lem>
                 <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
@@ -921,7 +920,6 @@
                     </listRelation>
                 </note>
             </app>
-            <!-- this unit should always be ignored -->
             <app xml:id="B10K6V20U12">
                 <lem><w>ινα</w></lem>
                 <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w></rdg>

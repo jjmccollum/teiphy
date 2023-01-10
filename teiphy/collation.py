@@ -68,6 +68,7 @@ class Collation:
         self.readings_by_witness = {}
         self.substantive_variation_unit_ids = []
         self.substantive_variation_unit_reading_tuples = []
+        self.substantive_readings_by_variation_unit_id = {}
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
@@ -108,7 +109,7 @@ class Collation:
 
     def parse_list_wit(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
-        If the XML tree does not contain a listWit element, then an Exception is thrown listing all distinct witness sigla encountered in the collation.
+        If the XML tree does not contain a listWit element, then a ParsingException is thrown listing all distinct witness sigla encountered in the collation.
 
         Args:
             xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
@@ -213,38 +214,35 @@ class Collation:
         """
         # In a first pass, populate lists of substantive (variation unit ID, reading ID) tuples and reading labels
         # and a map from reading IDs to the indices of their parent substantive reading in this unit:
-        substantive_variation_unit_reading_tuples = []
         reading_id_to_index = {}
+        self.substantive_readings_by_variation_unit_id[vu.id] = []
         for rdg in vu.readings:
             # If this reading is missing (e.g., lacunose or inapplicable due to an overlapping variant) or targets another reading, then skip it:
             if rdg.type in self.missing_reading_types or len(rdg.certainties) > 0:
                 continue
             # If this reading is trivial, then map it to the last substantive index:
             if rdg.type in self.trivial_reading_types:
-                reading_id_to_index[rdg.id] = len(substantive_variation_unit_reading_tuples) - 1
+                reading_id_to_index[rdg.id] = len(self.substantive_readings_by_variation_unit_id[vu.id]) - 1
                 continue
             # Otherwise, the reading is substantive: add it to the map and update the last substantive index:
-            substantive_variation_unit_reading_tuples.append(tuple([vu.id, rdg.id]))
-            reading_id_to_index[rdg.id] = len(substantive_variation_unit_reading_tuples) - 1
+            self.substantive_readings_by_variation_unit_id[vu.id].append(rdg.id)
+            self.substantive_variation_unit_reading_tuples.append(tuple([vu.id, rdg.id]))
+            reading_id_to_index[rdg.id] = len(self.substantive_readings_by_variation_unit_id[vu.id]) - 1
         # If the list of substantive readings only contains one entry, then this variation unit is not informative;
         # return an empty dictionary and add nothing to the list of substantive reading labels:
         if self.verbose:
             print(
                 "Variation unit %s has %d substantive readings."
-                % (vu.id, len(substantive_variation_unit_reading_tuples))
+                % (vu.id, len(self.substantive_readings_by_variation_unit_id[vu.id]))
             )
         readings_by_witness_for_unit = {}
-        if len(substantive_variation_unit_reading_tuples) <= 1:
-            return readings_by_witness_for_unit
-        # Otherwise, add these substantive reading ID tuples and labels to their corresponding list and initialize the output dictionary with empty sets for all base witnesses:
-        for substantive_variation_unit_reading_tuple in substantive_variation_unit_reading_tuples:
-            self.substantive_variation_unit_reading_tuples.append(substantive_variation_unit_reading_tuple)
+        # Initialize the output dictionary with empty sets for all base witnesses:
         for wit in self.witnesses:
-            readings_by_witness_for_unit[wit.id] = [0] * len(substantive_variation_unit_reading_tuples)
+            readings_by_witness_for_unit[wit.id] = [0] * len(self.substantive_readings_by_variation_unit_id[vu.id])
         # In a second pass, assign each base witness a set containing the readings it supports in this unit:
         for rdg in vu.readings:
             # Initialize the dictionary indicating support for this reading (or its disambiguations):
-            rdg_support = [0] * len(substantive_variation_unit_reading_tuples)
+            rdg_support = [0] * len(self.substantive_readings_by_variation_unit_id[vu.id])
             # If this is a missing reading (e.g., a lacuna or an overlap), then we can skip this reading, as its corresponding set will be empty:
             if rdg.type in self.missing_reading_types:
                 continue
