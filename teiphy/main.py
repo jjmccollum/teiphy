@@ -47,6 +47,10 @@ def to_file(
         False,
         help="Use the StatesFormat=Frequency setting instead of the StatesFormat=StatesPresent setting (and thus represent all states with frequency vectors rather than symbols) in NEXUS output.",
     ),
+    drop_constant: bool = typer.Option(
+        False,
+        help="If set, do not write constant sites (i.e., variation units with one substantive reading) to output.",
+    ),
     ambiguous_as_missing: bool = typer.Option(
         False,
         help="Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --frequency option is not set.",
@@ -111,6 +115,7 @@ def to_file(
     coll.to_file(
         output,
         format=format,
+        drop_constant=drop_constant,
         char_state_labels=labels,
         frequency=frequency,
         ambiguous_as_missing=ambiguous_as_missing,

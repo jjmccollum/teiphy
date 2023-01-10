@@ -1,9 +1,11 @@
 from pathlib import Path
 import tempfile
 from typer.testing import CliRunner
+from lxml import etree as et
 
 from teiphy.main import app
 from teiphy.collation import ParsingException
+from teiphy.common import tei_ns
 
 runner = CliRunner()
 
@@ -66,6 +68,20 @@ def test_to_nexus():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" in text
+        assert "22 B10K4V28U24_26" in text
+        assert "StatesFormat=Frequency" not in text
+
+
+def test_to_nexus_drop_constant():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--drop-constant", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "CharStateLabels" in text
+        assert "22 B10K4V28U24_26" not in text
         assert "StatesFormat=Frequency" not in text
 
 
@@ -89,6 +105,19 @@ def test_to_nexus_frequency():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
+        assert "22 B10K4V28U24_26" in text
+        assert "StatesFormat=Frequency" in text
+
+
+def test_to_nexus_drop_constant_frequency():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, ["--drop-constant", "--frequency", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "22 B10K4V28U24_26" not in text
         assert "StatesFormat=Frequency" in text
 
 
@@ -186,6 +215,11 @@ def test_to_nexus_mrbayes_some_dates():
 
 
 def test_to_hennig86():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.tnt"
         result = runner.invoke(
@@ -208,9 +242,47 @@ def test_to_hennig86():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("nstates")
         assert "xread" in text
+        assert "%d %d" % (len(xml_variation_units), len(xml_witnesses)) in text
+
+
+def test_to_hennig86_drop_constant():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.tnt"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                "--drop-constant",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("nstates")
+        assert "xread" in text
+        assert "%d %d" % (len(xml_variation_units) - 2, len(xml_witnesses)) in text
 
 
 def test_to_phylip():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.phy"
         result = runner.invoke(
@@ -231,10 +303,44 @@ def test_to_phylip():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="ascii")
-        assert text.startswith("38 40")
+        assert text.startswith("%d %d" % (len(xml_witnesses), len(xml_variation_units)))
+
+
+def test_to_phylip_drop_constant():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.phy"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                "--drop-constant",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="ascii")
+        assert text.startswith("%d %d" % (len(xml_witnesses), len(xml_variation_units) - 2))
 
 
 def test_to_fasta():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.fa"
         result = runner.invoke(
@@ -256,6 +362,37 @@ def test_to_fasta():
         assert output.exists()
         text = output.read_text(encoding="ascii")
         assert text.startswith(">UBS")
+        assert "0" * len(xml_variation_units) in text
+
+
+def test_to_fasta_drop_constant():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.fa"
+        result = runner.invoke(
+            app,
+            [
+                "-t reconstructed",
+                "-t defective",
+                "-t orthographic",
+                "-m lac",
+                "-m overlap",
+                "-s *",
+                "-s T",
+                "--fill-correctors",
+                "--drop-constant",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="ascii")
+        assert text.startswith(">UBS")
+        assert "0" * (len(xml_variation_units) - 2) in text
 
 
 def test_to_csv():
@@ -266,6 +403,18 @@ def test_to_csv():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert "B10K4V28U24-26," in text
+
+
+def test_to_csv_drop_constant():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--drop-constant", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert "B10K4V28U24-26," not in text
 
 
 def test_to_csv_long_table():
@@ -276,6 +425,18 @@ def test_to_csv_long_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("taxon,character,state,value")
+        assert "B10K4V28U24-26," in text
+
+
+def test_to_csv_drop_constant_long_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--drop-constant", "--long-table", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("taxon,character,state,value")
+        assert "B10K4V28U24-26," not in text
 
 
 def test_to_tsv():
