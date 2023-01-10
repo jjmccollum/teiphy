@@ -26,5 +26,5 @@ jobs:
         sudo apt-get install -y iqtree
     - name: Phylogenetics Run
       run: |
-        iqtree2 -s iqtree_example.nexus -m MK+ASC -bb 1000
+        iqtree2 -s iqtree_example.nexus -m MK -bb 1000
       

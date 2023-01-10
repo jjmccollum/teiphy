@@ -66,8 +66,9 @@ class Collation:
         self.witness_index_by_id = {}
         self.variation_units = []
         self.readings_by_witness = {}
-        self.substantive_variation_unit_ids = []
+        self.variation_unit_ids = []
         self.substantive_variation_unit_reading_tuples = []
+        self.substantive_readings_by_variation_unit_id = {}
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
@@ -108,7 +109,7 @@ class Collation:
 
     def parse_list_wit(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates its list of witnesses from its listWit element.
-        If the XML tree does not contain a listWit element, then an Exception is thrown listing all distinct witness sigla encountered in the collation.
+        If the XML tree does not contain a listWit element, then a ParsingException is thrown listing all distinct witness sigla encountered in the collation.
 
         Args:
             xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
@@ -213,38 +214,35 @@ class Collation:
         """
         # In a first pass, populate lists of substantive (variation unit ID, reading ID) tuples and reading labels
         # and a map from reading IDs to the indices of their parent substantive reading in this unit:
-        substantive_variation_unit_reading_tuples = []
         reading_id_to_index = {}
+        self.substantive_readings_by_variation_unit_id[vu.id] = []
         for rdg in vu.readings:
             # If this reading is missing (e.g., lacunose or inapplicable due to an overlapping variant) or targets another reading, then skip it:
             if rdg.type in self.missing_reading_types or len(rdg.certainties) > 0:
                 continue
             # If this reading is trivial, then map it to the last substantive index:
             if rdg.type in self.trivial_reading_types:
-                reading_id_to_index[rdg.id] = len(substantive_variation_unit_reading_tuples) - 1
+                reading_id_to_index[rdg.id] = len(self.substantive_readings_by_variation_unit_id[vu.id]) - 1
                 continue
             # Otherwise, the reading is substantive: add it to the map and update the last substantive index:
-            substantive_variation_unit_reading_tuples.append(tuple([vu.id, rdg.id]))
-            reading_id_to_index[rdg.id] = len(substantive_variation_unit_reading_tuples) - 1
+            self.substantive_readings_by_variation_unit_id[vu.id].append(rdg.id)
+            self.substantive_variation_unit_reading_tuples.append(tuple([vu.id, rdg.id]))
+            reading_id_to_index[rdg.id] = len(self.substantive_readings_by_variation_unit_id[vu.id]) - 1
         # If the list of substantive readings only contains one entry, then this variation unit is not informative;
         # return an empty dictionary and add nothing to the list of substantive reading labels:
         if self.verbose:
             print(
                 "Variation unit %s has %d substantive readings."
-                % (vu.id, len(substantive_variation_unit_reading_tuples))
+                % (vu.id, len(self.substantive_readings_by_variation_unit_id[vu.id]))
             )
         readings_by_witness_for_unit = {}
-        if len(substantive_variation_unit_reading_tuples) <= 1:
-            return readings_by_witness_for_unit
-        # Otherwise, add these substantive reading ID tuples and labels to their corresponding list and initialize the output dictionary with empty sets for all base witnesses:
-        for substantive_variation_unit_reading_tuple in substantive_variation_unit_reading_tuples:
-            self.substantive_variation_unit_reading_tuples.append(substantive_variation_unit_reading_tuple)
+        # Initialize the output dictionary with empty sets for all base witnesses:
         for wit in self.witnesses:
-            readings_by_witness_for_unit[wit.id] = [0] * len(substantive_variation_unit_reading_tuples)
+            readings_by_witness_for_unit[wit.id] = [0] * len(self.substantive_readings_by_variation_unit_id[vu.id])
         # In a second pass, assign each base witness a set containing the readings it supports in this unit:
         for rdg in vu.readings:
             # Initialize the dictionary indicating support for this reading (or its disambiguations):
-            rdg_support = [0] * len(substantive_variation_unit_reading_tuples)
+            rdg_support = [0] * len(self.substantive_readings_by_variation_unit_id[vu.id])
             # If this is a missing reading (e.g., a lacuna or an overlap), then we can skip this reading, as its corresponding set will be empty:
             if rdg.type in self.missing_reading_types:
                 continue
@@ -297,14 +295,14 @@ class Collation:
         t0 = time.time()
         # Initialize the data structures to be populated here:
         self.readings_by_witness = {}
-        self.substantive_variation_unit_ids = []
+        self.variation_unit_ids = []
         for wit in self.witnesses:
             self.readings_by_witness[wit.id] = []
         # Populate them for each variation unit:
         for vu in self.variation_units:
             readings_by_witness_for_unit = self.get_readings_by_witness_for_unit(vu)
             if len(readings_by_witness_for_unit) > 0:
-                self.substantive_variation_unit_ids.append(vu.id)
+                self.variation_unit_ids.append(vu.id)
             for wit in readings_by_witness_for_unit:
                 self.readings_by_witness[wit].append(readings_by_witness_for_unit[wit])
         # Optionally, fill the lacunae of the correctors:
@@ -326,7 +324,7 @@ class Collation:
         if self.verbose:
             print(
                 "Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs."
-                % (len(self.witnesses), len(self.substantive_variation_unit_ids), t1 - t0)
+                % (len(self.witnesses), len(self.variation_unit_ids), t1 - t0)
             )
         return
 
@@ -355,6 +353,7 @@ class Collation:
     def to_nexus(
         self,
         file_addr: Union[Path, str],
+        drop_constant: bool = False,
         char_state_labels: bool = True,
         frequency: bool = False,
         ambiguous_as_missing: bool = False,
@@ -365,6 +364,7 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output NEXUS file; the file type should be .nex, .nexus, or .nxs.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             char_state_labels: An optional flag indicating whether or not to include the CharStateLabels block.
             frequency: An optional flag indicating whether to use the StatesFormat=Frequency setting
                 instead of the StatesFormat=StatesPresent setting
@@ -378,16 +378,24 @@ class Collation:
             mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses.
                 This option is intended for inputs to MrBayes.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
-        nchar = (
-            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
-        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        nchar = len(substantive_variation_unit_ids)
         taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
         max_taxlabel_length = max(
             [len(taxlabel) for taxlabel in taxlabels]
         )  # keep track of the longest taxon label for tabular alignment purposes
-        charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in self.substantive_variation_unit_ids]
+        charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in substantive_variation_unit_ids]
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
         with open(file_addr, "w", encoding="utf-8") as f:
@@ -407,8 +415,6 @@ class Collation:
             # If the char_state_labels is set, then write the labels for character-state labels, with each on its own line:
             if char_state_labels:
                 f.write("\tCharStateLabels")
-                substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
-                substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
                 vu_ind = 1
                 for vu in self.variation_units:
                     if vu.id not in substantive_variation_unit_ids_set:
@@ -438,7 +444,10 @@ class Collation:
                 taxlabel = taxlabels[i]
                 if frequency:
                     sequence = "\n\t\t" + taxlabel
-                    for rdg_support in self.readings_by_witness[wit.id]:
+                    for j, vu_id in enumerate(self.variation_unit_ids):
+                        if vu_id not in substantive_variation_unit_ids_set:
+                            continue
+                        rdg_support = self.readings_by_witness[wit.id][j]
                         sequence += "\n\t\t\t"
                         # If this reading is lacunose in this witness, then use the missing character:
                         if sum(rdg_support) == 0:
@@ -455,13 +464,16 @@ class Collation:
                     sequence = "\n\t\t" + taxlabel
                     # Add enough space after this label ensure that all sequences are nicely aligned:
                     sequence += " " * (max_taxlabel_length - len(taxlabel) + 1)
-                    for rdg_support in self.readings_by_witness[wit.id]:
+                    for j, vu_id in enumerate(self.variation_unit_ids):
+                        if vu_id not in substantive_variation_unit_ids_set:
+                            continue
+                        rdg_support = self.readings_by_witness[wit.id][j]
                         # If this reading is lacunose in this witness, then use the missing character:
                         if sum(rdg_support) == 0:
                             sequence += missing_symbol
                             continue
                         rdg_inds = [
-                            i for i, w in enumerate(rdg_support) if w > 0
+                            k for k, w in enumerate(rdg_support) if w > 0
                         ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
                         # For singleton readings, just print the symbol:
                         if len(rdg_inds) == 1:
@@ -588,18 +600,27 @@ class Collation:
         hennig86_symbols = possible_symbols[:nsymbols]
         return hennig86_symbols
 
-    def to_hennig86(self, file_addr: Union[Path, str]):
+    def to_hennig86(self, file_addr: Union[Path, str], drop_constant: bool = False):
         """Writes this Collation to a file in Hennig86 format with the given address.
         Note that because Hennig86 format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.
 
         Args:
             file_addr: A string representing the path to an output file.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
-        nchar = (
-            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
-        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        nchar = len(substantive_variation_unit_ids)
         taxlabels = []
         for wit in self.witnesses:
             taxlabel = wit.id
@@ -626,13 +647,16 @@ class Collation:
                 taxlabel = taxlabels[i]
                 # Add enough space after this label ensure that all sequences are nicely aligned:
                 sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel) + 1))
-                for rdg_support in self.readings_by_witness[wit.id]:
+                for j, vu_id in enumerate(self.variation_unit_ids):
+                    if vu_id not in substantive_variation_unit_ids_set:
+                        continue
+                    rdg_support = self.readings_by_witness[wit.id][j]
                     # If this reading is lacunose in this witness, then use the missing character:
                     if sum(rdg_support) == 0:
                         sequence += missing_symbol
                         continue
                     rdg_inds = [
-                        i for i, w in enumerate(rdg_support) if w > 0
+                        k for k, w in enumerate(rdg_support) if w > 0
                     ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
                     # For singleton readings, just print the symbol:
                     if len(rdg_inds) == 1:
@@ -666,18 +690,27 @@ class Collation:
         phylip_symbols = possible_symbols[:nsymbols]
         return phylip_symbols
 
-    def to_phylip(self, file_addr: Union[Path, str]):
+    def to_phylip(self, file_addr: Union[Path, str], drop_constant: bool = False):
         """Writes this Collation to a file in PHYLIP format with the given address.
         Note that because PHYLIP format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.
 
         Args:
             file_addr: A string representing the path to an output file.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
-        nchar = (
-            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
-        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        nchar = len(substantive_variation_unit_ids)
         taxlabels = []
         for wit in self.witnesses:
             taxlabel = wit.id
@@ -697,13 +730,16 @@ class Collation:
                 taxlabel = taxlabels[i]
                 # Add enough space after this label ensure that all sequences are nicely aligned:
                 sequence = taxlabel + (" " * (max_taxlabel_length - len(taxlabel))) + "\t"
-                for rdg_support in self.readings_by_witness[wit.id]:
+                for j, vu_id in enumerate(self.variation_unit_ids):
+                    if vu_id not in substantive_variation_unit_ids_set:
+                        continue
+                    rdg_support = self.readings_by_witness[wit.id][j]
                     # If this reading is lacunose in this witness, then use the missing character:
                     if sum(rdg_support) == 0:
                         sequence += missing_symbol
                         continue
                     rdg_inds = [
-                        i for i, w in enumerate(rdg_support) if w > 0
+                        k for k, w in enumerate(rdg_support) if w > 0
                     ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
                     # For singleton readings, just print the symbol:
                     if len(rdg_inds) == 1:
@@ -736,18 +772,27 @@ class Collation:
         fasta_symbols = possible_symbols[:nsymbols]
         return fasta_symbols
 
-    def to_fasta(self, file_addr: Union[Path, str]):
+    def to_fasta(self, file_addr: Union[Path, str], drop_constant: bool = False):
         """Writes this Collation to a file in FASTA format with the given address.
         Note that because FASTA format does not support NEXUS-style ambiguities, such ambiguities will be treated as missing data.
 
         Args:
             file_addr: A string representing the path to an output file.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Start by calculating the values we will be using here:
         ntax = len(self.witnesses)
-        nchar = (
-            len(self.readings_by_witness[self.witnesses[0].id]) if ntax > 0 else 0
-        )  # if the number of taxa is 0, then the number of characters is irrelevant
+        nchar = len(substantive_variation_unit_ids)
         taxlabels = []
         for wit in self.witnesses:
             taxlabel = wit.id
@@ -765,13 +810,16 @@ class Collation:
                 taxlabel = taxlabels[i]
                 # Add enough space after this label ensure that all sequences are nicely aligned:
                 sequence = ">%s\n" % taxlabel
-                for rdg_support in self.readings_by_witness[wit.id]:
+                for j, vu_id in enumerate(self.variation_unit_ids):
+                    if vu_id not in substantive_variation_unit_ids_set:
+                        continue
+                    rdg_support = self.readings_by_witness[wit.id][j]
                     # If this reading is lacunose in this witness, then use the missing character:
                     if sum(rdg_support) == 0:
                         sequence += missing_symbol
                         continue
                     rdg_inds = [
-                        i for i, w in enumerate(rdg_support) if w > 0
+                        k for k, w in enumerate(rdg_support) if w > 0
                     ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
                     # For singleton readings, just print the symbol:
                     if len(rdg_inds) == 1:
@@ -782,10 +830,11 @@ class Collation:
                 f.write("%s\n" % (sequence))
         return
 
-    def to_numpy(self, split_missing: bool = True):
+    def to_numpy(self, drop_constant: bool = False, split_missing: bool = True):
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
         Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
 
         Returns:
@@ -793,10 +842,18 @@ class Collation:
             A list of substantive reading ID strings.
             A list of witness ID strings.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Initialize the output array with the appropriate dimensions:
         reading_labels = []
-        substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
-        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         for vu in self.variation_units:
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
@@ -807,9 +864,13 @@ class Collation:
         witness_labels = [wit.id for wit in self.witnesses]
         matrix = np.zeros((len(reading_labels), len(witness_labels)), dtype=float)
         # Then populate it with the appropriate values:
-        for col_ind, wit_id in enumerate(witness_labels):
+        col_ind = 0
+        for i, wit in enumerate(self.witnesses):
             row_ind = 0
-            for rdg_support in self.readings_by_witness[wit_id]:
+            for j, vu_id in enumerate(self.variation_unit_ids):
+                if vu_id not in substantive_variation_unit_ids_set:
+                    continue
+                rdg_support = self.readings_by_witness[wit.id][j]
                 # If this reading support vector sums to 0, then this is missing data; handle it as specified:
                 if sum(rdg_support) == 0:
                     if split_missing:
@@ -823,19 +884,31 @@ class Collation:
                     for i in range(len(rdg_support)):
                         matrix[row_ind, col_ind] = rdg_support[i]
                         row_ind += 1
+            col_ind += 1
         return matrix, reading_labels, witness_labels
 
-    def to_distance_matrix(self, proportion=False):
+    def to_distance_matrix(self, drop_constant: bool = False, proportion=False):
         """Transforms this Collation into a NumPy distance matrix between witnesses, along with an array of its labels for the witnesses.
         Distances can be computed either as counts of disagreements (the default setting), or as proportions of disagreements over all variation units where both witnesses have singleton readings.
 
         Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
 
         Returns:
             A NumPy distance matrix with a row and column for each witness.
             A list of witness ID strings.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Initialize the output array with the appropriate dimensions:
         witness_labels = [wit.id for wit in self.witnesses]
         matrix = np.zeros((len(witness_labels), len(witness_labels)), dtype=float)
@@ -851,11 +924,13 @@ class Collation:
                 if i > j:
                     matrix[i, j] = matrix[j, i]
                     continue
-                for vu_ind in range(len(self.substantive_variation_unit_ids)):
-                    wit_1_rdg_support = self.readings_by_witness[wit_1][vu_ind]
-                    wit_2_rdg_support = self.readings_by_witness[wit_2][vu_ind]
-                    wit_1_rdg_inds = [k for k, w in enumerate(wit_1_rdg_support) if w > 0]
-                    wit_2_rdg_inds = [k for k, w in enumerate(wit_2_rdg_support) if w > 0]
+                for k, vu_id in enumerate(self.variation_unit_ids):
+                    if vu_id not in substantive_variation_unit_ids_set:
+                        continue
+                    wit_1_rdg_support = self.readings_by_witness[wit_1][k]
+                    wit_2_rdg_support = self.readings_by_witness[wit_2][k]
+                    wit_1_rdg_inds = [l for l, w in enumerate(wit_1_rdg_support) if w > 0]
+                    wit_2_rdg_inds = [l for l, w in enumerate(wit_2_rdg_support) if w > 0]
                     if len(wit_1_rdg_inds) != 1 or len(wit_2_rdg_inds) != 1:
                         continue
                     extant_units += 1
@@ -869,63 +944,73 @@ class Collation:
                     matrix[i, j] = disagreements
         return matrix, witness_labels
 
-    def to_long_table(self):
+    def to_long_table(self, drop_constant: bool = False):
         """Returns this Collation in the form of a long table with columns for taxa, characters, reading indices, and reading values.
         Note that this method treats ambiguous readings as missing data.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
 
         Returns:
             A NumPy array with columns for taxa, characters, reading indices, and reading values, and rows for each combination of these values in the matrix.
             A list of column label strings.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Initialize the outputs:
         column_labels = ["taxon", "character", "state", "value"]
         long_table_list = []
-        # First, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
-        # to the readings' texts:
+        # Populate a dictionary mapping (variation unit index, reading index) tuples to reading texts:
         reading_texts_by_indices = {}
-        substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
-        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
-        vu_ind = 0
-        for vu in self.variation_units:
+        for j, vu in enumerate(self.variation_units):
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
-            rdg_ind = 0
+            k = 0
             for rdg in vu.readings:
                 key = tuple([vu.id, rdg.id])
                 if key not in substantive_variation_unit_reading_tuples_set:
                     continue
-                indices = tuple([vu_ind, rdg_ind])
+                indices = tuple([j, k])
                 reading_texts_by_indices[indices] = rdg.text
-                rdg_ind += 1
-            if rdg_ind > 0:
-                vu_ind += 1
+                k += 1
         # Then populate the output list with the appropriate values:
         witness_labels = [wit.id for wit in self.witnesses]
         missing_symbol = '?'
-        for wit_id in witness_labels:
-            for vu_ind, rdg_support in enumerate(self.readings_by_witness[wit_id]):
-                # Get the variation unit label for this unit:
-                vu_label = self.substantive_variation_unit_ids[vu_ind]
+        for i, wit in enumerate(self.witnesses):
+            row_ind = 0
+            for j, vu_id in enumerate(self.variation_unit_ids):
+                if vu_id not in substantive_variation_unit_ids_set:
+                    continue
+                rdg_support = self.readings_by_witness[wit.id][j]
                 # Populate a list of nonzero coefficients for this reading support vector:
                 rdg_inds = [k for k, w in enumerate(rdg_support) if w > 0]
                 # If this list does not consist of exactly one reading, then treat it as missing data:
                 if len(rdg_inds) != 1:
-                    long_table_list.append([wit_id, vu_label, missing_symbol, missing_symbol])
+                    long_table_list.append([wit.id, vu_id, missing_symbol, missing_symbol])
                     continue
-                rdg_ind = rdg_inds[0]
-                rdg_text = reading_texts_by_indices[(vu_ind, rdg_ind)]
+                k = rdg_inds[0]
+                rdg_text = reading_texts_by_indices[(j, k)]
                 # Replace empty reading texts with the omission placeholder:
                 if rdg_text == "":
                     rdg_text = "om."
-                long_table_list.append([wit_id, vu_label, rdg_ind, rdg_text])
+                long_table_list.append([wit.id, vu_id, k, rdg_text])
         # Then convert the long table entries list to a NumPy array:
         long_table = np.array(long_table_list)
         return long_table, column_labels
 
-    def to_dataframe(self, long_table: bool = False, split_missing: bool = True):
+    def to_dataframe(self, drop_constant: bool = False, long_table: bool = False, split_missing: bool = True):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
             Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
@@ -937,46 +1022,63 @@ class Collation:
         # Proceed based on whether the long_table option is set:
         if long_table:
             # Convert the collation to a long table and get its column labels first:
-            long_table, column_labels = self.to_long_table()
+            long_table, column_labels = self.to_long_table(drop_constant=drop_constant)
             df = pd.DataFrame(long_table, columns=column_labels)
         else:
             # Convert the collation to a NumPy array and get its row and column labels first:
-            matrix, reading_labels, witness_labels = self.to_numpy(split_missing)
+            matrix, reading_labels, witness_labels = self.to_numpy(
+                drop_constant=drop_constant, split_missing=split_missing
+            )
             df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         return df
 
-    def to_csv(self, file_addr: Union[Path, str], long_table: bool = False, split_missing: bool = True, **kwargs):
+    def to_csv(
+        self,
+        file_addr: Union[Path, str],
+        drop_constant: bool = False,
+        long_table: bool = False,
+        split_missing: bool = True,
+        **kwargs
+    ):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
 
         If your witness IDs are numeric (e.g., Gregory-Aland numbers), then they will be written in full to the CSV file, but Excel will likely interpret them as numbers and truncate any leading zeroes!
 
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
             Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
             **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(long_table, split_missing)
+        df = self.to_dataframe(drop_constant=drop_constant, long_table=long_table, split_missing=split_missing)
         # If this is a long table, then do not include row indices:
         if long_table:
             return df.to_csv(file_addr, encoding="utf-8", index=False, **kwargs)
         return df.to_csv(file_addr, encoding="utf-8", **kwargs)
 
-    def to_excel(self, file_addr: Union[Path, str], long_table: bool = False, split_missing: bool = True):
+    def to_excel(
+        self,
+        file_addr: Union[Path, str],
+        drop_constant: bool = False,
+        long_table: bool = False,
+        split_missing: bool = True,
+    ):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
         Since Pandas is deprecating its support for xlwt, specifying an output in old Excel (.xls) output is not recommended.
 
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
             Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(long_table, split_missing)
+        df = self.to_dataframe(drop_constant=drop_constant, long_table=long_table, split_missing=split_missing)
         # If this is a long table, then do not include row indices:
         if long_table:
             return df.to_excel(file_addr, index=False)
@@ -990,39 +1092,45 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
             The accompanying chron file will match this file name, except that it will have "_chron" appended to the end.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
         """
+        # Populate a list of sites that will correspond to columns of the sequence alignment
+        # (by default, constant sites are dropped):
+        substantive_variation_unit_ids = [
+            vu_id for vu_id in self.variation_unit_ids if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+        ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
         # to the readings' texts:
         reading_texts_by_indices = {}
-        substantive_variation_unit_ids_set = set(self.substantive_variation_unit_ids)
-        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
-        vu_ind = 0
-        for vu in self.variation_units:
+        for j, vu in enumerate(self.variation_units):
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
-            rdg_ind = 0
+            k = 0
             for rdg in vu.readings:
                 key = tuple([vu.id, rdg.id])
                 if key not in substantive_variation_unit_reading_tuples_set:
                     continue
-                indices = tuple([vu_ind, rdg_ind])
+                indices = tuple([j, k])
                 reading_texts_by_indices[indices] = rdg.text
-                rdg_ind += 1
-            if rdg_ind > 0:
-                vu_ind += 1
+                k += 1
         # In a second pass, populate another dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
         # to the witnesses exclusively supporting those readings:
         reading_wits_by_indices = {}
         for indices in reading_texts_by_indices:
             reading_wits_by_indices[indices] = []
-        for wit in self.readings_by_witness:
-            for vu_ind, rdg_support in enumerate(self.readings_by_witness[wit]):
-                # If this witness does not exclusively support exactly one reading at this unit, then treat it as lacunose:
-                if len([i for i, w in enumerate(rdg_support) if w > 0]) != 1:
+        for i, wit in enumerate(self.witnesses):
+            for j, vu_id in enumerate(self.variation_unit_ids):
+                if vu_id not in substantive_variation_unit_ids_set:
                     continue
-                rdg_ind = rdg_support.index(1)
-                indices = tuple([vu_ind, rdg_ind])
-                reading_wits_by_indices[indices].append(wit)
+                rdg_support = self.readings_by_witness[wit.id][j]
+                # If this witness does not exclusively support exactly one reading at this unit, then treat it as lacunose:
+                if len([k for k, w in enumerate(rdg_support) if w > 0]) != 1:
+                    continue
+                k = rdg_support.index(1)
+                indices = tuple([j, k])
+                reading_wits_by_indices[indices].append(wit.id)
         # In a third pass, write to the STEMMA file:
         chron_file_addr = str(file_addr) + "_chron"
         with open(file_addr, "w", encoding="utf-8") as f:
@@ -1032,14 +1140,16 @@ class Collation:
             # Then add a line indicating that all witnesses are lacunose unless they are specified explicitly:
             f.write("= $? $* ;\n\n")
             # Then proceed for each variation unit:
-            for vu_ind, vu_id in enumerate(self.substantive_variation_unit_ids):
+            for j, vu_id in enumerate(self.variation_unit_ids):
+                if vu_id not in substantive_variation_unit_ids_set:
+                    continue
                 # Print the variation unit ID first:
                 f.write("@ %s\n" % vu_id)
                 # In a first pass, print the texts of all readings enclosed in brackets:
                 f.write("[ ")
-                rdg_ind = 0
+                k = 0
                 while True:
-                    indices = tuple([vu_ind, rdg_ind])
+                    indices = tuple([j, k])
                     if indices not in reading_texts_by_indices:
                         break
                     text = slugify(
@@ -1049,29 +1159,29 @@ class Collation:
                     if text == "":
                         text = "\u2013"
                     # The first reading should not be preceded by anything:
-                    if rdg_ind == 0:
+                    if k == 0:
                         f.write(text)
                         f.write(" |")
                     # Every subsequent reading should be preceded by a space:
-                    elif rdg_ind > 0:
+                    elif k > 0:
                         f.write(" %s" % text)
-                    rdg_ind += 1
+                    k += 1
                 f.write(" ]\n")
                 # In a second pass, print the indices and witnesses for all readings enclosed in angle brackets:
-                rdg_ind = 0
+                k = 0
                 f.write("\t< ")
                 while True:
-                    indices = tuple([vu_ind, rdg_ind])
+                    indices = tuple([j, k])
                     if indices not in reading_wits_by_indices:
                         break
                     wits = " ".join(reading_wits_by_indices[indices])
                     # Open the variant reading support block with an angle bracket:
-                    if rdg_ind == 0:
-                        f.write("%d %s" % (rdg_ind, wits))
+                    if k == 0:
+                        f.write("%d %s" % (k, wits))
                     # Open all subsequent variant reading support blocks with pipes on the next line:
                     else:
-                        f.write("\n\t| %d %s" % (rdg_ind, wits))
-                    rdg_ind += 1
+                        f.write("\n\t| %d %s" % (k, wits))
+                    k += 1
                 f.write(" >\n")
         # In a fourth pass, write to the chron file:
         max_id_length = max(
@@ -1122,6 +1232,7 @@ class Collation:
         self,
         file_addr: Union[Path, str],
         format: Format = None,
+        drop_constant: bool = False,
         long_table: bool = False,
         split_missing: bool = True,
         char_state_labels: bool = True,
@@ -1137,6 +1248,7 @@ class Collation:
             format (Format, optional): The desired output format.
                 If None then it is infered from the file suffix.
                 Defaults to None.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             long_table (bool, optional): An optional flag indicating whether or not to generate a long table
                 with columns for taxa, characters, reading indices, and reading values.
                 Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
@@ -1174,6 +1286,7 @@ class Collation:
         if format == Format.NEXUS:
             return self.to_nexus(
                 file_addr,
+                drop_constant=drop_constant,
                 char_state_labels=char_state_labels,
                 frequency=frequency,
                 ambiguous_as_missing=ambiguous_as_missing,
@@ -1182,22 +1295,28 @@ class Collation:
             )
 
         if format == format.HENNIG86:
-            return self.to_hennig86(file_addr)
+            return self.to_hennig86(file_addr, drop_constant=drop_constant)
 
         if format == format.PHYLIP:
-            return self.to_phylip(file_addr)
+            return self.to_phylip(file_addr, drop_constant=drop_constant)
 
         if format == format.FASTA:
-            return self.to_fasta(file_addr)
+            return self.to_fasta(file_addr, drop_constant=drop_constant)
 
         if format == Format.CSV:
-            return self.to_csv(file_addr, long_table=long_table, split_missing=split_missing)
+            return self.to_csv(
+                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing
+            )
 
         if format == Format.TSV:
-            return self.to_csv(file_addr, long_table=long_table, split_missing=split_missing, sep="\t")
+            return self.to_csv(
+                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing, sep="\t"
+            )
 
         if format == Format.EXCEL:
-            return self.to_excel(file_addr, long_table=long_table, split_missing=split_missing)
+            return self.to_excel(
+                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing
+            )
 
         if format == Format.STEMMA:
             return self.to_stemma(file_addr)
