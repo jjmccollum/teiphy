@@ -13,7 +13,7 @@ from .common import xml_ns, tei_ns
 from .format import Format
 from .witness import Witness
 from .variation_unit import VariationUnit
-from .beast_templates import *
+from .beast_templates import beast_template, sequence_template, charstatelabels_template, transcriptional_rate_parameter_template, single_var_template, multiple_var_template, frequencies_template, first_branch_rate_model_template, other_branch_rate_model_template
 
 
 class ParsingException(Exception):
@@ -1013,6 +1013,67 @@ class Collation:
         date_map = ",".join(calibrate_strings)
         return date_map
 
+    def get_beast_root_frequencies_for_unit(self, vu_ind):
+        """Returns a string containing state/reading root frequencies in BEAST format for the character/variation unit at the given index.
+        The root frequencies are calculated from the intrinsic odds at this unit. 
+
+        Args:
+            vu_ind: An integer index for the desired unit.
+
+        Returns:
+            A string containing space-separated root frequencies.
+        """
+        vu = self.variation_units[vu_ind]
+        vu_id = vu.id
+        intrinsic_relations = vu.intrinsic_relations
+        intrinsic_odds_by_id = self.intrinsic_odds_by_id
+        # We will populate the root frequencies based on the intrinsic odds of the readings:
+        root_frequencies_by_id = {}
+        for rdg_id in self.substantive_readings_by_variation_unit_id[vu_id]:
+            root_frequencies_by_id[rdg_id] = 0
+        # First, construct an adjacency list for efficient edge iteration:
+        neighbors_by_source = {}
+        for edge in intrinsic_relations:
+            s = edge[0]
+            t = edge[1]
+            if s not in neighbors_by_source:
+                neighbors_by_source[s] = []
+            if t not in neighbors_by_source:
+                neighbors_by_source[t] = []
+            neighbors_by_source[s].append(t)
+        # Next, identify the unique reading that is not targeted by any intrinsic odds relation:
+        in_degree_by_reading = {}
+        for edge in intrinsic_relations:
+            s = edge[0]
+            t = edge[1]
+            if s not in in_degree_by_reading:
+                in_degree_by_reading[s] = 0
+            if t not in in_degree_by_reading:
+                in_degree_by_reading[t] = 0
+            in_degree_by_reading[t] += 1
+        first_reading = [t for t in in_degree_by_reading if in_degree_by_reading[t] == 0][0]
+        # Set the root frequency for this reading to 1 (it will be normalized later):
+        root_frequencies_by_id[first_reading] = 1.0
+        # Next, populate the root frequencies vector recursively using the adjacency list:
+        def update_root_frequencies(s):
+            for t in neighbors_by_source[s]:
+                intrinsic_category = intrinsic_relations[(s, t)]
+                odds = intrinsic_odds_by_id[intrinsic_category]
+                # TODO: This needs to be handled using parameters once we have it implemented in BEAST
+                if odds is None:
+                    odds = 1.0
+                root_frequencies_by_id[t] = root_frequencies_by_id[s] / odds
+                update_root_frequencies(first_reading)
+            return
+        update_root_frequencies(first_reading)
+        # Then produce a normalized vector of root frequencies that corresponds to a probability distribution:
+        root_frequencies = [root_frequencies_by_id[rdg_id] for rdg_id in self.substantive_readings_by_variation_unit_id[vu_id]]
+        total_frequencies = sum(root_frequencies)
+        for k in range(len(root_frequencies)):
+            root_frequencies[k] = root_frequencies[k] / total_frequencies
+        root_frequencies_string = " ".join([str(w) for w in root_frequencies])
+        return root_frequencies_string
+
     def to_beast(self, file_addr: Union[Path, str], drop_constant: bool = False):
         """Writes this Collation to a file in BEAST format with the given address.
 
@@ -1030,102 +1091,174 @@ class Collation:
             ]
         substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
         substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
-        # Start by calculating the values we will be using for the main template:
+        # First, calculate the values we will be using for the main template:
         taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
-        charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in substantive_variation_unit_ids]
+        missing_symbol = '?'
         symbols = self.get_beast_symbols()
         date_map = self.get_beast_date_map(taxlabels)
-
-        with open(file_addr, "w", encoding="utf-8") as f:
-            # Start with the NEXUS header:
-            f.write("#NEXUS\n\n")
-            # Then begin the data block:
-            f.write("Begin DATA;\n")
-            # Write the collation matrix dimensions:
-            f.write("\tDimensions ntax=%d nchar=%d;\n" % (ntax, nchar))
-            # Write the format subblock:
-            f.write("\tFormat\n")
-            f.write("\t\tDataType=Standard\n")
-            f.write("\t\tMissing=%s\n" % missing_symbol)
-            if frequency:
-                f.write("\t\tStatesFormat=Frequency\n")
-            f.write("\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
-            # If the char_state_labels is set, then write the labels for character-state labels, with each on its own line:
-            if char_state_labels:
-                f.write("\tCharStateLabels")
-                vu_ind = 1
-                for vu in self.variation_units:
-                    if vu.id not in substantive_variation_unit_ids_set:
-                        continue
-                    if vu_ind == 1:
-                        f.write("\n\t\t%d %s /" % (vu_ind, slugify(vu.id, lowercase=False, separator='_')))
-                    else:
-                        f.write(",\n\t\t%d %s /" % (vu_ind, slugify(vu.id, lowercase=False, separator='_')))
-                    rdg_ind = 0
-                    for rdg in vu.readings:
-                        key = tuple([vu.id, rdg.id])
-                        if key not in substantive_variation_unit_reading_tuples_set:
-                            continue
-                        ascii_rdg_text = slugify(
-                            rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']]
-                        )
-                        if ascii_rdg_text == "":
-                            ascii_rdg_text = "om."
-                        f.write(" %s" % ascii_rdg_text)
-                        rdg_ind += 1
-                    if rdg_ind > 0:
-                        vu_ind += 1
-                f.write(";\n")
-            # Write the matrix subblock:
-            f.write("\tMatrix")
-            for i, wit in enumerate(self.witnesses):
-                taxlabel = taxlabels[i]
-                if frequency:
-                    sequence = "\n\t\t" + taxlabel
-                    for j, vu_id in enumerate(self.variation_unit_ids):
-                        if vu_id not in substantive_variation_unit_ids_set:
-                            continue
-                        rdg_support = self.readings_by_witness[wit.id][j]
-                        sequence += "\n\t\t\t"
-                        # If this reading is lacunose in this witness, then use the missing character:
-                        if sum(rdg_support) == 0:
-                            sequence += missing_symbol
-                            continue
-                        # Otherwise, print out its frequencies for different readings in parentheses:
-                        sequence += "("
-                        for j, w in enumerate(rdg_support):
-                            sequence += "%s:%0.4f" % (symbols[j], w)
-                            if j < len(rdg_support) - 1:
-                                sequence += " "
-                        sequence += ")"
+        # Now fill in the main template string and convert it to an XML Element:
+        beast_xml = et.fromstring(beast_template.format(nsymbols=len(symbols), date_map=date_map))
+        # Next, add the sequences for all witnesses:
+        data_xml = beast_xml.find(".//data")
+        start_sequence_comment = data_xml.xpath("./comment()[. = \" Start sequences \"]")[0]
+        current_sequence_index = data_xml.index(start_sequence_comment) + 1
+        for i, wit in enumerate(self.witnesses):
+            # Populate its sequence from its entries in the witness's readings dictionary:
+            sequence = ""
+            for j, rdg_support in enumerate(self.readings_by_witness[wit.id]):
+                vu_id = self.variation_unit_ids[j]
+                # Skip any variation units deemed non-substantive:
+                if vu_id not in substantive_variation_unit_ids:
+                    continue
+                # If this witness has a certainty of 0 for all readings, then assign an equal probability to each reading:
+                if sum(rdg_support) == 0:
+                    for k, w in enumerate(rdg_support):
+                        w = 1 / len(rdg_support)
+                        sequence += str(w)
+                        sequence += ", " if k < len(rdg_support) - 1 else "; "
+                # Otherwise, read the probabilities as they are given:
                 else:
-                    sequence = "\n\t\t" + taxlabel
-                    # Add enough space after this label ensure that all sequences are nicely aligned:
-                    sequence += " " * (max_taxlabel_length - len(taxlabel) + 1)
-                    for j, vu_id in enumerate(self.variation_unit_ids):
-                        if vu_id not in substantive_variation_unit_ids_set:
+                    for k, w in enumerate(rdg_support):
+                        sequence += str(w)
+                        sequence += ", " if k < len(rdg_support) - 1 else "; "
+            # Strip the final semicolon and space from the sequence:
+            sequence = sequence.strip("; ")
+            # Now fill in the sequence template string and convert it to an XML Element:
+            sequence_xml = et.fromstring(sequence_template.format(wit_id=taxlabels[i], sequence=sequence))
+            # Then insert it under the data element:
+            data_xml.insert(current_sequence_index, sequence_xml)
+            current_sequence_index += 1
+        # Next, add the character and state labels for all witnesses:
+        user_data_type_xml = beast_xml.find(".//userDataType")
+        start_charstatelabels_comment = user_data_type_xml.xpath("./comment()[. = \" Start charstatelabels \"]")[0]
+        current_charstatelabels_index = user_data_type_xml.index(start_charstatelabels_comment) + 1
+        for j, vu in enumerate(self.variation_units):
+            if vu.id not in substantive_variation_unit_ids_set:
+                continue
+            # First, construct the code map for this unit using the readings_by_witness dictionary:
+            code_map = {}
+            # Add singleton states first:
+            for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id])):
+                code_map[symbols[k]] = str(k)
+            # Then add a mapping for the missing state:
+            code_map[missing_symbol] = " ".join(str(k) for k in range(len(rdg_support)))
+            # Then add any ambiguous states that occur in the data:
+            for i, wit in enumerate(self.witnesses):
+                rdg_support = self.readings_by_witness[wit.id][j]
+                rdg_inds = [
+                    k for k, w in enumerate(rdg_support) if w > 0
+                ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                if len(rdg_inds) <= 1:
+                    continue
+                ambiguous_symbol = ""
+                for k in rdg_inds:
+                    ambiguous_symbol += symbols[k]
+                code_map[ambiguous_symbol] = " ".join(str(k) for k in rdg_inds)
+            code_map_string = ", ".join([code + "=" + code_map[code] for code in code_map])
+            # Second, get the variation unit and reading labels:
+            rdg_texts = []
+            vu_label = slugify(vu.id, lowercase=False, allow_unicode=True, separator='_')
+            for rdg in vu.readings:
+                key = tuple([vu.id, rdg.id])
+                if key not in substantive_variation_unit_reading_tuples_set:
+                    continue
+                rdg_text = slugify(rdg.text, lowercase=False, allow_unicode=True, separator='_')
+                # Replace any empty reading text with an omission marker:
+                if rdg_text == "":
+                    rdg_text = "om."
+                rdg_texts.append(rdg.text)
+                k += 1
+            rdg_texts_string = ", ".join(rdg_texts)
+            # Now fill in the charstatelabels template string and convert it to an XML Element:
+            charstatelabels_xml = et.fromstring(charstatelabels_template.format(vu_id=vu_label, code_map=code_map_string, nstates=str(len(rdg_texts)), value=rdg_texts_string))
+            # Then insert it under the userDataType element:
+            user_data_type_xml.insert(current_charstatelabels_index, charstatelabels_xml)
+            current_charstatelabels_index += 1
+        # TODO: Next, add the parameters corresponding to intrinsic odds:
+
+        # Next, add the parameters corresponding to transcriptional rates:
+        state_xml = beast_xml.find(".//state")
+        start_transcriptional_parameters_comment = state_xml.xpath("./comment()[. = \" Start transcriptional parameters \"]")[0]
+        current_transcriptional_parameter_index = state_xml.index(start_transcriptional_parameters_comment) + 1
+        for transcriptional_category in self.transcriptional_categories:
+            rate = self.transcriptional_rates_by_id[transcriptional_category]
+            estimate = "true" if rate is None else "false"
+            value = "1.0" if rate is None else str(rate)
+            transcriptional_rate_parameter_xml = et.fromstring(transcriptional_rate_parameter_template.format(id=transcriptional_category, estimate=estimate, value=value))
+            state_xml.insert(current_transcriptional_parameter_index, transcriptional_rate_parameter_xml)
+            current_transcriptional_parameter_index += 1
+        # Next, add the distribution data for each variation unit:
+        likelihood_distribution_xml = beast_xml.find(".//distribution[@id=\"likelihood\"]")
+        start_character_distributions_comment = likelihood_distribution_xml.xpath("./comment()[. = \" Start character distributions \"]")[0]
+        current_character_distribution_index = likelihood_distribution_xml.index(start_character_distributions_comment) + 1
+        character_ind = 0
+        for j, vu in enumerate(self.variation_units):
+            if vu.id not in substantive_variation_unit_ids_set:
+                continue
+            # Now fill in the distribution template string and convert it to an XML Element:
+            distribution_xml = et.fromstring(distribution_template.format(vu_ind=character_ind+1))
+            # Next, add the rate parameters for this distribution element:
+            rates_parameter_xml = distribution_xml.find(".//parameter[name=\"rates\"]")
+            start_rate_vars_comment = rates_parameter_xml.xpath("./comment()[. = \" Start rate vars \"]")[0]
+            current_var_index = rates_parameter_xml.index(start_rate_vars_comment) + 1
+            # Proceed for every pair of readings in this unit:
+            for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                    # Skip diagonal elements:
+                    if k_1 == k_2:
+                        continue
+                    # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
+                    if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
+                        var_xml = et.fromstring(single_var_template.format(rate_id="default"))
+                        rates_parameter_xml.insert(current_var_index, var_xml)
+                        current_var_index += 1
+                        continue
+                    # Otherwise, check how many distinct categories of transcriptional relations hold between the first and second readings:
+                    else:
+                        # If there is only one such category, then add its rate as a standalone var element:
+                        if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
+                            transcriptional_category = vu.transcriptional_relations[(rdg_id_1, rdg_id_2)][0]
+                            var_xml = et.fromstring(single_var_template.format(rate_id=transcriptional_category))
+                            rates_parameter_xml.insert(current_var_index, var_xml)
+                            current_var_index += 1
                             continue
-                        rdg_support = self.readings_by_witness[wit.id][j]
-                        # If this reading is lacunose in this witness, then use the missing character:
-                        if sum(rdg_support) == 0:
-                            sequence += missing_symbol
-                            continue
-                        rdg_inds = [
-                            k for k, w in enumerate(rdg_support) if w > 0
-                        ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
-                        # For singleton readings, just print the symbol:
-                        if len(rdg_inds) == 1:
-                            sequence += symbols[rdg_inds[0]]
-                            continue
-                        # For multiple readings, print the corresponding readings in braces or the missing symbol depending on input settings:
-                        if ambiguous_as_missing:
-                            sequence += missing_symbol
+                        # If there is more than one, then add a var element that is a sum of the individual categories' rates:
                         else:
-                            sequence += "{%s}" % "".join([str(rdg_ind) for rdg_ind in rdg_inds])
-                f.write("%s" % (sequence))
-            f.write(";\n")
-            # End the data block:
-            f.write("End;")
+                            transcriptional_categories = vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]
+                            sum_var_xml = et.fromstring(multiple_var_template)
+                            for transcriptional_category in transcriptional_categories:
+                                var_xml = et.fromstring(single_var_template.format(rate_id=transcriptional_category))
+                                sum_var_xml.append(var_xml)
+                            rates_parameter_xml.insert(current_var_index, sum_var_xml)
+                            current_var_index += 1
+                            continue
+            # Next, add the root frequencies for this distribution element:
+            root_frequencies_xml = distribution_xml.find(".//rootFrequencies")
+            start_root_frequencies_comment = root_frequencies_xml.xpath("./comment()[. = \" Start root frequencies \"]")[0]
+            current_frequencies_index = root_frequencies_xml.index(start_root_frequencies_comment) + 1
+            root_frequencies_string = self.get_beast_root_frequencies_for_unit(j)
+            frequencies_xml = et.fromstring(frequencies_template.format(vu_ind=character_ind+1, frequencies=root_frequencies_string))
+            root_frequencies_xml.insert(current_frequencies_index, frequencies_xml)
+            current_frequencies_index += 1
+            # Next, add the appropriate branch rate model for this distribution element:
+            start_branch_rate_model_comment = distribution_xml.xpath("./comment()[. = \" Start branchRateModel \"]")[0]
+            current_branch_rate_model_index = distribution_xml.index(start_branch_rate_model_comment) + 1
+            # If this is the first character, then use the full form of the branchRateModel element:
+            if character_ind == 0:
+                branch_rate_model_xml = et.fromstring(first_branch_rate_model_template)
+                distribution_xml.insert(current_branch_rate_model_index, branch_rate_model_xml)
+                current_branch_rate_model_index += 1
+            # Otherwise, just reference the first character's branchRateModel element:
+            else:
+                branch_rate_model_xml = et.fromstring(other_branch_rate_model_template)
+                distribution_xml.insert(current_branch_rate_model_index, branch_rate_model_xml)
+                current_branch_rate_model_index += 1
+            # Then insert this unit's completed distribution element under the likelihood distribution element:
+            likelihood_distribution_xml.insert(current_character_distribution_index, distribution_xml)
+            current_character_distribution_index += 1
+            character_ind += 1
+        # Finally, write the full XML tree to the output file address:
+        
         return
 
     def to_numpy(self, drop_constant: bool = False, split_missing: bool = True):

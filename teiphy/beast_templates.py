@@ -4,8 +4,9 @@
 BEAST XML template string
 """
 beast_template = """
+<?xml version="1.0" encoding="UTF-8">
 <beast version="2.6" namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood">
-    <data spec="Alignment" dataType="standard" statecount={nsymbols} id="alignment">
+    <data spec="Alignment" id="alignment" dataType="standard" statecount="{nsymbols}">
         <!-- Start sequences -->
         <!-- End sequences -->
         <userDataType spec="beast.evolution.datatype.StandardData">
@@ -31,68 +32,64 @@ beast_template = """
                     <taxa spec="TaxonSet" alignment="@alignment"/>
                 </trait>
             </tree>
-            <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate_BDSKY_Serial.t:alignment" lower="0.0" name="stateNode" upper="Infinity">1.0</parameter>
-            <parameter spec="parameter.RealParameter" id="reproductiveNumber_BDSKY_Serial.t:alignment" dimension="10" lower="0.0" name="stateNode" upper="Infinity">2.0</parameter>
-            <parameter spec="parameter.RealParameter" id="samplingProportion_BDSKY_Serial.t:alignment" lower="0.0" name="stateNode" upper="1.0">0.01</parameter>
-            <parameter spec="parameter.RealParameter" id="ucldMean.c:alignment" name="stateNode">1.0</parameter>
-            <parameter spec="parameter.RealParameter" id="ucldStdevParameter" lower="0.0" name="stateNode" estimate="false">0.000001</parameter>
-            <stateNode spec="parameter.IntegerParameter" id="rateCategories.c:alignment" dimension="74">1</stateNode>
-            <parameter spec="parameter.RealParameter" id="nonhomogeneousClockScaleFactor" name="stateNode" lower="0.0" upper="10.0">1</parameter>
-            <parameter spec="parameter.RealParameter" id="nonhomogeneousClockGrowthFactor" name="stateNode">500</parameter>
-            <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddle" name="stateNode">600</parameter>
+            <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate_BDSKY_Serial.t:alignment" lower="0.0" name="stateNode" upper="Infinity" value="1.0"/>
+            <parameter spec="parameter.RealParameter" id="reproductiveNumber_BDSKY_Serial.t:alignment" dimension="10" lower="0.0" name="stateNode" upper="Infinity" value="2.0"/>
+            <parameter spec="parameter.RealParameter" id="samplingProportion_BDSKY_Serial.t:alignment" lower="0.0" name="stateNode" upper="1.0" value="0.01"/>
+            <parameter spec="parameter.RealParameter" id="ucldMean.c:alignment" name="stateNode" value="1.0"/>
+            <parameter spec="parameter.RealParameter" id="ucldStdevParameter" lower="0.0" name="stateNode" estimate="false" value="0.000001"/>
+            <stateNode spec="parameter.IntegerParameter" id="rateCategories.c:alignment" dimension="74" value="1"/>
+            <parameter spec="parameter.RealParameter" id="nonhomogeneousClockScaleFactor" name="stateNode" lower="0.0" upper="10.0" value="1.0"/>
+            <parameter spec="parameter.RealParameter" id="nonhomogeneousClockGrowthFactor" name="stateNode" value="500.0"/>
+            <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddle" name="stateNode" value="600.0"/>
+            <!-- Start intrinsic parameters -->
+            <!-- End intrinsic parameters -->
             <!-- Start transcriptional parameters -->
             <!-- End transcriptional parameters -->
             <!-- We include a "default" rate fixed at 1 that corresponds to (unlikely) transitions with no transcriptional explanation.
             All other rates in the substitution matrices will be estimated relative to this.
             If no other transcriptional rate parameters are specified, then the substitution matrices will correspond to those of the Lewis Mk model. -->
-            <parameter spec="parameter.RealParameter" id="default_rate" name="stateNode" estimate="false">1.0</parameter>
+            <parameter spec="parameter.RealParameter" id="default_rate" name="stateNode" estimate="false" value="1.0"/>
         </state>
         <init spec="beast.evolution.tree.RandomTree" id="RandomTree.t:alignment" estimate="false" initial="@tree" taxa="@alignment">
             <populationModel spec="ConstantPopulation" id="ConstantPopulation0.t:alignment">
-                <parameter spec="parameter.RealParameter" id="randomPopSize.t:alignment" name="popSize">1.0</parameter>
+                <parameter spec="parameter.RealParameter" id="randomPopSize.t:alignment" name="popSize" value="1.0"/>
             </populationModel>
         </init>
         <distribution spec="util.CompoundDistribution" id="posterior">
             <distribution spec="util.CompoundDistribution" id="prior">
                 <distribution spec="beast.evolution.speciation.BirthDeathSkylineModel" id="BDSKY_Serial.t:alignment" becomeUninfectiousRate="@becomeUninfectiousRate_BDSKY_Serial.t:alignment" reproductiveNumber="@reproductiveNumber_BDSKY_Serial.t:alignment" samplingProportion="@samplingProportion_BDSKY_Serial.t:alignment" tree="@tree">
-                    <parameter spec="parameter.RealParameter" id="origin_BDSKY_Serial.t:alignment" estimate="false" lower="1250.0" name="origin" upper="1250.0">1250.0</parameter>
+                    <parameter spec="parameter.RealParameter" id="origin_BDSKY_Serial.t:alignment" estimate="false" lower="1250.0" name="origin" upper="1250.0" value="1250.0"/>
                 </distribution>
                 <prior id="becomeUninfectiousRatePrior_BDSKY_Serial.t:alignment" name="distribution" x="@becomeUninfectiousRate_BDSKY_Serial.t:alignment">
                     <LogNormal id="LogNormalDistributionModel.1" name="distr">
-                    <parameter spec="parameter.RealParameter" id="RealParameter.13" estimate="false" name="M">0.0</parameter>
-                    <parameter spec="parameter.RealParameter" id="RealParameter.14" estimate="false" name="S">1.0</parameter>
+                    <parameter spec="parameter.RealParameter" id="RealParameter.13" estimate="false" name="M" value="0.0"/>
+                    <parameter spec="parameter.RealParameter" id="RealParameter.14" estimate="false" name="S" value="1.0"/>
                     </LogNormal>
                 </prior>
                 <prior id="reproductiveNumberPrior_BDSKY_Serial.t:alignment" name="distribution" x="@reproductiveNumber_BDSKY_Serial.t:alignment">
                     <LogNormal id="LogNormalDistributionModel.2" name="distr">
-                    <parameter spec="parameter.RealParameter" id="RealParameter.15" estimate="false" name="M">0.0</parameter>
-                    <parameter spec="parameter.RealParameter" id="RealParameter.16" estimate="false" name="S">1.0</parameter>
+                    <parameter spec="parameter.RealParameter" id="RealParameter.15" estimate="false" name="M" value="0.0"/>
+                    <parameter spec="parameter.RealParameter" id="RealParameter.16" estimate="false" name="S" value="1.0"/>
                     </LogNormal>
                 </prior>
                 <prior id="samplingProportionPrior_BDSKY_Serial.t:alignment" name="distribution" x="@samplingProportion_BDSKY_Serial.t:alignment">
                     <Beta id="Beta.1" name="distr">
-                        <parameter spec="parameter.RealParameter" id="RealParameter.17" estimate="false" name="alpha">1.0</parameter>
-                        <parameter spec="parameter.RealParameter" id="RealParameter.18" estimate="false" name="beta">1.0</parameter>
+                        <parameter spec="parameter.RealParameter" id="RealParameter.17" estimate="false" name="alpha" value="1.0"/>
+                        <parameter spec="parameter.RealParameter" id="RealParameter.18" estimate="false" name="beta" value="1.0"/>
                     </Beta>
                 </prior>
                 <prior id="MeanRatePrior.c:alignment" name="distribution" x="@ucldMean.c:alignment">
                     <Uniform id="Uniform.4" name="distr" upper="Infinity"/>
                 </prior>
                 <prior id="nonhomogeneousClockScaleFactorPrior" name="distribution" x="@nonhomogeneousClockScaleFactor">
-                    <!--
-                    <Uniform id="nonhomogeneousClockScaleFactorPriorDistribution" name="distr" lower="0.0" upper="20.0"/>
-                    -->
                     <Exponential id="nonhomogeneousClockScaleFactorPriorDistribution" name="distr">
                         <parameter spec="parameter.RealParameter" id="nonhomogeneousClockScaleFactorPriorDistributionMean" estimate="false" name="mean">1.0</parameter>
                     </Exponential>
                 </prior>
                 <prior id="nonhomogeneousClockGrowthFactorPrior" name="distribution" x="@nonhomogeneousClockGrowthFactor">
-                    <!--
-                    <Uniform id="nonhomogeneousClockGrowthFactorPriorDistribution" name="distr" lower="1" upper="1000.0"/>
-                    -->
                     <Normal id="nonhomogeneousClockGrowthFactorPriorDistribution" name="distr">
-                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockGrowthFactorPriorDistributionMean" estimate="false" name="mean">500.0</parameter>
-                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockGrowthFactorPriorDistributionSigma" estimate="false" name="sigma">500.0</parameter>
+                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockGrowthFactorPriorDistributionMean" estimate="false" name="mean" value="500.0"/>
+                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockGrowthFactorPriorDistributionSigma" estimate="false" name="sigma" value="500.0"/>
                     </Normal>
                 </prior>
                 <prior id="nonhomogeneousClockMiddlePrior" name="distribution" x="@nonhomogeneousClockMiddle">
@@ -100,8 +97,8 @@ beast_template = """
                     <Uniform id="nonhomogeneousClockMiddlePriorDistribution" name="distr" lower="0" upper="1250.0"/>
                     -->
                     <Normal id="nonhomogeneousClockMiddlePriorDistribution" name="distr">
-                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddlePriorDistributionMean" estimate="false" name="mean">500.0</parameter>
-                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddlePriorDistributionSigma" estimate="false" name="sigma">500.0</parameter>
+                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddlePriorDistributionMean" estimate="false" name="mean" value="500.0"/>
+                        <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddlePriorDistributionSigma" estimate="false" name="sigma" value="500.0"/>
                     </Normal>
                 </prior>
             </distribution>
@@ -189,27 +186,24 @@ charstatelabels_template = """
 """
 BEAST XML transcriptional rate parameter template string
 """
-parameter_template = """
-<parameter spec="parameter.RealParameter" id="{rate_id}_rate" name="stateNode" lower="1.0" upper="Infinity" estimate="true">1.0</parameter>
+transcriptional_rate_parameter_template = """
+<parameter spec="parameter.RealParameter" id="{rate_id}_rate" name="stateNode" lower="1.0" upper="Infinity" estimate="{estimate}" value="{value}"/>
 """
 
 """
 BEAST XML distribution template string
 """
 distribution_template = """
-<distribution id="morphTreeLikelihood.character{vu_ind}" useAmbiguities="true" useTipLikelihoods="true" spec="TreeLikelihood" tree="@tree">
-    <data spec="FilteredAlignment" id="filter1" data="@alignment" filter="{vu_ind}">
-        <userDataType spec="beast.evolution.datatype.StandardData" id="morphDataType.character{vu_ind}" ambiguities="" nrOfStates="{nstates}"/>
+<distribution spec="TreeLikelihood" id="morphTreeLikelihood.character{vu_ind}" useAmbiguities="true" useTipLikelihoods="true" tree="@tree">
+    <data spec="FilteredAlignment" id="filter{vu_ind}" data="@alignment" filter="{vu_ind}">
+        <userDataType spec="beast.evolution.datatype.StandardData" id="morphDataType.character{vu_ind}"/>
     </data>
     <siteModel spec="SiteModel" id="morphSiteModel.character{vu_ind}">
-        <parameter spec="parameter.RealParameter" id="mutationRate.character{vu_ind}" estimate="false" name="mutationRate">1.0</parameter>
-        <parameter spec="parameter.RealParameter" id="gammaShape.character{vu_ind}" estimate="false" name="shape">1.0</parameter>
+        <parameter spec="parameter.RealParameter" id="mutationRate.character{vu_ind}" estimate="false" name="mutationRate" value="1.0"/>
+        <parameter spec="parameter.RealParameter" id="gammaShape.character{vu_ind}" estimate="false" name="shape" value="1.0"/>
         <substModel spec="GeneralSubstitutionModel" id="SubstModel.character{vu_ind}">
             <!-- Equilibrium state frequencies -->
-            <frequencies spec="Frequencies" id="freqs.character{vu_ind}">
-                <!-- Start equilibrium frequencies -->
-                <!-- End equilibrium frequencies -->
-            </frequencies>
+            <frequencies spec="Frequencies" id="equilibriumfreqs.character{vu_ind}" data="@alignment"/>
             <parameter spec="parameter.CompoundValuable" id="rates.character{vu_ind}" name="rates">
                 <!-- Start rate vars -->
                 <!-- End rate vars -->
@@ -226,31 +220,6 @@ distribution_template = """
 """
 
 """
-BEAST XML frequencies template
-"""
-frequencies_template = """
-<frequencies spec="parameter.RealParameter" id="frequencies.character{vu_ind}" value="{frequencies}" estimate="false"/>
-"""
-
-"""
-BEAST XML branch rate model template for first site only
-"""
-first_branch_rate_model_template = """
-<branchRateModel spec="beast.evolution.branchratemodel.NonHomogeneousClockModel" id="RelaxedClock.c:alignment" clock.rate="@ucldMean.c:alignment" rateCategories="@rateCategories.c:alignment" tree="@tree" scaleFactor="@nonhomogeneousClockScaleFactor" growthFactor="@nonhomogeneousClockGrowthFactor" middle="@nonhomogeneousClockMiddle">
-    <LogNormal id="LogNormalDistributionModel.c:alignment" S="@ucldStdevParameter" meanInRealSpace="true" name="distr">
-        <parameter spec="parameter.RealParameter" id="RealParameter.23" estimate="false" lower="0.0" name="M" upper="1.0">1.0</parameter>
-    </LogNormal>
-</branchRateModel>
-"""
-
-"""
-BEAST XML branch rate model template for sites after the first
-"""
-other_branch_rate_model_template = """
-<branchRateModel idref="RelaxedClock.c:alignment"/>
-"""
-
-"""
 BEAST XML single rate variable template
 """
 single_var_template = """
@@ -262,4 +231,29 @@ BEAST XML multiple rate variable template (rate parameters being added should be
 """
 multiple_var_template = """
 <var spec="beast.core.util.Sum"/>
+"""
+
+"""
+BEAST XML frequencies template
+"""
+frequencies_template = """
+<frequencies spec="parameter.RealParameter" id="rootfrequencies.character{vu_ind}" value="{frequencies}" estimate="false"/>
+"""
+
+"""
+BEAST XML branch rate model template for first site only
+"""
+first_branch_rate_model_template = """
+<branchRateModel spec="beast.evolution.branchratemodel.NonHomogeneousClockModel" id="RelaxedClock.c:alignment" clock.rate="@ucldMean.c:alignment" rateCategories="@rateCategories.c:alignment" tree="@tree" scaleFactor="@nonhomogeneousClockScaleFactor" growthFactor="@nonhomogeneousClockGrowthFactor" middle="@nonhomogeneousClockMiddle">
+    <LogNormal id="LogNormalDistributionModel.c:alignment" S="@ucldStdevParameter" meanInRealSpace="true" name="distr">
+        <parameter spec="parameter.RealParameter" id="RealParameter.23" estimate="false" lower="0.0" name="M" upper="1.0" value="1.0"/>
+    </LogNormal>
+</branchRateModel>
+"""
+
+"""
+BEAST XML branch rate model template for sites after the first
+"""
+other_branch_rate_model_template = """
+<branchRateModel idref="RelaxedClock.c:alignment"/>
 """
