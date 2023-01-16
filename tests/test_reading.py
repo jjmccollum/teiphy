@@ -167,7 +167,7 @@ class ReadingTestCase(unittest.TestCase):
     def test_init_text_ref(self):
         xml = et.fromstring("<rdg n=\"1\" wit=\"A\"><ref target=\"#B1K1V1U2\"/><ref target=\"#B1K1V1U4\"/></rdg>")
         reading = Reading(xml, verbose=True)
-        self.assertEqual(reading.text, "<B1K1V1U2><B1K1V1U4>")
+        self.assertEqual(reading.text, "(B1K1V1U2)(B1K1V1U4)")
 
 
 if __name__ == '__main__':

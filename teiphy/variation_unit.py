@@ -14,6 +14,10 @@ class VariationUnit:
     Attributes:
         id: The ID string of this variation unit, which should be unique.
         readings: A list of Readings contained in this VariationUnit.
+        intrinsic_relations: A dictionary mapping pairs of IDs of Readings in this VariationUnit to the intrinsic odds category
+        describing the two readings' relative probability of being authorial.
+        transcriptional_relations: A dictionary mapping pairs of IDs of Readings in this VariationUnit to a set of transcriptional change categories
+        that could explain the rise of the second reading from the first.
     """
 
     def __init__(self, xml: et.Element, verbose: bool = False):
@@ -31,6 +35,9 @@ class VariationUnit:
             self.id = xml.get("n")
         # Initialize its list of readings:
         self.readings = []
+        # Initialize its dictionaries of intrinsic and transcriptional relations:
+        self.intrinsic_relations = {}
+        self.transcriptional_relations = {}
         # Now parse the app element to populate these data structures:
         self.parse(xml, verbose)
         if verbose:
@@ -100,4 +107,49 @@ class VariationUnit:
                 witDetail.targets.append(previous_rdg.id)
                 witDetail.certainties[previous_rdg.id] = 1
             self.readings.append(witDetail)
+            return
+        # If it is a note, then process the child elements of the note recursively:
+        elif raw_tag == "note":
+            for child in xml:
+                self.parse(child, verbose)
+            return
+        # If it is a list of relations, then populate the corresponding dictionary:
+        elif raw_tag == "listRelation":
+            if xml.get("type") is None:
+                return
+            if xml.get("type") == "intrinsic":
+                self.intrinsic_relations = {}
+                for child in xml:
+                    if child.get("active") is None or child.get("passive") is None or child.get("ana") is None:
+                        continue
+                    from_readings = child.get("active").replace("#", "").split()
+                    to_readings = child.get("passive").replace("#", "").split()
+                    intrinsic_category = (
+                        child.get("ana").replace("#", "").split()[0]
+                    )  # there shouldn't be more than one of these
+                    # For each pair of readings, assign them the specified category
+                    for from_reading in from_readings:
+                        for to_reading in to_readings:
+                            pair = (from_reading, to_reading)
+                            self.intrinsic_relations[pair] = intrinsic_category
+                return
+            if xml.get("type") == "transcriptional":
+                self.transcriptional_relations = {}
+                for child in xml:
+                    if child.get("active") is None or child.get("passive") is None or child.get("ana") is None:
+                        continue
+                    from_readings = child.get("active").replace("#", "").split()
+                    to_readings = child.get("passive").replace("#", "").split()
+                    transcriptional_categories = child.get("ana").replace("#", "").split()
+                    # For each pair of readings, assign them the specified category
+                    for from_reading in from_readings:
+                        for to_reading in to_readings:
+                            pair = (from_reading, to_reading)
+                            if pair not in self.transcriptional_relations:
+                                self.transcriptional_relations[
+                                    pair
+                                ] = set()  # we only need distinct categories for each transition
+                            for transcriptional_category in transcriptional_categories:
+                                self.transcriptional_relations[pair].add(transcriptional_category)
+                return
             return

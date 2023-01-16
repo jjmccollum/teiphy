@@ -250,10 +250,10 @@ class Reading:
             self.text += "]"
             self.text += xml.tail if xml.tail is not None else ""
             return
-        # If it is a ref element, then set its text (stripped of "#" characters) in diagonal brackets:
+        # If it is a ref element, then set its text (stripped of "#" characters) in parentheses:
         if raw_tag == "ref":
-            self.text += "<"
+            self.text += "("
             self.text += xml.get("target").strip("#") if xml.get("target") is not None else ""
-            self.text += ">"
+            self.text += ")"
             self.text += xml.tail if xml.tail is not None else ""
             return

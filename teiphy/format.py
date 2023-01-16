@@ -10,6 +10,7 @@ class Format(Enum):
     HENNIG86 = 'HENNIG86'
     PHYLIP = 'PHYLIP'
     FASTA = 'FASTA'
+    BEAST = 'BEAST'
     CSV = 'CSV'
     TSV = 'TSV'
     EXCEL = 'EXCEL'
@@ -21,11 +22,12 @@ class Format(Enum):
             ".nex": cls.NEXUS,
             ".nexus": cls.NEXUS,
             ".nxs": cls.NEXUS,
+            ".tnt": cls.HENNIG86,
             ".ph": cls.PHYLIP,
             ".phy": cls.PHYLIP,
             ".fa": cls.FASTA,
             ".fasta": cls.FASTA,
-            ".tnt": cls.HENNIG86,
+            ".xml": cls.BEAST,
             ".csv": cls.CSV,
             ".tsv": cls.TSV,
             ".xlsx": cls.EXCEL,

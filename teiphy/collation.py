@@ -13,9 +13,14 @@ from .common import xml_ns, tei_ns
 from .format import Format
 from .witness import Witness
 from .variation_unit import VariationUnit
+from .beast_templates import *
 
 
 class ParsingException(Exception):
+    pass
+
+
+class IntrinsicRelationsException(Exception):
     pass
 
 
@@ -69,6 +74,10 @@ class Collation:
         self.variation_unit_ids = []
         self.substantive_variation_unit_reading_tuples = []
         self.substantive_readings_by_variation_unit_id = {}
+        self.intrinsic_categories = []
+        self.intrinsic_odds_by_id = {}
+        self.transcriptional_categories = []
+        self.transcriptional_rates_by_id = {}
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
@@ -76,6 +85,7 @@ class Collation:
         self.parse_list_wit(xml)
         self.validate_wits(xml)
         self.parse_apps(xml)
+        self.validate_intrinsic_relations()
         self.parse_readings_by_witness()
         t1 = time.time()
         if self.verbose:
@@ -150,6 +160,75 @@ class Collation:
             print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
         return
 
+    def parse_intrinsic_odds(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, populates this Collation's list of intrinsic probability categories
+        (e.g., "absolutely more likely," "highly more likely," "more likely," "slightly more likely," "equally likely")
+        and its dictionary mapping these categories to numerical odds.
+        If a category does not contain a certainty element specifying its number, then it will be assumed to be a parameter to be estimated.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Parsing intrinsic odds categories...")
+        t0 = time.time()
+        self.intrinsic_categories = []
+        self.intrinsic_odds_by_id = {}
+        for interp in xml.xpath("//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}):
+            # These must be indexed by the xml:id attribute, so skip any that do not have one:
+            if interp.get("{%s}id" % xml_ns) is None:
+                continue
+            odds_category = interp.get("{%s}id" % xml_ns)
+            # If this element contains a certainty subelement with a fixed odds value for this category, then set it:
+            odds = None
+            for certainty in interp.xpath("./tei:certainty", namespaces={"tei": tei_ns}):
+                if certainty.get("degree") is not None:
+                    odds = float(certainty.get("degree"))
+                    break
+            self.intrinsic_categories.append(odds_category)
+            self.intrinsic_odds_by_id[odds_category] = odds
+        t1 = time.time()
+        if self.verbose:
+            print(
+                "Finished processing %d intrinsic odds categories in %0.4fs."
+                % (len(self.intrinsic_categories), t1 - t0)
+            )
+        return
+
+    def parse_transcriptional_rates(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, populates this Collation's dictionary mapping transcriptional change categories
+        (e.g., "aural confusion," "visual error," "clarification") to numerical rates.
+        If a category does not contain a certainty element specifying its number, then it will be assumed to be a parameter to be estimated.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Parsing transcriptional change categories...")
+        t0 = time.time()
+        self.transcriptional_categories = []
+        self.transcriptional_rates_by_id = {}
+        for interp in xml.xpath("//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}):
+            # These must be indexed by the xml:id attribute, so skip any that do not have one:
+            if interp.get("{%s}id" % xml_ns) is None:
+                continue
+            transcriptional_category = interp.get("{%s}id" % xml_ns)
+            # If this element contains a certainty subelement with a fixed rate for this category, then set it:
+            rate = None
+            for certainty in interp.xpath("./tei:certainty", namespaces={"tei": tei_ns}):
+                if certainty.get("degree") is not None:
+                    rate = float(certainty.get("degree"))
+                    break
+            self.transcriptional_categories.append(transcriptional_category)
+            self.transcriptional_rates_by_id[transcriptional_category] = rate
+        t1 = time.time()
+        if self.verbose:
+            print(
+                "Finished processing %d transcriptional change categories in %0.4fs."
+                % (len(self.transcriptional_rates_by_id), t1 - t0)
+            )
+        return
+
     def validate_wits(self, xml: et.ElementTree):
         """Given an XML tree for a collation, checks if any witness sigla listed in a rdg, rdgGrp, or witDetail element,
         once stripped of ignored suffixes, is not found in the witness list.
@@ -184,6 +263,59 @@ class Collation:
         t1 = time.time()
         if self.verbose:
             print("Finished witness validation in %0.4fs." % (t1 - t0))
+        return
+
+    def validate_intrinsic_relations(self):
+        """Checks if any VariationUnit's intrinsic_relations map is not a tree.
+        If any is not, then an IntrinsicRelationsException is thrown describing the VariationUnit at fault.
+        """
+        if self.verbose:
+            print("Validating intrinsic relation graphs for variation units...")
+        t0 = time.time()
+        for vu in self.variation_units:
+            # Skip any variation units with an empty intrinsic_relations map:
+            if len(vu.intrinsic_relations) == 0:
+                continue
+            # For all others, start by identifying all reading IDs that are not related to by some other reading ID:
+            in_degree_by_reading = {}
+            for edge in vu.intrinsic_relations:
+                s = edge[0]
+                t = edge[1]
+                if s not in in_degree_by_reading:
+                    in_degree_by_reading[s] = 0
+                if t not in in_degree_by_reading:
+                    in_degree_by_reading[t] = 0
+                in_degree_by_reading[t] += 1
+            # If any reading has more than one relation pointing to it, then the intrinsic relations graph is not a tree:
+            excessive_in_degree_readings = [
+                rdg_id for rdg_id in in_degree_by_reading if in_degree_by_reading[rdg_id] > 1
+            ]
+            if len(excessive_in_degree_readings) > 0:
+                msg = ""
+                msg += (
+                    "In variation unit %s, the following readings have more than one intrinsic relation pointing to them: %s.\n"
+                    % (vu.id, ", ".join(excessive_in_degree_readings))
+                )
+                msg += "Please ensure that there is one root reading with no relation pointing to it and that every other reading has exactly one relation pointing to it."
+                raise IntrinsicRelationsException(msg)
+            # If no reading is the root, then the intrinsic relations graph is not a tree:
+            root_readings = [rdg_id for rdg_id in in_degree_by_reading if in_degree_by_reading[rdg_id] == 0]
+            if len(root_readings) == 0:
+                msg = ""
+                msg += "In variation unit %s, the intrinsic relations form a cycle.\n" % vu.id
+                msg += "Please ensure that there is one root reading with no relation pointing to it and that every other reading has exactly one relation pointing to it."
+                raise IntrinsicRelationsException(msg)
+            if len(root_readings) > 1:
+                msg = ""
+                msg += (
+                    "In variation unit %s, there is more than one root reading without any intrinsic relation pointing to it.\n"
+                    % vu.id
+                )
+                msg += "Please ensure that there is one root reading with no relation pointing to it and that every other reading has exactly one relation pointing to it."
+                raise IntrinsicRelationsException(msg)
+        t1 = time.time()
+        if self.verbose:
+            print("Finished intrinsic relations validation in %0.4fs." % (t1 - t0))
         return
 
     def parse_apps(self, xml: et.ElementTree):
@@ -830,6 +962,172 @@ class Collation:
                 f.write("%s\n" % (sequence))
         return
 
+    def get_beast_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in BEAST format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_lowercase)[:22]
+        )  # NOTE: for BEAST, any number of states should theoretically be permissible, but since code maps are required for some reason, we will limit the number of symbols to 32 for now
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        beast_symbols = possible_symbols[:nsymbols]
+        return beast_symbols
+
+    def get_beast_date_map(self, taxlabels):
+        """Returns a string representing witness-to-date mappings in BEAST format.
+
+        Since this format requires single dates as opposed to date ranges,
+        witnesses with closed date ranges will be mapped to the average of their lower and upper bounds,
+        and witnesses with open date ranges will not be mapped.
+
+        Args:
+            taxlabels: A list of slugified taxon labels.
+
+        Returns:
+            A string containing comma-separated date calibrations of the form witness_id=date.
+        """
+        # Then calibrate the date distributions for each witness that has date information specified:
+        calibrate_strings = []
+        for i, wit in enumerate(self.witnesses):
+            taxlabel = taxlabels[i]
+            date_range = wit.date_range
+            # If either end of this witness's date range is empty, then do not include it:
+            if date_range[0] is None or date_range[1] is None:
+                continue
+            # Otherwise, take the midpoint of its date range as its date:
+            date = int((date_range[0] + date_range[1]) / 2)
+            calibrate_string = "%s=%d" % (taxlabel, date)
+            calibrate_strings.append(calibrate_string)
+        # Then output the full date map string:
+        date_map = ",".join(calibrate_strings)
+        return date_map
+
+    def to_beast(self, file_addr: Union[Path, str], drop_constant: bool = False):
+        """Writes this Collation to a file in BEAST format with the given address.
+
+        Args:
+            file_addr: A string representing the path to an output file.
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Start by calculating the values we will be using for the main template:
+        taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
+        charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in substantive_variation_unit_ids]
+        symbols = self.get_beast_symbols()
+        date_map = self.get_beast_date_map(taxlabels)
+
+        with open(file_addr, "w", encoding="utf-8") as f:
+            # Start with the NEXUS header:
+            f.write("#NEXUS\n\n")
+            # Then begin the data block:
+            f.write("Begin DATA;\n")
+            # Write the collation matrix dimensions:
+            f.write("\tDimensions ntax=%d nchar=%d;\n" % (ntax, nchar))
+            # Write the format subblock:
+            f.write("\tFormat\n")
+            f.write("\t\tDataType=Standard\n")
+            f.write("\t\tMissing=%s\n" % missing_symbol)
+            if frequency:
+                f.write("\t\tStatesFormat=Frequency\n")
+            f.write("\t\tSymbols=\"%s\";\n" % (" ".join(symbols)))
+            # If the char_state_labels is set, then write the labels for character-state labels, with each on its own line:
+            if char_state_labels:
+                f.write("\tCharStateLabels")
+                vu_ind = 1
+                for vu in self.variation_units:
+                    if vu.id not in substantive_variation_unit_ids_set:
+                        continue
+                    if vu_ind == 1:
+                        f.write("\n\t\t%d %s /" % (vu_ind, slugify(vu.id, lowercase=False, separator='_')))
+                    else:
+                        f.write(",\n\t\t%d %s /" % (vu_ind, slugify(vu.id, lowercase=False, separator='_')))
+                    rdg_ind = 0
+                    for rdg in vu.readings:
+                        key = tuple([vu.id, rdg.id])
+                        if key not in substantive_variation_unit_reading_tuples_set:
+                            continue
+                        ascii_rdg_text = slugify(
+                            rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']]
+                        )
+                        if ascii_rdg_text == "":
+                            ascii_rdg_text = "om."
+                        f.write(" %s" % ascii_rdg_text)
+                        rdg_ind += 1
+                    if rdg_ind > 0:
+                        vu_ind += 1
+                f.write(";\n")
+            # Write the matrix subblock:
+            f.write("\tMatrix")
+            for i, wit in enumerate(self.witnesses):
+                taxlabel = taxlabels[i]
+                if frequency:
+                    sequence = "\n\t\t" + taxlabel
+                    for j, vu_id in enumerate(self.variation_unit_ids):
+                        if vu_id not in substantive_variation_unit_ids_set:
+                            continue
+                        rdg_support = self.readings_by_witness[wit.id][j]
+                        sequence += "\n\t\t\t"
+                        # If this reading is lacunose in this witness, then use the missing character:
+                        if sum(rdg_support) == 0:
+                            sequence += missing_symbol
+                            continue
+                        # Otherwise, print out its frequencies for different readings in parentheses:
+                        sequence += "("
+                        for j, w in enumerate(rdg_support):
+                            sequence += "%s:%0.4f" % (symbols[j], w)
+                            if j < len(rdg_support) - 1:
+                                sequence += " "
+                        sequence += ")"
+                else:
+                    sequence = "\n\t\t" + taxlabel
+                    # Add enough space after this label ensure that all sequences are nicely aligned:
+                    sequence += " " * (max_taxlabel_length - len(taxlabel) + 1)
+                    for j, vu_id in enumerate(self.variation_unit_ids):
+                        if vu_id not in substantive_variation_unit_ids_set:
+                            continue
+                        rdg_support = self.readings_by_witness[wit.id][j]
+                        # If this reading is lacunose in this witness, then use the missing character:
+                        if sum(rdg_support) == 0:
+                            sequence += missing_symbol
+                            continue
+                        rdg_inds = [
+                            k for k, w in enumerate(rdg_support) if w > 0
+                        ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                        # For singleton readings, just print the symbol:
+                        if len(rdg_inds) == 1:
+                            sequence += symbols[rdg_inds[0]]
+                            continue
+                        # For multiple readings, print the corresponding readings in braces or the missing symbol depending on input settings:
+                        if ambiguous_as_missing:
+                            sequence += missing_symbol
+                        else:
+                            sequence += "{%s}" % "".join([str(rdg_ind) for rdg_ind in rdg_inds])
+                f.write("%s" % (sequence))
+            f.write(";\n")
+            # End the data block:
+            f.write("End;")
+        return
+
     def to_numpy(self, drop_constant: bool = False, split_missing: bool = True):
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
@@ -1302,6 +1600,9 @@ class Collation:
 
         if format == format.FASTA:
             return self.to_fasta(file_addr, drop_constant=drop_constant)
+
+        if format == format.BEAST:
+            return self.to_beast(file_addr, drop_constant=drop_constant)
 
         if format == Format.CSV:
             return self.to_csv(

@@ -65,11 +65,11 @@ def to_file(
     ),
     long_table: bool = typer.Option(
         False,
-        help="Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format. Note that if this option is set, ambiguous readings will be treated as missing data, and the --split-missing option will be ignored.",
+        help="Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for non-tabular formats. Note that if this option is set, ambiguous readings will be treated as missing data, and the --split-missing option will be ignored.",
     ),
     split_missing: bool = typer.Option(
         False,
-        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.",
+        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     version: bool = typer.Option(

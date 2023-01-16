@@ -142,18 +142,23 @@
         <interpGrp type="intrinsic">
             <interp xml:id="RatingA">
                 <p>The text is certain.</p>
+                <certainty locus="value" degree="19"/>
             </interp>
             <interp xml:id="RatingB">
                 <p>The text is almost certain.</p>
+                <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="RatingC">
                 <p>The Committee had difficulty in deciding which variant to place in the text.</p>
+                <certainty locus="value" degree="1.5"/>
             </interp>
             <interp xml:id="RatingD">
                 <p>The Committee had great difficulty in arriving at a decision.</p>
+                <certainty locus="value" degree="1.1"/>
             </interp>
             <interp xml:id="EqualRating">
                 <p>The current reading and the linked reading are equally likely.</p>
+                <certainty locus="value" degree="1"/>
             </interp>
         </interpGrp>
         <interpGrp type="transcriptional">

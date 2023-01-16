@@ -18,6 +18,12 @@ class CollationDefaultTestCase(unittest.TestCase):
         self.xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
         self.xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
         self.xml_readings = xml.xpath("//tei:rdg", namespaces={"tei": tei_ns})
+        self.xml_intrinsic_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"intrinsic\"]/interp", namespaces={"tei": tei_ns}
+        )
+        self.xml_transcriptional_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"transcriptional\"]/interp", namespaces={"tei": tei_ns}
+        )
         self.collation = Collation(xml)
 
     def test_witnesses(self):
@@ -40,6 +46,18 @@ class CollationDefaultTestCase(unittest.TestCase):
 
     def test_substantive_variation_unit_reading_tuples(self):
         self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
+
+    def test_intrinsic_categories(self):
+        self.assertEqual(len(self.collation.intrinsic_categories), len(self.xml_intrinsic_relations))
+
+    def test_intrinsic_odds_by_id(self):
+        self.assertEqual(len(self.collation.intrinsic_odds_by_id), len(self.xml_intrinsic_relations))
+
+    def test_transcriptional_categories(self):
+        self.assertEqual(len(self.collation.transcriptional_categories), len(self.xml_transcriptional_relations))
+
+    def test_transcriptional_rates_by_id(self):
+        self.assertEqual(len(self.collation.transcriptional_rates_by_id), len(self.xml_transcriptional_relations))
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
