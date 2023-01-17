@@ -920,8 +920,8 @@
                         <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#RatingA"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#Clar"/>
+                        <relation active="#B10K6V20U12-18R2" passive="#B10K6V20U12-18R1" ana="#Byz"/>
                     </listRelation>
                 </note>
             </app>
@@ -937,7 +937,7 @@
                 <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg copsa copbo MariusVictorinus"/>
                 <note>
                     <listRelation type="intrinsic">
-                        <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#RatingC"/>
+                        <relation active="1" passive="2" ana="#RatingC"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
@@ -956,7 +956,7 @@
                 <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg copsa copbo MariusVictorinus"/>
                 <note>
                     <listRelation type="intrinsic">
-                        <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#RatingA"/>
+                        <relation active="1" passive="2" ana="#RatingA"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#AurConf"/>
@@ -974,7 +974,7 @@
                 <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
                 <note>
                     <listRelation type="intrinsic">
-                        <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#RatingA"/>
+                        <relation active="1" passive="2" ana="#RatingA"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>

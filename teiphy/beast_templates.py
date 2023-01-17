@@ -4,7 +4,6 @@
 BEAST XML template string
 """
 beast_template = """
-<?xml version="1.0" encoding="UTF-8">
 <beast version="2.6" namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood">
     <data spec="Alignment" id="alignment" dataType="standard" statecount="{nsymbols}">
         <!-- Start sequences -->
@@ -62,14 +61,14 @@ beast_template = """
                 </distribution>
                 <prior id="becomeUninfectiousRatePrior_BDSKY_Serial.t:alignment" name="distribution" x="@becomeUninfectiousRate_BDSKY_Serial.t:alignment">
                     <LogNormal id="LogNormalDistributionModel.1" name="distr">
-                    <parameter spec="parameter.RealParameter" id="RealParameter.13" estimate="false" name="M" value="0.0"/>
-                    <parameter spec="parameter.RealParameter" id="RealParameter.14" estimate="false" name="S" value="1.0"/>
+                        <parameter spec="parameter.RealParameter" id="RealParameter.13" estimate="false" name="M" value="0.0"/>
+                        <parameter spec="parameter.RealParameter" id="RealParameter.14" estimate="false" name="S" value="1.0"/>
                     </LogNormal>
                 </prior>
                 <prior id="reproductiveNumberPrior_BDSKY_Serial.t:alignment" name="distribution" x="@reproductiveNumber_BDSKY_Serial.t:alignment">
                     <LogNormal id="LogNormalDistributionModel.2" name="distr">
-                    <parameter spec="parameter.RealParameter" id="RealParameter.15" estimate="false" name="M" value="0.0"/>
-                    <parameter spec="parameter.RealParameter" id="RealParameter.16" estimate="false" name="S" value="1.0"/>
+                        <parameter spec="parameter.RealParameter" id="RealParameter.15" estimate="false" name="M" value="0.0"/>
+                        <parameter spec="parameter.RealParameter" id="RealParameter.16" estimate="false" name="S" value="1.0"/>
                     </LogNormal>
                 </prior>
                 <prior id="samplingProportionPrior_BDSKY_Serial.t:alignment" name="distribution" x="@samplingProportion_BDSKY_Serial.t:alignment">
@@ -93,9 +92,6 @@ beast_template = """
                     </Normal>
                 </prior>
                 <prior id="nonhomogeneousClockMiddlePrior" name="distribution" x="@nonhomogeneousClockMiddle">
-                    <!--
-                    <Uniform id="nonhomogeneousClockMiddlePriorDistribution" name="distr" lower="0" upper="1250.0"/>
-                    -->
                     <Normal id="nonhomogeneousClockMiddlePriorDistribution" name="distr">
                         <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddlePriorDistributionMean" estimate="false" name="mean" value="500.0"/>
                         <parameter spec="parameter.RealParameter" id="nonhomogeneousClockMiddlePriorDistributionSigma" estimate="false" name="sigma" value="500.0"/>
@@ -187,7 +183,7 @@ charstatelabels_template = """
 BEAST XML transcriptional rate parameter template string
 """
 transcriptional_rate_parameter_template = """
-<parameter spec="parameter.RealParameter" id="{rate_id}_rate" name="stateNode" lower="1.0" upper="Infinity" estimate="{estimate}" value="{value}"/>
+<parameter spec="parameter.RealParameter" id="{transcriptional_category}_rate" name="stateNode" lower="1.0" upper="Infinity" estimate="{estimate}" value="{value}"/>
 """
 
 """
@@ -223,7 +219,7 @@ distribution_template = """
 BEAST XML single rate variable template
 """
 single_var_template = """
-<var idref="{rate_id}_rate"/>
+<var idref="{transcriptional_category}_rate"/>
 """
 
 """
@@ -256,4 +252,25 @@ BEAST XML branch rate model template for sites after the first
 """
 other_branch_rate_model_template = """
 <branchRateModel idref="RelaxedClock.c:alignment"/>
+"""
+
+"""
+BEAST XML operator template for rate variables
+"""
+transcriptional_rate_parameter_operator_template = """
+<operator id="Scaler.{transcriptional_category}_rate" spec="ScaleOperator" scaleFactor="0.5" weight="1" parameter="@{transcriptional_category}_rate"/>
+"""
+
+"""
+BEAST XML log template for rate variables
+"""
+transcriptional_rate_parameter_log_template = """
+<log idref="{transcriptional_category}_rate"/>
+"""
+
+"""
+BEAST XML log template for individual sites
+"""
+character_log_template = """
+<log spec="beast.evolution.likelihood.AncestralSequenceLogger" id="morphTreeLikelihood.character{vu_ind}.anclogger" data="@filter{vu_ind}" siteModel="@morphSiteModel.character{vu_ind}" branchRateModel="@RelaxedClock.c:alignment" tree="@tree" tag="morphTreeLikelihood.character{vu_ind}" useAmbiguities="true" useTipLikelihoods="true" ascii="false"/>
 """
