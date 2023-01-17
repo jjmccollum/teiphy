@@ -1,4 +1,4 @@
-name: mrbayes
+name: beast
 
 on: [push]
 jobs:
@@ -26,7 +26,7 @@ jobs:
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd beast2
-        ant
+        ant build
     - name: Phylogenetics Run
       run: |
         cd beast2

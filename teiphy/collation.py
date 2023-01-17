@@ -19,8 +19,8 @@ from .beast_templates import (
     charstatelabels_template,
     transcriptional_rate_parameter_template,
     distribution_template,
-    single_var_template,
-    multiple_var_template,
+    var_template,
+    rpn_calculator_template,
     frequencies_template,
     transcriptional_rate_parameter_operator_template,
     transcriptional_rate_parameter_log_template,
@@ -1107,7 +1107,7 @@ class Collation:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
         """
         # Initialize the XML parser we will use for parsing XML template strings:
-        parser = et.XMLParser(remove_blank_text=True)
+        parser = et.XMLParser(encoding="utf-8", remove_blank_text=True)
         # Populate a list of sites that will correspond to columns of the sequence alignment:
         substantive_variation_unit_ids = self.variation_unit_ids
         if drop_constant:
@@ -1193,8 +1193,8 @@ class Collation:
                 key = tuple([vu.id, rdg.id])
                 if key not in substantive_variation_unit_reading_tuples_set:
                     continue
-                # rdg_text = slugify(rdg.text, lowercase=False, allow_unicode=True, separator='_')
-                rdg_text = slugify(rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']])
+                rdg_text = slugify(rdg.text, lowercase=False, allow_unicode=True, separator='_')
+                # rdg_text = slugify(rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']])
                 # Replace any empty reading text with an omission marker:
                 if rdg_text == "":
                     rdg_text = "om."
@@ -1256,9 +1256,7 @@ class Collation:
                         continue
                     # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
                     if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
-                        var_xml = et.fromstring(
-                            single_var_template.format(transcriptional_category="default"), parser=parser
-                        )
+                        var_xml = et.fromstring(var_template.format(transcriptional_category="default"), parser=parser)
                         rates_parameter_xml.insert(current_var_index, var_xml)
                         current_var_index += 1
                         continue
@@ -1268,7 +1266,7 @@ class Collation:
                         if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
                             transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
                             var_xml = et.fromstring(
-                                single_var_template.format(transcriptional_category=transcriptional_category),
+                                var_template.format(transcriptional_category=transcriptional_category),
                                 parser=parser,
                             )
                             rates_parameter_xml.insert(current_var_index, var_xml)
@@ -1277,14 +1275,17 @@ class Collation:
                         # If there is more than one, then add a var element that is a sum of the individual categories' rates:
                         else:
                             transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
-                            sum_var_xml = et.fromstring(multiple_var_template)
+                            args = []
                             for transcriptional_category in transcriptional_categories:
-                                var_xml = et.fromstring(
-                                    single_var_template.format(transcriptional_category=transcriptional_category),
-                                    parser=parser,
-                                )
-                                sum_var_xml.append(var_xml)
-                            rates_parameter_xml.insert(current_var_index, sum_var_xml)
+                                args.append("%s_rate" % transcriptional_category)
+                            args_string = " ".join(args)
+                            ops = ["+"] * (len(args) - 1)
+                            ops_string = " ".join(ops)
+                            expression_string = " ".join([args_string, ops_string])
+                            rpn_calculator_xml = et.fromstring(
+                                rpn_calculator_template.format(expression=expression_string)
+                            )
+                            rates_parameter_xml.insert(current_var_index, rpn_calculator_xml)
                             current_var_index += 1
                             continue
             # Next, add the root frequencies for this distribution element:
@@ -1307,7 +1308,7 @@ class Collation:
         # Next, add the operators for the transcriptional rate parameters that must be estimated:
         run_xml = beast_xml.find(".//run")
         start_transcriptional_operators_comment = run_xml.xpath(
-            "./comment()[. = \" Start transcriptional operators \"]"
+            "./comment()[. = \" Start transcriptional rate operators \"]"
         )[0]
         current_transcriptional_operator_index = run_xml.index(start_transcriptional_operators_comment) + 1
         for transcriptional_category in self.transcriptional_categories:
@@ -1326,7 +1327,7 @@ class Collation:
         # Next, add the loggers for the transcriptional rate parameters that must be estimated:
         tracelog_logger_xml = beast_xml.find(".//logger[@id=\"tracelog\"]")
         start_transcriptional_loggers_comment = tracelog_logger_xml.xpath(
-            "./comment()[. = \" Start transcriptional loggers \"]"
+            "./comment()[. = \" Start transcriptional rate loggers \"]"
         )[0]
         current_transcriptional_log_index = tracelog_logger_xml.index(start_transcriptional_loggers_comment) + 1
         for transcriptional_category in self.transcriptional_categories:
@@ -1341,7 +1342,7 @@ class Collation:
             tracelog_logger_xml.insert(current_transcriptional_log_index, transcriptional_rate_parameter_log_xml)
             current_transcriptional_log_index += 1
         # Next, add the ancestral state logger for each variation unit:
-        ancestral_sequence_logger_xml = beast_xml.find(".//logger[@id=\"AncestralSequenceLogger\"]")
+        ancestral_sequence_logger_xml = beast_xml.find(".//logger[@id=\"AncestralStateLogger\"]")
         start_character_ancestral_state_loggers_comment = ancestral_sequence_logger_xml.xpath(
             "./comment()[. = \" Start character ancestral state loggers \"]"
         )[0]
@@ -1357,7 +1358,9 @@ class Collation:
             current_character_ancestral_state_log_index += 1
             character_ind += 1
         # Finally, write the full XML tree to the output file address:
-        et.ElementTree(beast_xml).write(file_addr, encoding='utf-8', xml_declaration=True, pretty_print=True)
+        et.ElementTree(beast_xml).write(
+            file_addr, encoding="utf-8", standalone=False, xml_declaration=True, pretty_print=True
+        )
         return
 
     def to_numpy(self, drop_constant: bool = False, split_missing: bool = True):
