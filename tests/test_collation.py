@@ -19,10 +19,10 @@ class CollationDefaultTestCase(unittest.TestCase):
         self.xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
         self.xml_readings = xml.xpath("//tei:rdg", namespaces={"tei": tei_ns})
         self.xml_intrinsic_relations = xml.xpath(
-            "//tei:interpGrp[@type=\"intrinsic\"]/interp", namespaces={"tei": tei_ns}
+            "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.xml_transcriptional_relations = xml.xpath(
-            "//tei:interpGrp[@type=\"transcriptional\"]/interp", namespaces={"tei": tei_ns}
+            "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.collation = Collation(xml)
 
