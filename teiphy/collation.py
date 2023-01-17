@@ -22,8 +22,6 @@ from .beast_templates import (
     single_var_template,
     multiple_var_template,
     frequencies_template,
-    first_branch_rate_model_template,
-    other_branch_rate_model_template,
     transcriptional_rate_parameter_operator_template,
     transcriptional_rate_parameter_log_template,
     character_log_template,
@@ -1032,6 +1030,7 @@ class Collation:
     def get_beast_root_frequencies_for_unit(self, vu_ind):
         """Returns a string containing state/reading root frequencies in BEAST format for the character/variation unit at the given index.
         The root frequencies are calculated from the intrinsic odds at this unit.
+        If no intrinsic odds are specified, then a uniform distribution is assumed.
 
         Args:
             vu_ind: An integer index for the desired unit.
@@ -1043,13 +1042,17 @@ class Collation:
         vu_id = vu.id
         intrinsic_relations = vu.intrinsic_relations
         intrinsic_odds_by_id = self.intrinsic_odds_by_id
+        # If this unit has no intrinsic odds, then assume a uniform distribution over all readings:
+        if len(vu.intrinsic_relations) == 0:
+            root_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
+                self.substantive_readings_by_variation_unit_id[vu_id]
+            )
+            root_frequencies_string = " ".join([str(w) for w in root_frequencies])
+            return root_frequencies_string
         # We will populate the root frequencies based on the intrinsic odds of the readings:
         root_frequencies_by_id = {}
         for rdg_id in self.substantive_readings_by_variation_unit_id[vu_id]:
             root_frequencies_by_id[rdg_id] = 0
-        # If this unit has only one substantive reading, then return the trivial root frequency string:
-        if len(root_frequencies_by_id) == 1:
-            return "1.0"
         # First, construct an adjacency list for efficient edge iteration:
         neighbors_by_source = {}
         for edge in intrinsic_relations:
@@ -1190,7 +1193,8 @@ class Collation:
                 key = tuple([vu.id, rdg.id])
                 if key not in substantive_variation_unit_reading_tuples_set:
                     continue
-                rdg_text = slugify(rdg.text, lowercase=False, allow_unicode=True, separator='_')
+                # rdg_text = slugify(rdg.text, lowercase=False, allow_unicode=True, separator='_')
+                rdg_text = slugify(rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']])
                 # Replace any empty reading text with an omission marker:
                 if rdg_text == "":
                     rdg_text = "om."
@@ -1296,19 +1300,6 @@ class Collation:
             )
             root_frequencies_xml.insert(current_frequencies_index, frequencies_xml)
             current_frequencies_index += 1
-            # Next, add the appropriate branch rate model for this distribution element:
-            start_branch_rate_model_comment = distribution_xml.xpath("./comment()[. = \" Start branchRateModel \"]")[0]
-            current_branch_rate_model_index = distribution_xml.index(start_branch_rate_model_comment) + 1
-            # If this is the first character, then use the full form of the branchRateModel element:
-            if character_ind == 0:
-                branch_rate_model_xml = et.fromstring(first_branch_rate_model_template, parser=parser)
-                distribution_xml.insert(current_branch_rate_model_index, branch_rate_model_xml)
-                current_branch_rate_model_index += 1
-            # Otherwise, just reference the first character's branchRateModel element:
-            else:
-                branch_rate_model_xml = et.fromstring(other_branch_rate_model_template, parser=parser)
-                distribution_xml.insert(current_branch_rate_model_index, branch_rate_model_xml)
-                current_branch_rate_model_index += 1
             # Then insert this unit's completed distribution element under the likelihood distribution element:
             likelihood_distribution_xml.insert(current_character_distribution_index, distribution_xml)
             current_character_distribution_index += 1
