@@ -1137,11 +1137,10 @@ class Collation:
                 # Skip any variation units deemed non-substantive:
                 if vu_id not in substantive_variation_unit_ids:
                     continue
-                # If this witness has a certainty of 0 for all readings, then assign an equal probability to each reading:
+                # If this witness has a certainty of 0 for all readings, then it is a gap; assign a likelihood of 1 to each reading:
                 if sum(rdg_support) == 0:
                     for k, w in enumerate(rdg_support):
-                        w = 1 / len(rdg_support)
-                        sequence += str(w)
+                        sequence += "1"
                         sequence += ", " if k < len(rdg_support) - 1 else "; "
                 # Otherwise, read the probabilities as they are given:
                 else:
