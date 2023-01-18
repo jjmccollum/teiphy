@@ -35,5 +35,5 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast2
-        export PATH="release/Linux/jrebin:$PATH"
-        packagemanager --help
+        release/Linux/jrebin/packagemanager -add BDSKY
+        release/Linux/jrebin/packagemanager -add BEASTlabs
