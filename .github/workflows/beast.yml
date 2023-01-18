@@ -30,6 +30,10 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast2
+        echo ".:"
+        ls -l
+        echo "build:"
+        ls -l build
         echo "build/beast:"
         ls -l build/beast
         echo "build/dist:"
