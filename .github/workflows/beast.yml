@@ -34,9 +34,5 @@ jobs:
         ls -l
         echo "release:"
         ls -l release
-        echo "build:"
-        ls -l build
-        echo "build/beast:"
-        ls -l build/beast
-        echo "build/dist:"
-        ls -l build/dist
+        echo "release/Linux:"
+        ls -l release/Linux
