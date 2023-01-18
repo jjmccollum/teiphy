@@ -36,3 +36,5 @@ jobs:
         ls -l release
         echo "release/Linux:"
         ls -l release/Linux
+        echo "release/Linux/jrebin:"
+        ls -l release/Linux/jrebin
