@@ -27,9 +27,7 @@ jobs:
         git clone https://github.com/CompEvol/BeastFX.git
         cd beast2
         ant compile-all
-        cd ../BeastFX
-        ant addon
     - name: Phylogenetics Run
       run: |
-        cd BeastFX
+        cd beast2
         ls -l
