@@ -17,6 +17,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'poetry'
+    - name: Install Java 17
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '17'
     - run: poetry install
     - name: Testing
       run: |
