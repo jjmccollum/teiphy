@@ -35,5 +35,5 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast2/release/Linux/jrebin
-        head packagemanager
+        grep -i "jre/bin/java" packagemanager
         ./packagemanager --help
