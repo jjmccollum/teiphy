@@ -22,9 +22,6 @@ jobs:
       with:
         distribution: 'temurin' # See 'Supported distributions' for available options
         java-version: '17'
-    - name: Backup JAVA_HOME
-      id: java-home
-      run: echo "::set-output name=path::$JAVA_HOME"
     - run: poetry install
     - name: Testing
       run: |
@@ -38,4 +35,5 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast2/release/Linux/jrebin
+        echo $JAVA_HOME
         ./packagemanager --help
