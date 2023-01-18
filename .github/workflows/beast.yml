@@ -31,8 +31,8 @@ jobs:
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd beast2
-        ant compile-all
+        ant build_jar_all_BEAST_NoJUnitTest
     - name: Phylogenetics Run
       run: |
         cd beast2
-        packagemanager --help
+        ls -l dist
