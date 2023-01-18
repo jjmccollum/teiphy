@@ -34,6 +34,6 @@ jobs:
         ant compile-all
     - name: Phylogenetics Run
       run: |
-        cd beast2/release/Linux/jrebin
+        cd beast2
         export PATH="release/Linux/jrebin:$PATH"
         packagemanager --help
