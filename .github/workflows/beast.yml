@@ -32,6 +32,8 @@ jobs:
         cd beast2
         echo ".:"
         ls -l
+        echo "release:"
+        ls -l release
         echo "build:"
         ls -l build
         echo "build/beast:"
