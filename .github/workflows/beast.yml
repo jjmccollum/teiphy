@@ -35,4 +35,4 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast2
-        ls -l dist
+        ls -l
