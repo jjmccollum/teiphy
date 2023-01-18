@@ -34,6 +34,5 @@ jobs:
         ant compile-all
     - name: Phylogenetics Run
       run: |
-        cd beast2/release/Linux/jrebin
-        grep -i "java" packagemanager
-        ./packagemanager --help
+        cd beast2
+        release/Linux/jrebin/packagemanager --help
