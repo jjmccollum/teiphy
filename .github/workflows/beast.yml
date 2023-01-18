@@ -26,9 +26,9 @@ jobs:
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd beast2
-        ant build_jar_all_BEAST_NoJUnitTest
+        ant compile-all
         cd ../BeastFX
-        ant linux
+        ant addon
     - name: Phylogenetics Run
       run: |
         cd BeastFX
