@@ -28,7 +28,7 @@ jobs:
         cd .beast
         wget https://github.com/CompEvol/beast2/releases/download/v2.7.3/BEAST.v2.7.3.Linux.x86.tgz
         tar zxvf BEAST.v2.7.3.Linux.x86.tgz
-        ~/.beast/beast/bin/packagemanager -add BEASTlabs
+        ~/.beast/beast/bin/packagemanager -add BEASTLabs
         ~/.beast/beast/bin/packagemanager -add BDSKY
     - name: Phylogenetics Run
       run: |
