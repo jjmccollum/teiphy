@@ -28,21 +28,25 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml beast_example.xml
     - name: Install Phylogenetics Package
       run: |
-        git clone https://github.com/CompEvol/beast2.git
-        git clone https://github.com/CompEvol/BeastFX.git
-        git clone https://github.com/BEAST2-Dev/BEASTLabs.git
-        git clone https://github.com/BEAST2-Dev/bdsky.git
-        cd beast2
-        ant compile-all
-        cd ../BeastFX
-        ant compile-all
-        cd ../BEASTLabs
-        ant compile-all
-        cd ../bdsky
-        ant
+        cd ~
+        mkdir .beast
+        cd .beast
+        wget https://github.com/CompEvol/beast2/releases/download/v2.7.3/BEAST.v2.7.3.Linux.x86.tgz
+        tar zxvf BEAST.v2.7.3.Linux.x86.tgz
+      # git clone https://github.com/CompEvol/beast2.git
+      # git clone https://github.com/CompEvol/BeastFX.git
+      # git clone https://github.com/BEAST2-Dev/BEASTLabs.git
+      # git clone https://github.com/BEAST2-Dev/bdsky.git
+      # cd beast2
+      # ant compile-all
+      # cd ../BeastFX
+      # ant compile-all
+      # cd ../BEASTLabs
+      # ant compile-all
+      # cd ../bdsky
+      # ant
     - name: Phylogenetics Run
       run: |
-        ls -l
-        ls -l /home/
-        find /home/runner/ -type d -name ".beast"
+        cd teiphy
+        ~/.beast/beast/bin/beast beast_example.xml
         
