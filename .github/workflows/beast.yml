@@ -34,5 +34,6 @@ jobs:
         ant compile-all
     - name: Phylogenetics Run
       run: |
+        echo $JAVA_HOME
         beast2/release/Linux/jrebin/packagemanager -add BDSKY
         beast2/release/Linux/jrebin/packagemanager -add BEASTlabs
