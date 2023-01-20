@@ -35,7 +35,6 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd beast2
-        docker build -t beast2 .
-        docker run packagemanager --help
+        release/Linux/jrebin/packagemanager --help
       # beast2/release/Linux/jrebin/packagemanager -add BDSKY
       # beast2/release/Linux/jrebin/packagemanager -add BEASTlabs
