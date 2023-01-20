@@ -35,9 +35,9 @@ jobs:
         cd beast2
         ant compile-all
         cd ../BeastFX
-        ant addon
+        ant compile-all
         cd ../BEASTLabs
-        ant addon
+        ant compile-all
         cd ../bdsky
         ant
     - name: Phylogenetics Run
