@@ -29,13 +29,13 @@ jobs:
     - name: Install Phylogenetics Package
       run: |
         git clone https://github.com/CompEvol/beast2.git
-        git clone https://github.com/CompEvol/BeastFX.git
-        cd beast2
-        ant compile-all
+      # git clone https://github.com/CompEvol/BeastFX.git
+      # cd beast2
+      # ant compile-all
     - name: Phylogenetics Run
       run: |
-        echo $JAVA_HOME
         cd beast2
-        find . -type d -name "jre"
-        beast2/release/Linux/jrebin/packagemanager -add BDSKY
-        beast2/release/Linux/jrebin/packagemanager -add BEASTlabs
+        docker build -t beast2 .
+      # docker run beast2-test test-core
+      # beast2/release/Linux/jrebin/packagemanager -add BDSKY
+      # beast2/release/Linux/jrebin/packagemanager -add BEASTlabs
