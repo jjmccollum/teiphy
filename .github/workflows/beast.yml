@@ -47,6 +47,5 @@ jobs:
       # ant
     - name: Phylogenetics Run
       run: |
-        cd teiphy
         ~/.beast/beast/bin/beast beast_example.xml
         
