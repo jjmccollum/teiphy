@@ -34,6 +34,8 @@ jobs:
         git clone https://github.com/BEAST2-Dev/bdsky.git
         cd beast2
         ant compile-all
+        cd ../BeastFX
+        ant addon
         cd ../BEASTLabs
         ant addon
         cd ../bdsky
