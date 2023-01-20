@@ -42,7 +42,7 @@ jobs:
         ant
     - name: Phylogenetics Run
       run: |
-        ls -l /home/runner/work/
-        ls -l /home/runner/work/.beast/
-        ls -l /home/runner/work/.beast/2.7/
+        ls -l
+        ls -l /home/
+        find /home/ -type d -name ".beast"
         
