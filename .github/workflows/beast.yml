@@ -35,6 +35,7 @@ jobs:
     - name: Phylogenetics Run
       run: |
         echo $JAVA_HOME
-        find ./beast2 -type d -name "jre"
+        cd beast2
+        find . -type d -name "jre"
         beast2/release/Linux/jrebin/packagemanager -add BDSKY
         beast2/release/Linux/jrebin/packagemanager -add BEASTlabs
