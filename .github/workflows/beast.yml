@@ -29,12 +29,15 @@ jobs:
     - name: Install Phylogenetics Package
       run: |
         git clone https://github.com/CompEvol/beast2.git
-        git clone https://github.com/CompEvol/BeastFX.git
+        git clone https://github.com/BEAST2-Dev/BEASTLabs.git
+        git clone https://github.com/BEAST2-Dev/bdsky.git
         cd beast2
         ant compile-all
+        cd ../BEASTLabs
+        ant addon
+        cd ../bdsky
+        ant
     - name: Phylogenetics Run
       run: |
         cd beast2
-        echo $BEAST
-      # beast2/release/Linux/jrebin/packagemanager -add BDSKY
-      # beast2/release/Linux/jrebin/packagemanager -add BEASTlabs
+        
