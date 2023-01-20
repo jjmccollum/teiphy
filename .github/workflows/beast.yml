@@ -44,5 +44,5 @@ jobs:
       run: |
         ls -l
         ls -l /home/
-        find /home/ -type d -name ".beast"
+        find /home/runner/ -type d -name ".beast"
         
