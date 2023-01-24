@@ -24,8 +24,8 @@ beast_template = """
         <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
     </birthDeathSkylineModel>
-    <branchRateModel spec="StrictClockModel" id="StrictClock">
-		<parameter dimension="1" id="clock.rate" name="clock.rate" lower="0.0" upper="100.0" value="0.1"/> 
+    <branchRateModel spec="StrictClockModel" id="strictClock">
+		<parameter dimension="1" id="clock.rate" name="clock.rate" lower="0.0" upper="100.0" value="0.1"/>
 	</branchRateModel>
     <!-- The chainLength attribute should be increased to a large number (e.g., 20000000) for non-test runs -->
     <run spec="MCMC" id="mcmc" chainLength="100000">
@@ -48,7 +48,7 @@ beast_template = """
         <distribution spec="CompoundDistribution" id="posterior">
             <distribution spec="CompoundDistribution" id="prior">
                 <!-- Priors for the Birth-Death Skyline model -->
-                <distribution spec="CompoundDistribution" id="BDlikelihood">
+                <distribution spec="CompoundDistribution" id="bdLikelihood">
                     <distribution idref="birthDeath"/>
                 </distribution>
                 <distribution spec="Prior" id="samplingProportionPrior" x="@samplingProportion">
@@ -67,13 +67,13 @@ beast_template = """
             </distribution>
         </distribution>
         <!-- Operators for the Birth-Death Skyline model -->
-        <operator spec="ScaleOperator" id="BDSKY_SerialTreeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="ScaleOperator" id="BDSKY_SerialTreeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="beast.base.evolution.operator.Uniform" id="BDSKY_SerialUniformOperator" tree="@tree" weight="30.0"/>
-        <operator spec="SubtreeSlide" id="BDSKY_SerialSubtreeSlide" tree="@tree" weight="15.0"/>
-        <operator spec="Exchange" id="BDSKY_SerialNarrow" tree="@tree" weight="0.0"/>
-        <operator spec="Exchange" id="BDSKY_SerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
-        <operator spec="WilsonBalding" id="BDSKY_SerialWilsonBalding" tree="@tree" weight="3.0"/>
+        <operator spec="ScaleOperator" id="bdskySerialTreeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
+        <operator spec="ScaleOperator" id="bdskySerialTreeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
+        <operator spec="beast.base.evolution.operator.Uniform" id="bdskySerialUniformOperator" tree="@tree" weight="30.0"/>
+        <operator spec="SubtreeSlide" id="bdskySerialSubtreeSlide" tree="@tree" weight="15.0"/>
+        <operator spec="Exchange" id="bdskySerialNarrow" tree="@tree" weight="0.0"/>
+        <operator spec="Exchange" id="bdskySerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
+        <operator spec="WilsonBalding" id="bdskySerialWilsonBalding" tree="@tree" weight="3.0"/>
         <operator spec="ScaleOperator" id="becomeUninfectiousRateScaler" parameter="@becomeUninfectiousRate" weight="2.0"/>
         <operator spec="ScaleOperator" id="reproductiveNumberScaler" parameter="@reproductiveNumber" weight="10.0"/>
         <operator spec="ScaleOperator" id="samplingProportionScaler" parameter="@samplingProportion" weight="10.0"/>
@@ -93,12 +93,12 @@ beast_template = """
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
-            <log spec="TreeHeightLogger" id="TreeHeight" tree="@tree"/>
+            <log spec="TreeHeightLogger" id="treeHeight" tree="@tree"/>
             <log idref="birthDeath"/>
             <log idref="becomeUninfectiousRate"/>
             <log idref="reproductiveNumber"/>
             <log idref="samplingProportion"/>
-            <log spec="RateStatistic" id="rate" branchratemodel="@StrictClock" tree="@tree"/>
+            <log spec="RateStatistic" id="rate" branchratemodel="@strictClock" tree="@tree"/>
             <!-- Start transcriptional rate loggers -->
             <!-- End transcriptional rate loggers -->
         </logger>
@@ -108,10 +108,10 @@ beast_template = """
             <log idref="prior"/>
         </logger>
         <logger spec="Logger" id="treelog" fileName="$(tree).trees" logEvery="1000" mode="tree">
-            <log spec="TreeWithMetaDataLogger" id="TreeWithMetaDataLogger" branchratemodel="@StrictClock" tree="@tree"/>
+            <log spec="TreeWithMetaDataLogger" id="treeWithMetaDataLogger" branchratemodel="@strictClock" tree="@tree"/>
         </logger>
-        <operatorschedule spec="OperatorSchedule" id="OperatorSchedule"/>
-        <logger id="AncestralStateLogger" fileName="$(tree).ancestral.trees" logEvery="10000" mode="tree">
+        <operatorschedule spec="OperatorSchedule" id="operatorSchedule"/>
+        <logger id="ancestralStateLogger" fileName="$(tree).ancestral.trees" logEvery="10000" mode="tree">
             <!-- Start character ancestral state loggers -->
             <!-- End character ancestral state loggers -->
         </logger>
@@ -151,7 +151,7 @@ distribution_template = """
     <siteModel spec="SiteModel" id="morphSiteModel.character{vu_ind}">
         <parameter spec="parameter.RealParameter" id="mutationRate.character{vu_ind}" name="mutationRate" value="1.0" estimate="false"/>
         <parameter spec="parameter.RealParameter" id="gammaShape.character{vu_ind}" name="shape" value="1.0" estimate="false"/>
-        <substModel spec="GeneralSubstitutionModel" id="SubstModel.character{vu_ind}">
+        <substModel spec="GeneralSubstitutionModel" id="substModel.character{vu_ind}">
             <!-- Equilibrium state frequencies -->
             <frequencies spec="Frequencies" id="equilibriumfreqs.character{vu_ind}" data="@alignment"/>
             <parameter spec="parameter.CompoundValuable" id="rates.character{vu_ind}" name="rates">
@@ -164,7 +164,7 @@ distribution_template = """
         <!-- Start root frequencies -->
         <!-- End root frequencies -->
     </rootFrequencies>
-    <branchRateModel idref="StrictClock"/>
+    <branchRateModel idref="strictClock"/>
 </distribution>
 """
 
@@ -193,7 +193,7 @@ frequencies_template = """
 BEAST XML operator template for rate variables
 """
 transcriptional_rate_parameter_operator_template = """
-<operator id="Scaler.{transcriptional_category}_rate" spec="ScaleOperator" scaleFactor="0.5" weight="1" parameter="@{transcriptional_category}_rate"/>
+<operator id="scaler.{transcriptional_category}_rate" spec="ScaleOperator" scaleFactor="0.5" weight="1" parameter="@{transcriptional_category}_rate"/>
 """
 
 """
@@ -207,5 +207,5 @@ transcriptional_rate_parameter_log_template = """
 BEAST XML log template for individual sites
 """
 character_log_template = """
-<log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character{vu_ind}.anclogger" data="@filter{vu_ind}" taxonset="@taxa" siteModel="@morphSiteModel.character{vu_ind}" branchRateModel="@StrictClock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
+<log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character{vu_ind}.anclogger" data="@filter{vu_ind}" taxonset="@taxa" siteModel="@morphSiteModel.character{vu_ind}" branchRateModel="@strictClock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
 """
