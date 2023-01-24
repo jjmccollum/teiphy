@@ -1030,6 +1030,7 @@ class Collation:
     def get_beast_root_frequencies_for_unit(self, vu_ind):
         """Returns a string containing state/reading root frequencies in BEAST format for the character/variation unit at the given index.
         The root frequencies are calculated from the intrinsic odds at this unit.
+        If the variation unit at the given index is a singleton unit (i.e., if it has only one substantive reading), then a root frequency of 0 will be added for a dummy state.
         If no intrinsic odds are specified, then a uniform distribution is assumed.
 
         Args:
@@ -1042,6 +1043,9 @@ class Collation:
         vu_id = vu.id
         intrinsic_relations = vu.intrinsic_relations
         intrinsic_odds_by_id = self.intrinsic_odds_by_id
+        # If this unit is a singleton, then return the string "1 0":
+        if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 1:
+            return "1 0"
         # If this unit has no intrinsic odds, then assume a uniform distribution over all readings:
         if len(vu.intrinsic_relations) == 0:
             root_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
@@ -1125,8 +1129,12 @@ class Collation:
         date_map = self.get_beast_date_map(taxlabels)
         # Now fill in the main template string and convert it to an XML Element:
         beast_xml = et.fromstring(beast_template.format(nsymbols=len(symbols), date_map=date_map), parser=parser)
-        # Next, add the sequences for all witnesses:
+        # Get the element representing the alignment:
         data_xml = beast_xml.find(".//data")
+        # If constant sites are included, then ensure that they are stripped from the analysis:
+        if not drop_constant:
+            data_xml.set("strip", "true")
+        # Then add the sequences for all witnesses:
         start_sequence_comment = data_xml.xpath("./comment()[. = \" Start sequences \"]")[0]
         current_sequence_index = data_xml.index(start_sequence_comment) + 1
         for i, wit in enumerate(self.witnesses):
@@ -1141,12 +1149,26 @@ class Collation:
                 if sum(rdg_support) == 0:
                     for k, w in enumerate(rdg_support):
                         sequence += "1"
-                        sequence += ", " if k < len(rdg_support) - 1 else "; "
+                        if k < len(rdg_support) - 1:
+                            sequence += ", "
+                        else:
+                            if len(rdg_support) > 1:
+                                sequence += "; "
+                            else:
+                                # If this site is a singleton site, then add a dummy state:
+                                sequence += ", 0; "
                 # Otherwise, read the probabilities as they are given:
                 else:
                     for k, w in enumerate(rdg_support):
                         sequence += str(w)
-                        sequence += ", " if k < len(rdg_support) - 1 else "; "
+                        if k < len(rdg_support) - 1:
+                            sequence += ", "
+                        else:
+                            if len(rdg_support) > 1:
+                                sequence += "; "
+                            else:
+                                # If this site is a singleton site, then add a dummy state:
+                                sequence += ", 0; "
             # Strip the final semicolon and space from the sequence:
             sequence = sequence.strip("; ")
             # Now fill in the sequence template string and convert it to an XML Element:
@@ -1168,10 +1190,9 @@ class Collation:
             # Add singleton states first:
             for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id])):
                 code_map[symbols[k]] = str(k)
-            # Then add a mapping for the missing state:
-            code_map[missing_symbol] = " ".join(
-                str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
-            )
+            # If this site is a singleton site, then add a code mapping for the dummy state:
+            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+                code_map[symbols[1]] = str(1)
             # Then add any ambiguous states that occur in the data:
             for i, wit in enumerate(self.witnesses):
                 rdg_support = self.readings_by_witness[wit.id][j]
@@ -1184,6 +1205,14 @@ class Collation:
                 for k in rdg_inds:
                     ambiguous_symbol += symbols[k]
                 code_map[ambiguous_symbol] = " ".join(str(k) for k in rdg_inds)
+            # Then add a mapping for the missing state, including a dummy state if this is a singleton site:
+            code_map[missing_symbol] = " ".join(
+                str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
+            )
+            # If this site is a singleton site, then add the dummy state to the missing state mapping:
+            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+                code_map[missing_symbol] = code_map[missing_symbol] + " " + str(1)
+            # Then combine all of the mappings into a single string:
             code_map_string = ", ".join([code + "=" + code_map[code] for code in code_map])
             # Second, get the variation unit and reading labels:
             rdg_texts = []
@@ -1198,6 +1227,9 @@ class Collation:
                 if rdg_text == "":
                     rdg_text = "om."
                 rdg_texts.append(rdg_text)
+            # If this site is a singleton site, then add a dummy reading for the dummy state:
+            if len(rdg_support) == 1:
+                rdg_texts.append("DUMMY")
             rdg_texts_string = ", ".join(rdg_texts)
             # Now fill in the charstatelabels template string and convert it to an XML Element:
             charstatelabels_xml = et.fromstring(
@@ -1247,46 +1279,57 @@ class Collation:
             rates_parameter_xml = distribution_xml.find(".//parameter[@name=\"rates\"]")
             start_rate_vars_comment = rates_parameter_xml.xpath("./comment()[. = \" Start rate vars \"]")[0]
             current_var_index = rates_parameter_xml.index(start_rate_vars_comment) + 1
-            # Proceed for every pair of readings in this unit:
-            for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
-                for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
-                    # Skip diagonal elements:
-                    if k_1 == k_2:
-                        continue
-                    # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
-                    if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
-                        var_xml = et.fromstring(var_template.format(transcriptional_category="default"), parser=parser)
-                        rates_parameter_xml.insert(current_var_index, var_xml)
-                        current_var_index += 1
-                        continue
-                    # Otherwise, check how many distinct categories of transcriptional relations hold between the first and second readings:
-                    else:
-                        # If there is only one such category, then add its rate as a standalone var element:
-                        if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
-                            transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+                # If this is a singleton site, then use an arbitrary 2x2 rate matrix:
+                var_xml = et.fromstring(var_template.format(transcriptional_category="default"), parser=parser)
+                rates_parameter_xml.insert(current_var_index, var_xml)
+                current_var_index += 1
+                var_xml = et.fromstring(var_template.format(transcriptional_category="default"), parser=parser)
+                rates_parameter_xml.insert(current_var_index, var_xml)
+                current_var_index += 1
+            else:
+                # Otherwise, proceed for every pair of readings in this unit:
+                for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                    for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                        # Skip diagonal elements:
+                        if k_1 == k_2:
+                            continue
+                        # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
+                        if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
                             var_xml = et.fromstring(
-                                var_template.format(transcriptional_category=transcriptional_category),
-                                parser=parser,
+                                var_template.format(transcriptional_category="default"), parser=parser
                             )
                             rates_parameter_xml.insert(current_var_index, var_xml)
                             current_var_index += 1
                             continue
-                        # If there is more than one, then add a var element that is a sum of the individual categories' rates:
+                        # Otherwise, check how many distinct categories of transcriptional relations hold between the first and second readings:
                         else:
-                            transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
-                            args = []
-                            for transcriptional_category in transcriptional_categories:
-                                args.append("%s_rate" % transcriptional_category)
-                            args_string = " ".join(args)
-                            ops = ["+"] * (len(args) - 1)
-                            ops_string = " ".join(ops)
-                            expression_string = " ".join([args_string, ops_string])
-                            rpn_calculator_xml = et.fromstring(
-                                rpn_calculator_template.format(expression=expression_string)
-                            )
-                            rates_parameter_xml.insert(current_var_index, rpn_calculator_xml)
-                            current_var_index += 1
-                            continue
+                            # If there is only one such category, then add its rate as a standalone var element:
+                            if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
+                                transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+                                var_xml = et.fromstring(
+                                    var_template.format(transcriptional_category=transcriptional_category),
+                                    parser=parser,
+                                )
+                                rates_parameter_xml.insert(current_var_index, var_xml)
+                                current_var_index += 1
+                                continue
+                            # If there is more than one, then add a var element that is a sum of the individual categories' rates:
+                            else:
+                                transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
+                                args = []
+                                for transcriptional_category in transcriptional_categories:
+                                    args.append("%s_rate" % transcriptional_category)
+                                args_string = " ".join(args)
+                                ops = ["+"] * (len(args) - 1)
+                                ops_string = " ".join(ops)
+                                expression_string = " ".join([args_string, ops_string])
+                                rpn_calculator_xml = et.fromstring(
+                                    rpn_calculator_template.format(expression=expression_string)
+                                )
+                                rates_parameter_xml.insert(current_var_index, rpn_calculator_xml)
+                                current_var_index += 1
+                                continue
             # Next, add the root frequencies for this distribution element:
             root_frequencies_xml = distribution_xml.find(".//rootFrequencies")
             start_root_frequencies_comment = root_frequencies_xml.xpath(
