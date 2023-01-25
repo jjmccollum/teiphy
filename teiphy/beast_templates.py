@@ -17,6 +17,7 @@ beast_template = """
         <trait spec="TraitSet" traitname="date" units="year" value="{date_map}">
             <taxa spec="TaxonSet" id="taxa" alignment="@alignment"/>
         </trait>
+        <taxonset idref="taxa"/>
     </tree>
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
         <parameter spec="parameter.RealParameter" id="origin" name="origin" lower="1250.0"  upper="1250.0" value="1250.0" estimate="false"/>
