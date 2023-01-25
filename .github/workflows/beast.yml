@@ -16,6 +16,7 @@ jobs:
         java-package: 'jdk+fx'
         distribution: 'zulu'
         java-version: '17'
+        cache: 'maven'
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies for Python ${{ matrix.python-version }}
@@ -42,7 +43,7 @@ jobs:
       # ~/.beast/beast/bin/packagemanager -add BDSKY
     - name: Phylogenetics Run
       run: |
-        which java
+        cd BeastFX
         ls -l
       # ~/.beast/beast/bin/beast beast_example.xml
         
