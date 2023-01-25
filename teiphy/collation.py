@@ -1194,17 +1194,17 @@ class Collation:
             if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
                 code_map[symbols[1]] = str(1)
             # Then add any ambiguous states that occur in the data:
-            for i, wit in enumerate(self.witnesses):
-                rdg_support = self.readings_by_witness[wit.id][j]
-                rdg_inds = [
-                    k for k, w in enumerate(rdg_support) if w > 0
-                ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
-                if len(rdg_inds) <= 1:
-                    continue
-                ambiguous_symbol = ""
-                for k in rdg_inds:
-                    ambiguous_symbol += symbols[k]
-                code_map[ambiguous_symbol] = " ".join(str(k) for k in rdg_inds)
+            # for i, wit in enumerate(self.witnesses):
+            #     rdg_support = self.readings_by_witness[wit.id][j]
+            #     rdg_inds = [
+            #         k for k, w in enumerate(rdg_support) if w > 0
+            #     ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+            #     if len(rdg_inds) <= 1:
+            #         continue
+            #     ambiguous_symbol = ""
+            #     for k in rdg_inds:
+            #         ambiguous_symbol += symbols[k]
+            #     code_map[ambiguous_symbol] = " ".join(str(k) for k in rdg_inds)
             # Then add a mapping for the missing state, including a dummy state if this is a singleton site:
             code_map[missing_symbol] = " ".join(
                 str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
