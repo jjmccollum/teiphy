@@ -21,6 +21,7 @@ from .beast_templates import (
     distribution_template,
     var_template,
     rpn_calculator_template,
+    rpn_calculator_parameter_template,
     transcriptional_rate_parameter_operator_template,
     transcriptional_rate_parameter_log_template,
     character_log_template,
@@ -1347,6 +1348,14 @@ class Collation:
                                 rpn_calculator_xml = et.fromstring(
                                     rpn_calculator_template.format(expression=expression_string)
                                 )
+                                # Add parameter elements under this for each transcriptional rate parameter:
+                                for transcriptional_category in transcriptional_categories:
+                                    rpn_calculator_parameter_xml = et.fromstring(
+                                        rpn_calculator_parameter_template.format(
+                                            transcriptional_category=transcriptional_category
+                                        )
+                                    )
+                                    rpn_calculator_xml.append(rpn_calculator_parameter_xml)
                                 rates_parameter_xml.insert(current_var_index, rpn_calculator_xml)
                                 current_var_index += 1
                                 continue

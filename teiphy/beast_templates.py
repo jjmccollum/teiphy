@@ -185,6 +185,13 @@ rpn_calculator_template = """
 """
 
 """
+BEAST XML parameter template (for input to RPNcalculator)
+"""
+rpn_calculator_parameter_template = """
+<parameter idref="{transcriptional_category}_rate"/>
+"""
+
+"""
 BEAST XML operator template for rate variables
 """
 transcriptional_rate_parameter_operator_template = """
