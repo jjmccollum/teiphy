@@ -152,17 +152,19 @@ distribution_template = """
         <parameter spec="parameter.RealParameter" id="mutationRate.character{vu_ind}" name="mutationRate" value="1.0" estimate="false"/>
         <parameter spec="parameter.RealParameter" id="gammaShape.character{vu_ind}" name="shape" value="1.0" estimate="false"/>
         <substModel spec="GeneralSubstitutionModel" id="substModel.character{vu_ind}">
-            <!-- Equilibrium state frequencies -->
-            <frequencies spec="Frequencies" id="equilibriumfreqs.character{vu_ind}" data="@alignment"/>
+            <!-- Equilibrium frequencies -->
+            <frequencies spec="Frequencies" id="equilibriumfreqs.character{vu_ind}">
+                <frequencies spec="parameter.RealParameter" id="equilibriumfrequencies.character{vu_ind}" value="{equilibrium_frequencies}" estimate="false"/>
+            </frequencies>
             <parameter spec="parameter.CompoundValuable" id="rates.character{vu_ind}" name="rates">
                 <!-- Start rate vars -->
                 <!-- End rate vars -->
             </parameter>
         </substModel>
     </siteModel>
+    <!-- root frequencies -->
     <rootFrequencies spec="Frequencies" id="rootfreqs.character{vu_ind}">
-        <!-- Start root frequencies -->
-        <!-- End root frequencies -->
+        <frequencies spec="parameter.RealParameter" id="rootfrequencies.character{vu_ind}" value="{root_frequencies}" estimate="false"/>
     </rootFrequencies>
     <branchRateModel idref="strictClock"/>
 </distribution>
@@ -180,13 +182,6 @@ BEAST XML multiple rate variable template (for sum of rate parameters)
 """
 rpn_calculator_template = """
 <var spec="RPNcalculator" expression="{expression}"/>
-"""
-
-"""
-BEAST XML frequencies template
-"""
-frequencies_template = """
-<frequencies spec="parameter.RealParameter" id="rootfrequencies.character{vu_ind}" value="{frequencies}" estimate="false"/>
 """
 
 """

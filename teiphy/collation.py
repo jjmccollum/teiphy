@@ -21,7 +21,6 @@ from .beast_templates import (
     distribution_template,
     var_template,
     rpn_calculator_template,
-    frequencies_template,
     transcriptional_rate_parameter_operator_template,
     transcriptional_rate_parameter_log_template,
     character_log_template,
@@ -1027,6 +1026,29 @@ class Collation:
         date_map = ",".join(calibrate_strings)
         return date_map
 
+    def get_beast_equilibrium_frequencies_for_unit(self, vu_ind):
+        """Returns a string containing state/reading equilibrium frequencies in BEAST format for the character/variation unit at the given index.
+        Since the equilibrium frequencies are not used with the substitution models, the equilibrium frequencies simply correspond to a uniform distribution over the states.
+        If the variation unit at the given index is a singleton unit (i.e., if it has only one substantive reading), then an equilibrium frequency of 0 will be added for a dummy state.
+
+        Args:
+            vu_ind: An integer index for the desired unit.
+
+        Returns:
+            A string containing space-separated equilibrium frequencies.
+        """
+        vu = self.variation_units[vu_ind]
+        vu_id = vu.id
+        # If this unit is a singleton, then return the string "1 0":
+        if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 1:
+            return "1 0"
+        # Otherwise, set the equilibrium frequencies according to a uniform distribution:
+        equilibrium_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
+            self.substantive_readings_by_variation_unit_id[vu_id]
+        )
+        equilibrium_frequencies_string = " ".join([str(w) for w in equilibrium_frequencies])
+        return equilibrium_frequencies_string
+
     def get_beast_root_frequencies_for_unit(self, vu_ind):
         """Returns a string containing state/reading root frequencies in BEAST format for the character/variation unit at the given index.
         The root frequencies are calculated from the intrinsic odds at this unit.
@@ -1261,8 +1283,18 @@ class Collation:
         for j, vu in enumerate(self.variation_units):
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
+            # Get the equilibrium and root frequencies for this unit:
+            equilibrium_frequencies_string = self.get_beast_equilibrium_frequencies_for_unit(j)
+            root_frequencies_string = self.get_beast_root_frequencies_for_unit(j)
             # Now fill in the distribution template string and convert it to an XML Element:
-            distribution_xml = et.fromstring(distribution_template.format(vu_ind=character_ind + 1), parser=parser)
+            distribution_xml = et.fromstring(
+                distribution_template.format(
+                    vu_ind=character_ind + 1,
+                    equilibrium_frequencies=equilibrium_frequencies_string,
+                    root_frequencies=root_frequencies_string,
+                    parser=parser,
+                )
+            )
             # Next, add the rate parameters for this distribution element:
             rates_parameter_xml = distribution_xml.find(".//parameter[@name=\"rates\"]")
             start_rate_vars_comment = rates_parameter_xml.xpath("./comment()[. = \" Start rate vars \"]")[0]
@@ -1318,19 +1350,6 @@ class Collation:
                                 rates_parameter_xml.insert(current_var_index, rpn_calculator_xml)
                                 current_var_index += 1
                                 continue
-            # Next, add the root frequencies for this distribution element:
-            root_frequencies_xml = distribution_xml.find(".//rootFrequencies")
-            start_root_frequencies_comment = root_frequencies_xml.xpath(
-                "./comment()[. = \" Start root frequencies \"]"
-            )[0]
-            current_frequencies_index = root_frequencies_xml.index(start_root_frequencies_comment) + 1
-            root_frequencies_string = self.get_beast_root_frequencies_for_unit(j)
-            frequencies_xml = et.fromstring(
-                frequencies_template.format(vu_ind=character_ind + 1, frequencies=root_frequencies_string),
-                parser=parser,
-            )
-            root_frequencies_xml.insert(current_frequencies_index, frequencies_xml)
-            current_frequencies_index += 1
             # Then insert this unit's completed distribution element under the likelihood distribution element:
             likelihood_distribution_xml.insert(current_character_distribution_index, distribution_xml)
             current_character_distribution_index += 1
