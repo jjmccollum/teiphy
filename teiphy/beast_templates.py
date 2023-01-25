@@ -181,7 +181,7 @@ var_template = """
 BEAST XML multiple rate variable template (for sum of rate parameters)
 """
 rpn_calculator_template = """
-<var spec="RPNcalculator" expression="{expression}"/>
+<var spec="RPNexpressionCalculator" expression="{expression}"/>
 """
 
 """
