@@ -16,7 +16,6 @@ jobs:
         java-package: 'jdk+fx'
         distribution: 'zulu'
         java-version: '17'
-        cache: 'maven'
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies for Python ${{ matrix.python-version }}
