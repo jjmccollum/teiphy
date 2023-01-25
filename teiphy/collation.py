@@ -1384,7 +1384,7 @@ class Collation:
             tracelog_logger_xml.insert(current_transcriptional_log_index, transcriptional_rate_parameter_log_xml)
             current_transcriptional_log_index += 1
         # Next, add the ancestral state logger for each variation unit:
-        ancestral_sequence_logger_xml = beast_xml.find(".//logger[@id=\"AncestralStateLogger\"]")
+        ancestral_sequence_logger_xml = beast_xml.find(".//logger[@id=\"ancestralStateLogger\"]")
         start_character_ancestral_state_loggers_comment = ancestral_sequence_logger_xml.xpath(
             "./comment()[. = \" Start character ancestral state loggers \"]"
         )[0]

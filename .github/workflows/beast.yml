@@ -41,6 +41,7 @@ jobs:
       # ~/.beast/beast/bin/packagemanager -add BDSKY
     - name: Phylogenetics Run
       run: |
+        which java
         ls -l
       # ~/.beast/beast/bin/beast beast_example.xml
         
