@@ -43,6 +43,6 @@ jobs:
     - name: Phylogenetics Run
       run: |
         cd BeastFX
-        ls -l
+        ls -l build
       # ~/.beast/beast/bin/beast beast_example.xml
         
