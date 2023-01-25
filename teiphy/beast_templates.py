@@ -20,7 +20,7 @@ beast_template = """
         <taxonset idref="taxa"/>
     </tree>
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
-        <parameter spec="parameter.RealParameter" id="origin" name="origin" lower="1250.0"  upper="1250.0" value="1250.0" estimate="false"/>
+        <parameter spec="parameter.RealParameter" id="origin" name="origin" lower="1500.0"  upper="1500.0" value="1500.0" estimate="false"/>
         <parameter spec="parameter.RealParameter" id="reproductiveNumber" name="reproductiveNumber" lower="0.0" upper="Infinity" value="2.0"/>
         <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
