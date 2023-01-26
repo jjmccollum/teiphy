@@ -1284,13 +1284,19 @@ class Collation:
         for j, vu in enumerate(self.variation_units):
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
-            # Get the equilibrium and root frequencies for this unit:
+            # Get the number of states, equilibrium frequencies, and root frequencies for this unit:
+            nstates = (
+                len(self.substantive_readings_by_variation_unit_id[vu.id])
+                if len(self.substantive_readings_by_variation_unit_id[vu.id]) > 1
+                else 2
+            )
             equilibrium_frequencies_string = self.get_beast_equilibrium_frequencies_for_unit(j)
             root_frequencies_string = self.get_beast_root_frequencies_for_unit(j)
             # Now fill in the distribution template string and convert it to an XML Element:
             distribution_xml = et.fromstring(
                 distribution_template.format(
                     vu_ind=character_ind + 1,
+                    nstates=nstates,
                     equilibrium_frequencies=equilibrium_frequencies_string,
                     root_frequencies=root_frequencies_string,
                     parser=parser,
