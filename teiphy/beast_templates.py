@@ -8,7 +8,7 @@ beast_template = """
     <data spec="Alignment" id="alignment" dataType="standard" statecount="{nsymbols}">
         <!-- Start sequences -->
         <!-- End sequences -->
-        <userDataType spec="StandardData">
+        <userDataType spec="StandardData" states="{nsymbols}">
             <!-- Start charstatelabels -->
             <!-- End charstatelabels -->
         </userDataType>
