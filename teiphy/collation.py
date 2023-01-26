@@ -1210,19 +1210,18 @@ class Collation:
                 continue
             # First, construct the code map for this unit using the readings_by_witness dictionary:
             code_map = {}
-            # Add singleton states first:
             for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id])):
                 code_map[symbols[k]] = str(k)
             # If this site is a singleton site, then add a code mapping for the dummy state:
             if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
                 code_map[symbols[1]] = str(1)
-            # Then add a mapping for the missing state, including a dummy state if this is a singleton site:
-            code_map[missing_symbol] = " ".join(
-                str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
-            )
+            # # Then add a mapping for the missing state, including a dummy state if this is a singleton site:
+            # code_map[missing_symbol] = " ".join(
+            #     str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
+            # )
             # If this site is a singleton site, then add the dummy state to the missing state mapping:
-            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
-                code_map[missing_symbol] = code_map[missing_symbol] + " " + str(1)
+            # if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+            #     code_map[missing_symbol] = code_map[missing_symbol] + " " + str(1)
             # Then combine all of the mappings into a single string:
             code_map_string = ", ".join([code + "=" + code_map[code] for code in code_map])
             # Second, get the variation unit and reading labels:
