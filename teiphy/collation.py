@@ -1196,7 +1196,7 @@ class Collation:
             sequence = sequence.strip("; ")
             # Now fill in the sequence template string and convert it to an XML Element:
             sequence_xml = et.fromstring(
-                sequence_template.format(wit_id=taxlabels[i], nsymbols=len(symbols), sequence=sequence), parser=parser
+                sequence_template.format(wit_id=taxlabels[i], sequence=sequence), parser=parser
             )
             # Then insert it under the data element:
             data_xml.insert(current_sequence_index, sequence_xml)
