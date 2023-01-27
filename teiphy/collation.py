@@ -1011,7 +1011,6 @@ class Collation:
         Returns:
             A string containing comma-separated date calibrations of the form witness_id=date.
         """
-        # Then calibrate the date distributions for each witness that has date information specified:
         calibrate_strings = []
         for i, wit in enumerate(self.witnesses):
             taxlabel = taxlabels[i]
@@ -1026,6 +1025,39 @@ class Collation:
         # Then output the full date map string:
         date_map = ",".join(calibrate_strings)
         return date_map
+
+    def get_beast_date_span(self):
+        """Returns the difference between the most recent witness date and the earliest witness date.
+        If witness dates are bounded, then upper bounds are used for the most recent date and lower bounds are used for the earliest date.
+
+        If no witnesses have dates, or if the set of dates forms an open interval, then a span of 0 is returned.
+
+        Returns:
+            A float representing the difference between the most recent witness date and the earliest witness date.
+        """
+        min_date = None
+        max_date = None
+        for i, wit in enumerate(self.witnesses):
+            date_range = wit.date_range
+            # Does this witness have a lower bound on its date?
+            if date_range[0] is not None:
+                # If it does, then (conditionally) set the minimum date to this value:
+                if min_date is None:
+                    min_date = date_range[0]
+                else:
+                    min_date = min(min_date, date_range[0])
+            # Does this witness have an upper bound on its date?
+            if date_range[1] is not None:
+                # If it does, then (conditionally) set the maximum date to this value:
+                if max_date is None:
+                    max_date = date_range[1]
+                else:
+                    max_date = max(max_date, date_range[1])
+        # Finally, if the two ends of the date span are defined, then calculate their difference and return it as a float:
+        if min_date is not None and max_date is not None:
+            return float(max_date - min_date)
+        # Otherwise, return 0 as a float:
+        return 0.0
 
     def get_beast_equilibrium_frequencies_for_unit(self, vu_ind):
         """Returns a string containing state/reading equilibrium frequencies in BEAST format for the character/variation unit at the given index.
@@ -1150,8 +1182,11 @@ class Collation:
         missing_symbol = '?'
         symbols = self.get_beast_symbols()
         date_map = self.get_beast_date_map(taxlabels)
+        date_span = self.get_beast_date_span()
         # Now fill in the main template string and convert it to an XML Element:
-        beast_xml = et.fromstring(beast_template.format(nsymbols=len(symbols), date_map=date_map), parser=parser)
+        beast_xml = et.fromstring(
+            beast_template.format(nsymbols=len(symbols), date_map=date_map, date_span=date_span), parser=parser
+        )
         # Get the element representing the alignment:
         data_xml = beast_xml.find(".//data")
         # If constant sites are included, then ensure that they are stripped from the analysis:

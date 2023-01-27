@@ -20,7 +20,7 @@ beast_template = """
         <taxonset idref="taxa"/>
     </tree>
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
-        <parameter spec="parameter.RealParameter" id="origin" name="origin" lower="1500.0"  upper="1500.0" value="1500.0" estimate="false"/>
+        <parameter spec="parameter.RealParameter" id="origin" name="origin" lower="{date_span}" upper="Infinity" value="{date_span}"/>
         <parameter spec="parameter.RealParameter" id="reproductiveNumber" name="reproductiveNumber" lower="0.0" upper="Infinity" value="2.0"/>
         <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
@@ -52,6 +52,9 @@ beast_template = """
                 <distribution spec="CompoundDistribution" id="bdLikelihood">
                     <distribution idref="birthDeath"/>
                 </distribution>
+                <distribution spec="Prior" id="originPrior" x="@origin">
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{date_span}"/>	
+                </distribution>
                 <distribution spec="Prior" id="samplingProportionPrior" x="@samplingProportion">
                     <distr spec="Beta" alpha="1.0" beta="1.0" offset="0.0"/>
                 </distribution>
@@ -75,6 +78,7 @@ beast_template = """
         <operator spec="Exchange" id="bdskySerialNarrow" tree="@tree" weight="0.0"/>
         <operator spec="Exchange" id="bdskySerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
         <operator spec="WilsonBalding" id="bdskySerialWilsonBalding" tree="@tree" weight="3.0"/>
+        <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="10.0"/>
         <operator spec="ScaleOperator" id="becomeUninfectiousRateScaler" parameter="@becomeUninfectiousRate" weight="2.0"/>
         <operator spec="ScaleOperator" id="reproductiveNumberScaler" parameter="@reproductiveNumber" weight="10.0"/>
         <operator spec="ScaleOperator" id="samplingProportionScaler" parameter="@samplingProportion" weight="10.0"/>
@@ -96,6 +100,7 @@ beast_template = """
             <log idref="prior"/>
             <log spec="TreeHeightLogger" id="treeHeight" tree="@tree"/>
             <log idref="birthDeath"/>
+            <log idref="origin"/>
             <log idref="becomeUninfectiousRate"/>
             <log idref="reproductiveNumber"/>
             <log idref="samplingProportion"/>
