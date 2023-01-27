@@ -124,7 +124,7 @@ beast_template = """
 BEAST XML sequence template string
 """
 sequence_template = """
-<sequence spec="Sequence" taxon="{wit_id}" uncertain="true" value="{sequence}"/>
+<sequence spec="Sequence" taxon="{wit_id}" totalcount="{nsymbols}" uncertain="true" value="{sequence}"/>
 """
 
 """

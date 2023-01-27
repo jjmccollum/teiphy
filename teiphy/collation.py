@@ -1171,7 +1171,7 @@ class Collation:
                 # If this witness has a certainty of 0 for all readings, then it is a gap; assign a likelihood of 1 to each reading:
                 if sum(rdg_support) == 0:
                     for k, w in enumerate(rdg_support):
-                        sequence += "1.0"
+                        sequence += "1"
                         if k < len(rdg_support) - 1:
                             sequence += ", "
                         else:
@@ -1179,7 +1179,7 @@ class Collation:
                                 sequence += "; "
                             else:
                                 # If this site is a singleton site, then add a dummy state:
-                                sequence += ", 0.0; "
+                                sequence += ", 0; "
                 # Otherwise, read the probabilities as they are given:
                 else:
                     for k, w in enumerate(rdg_support):
@@ -1191,12 +1191,12 @@ class Collation:
                                 sequence += "; "
                             else:
                                 # If this site is a singleton site, then add a dummy state:
-                                sequence += ", 0.0; "
+                                sequence += ", 0; "
             # Strip the final semicolon and space from the sequence:
             sequence = sequence.strip("; ")
             # Now fill in the sequence template string and convert it to an XML Element:
             sequence_xml = et.fromstring(
-                sequence_template.format(wit_id=taxlabels[i], sequence=sequence), parser=parser
+                sequence_template.format(wit_id=taxlabels[i], nsymbols=len(symbols), sequence=sequence), parser=parser
             )
             # Then insert it under the data element:
             data_xml.insert(current_sequence_index, sequence_xml)
