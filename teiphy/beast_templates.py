@@ -62,7 +62,7 @@ beast_template = """
                     <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
                 </distribution>
             </distribution>
-            <distribution spec="CompoundDistribution" id="likelihood" useThreads="true">
+            <distribution spec="CompoundDistribution" id="likelihood" useThreads="false">
                 <!-- Start character distributions -->
                 <!-- End character distributions -->
             </distribution>
