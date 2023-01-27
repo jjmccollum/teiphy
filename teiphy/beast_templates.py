@@ -147,7 +147,7 @@ BEAST XML distribution template string
 distribution_template = """
 <distribution spec="TreeLikelihood" id="morphTreeLikelihood.character{vu_ind}" useAmbiguities="true" useTipLikelihoods="true" tree="@tree">
     <data spec="FilteredAlignment" id="filter{vu_ind}" data="@alignment" filter="{vu_ind}">
-        <userDataType spec="StandardData" id="morphDataType.character{vu_ind}" nrOfStates="{nstates}" ambiguities="01"/>
+        <userDataType spec="StandardData" id="morphDataType.character{vu_ind}" nrOfStates="{nstates}"/>
     </data>
     <siteModel spec="SiteModel" id="morphSiteModel.character{vu_ind}">
         <parameter spec="parameter.RealParameter" id="mutationRate.character{vu_ind}" name="mutationRate" value="1.0" estimate="false"/>
