@@ -1185,7 +1185,10 @@ class Collation:
         date_span = self.get_beast_date_span()
         # Now fill in the main template string and convert it to an XML Element:
         beast_xml = et.fromstring(
-            beast_template.format(nsymbols=len(symbols), date_map=date_map, date_span=date_span), parser=parser
+            beast_template.format(
+                nsymbols=len(symbols), date_map=date_map, date_span=date_span, initial_origin=date_span + 1
+            ),
+            parser=parser,
         )
         # Get the element representing the alignment:
         data_xml = beast_xml.find(".//data")
