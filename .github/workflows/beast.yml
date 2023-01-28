@@ -26,7 +26,7 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml beast_example.xml
+        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --drop-constant example/ubs_ephesians.xml beast_example.xml
     - name: Install Phylogenetics Package
       run: |
         export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.5-8/x64
