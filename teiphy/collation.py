@@ -4,7 +4,6 @@ from typing import List, Union
 from pathlib import Path
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
-import random  # for random initialization of parameter values
 from lxml import etree as et  # for reading TEI XML inputs
 import numpy as np  # for collation matrix outputs
 import pandas as pd  # for writing to DataFrames, CSV, Excel, etc.
@@ -1301,7 +1300,7 @@ class Collation:
         for transcriptional_category in self.transcriptional_categories:
             rate = self.transcriptional_rates_by_id[transcriptional_category]
             estimate = "true" if rate is None else "false"
-            value = str(1.0 + random.random()) if rate is None else str(rate)
+            value = "1.0" if rate is None else str(rate)
             transcriptional_rate_parameter_xml = et.fromstring(
                 transcriptional_rate_parameter_template.format(
                     transcriptional_category=transcriptional_category, estimate=estimate, value=value
