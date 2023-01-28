@@ -1072,9 +1072,9 @@ class Collation:
         """
         vu = self.variation_units[vu_ind]
         vu_id = vu.id
-        # If this unit is a singleton, then return the string "1 0":
+        # If this unit is a singleton, then return the string "0.5 0.5":
         if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 1:
-            return "1 0"
+            return "0.5 0.5"
         # Otherwise, set the equilibrium frequencies according to a uniform distribution:
         equilibrium_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
             self.substantive_readings_by_variation_unit_id[vu_id]
