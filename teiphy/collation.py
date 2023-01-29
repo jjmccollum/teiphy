@@ -280,7 +280,7 @@ class Collation:
         return
 
     def validate_intrinsic_relations(self):
-        """Checks if any VariationUnit's intrinsic_relations map is not a tree.
+        """Checks if any VariationUnit's intrinsic_relations map is not a forest.
         If any is not, then an IntrinsicRelationsException is thrown describing the VariationUnit at fault.
         """
         if self.verbose:
@@ -300,7 +300,7 @@ class Collation:
                 if t not in in_degree_by_reading:
                     in_degree_by_reading[t] = 0
                 in_degree_by_reading[t] += 1
-            # If any reading has more than one relation pointing to it, then the intrinsic relations graph is not a tree:
+            # If any reading has more than one relation pointing to it, then the intrinsic relations graph is not a forest:
             excessive_in_degree_readings = [
                 rdg_id for rdg_id in in_degree_by_reading if in_degree_by_reading[rdg_id] > 1
             ]
@@ -310,22 +310,14 @@ class Collation:
                     "In variation unit %s, the following readings have more than one intrinsic relation pointing to them: %s.\n"
                     % (vu.id, ", ".join(excessive_in_degree_readings))
                 )
-                msg += "Please ensure that there is one root reading with no relation pointing to it and that every other reading has exactly one relation pointing to it."
+                msg += "Please ensure that at least one reading has no relations pointing to it and that every reading has no more than one relation pointing to it."
                 raise IntrinsicRelationsException(msg)
-            # If no reading is the root, then the intrinsic relations graph is not a tree:
-            root_readings = [rdg_id for rdg_id in in_degree_by_reading if in_degree_by_reading[rdg_id] == 0]
-            if len(root_readings) == 0:
+            # If every reading has another reading pointing to it, then the intrinsic relations graph contains a cycle and is not a forest:
+            starting_nodes = [rdg_id for rdg_id in in_degree_by_reading if in_degree_by_reading[rdg_id] == 0]
+            if len(starting_nodes) == 0:
                 msg = ""
-                msg += "In variation unit %s, the intrinsic relations form a cycle.\n" % vu.id
-                msg += "Please ensure that there is one root reading with no relation pointing to it and that every other reading has exactly one relation pointing to it."
-                raise IntrinsicRelationsException(msg)
-            if len(root_readings) > 1:
-                msg = ""
-                msg += (
-                    "In variation unit %s, there is more than one root reading without any intrinsic relation pointing to it.\n"
-                    % vu.id
-                )
-                msg += "Please ensure that there is one root reading with no relation pointing to it and that every other reading has exactly one relation pointing to it."
+                msg += "In variation unit %s, the intrinsic relations contain a cycle.\n" % vu.id
+                msg += "Please ensure that at least one reading has no relations pointing to it and that every reading has no more than one relation pointing to it."
                 raise IntrinsicRelationsException(msg)
         t1 = time.time()
         if self.verbose:
@@ -1086,7 +1078,7 @@ class Collation:
         """Returns a string containing state/reading root frequencies in BEAST format for the character/variation unit at the given index.
         The root frequencies are calculated from the intrinsic odds at this unit.
         If the variation unit at the given index is a singleton unit (i.e., if it has only one substantive reading), then a root frequency of 0 will be added for a dummy state.
-        If no intrinsic odds are specified, then a uniform distribution is assumed.
+        If no intrinsic odds are specified, then a uniform distribution over all states is assumed.
 
         Args:
             vu_ind: An integer index for the desired unit.
@@ -1102,7 +1094,7 @@ class Collation:
         if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 1:
             return "1 0"
         # If this unit has no intrinsic odds, then assume a uniform distribution over all readings:
-        if len(vu.intrinsic_relations) == 0:
+        if len(intrinsic_relations) == 0:
             root_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
                 self.substantive_readings_by_variation_unit_id[vu_id]
             )
@@ -1122,7 +1114,7 @@ class Collation:
             if t not in neighbors_by_source:
                 neighbors_by_source[t] = []
             neighbors_by_source[s].append(t)
-        # Next, identify the unique reading that is not targeted by any intrinsic odds relation:
+        # Next, identify all readings that are not targeted by any intrinsic odds relation:
         in_degree_by_reading = {}
         for edge in intrinsic_relations:
             s = edge[0]
@@ -1132,22 +1124,25 @@ class Collation:
             if t not in in_degree_by_reading:
                 in_degree_by_reading[t] = 0
             in_degree_by_reading[t] += 1
-        first_reading = [t for t in in_degree_by_reading if in_degree_by_reading[t] == 0][0]
-        # Set the root frequency for this reading to 1 (it will be normalized later):
-        root_frequencies_by_id[first_reading] = 1.0
-        # Next, populate the root frequencies vector recursively using the adjacency list:
+        starting_nodes = [t for t in in_degree_by_reading if in_degree_by_reading[t] == 0]
+        # Set the root frequencies for these readings to 1 (they will be normalized later):
+        for starting_node in starting_nodes:
+            root_frequencies_by_id[starting_node] = 1.0
+        # Next, set the frequencies for the remaining readings recursively using the adjacency list:
         def update_root_frequencies(s):
             for t in neighbors_by_source[s]:
                 intrinsic_category = intrinsic_relations[(s, t)]
-                odds = intrinsic_odds_by_id[intrinsic_category]
-                # TODO: This needs to be handled using parameters once we have it implemented in BEAST
-                if odds is None:
-                    odds = 1.0
+                odds = (
+                    intrinsic_odds_by_id[intrinsic_category]
+                    if intrinsic_odds_by_id[intrinsic_category] is not None
+                    else 1.0
+                )  # TODO: This needs to be handled using parameters once we have it implemented in BEAST
                 root_frequencies_by_id[t] = root_frequencies_by_id[s] / odds
                 update_root_frequencies(t)
             return
 
-        update_root_frequencies(first_reading)
+        for starting_node in starting_nodes:
+            update_root_frequencies(starting_node)
         # Then produce a normalized vector of root frequencies that corresponds to a probability distribution:
         root_frequencies = [
             root_frequencies_by_id[rdg_id] for rdg_id in self.substantive_readings_by_variation_unit_id[vu_id]

@@ -7,8 +7,10 @@ from lxml import etree as et
 
 from teiphy import tei_ns, Collation
 
-root_dir = Path("__file__").parent.parent
+test_dir = Path(__file__).parent
+root_dir = test_dir.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
+malformed_categories_example = test_dir / "malformed_categories_example.xml"
 
 
 class CollationDefaultTestCase(unittest.TestCase):
@@ -58,6 +60,25 @@ class CollationDefaultTestCase(unittest.TestCase):
 
     def test_transcriptional_rates_by_id(self):
         self.assertEqual(len(self.collation.transcriptional_rates_by_id), len(self.xml_transcriptional_relations))
+
+
+class CollationMalformedCategoriesTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(malformed_categories_example, parser=parser)
+        self.xml_intrinsic_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
+        )
+        self.xml_transcriptional_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+        )
+        self.collation = Collation(xml)
+
+    def test_intrinsic_categories(self):
+        self.assertEqual(len(self.collation.intrinsic_categories), len(self.xml_intrinsic_relations) - 1)
+
+    def test_transcriptional_categories(self):
+        self.assertEqual(len(self.collation.transcriptional_categories), len(self.xml_transcriptional_relations) - 1)
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
@@ -272,6 +293,16 @@ class CollationOutputTestCase(unittest.TestCase):
         empty_collation.witnesses = []
         fasta_symbols = empty_collation.get_fasta_symbols()
         self.assertEqual(fasta_symbols, [])
+
+    def test_get_beast_symbols(self):
+        beast_symbols = self.collation.get_beast_symbols()
+        self.assertEqual(beast_symbols, ["0", "1", "2", "3", "4", "5"])
+
+    def test_get_beast_symbols_empty(self):
+        empty_collation = self.collation
+        empty_collation.witnesses = []
+        beast_symbols = empty_collation.get_beast_symbols()
+        self.assertEqual(beast_symbols, [])
 
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)

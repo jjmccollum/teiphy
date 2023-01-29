@@ -115,9 +115,7 @@ class VariationUnit:
             return
         # If it is a list of relations, then populate the corresponding dictionary:
         elif raw_tag == "listRelation":
-            if xml.get("type") is None:
-                return
-            if xml.get("type") == "intrinsic":
+            if xml.get("type") is not None and xml.get("type") == "intrinsic":
                 self.intrinsic_relations = {}
                 for child in xml:
                     if child.get("active") is None or child.get("passive") is None or child.get("ana") is None:
@@ -133,7 +131,7 @@ class VariationUnit:
                             pair = (from_reading, to_reading)
                             self.intrinsic_relations[pair] = intrinsic_category
                 return
-            if xml.get("type") == "transcriptional":
+            if xml.get("type") is not None and xml.get("type") == "transcriptional":
                 self.transcriptional_relations = {}
                 for child in xml:
                     if child.get("active") is None or child.get("passive") is None or child.get("ana") is None:

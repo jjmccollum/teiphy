@@ -164,22 +164,28 @@
         <interpGrp type="transcriptional">
             <interp xml:id="Clar">
                 <p>Clarification of the text in terms of grammar, style, or theology.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
             <interp xml:id="AurConf">
                 <p>Aural confusion concerning letters or dipthongs that came to have the same sound in later Greek, including various itacisms (i.e., interchanges between ι, ει, η, οι, and υ), \textgreek{αι}-\textgreek{ε} interchanges, ο-ω interchanges, interchanges between similar-sounding consonants (e.g., β-υ after certain vowels and π-φ) and other less common interchanges (e.g., vowel sounds that might be confused if spoken quickly).</p>
+                <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="LingConf">
                 <p>Linguistic confusion concerning rules of Greek grammar.</p>
 		        <p><i>Constructiones ad sensum</i> that reflect changes in grammatical rules over time also fall under this rubric.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
             <interp xml:id="VisErr">
                 <p>Visual error, such as paleographic confusion of similar letters, haplography, dittography and other repetitions of nearby letters, and other skips of the eye resulting in small omissions. Rarer situations, like duplication or omission of letters related to the presence or absence of an ornamental capital at the start of a line, also fall under this rubric.</p>
+                <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="Harm">
                 <p>Harmonization, either to a parallel passage or to the near context.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
             <interp xml:id="Byz">
                 <p>The text is brought into conformity with the Byzantine text.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
         </interpGrp>
         <body>
