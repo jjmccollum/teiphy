@@ -94,6 +94,8 @@ beast_template = """
 		<operator id="clock.rate_Scaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.rate" />
         <!-- Start transcriptional rate operators -->
         <!-- End transcriptional rate operators -->
+        <!-- Start date operators -->
+        <!-- End date operators -->
         <logger spec="Logger" id="tracelog" fileName="beast.log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
             <log idref="posterior"/>
             <log idref="likelihood"/>
@@ -216,4 +218,35 @@ BEAST XML log template for individual sites
 """
 character_log_template = """
 <log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character{vu_ind}.anclogger" data="@filter{vu_ind}" taxonset="@taxa" siteModel="@morphSiteModel.character{vu_ind}" branchRateModel="@strictClock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
+"""
+
+"""
+BEAST XML Date Prior 
+"""
+date_prior_template = """
+<distribution id="date.{wit_id}" spec="beast.math.distributions.MRCAPrior" tipsonly="true" tree="@tree">
+    <taxonset id="taxonSet.{wit_id}" spec="TaxonSet">
+        <taxon id="{wit_id}" spec="Taxon"/>
+    </taxonset>
+    <Uniform id="datePrior.{wit_id}.Uniform" lower="{min_date}" name="distr" upper="{max_date}"/>
+</distribution>
+"""
+
+"""
+BEAST XML Date Operator 
+"""
+date_operator_template = """
+<operator id="dateOperator.{wit_id}" 
+	windowSize="1" 
+	spec="TipDatesRandomWalker" 
+	taxonset="@taxonSet.{wit_id}" 
+	tree="@tree" 
+	weight="1.0"/>
+"""
+
+"""
+BEAST XML Date Logger 
+"""
+date_log_template = """
+<log idref="date.{wit_id}"/>
 """

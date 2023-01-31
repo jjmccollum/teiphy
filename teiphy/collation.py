@@ -25,6 +25,9 @@ from .beast_templates import (
     transcriptional_rate_parameter_operator_template,
     transcriptional_rate_parameter_log_template,
     character_log_template,
+    date_prior_template,
+    date_operator_template,
+    date_log_template,
 )
 
 
@@ -1453,6 +1456,35 @@ class Collation:
             ancestral_sequence_logger_xml.insert(current_character_ancestral_state_log_index, character_log_xml)
             current_character_ancestral_state_log_index += 1
             character_ind += 1
+
+        # Allow for sampling of the dates for witnesses with a range dates
+        # See here for information: https://www.beast2.org/2015/06/09/sampling-tip-dates.html
+        prior = beast_xml.find(".//distribution[@id=\"prior\"]")
+        start_date_operators_comment = run_xml.xpath(
+            "./comment()[. = \" Start date operators \"]"
+        )[0]
+        current_date_operator_index = run_xml.index(start_date_operators_comment) + 1
+        tracelog = beast_xml.find(".//logger[@id=\"tracelog\"]")
+        for i, wit in enumerate(self.witnesses):
+            taxlabel = taxlabels[i]
+            date_range = wit.date_range
+            # If either end of this witness's date range is empty, or if they are equal, then do not include it:
+            if date_range[0] is None or date_range[1] is None or date_range[0] == date_range[1]:
+                continue
+
+            date_prior_xml = et.fromstring(
+                date_prior_template.format(wit_id=taxlabel, min_date=date_range[0], max_date=date_range[1]), 
+                parser=parser
+            )
+            prior.append(date_prior_xml)
+
+            date_operator_xml = et.fromstring(date_operator_template.format(wit_id=taxlabel), parser=parser)
+            run_xml.insert(current_date_operator_index, date_operator_xml)
+            current_date_operator_index += 1
+
+            date_logger_xml = et.fromstring(date_log_template.format(wit_id=taxlabel), parser=parser)
+            tracelog.append(date_logger_xml)
+
         # Finally, write the full XML tree to the output file address:
         et.ElementTree(beast_xml).write(
             file_addr, encoding="utf-8", standalone=False, xml_declaration=True, pretty_print=True
