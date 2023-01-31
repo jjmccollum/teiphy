@@ -28,6 +28,8 @@ beast_template = """
     <branchRateModel spec="StrictClockModel" id="strictClock">
 		<parameter dimension="1" id="clock.rate" name="clock.rate" lower="0.0" upper="100.0" value="0.1"/>
 	</branchRateModel>
+    <!-- Map shortcuts -->
+    <map name="Uniform" >beast.base.inference.distribution.Uniform</map>
     <!-- The chainLength attribute should be increased to a large number (e.g., 20000000) for non-test runs -->
     <run spec="MCMC" id="mcmc" chainLength="100000">
         <state spec="State" id="state" storeEvery="5000">
@@ -224,7 +226,7 @@ character_log_template = """
 BEAST XML Date Prior 
 """
 date_prior_template = """
-<distribution id="date.{wit_id}" spec="beast.math.distributions.MRCAPrior" tipsonly="true" tree="@tree">
+<distribution id="date.{wit_id}" spec="MRCAPrior" tipsonly="true" tree="@tree">
     <taxonset id="taxonSet.{wit_id}" spec="TaxonSet">
         <taxon id="{wit_id}" spec="Taxon"/>
     </taxonset>
