@@ -15,7 +15,7 @@ jobs:
       with:
         java-package: 'jdk+fx'
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '17.0.6+10'
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies for Python ${{ matrix.python-version }}
@@ -29,7 +29,7 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml beast_example.xml
     - name: Install Phylogenetics Package
       run: |
-        export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.5-8/x64
+        export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.6-10/x64
         export PATH=${JAVA_HOME}/bin:${PATH}
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
