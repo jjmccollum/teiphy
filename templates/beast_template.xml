@@ -26,9 +26,10 @@
         <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
     </birthDeathSkylineModel>
-    <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree" rateCategories="74">
+    <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree">
         <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
 		<parameter spec="parameter.RealParameter" id="clock.rate" name="clock.rate" lower="0.0" upper="100.0" value="1.0"/>
+        <rateCategories spec="parameter.IntegerParameter" id="clock.rateCategories"  dimension="{{ clock_rate_categories }}" value="1.0"/>
 	</branchRateModel>
     <!-- The chainLength attribute should be increased to a large number (e.g., 20000000) for non-test runs -->
     <run spec="MCMC" id="mcmc" chainLength="100000">

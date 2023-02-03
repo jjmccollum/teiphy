@@ -1349,6 +1349,7 @@ class Collation:
             date_map=date_map,
             date_span=date_span,
             initial_origin=date_span + 1,
+            clock_rate_categories=2 * len(self.witnesses) - 2,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
             intrinsic_categories=intrinsic_category_objects,
