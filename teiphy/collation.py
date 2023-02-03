@@ -1249,8 +1249,13 @@ class Collation:
             variation_unit_object = {}
             # Copy the ID of this variation unit:
             variation_unit_object["id"] = vu.id
-            # Copy this variation unit's number of substantive readings:
-            variation_unit_object["nstates"] = len(self.substantive_readings_by_variation_unit_id[vu.id])
+            # Copy this variation unit's number of substantive readings,
+            # setting it to 2 if it is a singleton unit:
+            variation_unit_object["nstates"] = (
+                len(self.substantive_readings_by_variation_unit_id[vu.id])
+                if len(self.substantive_readings_by_variation_unit_id[vu.id]) > 1
+                else 2
+            )
             # Then construct the code map for this unit:
             variation_unit_object["code_map"] = self.get_beast_code_map_for_unit(symbols, missing_symbol, j)
             # Then populate a comma-separated string of reading labels for this unit:
