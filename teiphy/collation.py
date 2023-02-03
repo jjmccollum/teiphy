@@ -8,27 +8,12 @@ from lxml import etree as et  # for reading TEI XML inputs
 import numpy as np  # for collation matrix outputs
 import pandas as pd  # for writing to DataFrames, CSV, Excel, etc.
 from slugify import slugify  # for converting Unicode text from readings to ASCII for NEXUS
+from jinja2 import Environment, FileSystemLoader, select_autoescape  # for filling output XML templates
 
 from .common import xml_ns, tei_ns
 from .format import Format
 from .witness import Witness
 from .variation_unit import VariationUnit
-from .beast_templates import (
-    beast_template,
-    sequence_template,
-    charstatelabels_template,
-    transcriptional_rate_parameter_template,
-    distribution_template,
-    var_template,
-    rpn_calculator_template,
-    rpn_calculator_parameter_template,
-    transcriptional_rate_parameter_operator_template,
-    transcriptional_rate_parameter_log_template,
-    character_log_template,
-    date_prior_template,
-    date_operator_template,
-    date_log_template,
-)
 
 
 class ParsingException(Exception):
@@ -1054,6 +1039,35 @@ class Collation:
         # Otherwise, return 0 as a float:
         return 0.0
 
+    def get_beast_code_map_for_unit(self, symbols, missing_symbol, vu_ind):
+        """Returns a string containing state/reading code mappings in BEAST format using the given single-state and missing state symbols for the character/variation unit at the given index.
+        If the variation unit at the given index is a singleton unit (i.e., if it has only one substantive reading), then a code for a dummy state will be included.
+
+        Args:
+            vu_ind: An integer index for the desired unit.
+
+        Returns:
+            A string containing comma-separated code mappings.
+        """
+        vu = self.variation_units[vu_ind]
+        vu_id = vu.id
+        code_map = {}
+        for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id])):
+            code_map[symbols[k]] = str(k)
+        # If this site is a singleton site, then add a code mapping for the dummy state:
+        if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+            code_map[symbols[1]] = str(1)
+        # Then add a mapping for the missing state, including a dummy state if this is a singleton site:
+        code_map[missing_symbol] = " ".join(
+            str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
+        )
+        # If this site is a singleton site, then add the dummy state to the missing state mapping:
+        if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+            code_map[missing_symbol] = code_map[missing_symbol] + " " + str(1)
+        # Then combine all of the mappings into a single string:
+        code_map_string = ", ".join([code + "=" + code_map[code] for code in code_map])
+        return code_map_string
+
     def get_beast_equilibrium_frequencies_for_unit(self, vu_ind):
         """Returns a string containing state/reading equilibrium frequencies in BEAST format for the character/variation unit at the given index.
         Since the equilibrium frequencies are not used with the substitution models, the equilibrium frequencies simply correspond to a uniform distribution over the states.
@@ -1163,8 +1177,6 @@ class Collation:
             file_addr: A string representing the path to an output file.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
         """
-        # Initialize the XML parser we will use for parsing XML template strings:
-        parser = et.XMLParser(encoding="utf-8", remove_blank_text=True)
         # Populate a list of sites that will correspond to columns of the sequence alignment:
         substantive_variation_unit_ids = self.variation_unit_ids
         if drop_constant:
@@ -1181,22 +1193,19 @@ class Collation:
         symbols = self.get_beast_symbols()
         date_map = self.get_beast_date_map(taxlabels)
         date_span = self.get_beast_date_span()
-        # Now fill in the main template string and convert it to an XML Element:
-        beast_xml = et.fromstring(
-            beast_template.format(
-                nsymbols=len(symbols), date_map=date_map, date_span=date_span, initial_origin=date_span + 1
-            ),
-            parser=parser,
-        )
-        # Get the element representing the alignment:
-        data_xml = beast_xml.find(".//data")
-        # If constant sites are included, then ensure that they are stripped from the analysis:
-        if not drop_constant:
-            data_xml.set("strip", "true")
-        # Then add the sequences for all witnesses:
-        start_sequence_comment = data_xml.xpath("./comment()[. = \" Start sequences \"]")[0]
-        current_sequence_index = data_xml.index(start_sequence_comment) + 1
+        # Then populate the necessary objects for the BEAST XML Jinja template:
+        witness_objects = []
+        variation_unit_objects = []
+        intrinsic_category_objects = []
+        transcriptional_category_objects = []
+        # Start with witnesses:
         for i, wit in enumerate(self.witnesses):
+            witness_object = {}
+            # Copy the ID for this witness:
+            witness_object["id"] = wit.id
+            # Copy its date bounds:
+            witness_object["min_date"] = wit.date_range[0]
+            witness_object["max_date"] = wit.date_range[1]
             # Populate its sequence from its entries in the witness's readings dictionary:
             sequence = ""
             for j, rdg_support in enumerate(self.readings_by_witness[wit.id]):
@@ -1230,37 +1239,21 @@ class Collation:
                                 sequence += ", 0; "
             # Strip the final semicolon and space from the sequence:
             sequence = sequence.strip("; ")
-            # Now fill in the sequence template string and convert it to an XML Element:
-            sequence_xml = et.fromstring(
-                sequence_template.format(wit_id=taxlabels[i], sequence=sequence), parser=parser
-            )
-            # Then insert it under the data element:
-            data_xml.insert(current_sequence_index, sequence_xml)
-            current_sequence_index += 1
-        # Next, add the character and state labels for all witnesses:
-        user_data_type_xml = beast_xml.find(".//userDataType")
-        start_charstatelabels_comment = user_data_type_xml.xpath("./comment()[. = \" Start charstatelabels \"]")[0]
-        current_charstatelabels_index = user_data_type_xml.index(start_charstatelabels_comment) + 1
+            # Then set the witness object's sequence attribute to this string:
+            witness_object["sequence"] = sequence
+            witness_objects.append(witness_object)
+        # Then proceed to variation units:
         for j, vu in enumerate(self.variation_units):
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
-            # First, construct the code map for this unit using the readings_by_witness dictionary:
-            code_map = {}
-            for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id])):
-                code_map[symbols[k]] = str(k)
-            # If this site is a singleton site, then add a code mapping for the dummy state:
-            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
-                code_map[symbols[1]] = str(1)
-            # Then add a mapping for the missing state, including a dummy state if this is a singleton site:
-            code_map[missing_symbol] = " ".join(
-                str(k) for k in range(len(self.substantive_readings_by_variation_unit_id[vu.id]))
-            )
-            # If this site is a singleton site, then add the dummy state to the missing state mapping:
-            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
-                code_map[missing_symbol] = code_map[missing_symbol] + " " + str(1)
-            # Then combine all of the mappings into a single string:
-            code_map_string = ", ".join([code + "=" + code_map[code] for code in code_map])
-            # Second, get the variation unit and reading labels:
+            variation_unit_object = {}
+            # Copy the ID of this variation unit:
+            variation_unit_object["id"] = vu.id
+            # Copy this variation unit's number of substantive readings:
+            variation_unit_object["nstates"] = len(self.substantive_readings_by_variation_unit_id[vu.id])
+            # Then construct the code map for this unit:
+            variation_unit_object["code_map"] = self.get_beast_code_map_for_unit(symbols, missing_symbol, j)
+            # Then populate a comma-separated string of reading labels for this unit:
             rdg_texts = []
             vu_label = vu.id
             for rdg in vu.readings:
@@ -1268,7 +1261,6 @@ class Collation:
                 if key not in substantive_variation_unit_reading_tuples_set:
                     continue
                 rdg_text = slugify(rdg.text, lowercase=False, allow_unicode=True, separator='_')
-                # rdg_text = slugify(rdg.text, lowercase=False, separator='_', replacements=[['η', 'h'], ['ω', 'w']])
                 # Replace any empty reading text with an omission marker:
                 if rdg_text == "":
                     rdg_text = "om."
@@ -1277,78 +1269,16 @@ class Collation:
             if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
                 rdg_texts.append("DUMMY")
             rdg_texts_string = ", ".join(rdg_texts)
-            # Now fill in the charstatelabels template string and convert it to an XML Element:
-            charstatelabels_xml = et.fromstring(
-                charstatelabels_template.format(
-                    vu_id=vu_label, code_map=code_map_string, nstates=str(len(rdg_texts)), rdg_texts=rdg_texts_string
-                ),
-                parser=parser,
-            )
-            # Then insert it under the userDataType element:
-            user_data_type_xml.insert(current_charstatelabels_index, charstatelabels_xml)
-            current_charstatelabels_index += 1
-        # TODO: Next, add the parameters corresponding to intrinsic odds:
-
-        # Next, add the parameters corresponding to transcriptional rates:
-        state_xml = beast_xml.find(".//state")
-        start_transcriptional_parameters_comment = state_xml.xpath(
-            "./comment()[. = \" Start transcriptional parameters \"]"
-        )[0]
-        current_transcriptional_parameter_index = state_xml.index(start_transcriptional_parameters_comment) + 1
-        for transcriptional_category in self.transcriptional_categories:
-            rate = self.transcriptional_rates_by_id[transcriptional_category]
-            estimate = "true" if rate is None else "false"
-            value = "1.0" if rate is None else str(rate)
-            transcriptional_rate_parameter_xml = et.fromstring(
-                transcriptional_rate_parameter_template.format(
-                    transcriptional_category=transcriptional_category, estimate=estimate, value=value
-                ),
-                parser=parser,
-            )
-            state_xml.insert(current_transcriptional_parameter_index, transcriptional_rate_parameter_xml)
-            current_transcriptional_parameter_index += 1
-        # Next, add the distribution data for each variation unit:
-        likelihood_distribution_xml = beast_xml.find(".//distribution[@id=\"likelihood\"]")
-        start_character_distributions_comment = likelihood_distribution_xml.xpath(
-            "./comment()[. = \" Start character distributions \"]"
-        )[0]
-        current_character_distribution_index = (
-            likelihood_distribution_xml.index(start_character_distributions_comment) + 1
-        )
-        character_ind = 0
-        for j, vu in enumerate(self.variation_units):
-            if vu.id not in substantive_variation_unit_ids_set:
-                continue
-            # Get the number of states, equilibrium frequencies, and root frequencies for this unit:
-            nstates = (
-                len(self.substantive_readings_by_variation_unit_id[vu.id])
-                if len(self.substantive_readings_by_variation_unit_id[vu.id]) > 1
-                else 2
-            )
-            equilibrium_frequencies_string = self.get_beast_equilibrium_frequencies_for_unit(j)
-            root_frequencies_string = self.get_beast_root_frequencies_for_unit(j)
-            # Now fill in the distribution template string and convert it to an XML Element:
-            distribution_xml = et.fromstring(
-                distribution_template.format(
-                    vu_ind=character_ind + 1,
-                    nstates=nstates,
-                    equilibrium_frequencies=equilibrium_frequencies_string,
-                    root_frequencies=root_frequencies_string,
-                    parser=parser,
-                )
-            )
-            # Next, add the rate parameters for this distribution element:
-            rates_parameter_xml = distribution_xml.find(".//parameter[@name=\"rates\"]")
-            start_rate_vars_comment = rates_parameter_xml.xpath("./comment()[. = \" Start rate vars \"]")[0]
-            current_var_index = rates_parameter_xml.index(start_rate_vars_comment) + 1
+            variation_unit_object["rdg_texts"] = rdg_texts_string
+            # Then populate this unit's equilibrium frequency string and its root frequency string:
+            variation_unit_object["equilibrium_frequencies"] = self.get_beast_equilibrium_frequencies_for_unit(j)
+            variation_unit_object["root_frequencies"] = self.get_beast_root_frequencies_for_unit(j)
+            # Then populate its transition rate matrix off-diagonal entries:
+            rate_objects = []
             if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
                 # If this is a singleton site, then use an arbitrary 2x2 rate matrix:
-                var_xml = et.fromstring(var_template.format(transcriptional_category="default"), parser=parser)
-                rates_parameter_xml.insert(current_var_index, var_xml)
-                current_var_index += 1
-                var_xml = et.fromstring(var_template.format(transcriptional_category="default"), parser=parser)
-                rates_parameter_xml.insert(current_var_index, var_xml)
-                current_var_index += 1
+                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
             else:
                 # Otherwise, proceed for every pair of readings in this unit:
                 for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
@@ -1358,137 +1288,68 @@ class Collation:
                             continue
                         # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
                         if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
-                            var_xml = et.fromstring(
-                                var_template.format(transcriptional_category="default"), parser=parser
-                            )
-                            rates_parameter_xml.insert(current_var_index, var_xml)
-                            current_var_index += 1
+                            rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
                             continue
-                        # Otherwise, check how many distinct categories of transcriptional relations hold between the first and second readings:
-                        else:
+                        # Otherwise, if only one category of transcriptional relations holds between the first and second readings,
+                        # then use its rate:
+                        if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
                             # If there is only one such category, then add its rate as a standalone var element:
-                            if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
-                                transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
-                                var_xml = et.fromstring(
-                                    var_template.format(transcriptional_category=transcriptional_category),
-                                    parser=parser,
-                                )
-                                rates_parameter_xml.insert(current_var_index, var_xml)
-                                current_var_index += 1
-                                continue
-                            # If there is more than one, then add a var element that is a sum of the individual categories' rates:
-                            else:
-                                transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
-                                args = []
-                                for transcriptional_category in transcriptional_categories:
-                                    args.append("%s_rate" % transcriptional_category)
-                                args_string = " ".join(args)
-                                ops = ["+"] * (len(args) - 1)
-                                ops_string = " ".join(ops)
-                                expression_string = " ".join([args_string, ops_string])
-                                rpn_calculator_xml = et.fromstring(
-                                    rpn_calculator_template.format(expression=expression_string)
-                                )
-                                # Add parameter elements under this for each transcriptional rate parameter:
-                                for transcriptional_category in transcriptional_categories:
-                                    rpn_calculator_parameter_xml = et.fromstring(
-                                        rpn_calculator_parameter_template.format(
-                                            transcriptional_category=transcriptional_category
-                                        )
-                                    )
-                                    rpn_calculator_xml.append(rpn_calculator_parameter_xml)
-                                rates_parameter_xml.insert(current_var_index, rpn_calculator_xml)
-                                current_var_index += 1
-                                continue
-            # Then insert this unit's completed distribution element under the likelihood distribution element:
-            likelihood_distribution_xml.insert(current_character_distribution_index, distribution_xml)
-            current_character_distribution_index += 1
-            character_ind += 1
-        # Next, add the operators for the transcriptional rate parameters that must be estimated:
-        run_xml = beast_xml.find(".//run")
-        start_transcriptional_operators_comment = run_xml.xpath(
-            "./comment()[. = \" Start transcriptional rate operators \"]"
-        )[0]
-        current_transcriptional_operator_index = run_xml.index(start_transcriptional_operators_comment) + 1
+                            transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+                            rate_objects.append(
+                                {"transcriptional_categories": [transcriptional_category], "expression": None}
+                            )
+                            continue
+                        # If there is more than one, then add a var element that is a sum of the individual categories' rates:
+                        transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
+                        args = []
+                        for transcriptional_category in transcriptional_categories:
+                            args.append("%s_rate" % transcriptional_category)
+                        args_string = " ".join(args)
+                        ops = ["+"] * (len(args) - 1)
+                        ops_string = " ".join(ops)
+                        expression_string = " ".join([args_string, ops_string])
+                        rate_objects.append(
+                            {"transcriptional_categories": transcriptional_categories, "expression": expression_string}
+                        )
+            variation_unit_object["rates"] = rate_objects
+            variation_unit_objects.append(variation_unit_object)
+        # Then proceed to intrinsic odds categories:
+        for intrinsic_category in self.intrinsic_categories:
+            intrinsic_category_object = {}
+            # Copy the ID of this intrinsic category:
+            intrinsic_category_object["id"] = intrinsic_category
+            # Then copy the odds factors associated with this intrinsic category,
+            # setting it to 1.0 if it is not specified and setting the estimate attribute accordingly:
+            odds = self.intrinsic_odds_by_id[intrinsic_category]
+            intrinsic_category_object["odds"] = odds if odds is not None else 1.0
+            intrinsic_category_object["estimate"] = "false" if odds is not None else "true"
+            intrinsic_category_objects.append(intrinsic_category_object)
+        # The proceed to transcriptional rate categories:
         for transcriptional_category in self.transcriptional_categories:
+            transcriptional_category_object = {}
+            # Copy the ID of this transcriptional category:
+            transcriptional_category_object["id"] = transcriptional_category
+            # Then copy the rate of this transcriptional category,
+            # setting it to 1.0 if it is not specified and setting the estimate attribute accordingly:
             rate = self.transcriptional_rates_by_id[transcriptional_category]
-            # If the rate is fixed, then no operator is needed:
-            if rate is not None:
-                continue
-            transcriptional_rate_parameter_operator_xml = et.fromstring(
-                transcriptional_rate_parameter_operator_template.format(
-                    transcriptional_category=transcriptional_category
-                ),
-                parser=parser,
-            )
-            run_xml.insert(current_transcriptional_operator_index, transcriptional_rate_parameter_operator_xml)
-            current_transcriptional_operator_index += 1
-        # Next, add the loggers for the transcriptional rate parameters that must be estimated:
-        tracelog_logger_xml = beast_xml.find(".//logger[@id=\"tracelog\"]")
-        start_transcriptional_loggers_comment = tracelog_logger_xml.xpath(
-            "./comment()[. = \" Start transcriptional rate loggers \"]"
-        )[0]
-        current_transcriptional_log_index = tracelog_logger_xml.index(start_transcriptional_loggers_comment) + 1
-        for transcriptional_category in self.transcriptional_categories:
-            rate = self.transcriptional_rates_by_id[transcriptional_category]
-            # If the rate is fixed, then no logger is needed:
-            if rate is not None:
-                continue
-            transcriptional_rate_parameter_log_xml = et.fromstring(
-                transcriptional_rate_parameter_log_template.format(transcriptional_category=transcriptional_category),
-                parser=parser,
-            )
-            tracelog_logger_xml.insert(current_transcriptional_log_index, transcriptional_rate_parameter_log_xml)
-            current_transcriptional_log_index += 1
-        # Next, add the ancestral state logger for each variation unit:
-        ancestral_sequence_logger_xml = beast_xml.find(".//logger[@id=\"ancestralStateLogger\"]")
-        start_character_ancestral_state_loggers_comment = ancestral_sequence_logger_xml.xpath(
-            "./comment()[. = \" Start character ancestral state loggers \"]"
-        )[0]
-        current_character_ancestral_state_log_index = (
-            ancestral_sequence_logger_xml.index(start_character_ancestral_state_loggers_comment) + 1
+            transcriptional_category_object["rate"] = rate if rate is not None else 1.0
+            transcriptional_category_object["estimate"] = "false" if rate is not None else "true"
+            transcriptional_category_objects.append(transcriptional_category_object)
+        # Now render the output XML file using the Jinja template:
+        root_dir = Path(__file__).parent.parent
+        env = Environment(loader=FileSystemLoader(root_dir / "templates"), autoescape=select_autoescape())
+        template = env.get_template("beast_template.xml")
+        rendered = template.render(
+            nsymbols=len(symbols),
+            date_map=date_map,
+            date_span=date_span,
+            witnesses=witness_objects,
+            variation_units=variation_unit_objects,
+            intrinsic_categories=intrinsic_category_objects,
+            transcriptional_categories=transcriptional_category_objects,
         )
-        character_ind = 0
-        for j, vu in enumerate(self.variation_units):
-            if vu.id not in substantive_variation_unit_ids_set:
-                continue
-            character_log_xml = et.fromstring(character_log_template.format(vu_ind=character_ind + 1), parser=parser)
-            ancestral_sequence_logger_xml.insert(current_character_ancestral_state_log_index, character_log_xml)
-            current_character_ancestral_state_log_index += 1
-            character_ind += 1
-
-        # Allow for sampling of the dates for witnesses with a range dates
-        # See here for information: https://www.beast2.org/2015/06/09/sampling-tip-dates.html
-        prior = beast_xml.find(".//distribution[@id=\"prior\"]")
-        start_date_operators_comment = run_xml.xpath(
-            "./comment()[. = \" Start date operators \"]"
-        )[0]
-        current_date_operator_index = run_xml.index(start_date_operators_comment) + 1
-        tracelog = beast_xml.find(".//logger[@id=\"tracelog\"]")
-        for i, wit in enumerate(self.witnesses):
-            taxlabel = taxlabels[i]
-            date_range = wit.date_range
-            # If either end of this witness's date range is empty, or if they are equal, then do not include it:
-            if date_range[0] is None or date_range[1] is None or date_range[0] == date_range[1]:
-                continue
-
-            date_prior_xml = et.fromstring(
-                date_prior_template.format(wit_id=taxlabel, min_date=date_range[0], max_date=date_range[1]), 
-                parser=parser
-            )
-            prior.append(date_prior_xml)
-
-            date_operator_xml = et.fromstring(date_operator_template.format(wit_id=taxlabel), parser=parser)
-            run_xml.insert(current_date_operator_index, date_operator_xml)
-            current_date_operator_index += 1
-
-            date_logger_xml = et.fromstring(date_log_template.format(wit_id=taxlabel), parser=parser)
-            tracelog.append(date_logger_xml)
-
-        # Finally, write the full XML tree to the output file address:
-        et.ElementTree(beast_xml).write(
-            file_addr, encoding="utf-8", standalone=False, xml_declaration=True, pretty_print=True
-        )
+        with open(file_addr, "w", encoding="utf-8") as f:
+            f.write(rendered)
         return
 
     def to_numpy(self, drop_constant: bool = False, split_missing: bool = True):
