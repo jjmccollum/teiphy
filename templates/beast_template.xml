@@ -101,7 +101,7 @@
                                 {%- if r.expression %}
                                 <var spec="RPNcalculator" expression="{{ r.expression }}">
                                     {%- for tc in r.transcriptional_categories %}
-                                    <var idref="{{ tc }}_rate"/>
+                                    <parameter idref="{{ tc }}_rate"/>
                                     {%- endfor %}
                                 </var>
                                 {%- else %}
