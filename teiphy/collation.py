@@ -1343,6 +1343,7 @@ class Collation:
             nsymbols=len(symbols),
             date_map=date_map,
             date_span=date_span,
+            initial_origin=date_span + 1,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
             intrinsic_categories=intrinsic_category_objects,

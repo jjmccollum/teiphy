@@ -568,7 +568,7 @@ def test_to_beast_variable_rates():
         for xml_transcriptional_category in xml_transcriptional_categories:
             transcriptional_category = xml_transcriptional_category.get("{%s}id" % xml_ns)
             beast_xml_transcriptional_rate_categories = beast_xml.xpath(
-                "//parameter[@id=\"%s_rate\"]" % transcriptional_category
+                "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
             )
             assert len(beast_xml_transcriptional_rate_categories) == 1
             assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == 1.0
@@ -608,7 +608,7 @@ def test_to_beast_fixed_rates():
                 xml_transcriptional_category.xpath("./tei:certainty", namespaces={"tei": tei_ns})[0].get("degree")
             )
             beast_xml_transcriptional_rate_categories = beast_xml.xpath(
-                "//parameter[@id=\"%s_rate\"]" % transcriptional_category
+                "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
             )
             assert len(beast_xml_transcriptional_rate_categories) == 1
             assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == transcriptional_rate
