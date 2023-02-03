@@ -26,7 +26,7 @@
         <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
     </birthDeathSkylineModel>
-    <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree">
+    <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree" rateCategories="74">
         <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
 		<parameter spec="parameter.RealParameter" id="clock.rate" name="clock.rate" lower="0.0" upper="100.0" value="1.0"/>
 	</branchRateModel>
