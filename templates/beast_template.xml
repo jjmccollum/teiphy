@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beast version="2.7" namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.inference.distribution:beast.base.inference.util:beast.base.evolution:beast.base.evolution.alignment:beast.base.evolution.datatype:beast.base.evolution.tree:beast.base.evolution.tree.coalescent:beast.base.evolution.branchratemodel:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood">
     <data spec="Alignment" id="alignment" dataType="standard" statecount="{{ nsymbols }}">
-        <!-- Start sequences -->
+        <!-- Start witness sequences -->
         {%- for wit in witnesses %}
         <sequence spec="Sequence" taxon="{{ wit.id }}" uncertain="true" value="{{ wit.sequence }}"/>
         {%- endfor %}
-        <!-- End sequences -->
         <userDataType spec="StandardData" nrOfStates="{{ nsymbols }}">
-            <!-- Start charstatelabels -->
+            <!-- Start variation unit and state labels -->
             {%- for vu in variation_units %}
             <charstatelabels spec="UserDataType" characterName="{{ vu.id }}" states="{{ vu.nstates }}" codeMap="{{ vu.code_map }}" value="{{ vu.rdg_texts }}"/>
             {%- endfor %}
-            <!-- End charstatelabels -->
         </userDataType>
     </data>
     <tree spec="Tree" id="tree">
@@ -76,7 +74,7 @@
                     <taxonset id="taxonSet.{{ wit.id }}" spec="TaxonSet">
                         <taxon id="{{ wit.id }}" spec="Taxon"/>
                     </taxonset>
-                    <distr spec="beast.base.inference.distribution.Uniform" id="datePrior.{{ wit.id }}.Uniform" lower="{{ wit.min_date }}" upper="{{ wit.max_date }}"/>
+                    <distr spec="Uniform" id="datePrior.{{ wit.id }}.Uniform" lower="{{ wit.min_date }}" upper="{{ wit.max_date }}"/>
                 </distribution>
                 {%- endif %}
                 {%- endfor %}
@@ -126,7 +124,7 @@
         <!-- Operators for the Birth-Death Skyline model -->
         <operator spec="ScaleOperator" id="bdskySerialTreeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
         <operator spec="ScaleOperator" id="bdskySerialTreeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="beast.base.evolution.operator.Uniform" id="bdskySerialUniformOperator" tree="@tree" weight="30.0"/>
+        <operator spec="Uniform" id="bdskySerialUniformOperator" tree="@tree" weight="30.0"/>
         <operator spec="SubtreeSlide" id="bdskySerialSubtreeSlide" tree="@tree" weight="15.0"/>
         <operator spec="Exchange" id="bdskySerialNarrow" tree="@tree" weight="0.0"/>
         <operator spec="Exchange" id="bdskySerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
