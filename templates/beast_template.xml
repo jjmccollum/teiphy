@@ -143,7 +143,7 @@
 			<up idref="tree"/>
 			<down idref="clock.mean"/>
 		</operator>
-		<operator id="clock.rate_Scaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.rate" />
+		<operator id="clock.rate_Scaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.mean" />
         <!-- Start intrinsic odds operators -->
 
         <!-- Start transcriptional rate operators -->
