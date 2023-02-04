@@ -24,10 +24,8 @@
         <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
     </birthDeathSkylineModel>
-    <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree">
-        <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
-		<parameter spec="parameter.RealParameter" id="clock.rate" name="clock.rate" lower="0.0" upper="100.0" value="1.0"/>
-        <rateCategories spec="parameter.IntegerParameter" id="clock.rateCategories"  dimension="{{ clock_rate_categories }}" value="1.0"/>
+    <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree" rateCategories="@clock.rateCategories">
+        <distr spec="LogNormalDistributionModel" M="@clock.mean" S="@clock.stdDev"/>
 	</branchRateModel>
     <!-- The chainLength attribute should be increased to a large number (e.g., 20000000) for non-test runs -->
     <run spec="MCMC" id="mcmc" chainLength="100000">
@@ -38,6 +36,9 @@
 			<stateNode idref="samplingProportion"/>
 			<stateNode idref="reproductiveNumber"/>
 			<stateNode idref="clock.rate"/>
+            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
+            <stateNode spec="parameter.RealParameter" id="clock.stdDev" lower="0.0" upper="Infinity" value="0.000001" estimate="false"/>
+            <stateNode spec="parameter.IntegerParameter" id="clock.rateCategories"  dimension="74" value="1"/>
             <!-- Start intrinsic odds parameters -->
 
             <!-- Start transcriptional rate parameters -->
@@ -48,6 +49,7 @@
             All other rates in the substitution matrices will be estimated relative to this.
             If no other transcriptional rate parameters are specified, then the substitution matrices will correspond to those of the Lewis Mk model. -->
             <stateNode spec="parameter.RealParameter" id="default_rate" value="1.0" estimate="false"/>
+
         </state>
         <distribution spec="CompoundDistribution" id="posterior">
             <distribution spec="CompoundDistribution" id="prior">
@@ -74,7 +76,7 @@
                     <taxonset id="taxonSet.{{ wit.id }}" spec="TaxonSet">
                         <taxon id="{{ wit.id }}" spec="Taxon"/>
                     </taxonset>
-                    <distr spec="Uniform" id="datePrior.{{ wit.id }}.Uniform" lower="{{ wit.min_date }}" upper="{{ wit.max_date }}"/>
+                    <distr spec="beast.base.inference.distribution.Uniform" id="datePrior.{{ wit.id }}.Uniform" lower="{{ wit.min_date }}" upper="{{ wit.max_date }}"/>
                 </distribution>
                 {%- endif %}
                 {%- endfor %}
@@ -124,7 +126,7 @@
         <!-- Operators for the Birth-Death Skyline model -->
         <operator spec="ScaleOperator" id="bdskySerialTreeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
         <operator spec="ScaleOperator" id="bdskySerialTreeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="Uniform" id="bdskySerialUniformOperator" tree="@tree" weight="30.0"/>
+        <operator spec="beast.base.evolution.operator.Uniform" id="bdskySerialUniformOperator" tree="@tree" weight="30.0"/>
         <operator spec="SubtreeSlide" id="bdskySerialSubtreeSlide" tree="@tree" weight="15.0"/>
         <operator spec="Exchange" id="bdskySerialNarrow" tree="@tree" weight="0.0"/>
         <operator spec="Exchange" id="bdskySerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
