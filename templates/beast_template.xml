@@ -50,7 +50,6 @@
             All other rates in the substitution matrices will be estimated relative to this.
             If no other transcriptional rate parameters are specified, then the substitution matrices will correspond to those of the Lewis Mk model. -->
             <stateNode spec="parameter.RealParameter" id="default_rate" value="1.0" estimate="false"/>
-
         </state>
         <distribution spec="CompoundDistribution" id="posterior">
             <distribution spec="CompoundDistribution" id="prior">
