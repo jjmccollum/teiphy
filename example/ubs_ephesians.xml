@@ -13,10 +13,15 @@
                 </availability>
             </publicationStmt>
             <sourceDesc>
+                <!-- Description of the work (including a date range of origin) whose manuscript tradition is detailed below -->
+                <bibl>
+                    <title>Πρὸς Ἐφεσίους</title>
+                    <date notBefore="50" notAfter="80"/>
+                </bibl>
                 <listWit>
-                    <!-- Root -->
-                    <witness type="root" n="UBS">
-                        <origDate when="50"/>
+                    <!-- Reconstructed texts -->
+                    <witness n="UBS">
+                        <origDate notBefore="50" notAfter="80"/>
                     </witness>
                     <!-- Papyri -->
                     <witness n="P46">

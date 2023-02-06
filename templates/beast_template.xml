@@ -19,26 +19,28 @@
         <taxonset spec="TaxonSet" idref="taxa"/>
     </tree>
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
-        <parameter spec="parameter.RealParameter" id="origin" name="origin" lower="{{ date_span }}" upper="Infinity" value="{{ initial_origin }}"/>
-        <parameter spec="parameter.RealParameter" id="reproductiveNumber" name="reproductiveNumber" lower="0.0" upper="Infinity" value="2.0"/>
-        <parameter spec="parameter.RealParameter" id="becomeUninfectiousRate" name="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
-        <parameter spec="parameter.RealParameter" id="samplingProportion" name="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
+        {%- if origin_span[1] %}
+        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[1] }}"/>
+        {%- else %}
+        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="Infinity" value="1.0"/>
+        {%- endif %}
+        <reproductiveNumber spec="parameter.RealParameter" id="reproductiveNumber" lower="0.0" upper="Infinity" value="2.0"/>
+        <becomeUninfectiousRate spec="parameter.RealParameter" id="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
+        <samplingProportion spec="parameter.RealParameter" id="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
     </birthDeathSkylineModel>
     <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree" clock.rate="@clock.mean" rateCategories="@clock.rateCategories">
-        <distr spec="LogNormalDistributionModel" meanInRealSpace="true" S="@clock.stdDev">
-            <M spec="parameter.RealParameter" id="clock.distr.M" lower="0.0" upper="1.0" value="1.0" estimate="false"/>
-        </distr>
-	</branchRateModel>
+        <distr spec="LogNormalDistributionModel" meanInRealSpace="true" M="@clock.mean" S="@clock.stdDev"/>
+    </branchRateModel>
     <!-- The chainLength attribute should be increased to a large number (e.g., 20000000) for non-test runs -->
     <run spec="MCMC" id="mcmc" chainLength="100000">
         <state spec="State" id="state" storeEvery="5000">
             <stateNode idref="tree"/>
             <stateNode idref="origin"/>
-			<stateNode idref="becomeUninfectiousRate"/>
-			<stateNode idref="samplingProportion"/>
-			<stateNode idref="reproductiveNumber"/>
+            <stateNode idref="becomeUninfectiousRate"/>
+            <stateNode idref="samplingProportion"/>
+            <stateNode idref="reproductiveNumber"/>
             <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
-            <stateNode spec="parameter.RealParameter" id="clock.stdDev" lower="0.0" upper="Infinity" value="0.000001" estimate="false"/>
+            <stateNode spec="parameter.RealParameter" id="clock.stdDev" lower="0.0" upper="Infinity" value="0"/>
             <stateNode spec="parameter.IntegerParameter" id="clock.rateCategories"  dimension="{{ clock_rate_categories }}" value="1"/>
             <!-- Start intrinsic odds parameters -->
 
@@ -58,7 +60,11 @@
                     <distribution idref="birthDeath"/>
                 </distribution>
                 <distribution spec="Prior" id="originPrior" x="@origin">
-                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ date_span }}"/>
+                    {%- if origin_span[1] %}
+                    <distr spec="beast.base.inference.distribution.Uniform" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}"/>
+                    {%- else %}
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ origin_span[0] }}"/>
+                    {%- endif %}
                 </distribution>
                 <distribution spec="Prior" id="samplingProportionPrior" x="@samplingProportion">
                     <distr spec="Beta" alpha="1.0" beta="1.0" offset="0.0"/>
@@ -141,10 +147,10 @@
         </operator>
         <!-- Operators for the clock model -->
         <operator id="tree_updown" spec="UpDownOperator" scaleFactor=".75" weight="10">
-			<up idref="tree"/>
-			<down idref="clock.mean"/>
-		</operator>
-		<operator id="clock.rate_Scaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.mean" />
+            <up idref="tree"/>
+            <down idref="clock.mean"/>
+        </operator>
+        <operator id="clock.rate_Scaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.mean"/>
         <!-- Start intrinsic odds operators -->
 
         <!-- Start transcriptional rate operators -->

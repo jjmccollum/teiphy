@@ -2,6 +2,7 @@
 
 from typing import List, Union
 from pathlib import Path
+from datetime import datetime  # for calculating the current year (for dating and tree height purposes)
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
 from lxml import etree as et  # for reading TEI XML inputs
@@ -17,6 +18,10 @@ from .variation_unit import VariationUnit
 
 
 class ParsingException(Exception):
+    pass
+
+
+class WitnessDateException(Exception):
     pass
 
 
@@ -40,6 +45,7 @@ class Collation:
         readings_by_witness: A dictionary mapping base witness ID strings to lists of reading support coefficients for all units (with at least two substantive readings).
         substantive_variation_unit_ids: A list of ID strings for variation units with two or more substantive readings.
         substantive_variation_unit_reading_tuples: A list of (variation unit ID, reading ID) tuples for substantive readings.
+        origin_date_range: A list containing lower and upper bounds on the origin date of the collated work.
         verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
     """
 
@@ -50,6 +56,7 @@ class Collation:
         trivial_reading_types: List[str] = [],
         missing_reading_types: List[str] = [],
         fill_corrector_lacunae: bool = False,
+        origin_date_range: List[int] = [],
         verbose: bool = False,
     ):
         """Constructs a new Collation instance with the given settings.
@@ -78,12 +85,17 @@ class Collation:
         self.intrinsic_odds_by_id = {}
         self.transcriptional_categories = []
         self.transcriptional_rates_by_id = {}
+        self.origin_date_range = []
         # Now parse the XML tree to populate these data structures:
         if self.verbose:
             print("Initializing collation...")
         t0 = time.time()
+        self.parse_origin_date_range(xml)
         self.parse_list_wit(xml)
         self.validate_wits(xml)
+        self.update_origin_date_range_from_witness_date_ranges()
+        if self.origin_date_range[0] is not None:
+            self.update_witness_date_ranges_from_origin_date_range()
         self.parse_intrinsic_odds(xml)
         self.parse_transcriptional_rates(xml)
         self.parse_apps(xml)
@@ -92,6 +104,38 @@ class Collation:
         t1 = time.time()
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
+
+    def parse_origin_date_range(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, populates this Collation's list of origin date bounds.
+        If no bounds are specified, then the current year is set to the default upper bound.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Parsing origin date range...")
+        t0 = time.time()
+        self.origin_date_range = [None, datetime.now().year]
+        for date in xml.xpath(
+            "//tei:sourceDesc//tei:bibl//tei:date|//tei:sourceDesc//tei:biblStruct//tei:date|//tei:sourceDesc//tei:biblFull//tei:date",
+            namespaces={"tei": tei_ns},
+        ):
+            # Try the @when attribute first; if it is set, then it accounts for both ends of the date range:
+            if date.get("when") is not None:
+                self.origin_date_range[0] = int(date.get("when").split("-")[0])
+                self.origin_date_range[1] = self.origin_date_range[0]
+            # Failing that, if it has @from and @to attributes (indicating the period over which the work was completed),
+            # then the completion date of the work accounts for both ends of the date range:
+            elif date.get("to") is not None:
+                self.origin_date_range[0] = int(date.get("to").split("-")[0])
+                self.origin_date_range[1] = self.origin_date_range[0]
+            # Failing that, set lower and upper bounds on the origin date using the the @notBefore and @notAfter attributes:
+            elif date.get("notBefore") is not None or date.get("notAfter") is not None:
+                if date.get("notBefore") is not None:
+                    self.origin_date_range[0] = int(date.get("notBefore").split("-")[0])
+                if date.get("notAfter") is not None:
+                    self.origin_date_range[1] = int(date.get("notAfter").split("-")[0])
+        return
 
     def get_base_wit(self, wit: str):
         """Given a witness siglum, strips of the specified manuscript suffixes until the siglum matches one in the witness list or until no more suffixes can be stripped.
@@ -162,6 +206,98 @@ class Collation:
             print("Finished processing %d witnesses in %0.4fs." % (len(self.witnesses), t1 - t0))
         return
 
+    def validate_wits(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, checks if any witness sigla listed in a rdg, rdgGrp, or witDetail element,
+        once stripped of ignored suffixes, is not found in the witness list.
+        A warning will be issued for each distinct siglum like this.
+        This method also checks if the upper bound of any witness's date is earlier than the lower bound on the collated work's date of origin
+        and throws an exception if so.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Validating witness list against collation...")
+        t0 = time.time()
+        # There is no listWit element: collect all distinct witness sigla in the collation and raise an exception listing them:
+        distinct_extra_sigla = set()
+        extra_sigla = []
+        # Proceed for each rdg, rdgGrp, or witDetail element:
+        for rdg in xml.xpath("//tei:rdg|//tei:rdgGrp|//tei:witDetail", namespaces={"tei": tei_ns}):
+            wit_str = rdg.get("wit") if rdg.get("wit") is not None else ""
+            wits = wit_str.split()
+            for wit in wits:
+                siglum = wit.strip("#")  # remove the URI prefix, if there is one
+                base_siglum = self.get_base_wit(siglum)
+                if base_siglum not in self.witness_index_by_id:
+                    if base_siglum not in distinct_extra_sigla:
+                        distinct_extra_sigla.add(base_siglum)
+                        extra_sigla.append(base_siglum)
+        if len(extra_sigla) > 0:
+            extra_sigla.sort()
+            msg = ""
+            msg += "WARNING: The following sigla occur in the collation that do not have corresponding witness entries in the listWit:\n"
+            msg += ", ".join(extra_sigla)
+            print(msg)
+        # If the lower bound on the date of origin is defined, then check each witness against it:
+        if self.origin_date_range[0] is not None:
+            bad_date_witness_sigla = []
+            bad_date_upper_bounds_by_witness = {}
+            for i, wit in enumerate(self.witnesses):
+                if wit.date_range[1] is not None and wit.date_range[1] < self.origin_date_range[0]:
+                    bad_date_witness_sigla.append(wit.id)
+                    bad_date_upper_bounds_by_witness[wit.id] = wit.date_range[1]
+            if len(bad_date_witness_sigla) > 0:
+                msg = ""
+                msg += "The following witnesses have their latest possible dates before the earliest date of origin %d specified for the collated work:\n"
+                msg += ", ".join(
+                    [
+                        (siglum + "(" + str(bad_date_upper_bounds_by_witness[siglum]) + ")")
+                        for siglum in bad_date_witness_sigla
+                    ]
+                )
+                raise WitnessDateException(msg)
+        t1 = time.time()
+        if self.verbose:
+            print("Finished witness validation in %0.4fs." % (t1 - t0))
+        return
+
+    def update_origin_date_range_from_witness_date_ranges(self):
+        """Conditionally updates the upper bound on the date of origin of the work represented by this Collation
+        based on the upper bounds on the witnesses' dates.
+        Since all witness dates have a default upper bound on the current year, they are assumed to be defined.
+        """
+        if self.verbose:
+            print("Updating upper bound on origin date using witness dates...")
+        t0 = time.time()
+        # Set the origin date to the earliest witness date upper bound:
+        min_witness_date_upper_bound = min([wit.date_range[1] for wit in self.witnesses])
+        self.origin_date_range[1] = min(self.origin_date_range[1], min_witness_date_upper_bound)
+        t1 = time.time()
+        if self.verbose:
+            print("Finished updating upper bound on origin date in %0.4fs." % (t1 - t0))
+        return
+
+    def update_witness_date_ranges_from_origin_date_range(self):
+        """Attempts to update the lower bounds on the witnesses' dates of origin of the work represented by this Collation
+        using the lower bound on the date of origin of the work represented by this Collation.
+        This method is only invoked if the collated work has a lower bound on its date of origin specified.
+        """
+        if self.verbose:
+            print("Updating lower bounds on witness dates using origin date...")
+        t0 = time.time()
+        # Set the origin date to the earliest witness date upper bound:
+        for i, wit in enumerate(self.witnesses):
+            wit.date_range[0] = (
+                max(wit.date_range[0], self.origin_date_range[0])
+                if wit.date_range[0] is not None
+                else self.origin_date_range[0]
+            )
+        t1 = time.time()
+        if self.verbose:
+            print("Finished updating lower bounds on witness dates in %0.4fs." % (t1 - t0))
+        return
+
     def parse_intrinsic_odds(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates this Collation's list of intrinsic probability categories
         (e.g., "absolutely more likely," "highly more likely," "more likely," "slightly more likely," "equally likely")
@@ -229,42 +365,6 @@ class Collation:
                 "Finished processing %d transcriptional change categories in %0.4fs."
                 % (len(self.transcriptional_rates_by_id), t1 - t0)
             )
-        return
-
-    def validate_wits(self, xml: et.ElementTree):
-        """Given an XML tree for a collation, checks if any witness sigla listed in a rdg, rdgGrp, or witDetail element,
-        once stripped of ignored suffixes, is not found in the witness list.
-        A warning will be issued for each distinct siglum like this.
-
-        Args:
-            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
-        """
-        if self.verbose:
-            print("Validating witness list against collation...")
-        t0 = time.time()
-        # There is no listWit element: collect all distinct witness sigla in the collation and raise an exception listing them:
-        distinct_extra_sigla = set()
-        extra_sigla = []
-        # Proceed for each rdg, rdgGrp, or witDetail element:
-        for rdg in xml.xpath("//tei:rdg|//tei:rdgGrp|//tei:witDetail", namespaces={"tei": tei_ns}):
-            wit_str = rdg.get("wit") if rdg.get("wit") is not None else ""
-            wits = wit_str.split()
-            for wit in wits:
-                siglum = wit.strip("#")  # remove the URI prefix, if there is one
-                base_siglum = self.get_base_wit(siglum)
-                if base_siglum not in self.witness_index_by_id:
-                    if base_siglum not in distinct_extra_sigla:
-                        distinct_extra_sigla.add(base_siglum)
-                        extra_sigla.append(base_siglum)
-        if len(extra_sigla) > 0:
-            extra_sigla.sort()
-            msg = ""
-            msg += "WARNING: The following sigla occur in the collation that do not have corresponding witness entries in the listWit:\n"
-            msg += ", ".join(extra_sigla)
-            print(msg)
-        t1 = time.time()
-        if self.verbose:
-            print("Finished witness validation in %0.4fs." % (t1 - t0))
         return
 
     def validate_intrinsic_relations(self):
@@ -616,38 +716,31 @@ class Collation:
             f.write("End;")
             # If calibrate_dates is set, then add the assumptions block:
             if calibrate_dates:
-                # Attempt to get the minimum and maximum dates for witnesses; if we can't do this, then don't write an assumptions block:
-                min_date = None
-                max_date = None
-                try:
-                    min_date = min([wit.date_range[0] for wit in self.witnesses if wit.date_range[0] is not None])
-                    max_date = max([wit.date_range[1] for wit in self.witnesses if wit.date_range[1] is not None])
-                except Exception as e:
-                    print("WARNING: no witnesses have date ranges; no Assumptions block will be written!")
-                    return
                 f.write("\n\n")
                 f.write("Begin ASSUMPTIONS;\n")
                 # Set the scale to years:
                 f.write("\tOPTIONS SCALE = years;\n\n")
-                # Then calibrate the date distributions for each witness that has date information specified:
+                # Then calibrate the witness ages:
                 calibrate_strings = []
                 for i, wit in enumerate(self.witnesses):
                     taxlabel = taxlabels[i]
-                    # If either end of this witness's date range is empty, then use the min and max dates over all witnesses as defaults:
                     date_range = wit.date_range
-                    if date_range[0] is None and date_range[1] is None:
-                        date_range = tuple([min_date, max_date])
-                    elif date_range[0] is None:
-                        date_range = tuple([min_date, date_range[1]])
-                    elif date_range[1] is None:
-                        date_range = tuple([date_range[0], max_date])
-                    # If both ends of the date range are the same, then use a fixed distribution:
-                    if date_range[0] == date_range[1]:
-                        calibrate_string = "\tCALIBRATE %s = fixed(%d)" % (taxlabel, date_range[0])
-                    # If they are different, then use a uniform distribution:
+                    if date_range[0] is not None:
+                        # If there is a lower bound on the witness's date, then use either a fixed or uniform distribution,
+                        # depending on whether the upper and lower bounds match:
+                        min_age = datetime.now().year - date_range[1]
+                        max_age = datetime.now().year - date_range[0]
+                        if min_age == max_age:
+                            calibrate_string = "\tCALIBRATE %s = fixed(%d)" % (taxlabel, min_age)
+                            calibrate_strings.append(calibrate_string)
+                        else:
+                            calibrate_string = "\tCALIBRATE %s = uniform(%d,%d)" % (taxlabel, min_age, max_age)
+                            calibrate_strings.append(calibrate_string)
                     else:
-                        calibrate_string = "\tCALIBRATE %s = uniform(%d,%d)" % (taxlabel, date_range[0], date_range[1])
-                    calibrate_strings.append(calibrate_string)
+                        # If there is no lower bound on the witness's date, then use an offset log-normal distribution:
+                        min_age = datetime.now().year - date_range[1]
+                        calibrate_string = "\tCALIBRATE %s = offsetlognormal(%d,0.0,1.0)" % (taxlabel, min_age)
+                        calibrate_strings.append(calibrate_string)
                 # Then print the calibrate strings, separated by commas and line breaks and terminated by a semicolon:
                 f.write("%s;\n\n" % ",\n".join(calibrate_strings))
                 # End the assumptions block:
@@ -658,44 +751,48 @@ class Collation:
                 f.write("Begin MRBAYES;\n")
                 # Turn on the autoclose feature by default:
                 f.write("\tset autoclose=yes;\n")
-                # Attempt to get the minimum and maximum dates for witnesses; if we can't do this, then don't write any age calibration settings:
-                min_date = None
-                max_date = None
-                try:
-                    min_date = min([wit.date_range[0] for wit in self.witnesses if wit.date_range[0] is not None])
-                    max_date = max([wit.date_range[1] for wit in self.witnesses if wit.date_range[1] is not None])
-                except Exception as e:
-                    print(
-                        "WARNING: no witnesses have date ranges; no clock model will be assumed and no date calibrations will be used!"
-                    )
-                if min_date is not None and max_date is not None:
-                    f.write("\n")
-                    f.write("\tprset brlenspr = clock:uniform;\n")
-                    f.write("\tprset nodeagepr = calibrated;\n")
-                    # Then calibrate the date distributions for each witness that has date information specified:
-                    calibrate_strings = []
-                    for i, wit in enumerate(self.witnesses):
-                        taxlabel = taxlabels[i]
-                        # If either end of this witness's date range is empty, then use the min and max dates over all witnesses as defaults:
-                        date_range = wit.date_range
-                        if date_range[0] is None and date_range[1] is None:
-                            date_range = tuple([min_date, max_date])
-                        elif date_range[0] is None:
-                            date_range = tuple([min_date, date_range[1]])
-                        elif date_range[1] is None:
-                            date_range = tuple([date_range[0], max_date])
-                        # If both ends of the date range are the same, then use a fixed distribution:
-                        if date_range[0] == date_range[1]:
-                            f.write(
-                                "\tcalibrate %s = fixed(%d);\n" % (taxlabel, max_date - date_range[0])
-                            )  # get age by subtracting date from latest date:
-                        # If they are different, then use a uniform distribution:
+                # Set all sites to have the same fixed gamma rate and shape parameters:
+                f.write("\n")
+                f.write("\tprset shapepr = fixed(1.0);\n")
+                f.write("\tprset ratecorrpr = fixed(1.0);\n")
+                # Set the branch lengths to be governed by a birth-death clock model, and set up the parameters for this model:
+                f.write("\n")
+                f.write("\tprset brlenspr = clock:birthdeath;\n")
+                f.write("\tprset speciationpr = uniform(0.0,10.0);\n")
+                f.write("\tprset extinctionpr  = uniform(0.0,10.0);\n")
+                f.write("\tprset sampleprob = 0.01;\n")
+                # Use an uncorrelated relaxed clock model with independent gamma rates:
+                f.write("\n")
+                f.write("\tprset clockvarpr=igr;\n")
+                # Set the priors on the tree age depending on the date range for the origin of the collated work:
+                f.write("\n")
+                if self.origin_date_range[0] is not None:
+                    min_tree_age = datetime.now().year - self.origin_date_range[1]
+                    max_tree_age = datetime.now().year - self.origin_date_range[0]
+                    f.write("\tprset treeagepr = uniform(%d,%d);\n" % (min_tree_age, max_tree_age))
+                else:
+                    min_tree_age = datetime.now().year - self.origin_date_range[1]
+                    f.write("\tprset treeagepr = offsetgamma(%d,1.0,1.0);\n" % (min_tree_age))
+                # Then calibrate the witness ages:
+                f.write("\n")
+                f.write("\tprset nodeagepr = calibrated;\n")
+                for i, wit in enumerate(self.witnesses):
+                    taxlabel = taxlabels[i]
+                    date_range = wit.date_range
+                    if date_range[0] is not None:
+                        # If there is a lower bound on the witness's date, then use either a fixed or uniform distribution,
+                        # depending on whether the upper and lower bounds match:
+                        min_age = datetime.now().year - date_range[1]
+                        max_age = datetime.now().year - date_range[0]
+                        if min_age == max_age:
+                            f.write("\tcalibrate %s = fixed(%d);\n" % (taxlabel, min_age))
                         else:
-                            f.write(
-                                "\tcalibrate %s = uniform(%d,%d);\n"
-                                % (taxlabel, max_date - date_range[1], max_date - date_range[0])
-                            )  # get age range by subtracting start and end dates from latest date:
-                    f.write("\n")
+                            f.write("\tcalibrate %s = uniform(%d,%d);\n" % (taxlabel, min_age, max_age))
+                    else:
+                        # If there is no lower bound on the witness's date, then use an offset gamma distribution:
+                        min_age = datetime.now().year - date_range[1]
+                        f.write("\tcalibrate %s = offsetgamma(%d,1.0,1.0);\n" % (taxlabel, min_age))
+                f.write("\n")
                 # Add default settings for MCMC estimation of posterior distribution:
                 f.write("\tmcmcp ngen=100000;\n")
                 # Write the command to run MrBayes:
@@ -1006,38 +1103,23 @@ class Collation:
         date_map = ",".join(calibrate_strings)
         return date_map
 
-    def get_beast_date_span(self):
-        """Returns the difference between the most recent witness date and the earliest witness date.
-        If witness dates are bounded, then upper bounds are used for the most recent date and lower bounds are used for the earliest date.
-
-        If no witnesses have dates, or if the set of dates forms an open interval, then a span of 0 is returned.
+    def get_beast_origin_span(self):
+        """Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
+        The upper bound on the height of the tree is the difference between the current date
+        and the lower bound on the date of the original work, if both are defined;
+        otherwise, it is left undefined.
+        The lower bound on the height of the tree is the difference between the latest lower bound on a witness's date
+        and the upper bound on the date of the original work, if both are defined;
+        otherwise, it is zero.
 
         Returns:
-            A float representing the difference between the most recent witness date and the earliest witness date.
+            A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.
         """
-        min_date = None
-        max_date = None
-        for i, wit in enumerate(self.witnesses):
-            date_range = wit.date_range
-            # Does this witness have a lower bound on its date?
-            if date_range[0] is not None:
-                # If it does, then (conditionally) set the minimum date to this value:
-                if min_date is None:
-                    min_date = date_range[0]
-                else:
-                    min_date = min(min_date, date_range[0])
-            # Does this witness have an upper bound on its date?
-            if date_range[1] is not None:
-                # If it does, then (conditionally) set the maximum date to this value:
-                if max_date is None:
-                    max_date = date_range[1]
-                else:
-                    max_date = max(max_date, date_range[1])
-        # Finally, if the two ends of the date span are defined, then calculate their difference and return it as a float:
-        if min_date is not None and max_date is not None:
-            return float(max_date - min_date)
-        # Otherwise, return 0 as a float:
-        return 0.0
+        origin_span = [datetime.now().year - self.origin_date_range[1], None]
+        # If the lower bound on the original work is defined, then update the upper bound on the height of the origin:
+        if self.origin_date_range[0] is not None:
+            origin_span[1] = datetime.now().year - self.origin_date_range[0]
+        return tuple(origin_span)
 
     def get_beast_code_map_for_unit(self, symbols, missing_symbol, vu_ind):
         """Returns a string containing state/reading code mappings in BEAST format using the given single-state and missing state symbols for the character/variation unit at the given index.
@@ -1192,7 +1274,7 @@ class Collation:
         missing_symbol = '?'
         symbols = self.get_beast_symbols()
         date_map = self.get_beast_date_map(taxlabels)
-        date_span = self.get_beast_date_span()
+        origin_span = self.get_beast_origin_span()
         # Then populate the necessary objects for the BEAST XML Jinja template:
         witness_objects = []
         variation_unit_objects = []
@@ -1347,8 +1429,7 @@ class Collation:
         rendered = template.render(
             nsymbols=len(symbols),
             date_map=date_map,
-            date_span=date_span,
-            initial_origin=date_span + 1,
+            origin_span=origin_span,
             clock_rate_categories=2 * len(self.witnesses) - 2,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
@@ -1736,14 +1817,10 @@ class Collation:
                 wit_label = slugify(wit.id, lowercase=False, allow_unicode=True, separator='_')
                 f.write(wit_label)
                 f.write(" " * (max_id_length - len(wit.id) + 1))
-                # If either end of this witness's date range is empty, then use the min and max dates over all witnesses as defaults:
+                # If either the lower bound on this witness's date is empty, then use the min and max dates over all witnesses as defaults:
                 date_range = wit.date_range
-                if date_range[0] is None and date_range[1] is None:
-                    date_range = tuple([min_date, max_date])
-                elif date_range[0] is None:
+                if date_range[0] is None:
                     date_range = tuple([min_date, date_range[1]])
-                elif date_range[1] is None:
-                    date_range = tuple([date_range[0], max_date])
                 # Then write the date range minimum, average, and maximum to the chron file:
                 low_date = str(date_range[0])
                 f.write(" " * (max_date_length - len(low_date) + 2))

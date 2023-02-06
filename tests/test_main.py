@@ -1,10 +1,11 @@
 from pathlib import Path
+from datetime import datetime
 import tempfile
 from typer.testing import CliRunner
 from lxml import etree as et
 
 from teiphy.main import app
-from teiphy.collation import ParsingException, IntrinsicRelationsException
+from teiphy.collation import ParsingException, WitnessDateException, IntrinsicRelationsException
 from teiphy.common import tei_ns, xml_ns
 
 runner = CliRunner()
@@ -20,6 +21,7 @@ extra_sigla_example = test_dir / "extra_sigla_example.xml"
 no_dates_example = test_dir / "no_dates_example.xml"
 some_dates_example = test_dir / "some_dates_example.xml"
 fixed_rates_example = test_dir / "fixed_rates_example.xml"
+bad_date_witness_example = test_dir / "bad_date_witness_example.xml"
 intrinsic_odds_excess_indegree_example = test_dir / "intrinsic_odds_excess_indegree_example.xml"
 intrinsic_odds_cycle_example = test_dir / "intrinsic_odds_cycle_example.xml"
 intrinsic_odds_no_relations_example = test_dir / "intrinsic_odds_no_relations_example.xml"
@@ -61,6 +63,16 @@ def test_extra_sigla_input():
         result = runner.invoke(app, [str(extra_sigla_example), str(output)])
         assert "WARNING" in result.stdout
         assert "TheodoreOfMopsuestia" in result.stdout
+
+
+def test_bad_date_witness_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, [str(bad_date_witness_example), str(output)])
+        assert isinstance(result.exception, WitnessDateException)
+        assert "The following witnesses have their latest possible dates before the earliest date of origin" in str(
+            result.exception
+        )
 
 
 def test_to_nexus():
@@ -146,8 +158,8 @@ def test_to_nexus_calibrate_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
-        assert "CALIBRATE UBS = fixed(50)" in text
-        assert "CALIBRATE P46 = uniform(175,225)" in text
+        assert "CALIBRATE 18 = fixed(%d)" % (datetime.now().year - 1364) in text
+        assert "CALIBRATE P46 = uniform(%d,%d)" % (datetime.now().year - 225, datetime.now().year - 175) in text
 
 
 def test_to_nexus_calibrate_dates_no_dates():
@@ -158,7 +170,8 @@ def test_to_nexus_calibrate_dates_no_dates():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "Begin ASSUMPTIONS;" not in text
+        assert "Begin ASSUMPTIONS;" in text
+        assert "CALIBRATE UBS = offsetlognormal(0,0.0,1.0)" in text
 
 
 def test_to_nexus_calibrate_dates_some_dates():
@@ -170,11 +183,19 @@ def test_to_nexus_calibrate_dates_some_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
-        assert "CALIBRATE UBS = fixed(50)" in text  # both ends of date range specified and identical
-        assert "CALIBRATE P46 = uniform(50,600)" in text  # neither end of date range specified
-        assert "CALIBRATE 01 = uniform(300,600)" in text  # lower bound but no upper bound
-        assert "CALIBRATE 02 = uniform(50,500)" in text  # upper bound but no lower bound
-        assert "CALIBRATE 06 = uniform(500,600)" in text  # both ends of date range specified and distinct
+        assert (
+            "CALIBRATE UBS = fixed(%d)" % (datetime.now().year - 50) in text
+        )  # both ends of date range specified and identical
+        assert "CALIBRATE P46 = offsetlognormal(0,0.0,1.0)" in text  # neither end of date range specified
+        assert (
+            "CALIBRATE 01 = uniform(%d,%d)" % (0, datetime.now().year - 300) in text
+        )  # lower bound but no upper bound
+        assert (
+            "CALIBRATE 02 = offsetlognormal(%d,0.0,1.0)" % (datetime.now().year - 500) in text
+        )  # upper bound but no lower bound
+        assert (
+            "CALIBRATE 06 = uniform(%d,%d)" % (datetime.now().year - 600, datetime.now().year - 500) in text
+        )  # both ends of date range specified and distinct
 
 
 def test_to_nexus_mrbayes():
@@ -186,8 +207,9 @@ def test_to_nexus_mrbayes():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
-        assert "calibrate UBS = fixed(1450);" in text
-        assert "calibrate P46 = uniform(1275,1325);" in text
+        assert "prset treeagepr = uniform(%d,%d)" % (datetime.now().year - 80, datetime.now().year - 50) in text
+        assert "calibrate 18 = fixed(%d);" % (datetime.now().year - 1364) in text
+        assert "calibrate P46 = uniform(%d,%d);" % (datetime.now().year - 225, datetime.now().year - 175) in text
 
 
 def test_to_nexus_mrbayes_no_dates():
@@ -198,8 +220,9 @@ def test_to_nexus_mrbayes_no_dates():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "Begin MRBAYES;" in text  # the MRBAYES block is still included, but no calibrations are
-        assert "calibrate" not in text
+        assert "Begin MRBAYES;" in text
+        assert "prset treeagepr = offsetgamma(0,1.0,1.0)" in text
+        assert "calibrate 18 = offsetgamma(0,1.0,1.0);" in text
 
 
 def test_to_nexus_mrbayes_some_dates():
@@ -211,11 +234,20 @@ def test_to_nexus_mrbayes_some_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
-        assert "calibrate UBS = fixed(550)" in text  # both ends of date range specified and identical
-        assert "calibrate P46 = uniform(0,550)" in text  # neither end of date range specified
-        assert "calibrate 01 = uniform(0,300)" in text  # lower bound but no upper bound
-        assert "calibrate 02 = uniform(100,550)" in text  # upper bound but no lower bound
-        assert "calibrate 06 = uniform(0,100)" in text  # both ends of date range specified and distinct
+        assert "prset treeagepr = offsetgamma(%d,1.0,1.0);" % (datetime.now().year - 50) in text
+        assert (
+            "calibrate UBS = fixed(%d);" % (datetime.now().year - 50) in text
+        )  # both ends of date range specified and identical
+        assert "calibrate P46 = offsetgamma(0,1.0,1.0);" in text  # neither end of date range specified
+        assert (
+            "calibrate 01 = uniform(%d,%d);" % (0, datetime.now().year - 300) in text
+        )  # lower bound but no upper bound
+        assert (
+            "calibrate 02 = offsetgamma(%d,1.0,1.0);" % (datetime.now().year - 500) in text
+        )  # upper bound but no lower bound
+        assert (
+            "calibrate 06 = uniform(%d,%d);" % (datetime.now().year - 600, datetime.now().year - 500) in text
+        )  # both ends of date range specified and distinct
 
 
 def test_to_hennig86():
@@ -503,6 +535,11 @@ def test_to_beast_no_dates():
         assert len(beast_xml_traits) == 1
         assert beast_xml_traits[0].get("value") is not None
         assert beast_xml_traits[0].get("value") == ""
+        beast_xml_origin_parameters = beast_xml.xpath("//origin")
+        assert len(beast_xml_origin_parameters) == 1
+        assert float(beast_xml_origin_parameters[0].get("value")) == 1.0
+        assert float(beast_xml_origin_parameters[0].get("lower")) == 0.0
+        assert beast_xml_origin_parameters[0].get("upper") == "Infinity"
 
 
 def test_to_beast_some_dates():
@@ -531,11 +568,16 @@ def test_to_beast_some_dates():
         beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
         assert len(beast_xml_traits) == 1
         assert beast_xml_traits[0].get("value") is not None
-        assert beast_xml_traits[0].get("value") == "UBS=50,06=550"
-        beast_xml_origin_parameters = beast_xml.xpath("//parameter[@name=\"origin\"]")
+        assert beast_xml_traits[0].get("value") == "UBS=%d,01=%d,06=%d" % (
+            50,
+            int((datetime.now().year + 300) / 2),
+            550,
+        )
+        beast_xml_origin_parameters = beast_xml.xpath("//origin")
         assert len(beast_xml_origin_parameters) == 1
-        assert beast_xml_origin_parameters[0].get("value") is not None
-        assert float(beast_xml_origin_parameters[0].get("value")) == 551.0
+        assert float(beast_xml_origin_parameters[0].get("value")) == 1.0
+        assert float(beast_xml_origin_parameters[0].get("lower")) == datetime.now().year - 50
+        assert beast_xml_origin_parameters[0].get("upper") == "Infinity"
 
 
 def test_to_beast_variable_rates():
@@ -785,7 +827,7 @@ def test_to_stemma():
         assert chron_output.exists()
         chron_text = chron_output.read_text(encoding="utf-8")
         assert chron_text.startswith("UBS")
-        assert "50    50    50" in chron_text
+        assert "50    65    80" in chron_text
 
 
 def test_to_stemma_no_dates():
@@ -812,13 +854,13 @@ def test_to_stemma_some_dates():
         assert chron_output.exists()
         chron_text = chron_output.read_text(encoding="utf-8")
         assert chron_text.startswith("UBS")
+        assert chron_text.count("50    50    50") == 1
         assert (
-            chron_text.count("50   50   50") == 1
-        )  # space between columns should be reduced because all dates are now at most 3 digits long
-        assert chron_text.count("300  450  600") == 1  # for the one witness with a lower bound and no upper bound
-        assert chron_text.count("50  275  500") == 1  # for the one witness with an upper bound and no lower bound
+            chron_text.count("300  %d  %d" % (int((datetime.now().year + 300) / 2), datetime.now().year)) == 1
+        )  # for the one witness with a lower bound and no upper bound
+        assert chron_text.count("50   275   500") == 1  # for the one witness with an upper bound and no lower bound
         assert (
-            chron_text.count("50  325  600") > 1
+            chron_text.count("50  %d  %d" % (int((datetime.now().year + 50) / 2), datetime.now().year)) > 1
         )  # for the remaining witnesses whose bounds are set to the minimum and maximum
 
 

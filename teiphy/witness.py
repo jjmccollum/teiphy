@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from datetime import datetime  # for calculating the current year (for dating purposes)
 from lxml import etree as et
 
 from .common import xml_ns, tei_ns
@@ -13,7 +14,7 @@ class Witness:
     Attributes:
         id: The ID string of this Witness. It should be unique.
         type: A string representing the type of witness. Examples include "corrector", "version", and "father".
-        date_range: A tuple containing a low and high date for this Witness.
+        date_range: A list containing a low and high date for this Witness.
     """
 
     def __init__(self, xml: et.Element, verbose: bool = False):
@@ -34,26 +35,25 @@ class Witness:
         # If it has a type, then save that; otherwise, default to "manuscript":
         self.type = xml.get("type") if xml.get("type") is not None else "manuscript"
         # If it has an origDate descendant, then use the dates in its attributes:
-        self.date_range = tuple([None, None])
+        self.date_range = [None, datetime.now().year]
         for orig_date in xml.xpath(".//tei:origDate", namespaces={"tei": tei_ns}):
-            date_range = [None, None]
+            date_range = [None, datetime.now().year]
             # Try the @when attribute first; if it is set, then it accounts for both ends of the date range:
             if orig_date.get("when") is not None:
-                date_range[0] = int(orig_date.get("when"))
+                date_range[0] = int(orig_date.get("when").split("-")[0])
                 date_range[1] = date_range[0]
-            # Failing that, try the @from and @to attributes:
-            elif orig_date.get("from") is not None or orig_date.get("to") is not None:
-                if orig_date.get("from") is not None or orig_date.get("to") is not None:
-                    date_range[0] = int(orig_date.get("from"))
-                if orig_date.get("to") is not None:
-                    date_range[1] = int(orig_date.get("to"))
-            # Failing that, try the @notBefore and @notAfter attributes:
+            # Failing that, if it has @from and @to attributes (indicating the period over which the manuscript was completed),
+            # then the completion date of the work accounts for both ends of the date range:
+            elif orig_date.get("to") is not None:
+                date_range[0] = int(orig_date.get("to").split("-")[0])
+                date_range[1] = date_range[0]
+            # Failing that, set lower and upper bounds on the witness's date using the the @notBefore and @notAfter attributes:
             elif orig_date.get("notBefore") is not None or orig_date.get("notAfter") is not None:
                 if orig_date.get("notBefore") is not None:
-                    date_range[0] = int(orig_date.get("notBefore"))
+                    date_range[0] = int(orig_date.get("notBefore").split("-")[0])
                 if orig_date.get("notAfter") is not None:
-                    date_range[1] = int(orig_date.get("notAfter"))
-            self.date_range = tuple(date_range)
+                    date_range[1] = int(orig_date.get("notAfter").split("-")[0])
+            self.date_range = date_range
             break
 
         if verbose:

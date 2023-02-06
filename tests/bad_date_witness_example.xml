@@ -136,8 +136,10 @@
                     <witness type="father" n="Pelagius">
                         <origDate notBefore="390" notAfter="418"/>
                     </witness>
+                    <!-- The following witness's date upper bound being less than the lower bound on the origin of the tradition 
+                    should trigger a warning message in teiphy -->
                     <witness type="father" n="TheodoreOfMopsuestia">
-                        <origDate notBefore="392" notAfter="428"/>
+                        <origDate notBefore="0" notAfter="49"/>
                     </witness>
                 </listWit>
             </sourceDesc>
@@ -147,23 +149,18 @@
         <interpGrp type="intrinsic">
             <interp xml:id="RatingA">
                 <p>The text is certain.</p>
-                <certainty locus="value" degree="19"/>
             </interp>
             <interp xml:id="RatingB">
                 <p>The text is almost certain.</p>
-                <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="RatingC">
                 <p>The Committee had difficulty in deciding which variant to place in the text.</p>
-                <certainty locus="value" degree="1.5"/>
             </interp>
             <interp xml:id="RatingD">
                 <p>The Committee had great difficulty in arriving at a decision.</p>
-                <certainty locus="value" degree="1.1"/>
             </interp>
             <interp xml:id="EqualRating">
                 <p>The current reading and the linked reading are equally likely.</p>
-                <certainty locus="value" degree="1"/>
             </interp>
         </interpGrp>
         <interpGrp type="transcriptional">
@@ -188,29 +185,19 @@
             </interp>
         </interpGrp>
         <body>
-            <app xml:id="B10K5V22U6-10">
-                <lem><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></lem>
-                <rdg n="1" wit="UBS P46 03 Jerome TheodoreOfMopsuestia"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="2" wit="01 02 33 88 424C 606 1175 1505 1611 1739 1910 2495 vg syrhmg copsa copbo Ambrosiaster MariusVictorinus Pelagius"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></rdg>
-                <rdg n="2-f1" type="defective" wit="1881"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθωσαν</w></rdg>
-                <rdg n="3" wit="18 35 424* 915C syrh Chrysostom"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
-                <rdg n="3-f1" type="defective" cause="aural-confusion" wit="915*"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθαι</w></rdg>
-                <rdg n="4" wit="06C1"><w>υποτασσεσθε</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="4-f1" type="defective" cause="aural-confusion" wit="06* 012"><w>υποτασσεσθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="4-f2" type="defective" cause="aural-confusion" wit="010"><w>υποτασεθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C2 syrp"/>
+            <app xml:id="B10K1V1U24-26">
+                <lem/>
+                <rdg n="1" wit="UBS 01C2 02 03C2 06 012 18 33 35 88 424* 606 915 1175 1505 1611 1881 1910 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
+                <rdg n="1-f1" type="defective" cause="parablepsis" wit="010"><w>εν</w><w>εφεω</w></rdg>
+                <rdg n="2" wit="P46 01* 03* 424C 1739"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
                 <note>
                     <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingA"/>
-                        <relation active="1" passive="3" ana="#RatingA"/>
-                        <relation active="2" passive="4" ana="#EqualRating"/>
-                        <relation active="3" passive="4" ana="#EqualRating"/><!-- two relations pointing to reading 4 should throw an exception -->
+                        <relation active="1" passive="2" ana="#RatingC"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2 3 4" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="3" ana="#Harm"/>
-                        <relation active="1 2 4" passive="3" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Clar"/>
+                        <relation active="2" passive="1" ana="#Byz"/>
                     </listRelation>
                 </note>
             </app>

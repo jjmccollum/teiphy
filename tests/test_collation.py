@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 from pathlib import Path
+from datetime import datetime
 import numpy as np
 from lxml import etree as et
 
@@ -61,6 +62,10 @@ class CollationDefaultTestCase(unittest.TestCase):
     def test_transcriptional_rates_by_id(self):
         self.assertEqual(len(self.collation.transcriptional_rates_by_id), len(self.xml_transcriptional_relations))
 
+    def test_origin_date_range(self):
+        self.assertEqual(self.collation.origin_date_range[0], 50)
+        self.assertEqual(self.collation.origin_date_range[1], 80)
+
 
 class CollationMalformedCategoriesTestCase(unittest.TestCase):
     def setUp(self):
@@ -79,6 +84,87 @@ class CollationMalformedCategoriesTestCase(unittest.TestCase):
 
     def test_transcriptional_categories(self):
         self.assertEqual(len(self.collation.transcriptional_categories), len(self.xml_transcriptional_relations) - 1)
+
+
+class CollationWhenDateTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date when=\"50\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertEqual(self.collation.origin_date_range[0], 50)
+        self.assertEqual(self.collation.origin_date_range[1], 50)
+
+
+class CollationFromToDatesTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date from=\"50\" to=\"80\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertEqual(self.collation.origin_date_range[0], 80)
+        self.assertEqual(self.collation.origin_date_range[1], 80)
+
+
+class CollationDateRangeStartOnlyTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date notBefore=\"50\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertEqual(self.collation.origin_date_range[0], 50)
+        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
+
+
+class CollationDateRangeEndOnlyTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date notAfter=\"80\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertIsNone(self.collation.origin_date_range[0])
+        self.assertEqual(self.collation.origin_date_range[1], 80)
+
+
+class CollationNoDatesTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        # After the parse_origin_date_range method is called, the origin date upper bound should default to the current year:
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertIsNone(self.collation.origin_date_range[0])
+        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
