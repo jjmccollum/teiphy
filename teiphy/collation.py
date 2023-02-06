@@ -764,6 +764,7 @@ class Collation:
                 # Use an uncorrelated relaxed clock model with independent gamma rates:
                 f.write("\n")
                 f.write("\tprset clockvarpr=igr;\n")
+                f.write("\tprset clockratepr=lognormal(0.0,1.0);\n")
                 # Set the priors on the tree age depending on the date range for the origin of the collated work:
                 f.write("\n")
                 if self.origin_date_range[0] is not None:
