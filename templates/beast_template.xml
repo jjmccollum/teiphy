@@ -75,6 +75,13 @@
                 <distribution spec="Prior" id="becomeUninfectiousRatePrior" x="@becomeUninfectiousRate">
                     <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
                 </distribution>
+                <!-- Priors for the clock model parameters -->
+                <distribution spec="Prior" id="clock.meanPrior" x="@clock.mean">
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
+                </distribution>
+                <distribution spec="Prior" id="clock.stdDevPrior" x="@clock.stdDev">
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
+                </distribution>
                 <!-- Priors for witness dates -->
                 {%- for wit in witnesses %}
                 {%- if wit.min_date and wit.max_date and wit.min_date != wit.max_date %}
@@ -150,7 +157,8 @@
             <up idref="tree"/>
             <down idref="clock.mean"/>
         </operator>
-        <operator id="clock.rate_Scaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.mean"/>
+        <operator id="clock.rateScaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.mean"/>
+        <operator id="clock.stdDevScaler" spec="ScaleOperator" scaleFactor=".75" weight="1" parameter="@clock.stdDev"/>
         <!-- Start intrinsic odds operators -->
 
         <!-- Start transcriptional rate operators -->

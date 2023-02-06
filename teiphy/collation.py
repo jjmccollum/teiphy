@@ -759,7 +759,7 @@ class Collation:
                 f.write("\n")
                 f.write("\tprset brlenspr = clock:birthdeath;\n")
                 f.write("\tprset speciationpr = uniform(0.0,10.0);\n")
-                f.write("\tprset extinctionpr  = uniform(0.0,10.0);\n")
+                f.write("\tprset extinctionpr = uniform(0.0,10.0);\n")
                 f.write("\tprset sampleprob = 0.01;\n")
                 # Use an uncorrelated relaxed clock model with independent gamma rates:
                 f.write("\n")
