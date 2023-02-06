@@ -40,7 +40,7 @@
             <stateNode idref="samplingProportion"/>
             <stateNode idref="reproductiveNumber"/>
             <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
-            <stateNode spec="parameter.RealParameter" id="clock.stdDev" lower="0.0" upper="Infinity" value="0"/>
+            <stateNode spec="parameter.RealParameter" id="clock.stdDev" lower="0.0" upper="Infinity" value="1.0"/>
             <stateNode spec="parameter.IntegerParameter" id="clock.rateCategories"  dimension="{{ clock_rate_categories }}" value="1"/>
             <!-- Start intrinsic odds parameters -->
 

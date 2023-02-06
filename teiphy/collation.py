@@ -752,9 +752,9 @@ class Collation:
                 # Turn on the autoclose feature by default:
                 f.write("\tset autoclose=yes;\n")
                 # Set all sites to have the same fixed gamma rate and shape parameters:
-                f.write("\n")
-                f.write("\tprset shapepr = fixed(1.0);\n")
-                f.write("\tprset ratecorrpr = fixed(1.0);\n")
+                # f.write("\n")
+                # f.write("\tprset shapepr = fixed(1.0);\n")
+                # f.write("\tprset ratecorrpr = fixed(1.0);\n")
                 # Set the branch lengths to be governed by a birth-death clock model, and set up the parameters for this model:
                 f.write("\n")
                 f.write("\tprset brlenspr = clock:birthdeath;\n")
