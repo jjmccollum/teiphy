@@ -207,9 +207,10 @@
                         <relation active="3" passive="4" ana="#EqualRating"/><!-- two relations pointing to reading 4 should throw an exception -->
                     </listRelation>
                     <listRelation type="transcriptional">
+                        <relation active="1 2 3" passive="4" ana="#Harm"/>
                         <relation active="1" passive="2 3 4" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="3" ana="#Harm"/>
+                        <relation active="2" passive="3" ana="#Clar #Harm"/>
                         <relation active="1 2 4" passive="3" ana="#Byz"/>
                     </listRelation>
                 </note>
