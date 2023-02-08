@@ -211,6 +211,7 @@
                         <relation active="1" passive="2 3 4" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
                         <relation active="2" passive="3" ana="#Clar #Harm"/>
+                        <relation active="3" passive="4" ana="#Clar"/>
                         <relation active="1 2 4" passive="3" ana="#Byz"/>
                     </listRelation>
                 </note>
