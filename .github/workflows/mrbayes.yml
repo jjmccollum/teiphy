@@ -20,7 +20,8 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --mrbayes example/ubs_ephesians.xml mrbayes_example.nexus
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --mrbayes --clock strict example/ubs_ephesians.xml mrbayes_strict_example.nexus
+        poetry run teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --mrbayes --clock uncorrelated example/ubs_ephesians.xml mrbayes_uncorrelated_example.nexus
     - name: Install Phylogenetics Package
       run: |
         git clone --depth 1 https://github.com/NBISweden/MrBayes.git
@@ -29,4 +30,5 @@ jobs:
         make && sudo make install
     - name: Phylogenetics Run
       run: |
-        mb mrbayes_example.nexus
+        mb mrbayes_strict_example.nexus
+        mb mrbayes_uncorrelated_example.nexus

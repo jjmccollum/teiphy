@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from enum import Enum
 from typing import List, Union
 from pathlib import Path
 from datetime import datetime  # for calculating the current year (for dating and tree height purposes)
@@ -27,6 +28,12 @@ class WitnessDateException(Exception):
 
 class IntrinsicRelationsException(Exception):
     pass
+
+
+class ClockModel(str, Enum):
+    strict = "strict"
+    uncorrelated = "uncorrelated"
+    local = "local"
 
 
 class Collation:
@@ -585,6 +592,7 @@ class Collation:
         ambiguous_as_missing: bool = False,
         calibrate_dates: bool = False,
         mrbayes: bool = False,
+        clock_model: ClockModel = ClockModel.strict,
     ):
         """Writes this Collation to a NEXUS file with the given address.
 
@@ -600,9 +608,12 @@ class Collation:
                 If this flag is set, then only base symbols will be generated for the NEXUS file.
                 It is only applied if the frequency option is False.
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses.
-                This option is intended for inputs to BEAST2.
+                This option is intended for inputs to BEAST 2.
             mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses.
                 This option is intended for inputs to MrBayes.
+            clock_model: A ClockModel option indicating which type of clock model to use.
+                This option is intended for inputs to MrBayes and BEAST 2.
+                MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment:
         substantive_variation_unit_ids = self.variation_unit_ids
@@ -751,20 +762,21 @@ class Collation:
                 f.write("Begin MRBAYES;\n")
                 # Turn on the autoclose feature by default:
                 f.write("\tset autoclose=yes;\n")
-                # Set all sites to have the same fixed gamma rate and shape parameters:
-                # f.write("\n")
-                # f.write("\tprset shapepr = fixed(1.0);\n")
-                # f.write("\tprset ratecorrpr = fixed(1.0);\n")
                 # Set the branch lengths to be governed by a birth-death clock model, and set up the parameters for this model:
                 f.write("\n")
                 f.write("\tprset brlenspr = clock:birthdeath;\n")
                 f.write("\tprset speciationpr = uniform(0.0,10.0);\n")
                 f.write("\tprset extinctionpr = beta(2.0,4.0);\n")
                 f.write("\tprset sampleprob = 0.01;\n")
-                # Use an uncorrelated relaxed clock model with independent gamma rates:
+                # Use the specified clock model:
                 f.write("\n")
-                f.write("\tprset clockvarpr=igr;\n")
-                f.write("\tprset clockratepr=lognormal(0.0,1.0);\n")
+                if clock_model == clock_model.uncorrelated:
+                    f.write("\tprset clockvarpr=igr;\n")
+                    f.write("\tprset clockratepr=lognormal(0.0,1.0);\n")
+                    f.write("\tprset igrvarpr=exponential(1.0);\n")
+                else:
+                    f.write("\tprset clockvarpr=strict;\n")
+                    f.write("\tprset clockratepr=lognormal(0.0,1.0);\n")
                 # Set the priors on the tree age depending on the date range for the origin of the collated work:
                 f.write("\n")
                 if self.origin_date_range[0] is not None:
@@ -1253,12 +1265,15 @@ class Collation:
         root_frequencies_string = " ".join([str(w) for w in root_frequencies])
         return root_frequencies_string
 
-    def to_beast(self, file_addr: Union[Path, str], drop_constant: bool = False):
+    def to_beast(
+        self, file_addr: Union[Path, str], drop_constant: bool = False, clock_model: ClockModel = ClockModel.strict
+    ):
         """Writes this Collation to a file in BEAST format with the given address.
 
         Args:
             file_addr: A string representing the path to an output file.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            clock_model: A ClockModel option indicating which clock model to use.
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment:
         substantive_variation_unit_ids = self.variation_unit_ids
@@ -1431,6 +1446,7 @@ class Collation:
             nsymbols=len(symbols),
             date_map=date_map,
             origin_span=origin_span,
+            clock_model=clock_model.value,
             clock_rate_categories=2 * len(self.witnesses) - 2,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
@@ -1847,6 +1863,7 @@ class Collation:
         ambiguous_as_missing: bool = False,
         calibrate_dates: bool = False,
         mrbayes: bool = False,
+        clock_model: ClockModel = ClockModel.strict,
     ):
         """Writes this Collation to the file with the given address.
 
@@ -1880,10 +1897,13 @@ class Collation:
                 It is only applied if the frequency option is False.
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
-                This option is intended for inputs to BEAST2.
+                This option is intended for inputs to BEAST 2.
             mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
                 in NEXUS output.
                 This option is intended for inputs to MrBayes.
+            clock_model: A ClockModel option indicating which type of clock model to use.
+                This option is intended for inputs to MrBayes and BEAST 2.
+                MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
         """
         file_addr = Path(file_addr)
         format = format or Format.infer(
@@ -1899,6 +1919,7 @@ class Collation:
                 ambiguous_as_missing=ambiguous_as_missing,
                 calibrate_dates=calibrate_dates,
                 mrbayes=mrbayes,
+                clock_model=clock_model,
             )
 
         if format == format.HENNIG86:
@@ -1911,7 +1932,7 @@ class Collation:
             return self.to_fasta(file_addr, drop_constant=drop_constant)
 
         if format == format.BEAST:
-            return self.to_beast(file_addr, drop_constant=drop_constant)
+            return self.to_beast(file_addr, drop_constant=drop_constant, clock_model=clock_model)
 
         if format == Format.CSV:
             return self.to_csv(

@@ -250,6 +250,101 @@ def test_to_nexus_mrbayes_some_dates():
         )  # both ends of date range specified and distinct
 
 
+def test_to_nexus_mrbayes_strict_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--mrbayes",
+                "--clock",
+                "strict",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert "prset clockvarpr=strict;" in text
+
+
+def test_to_nexus_mrbayes_uncorrelated_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--mrbayes",
+                "--clock",
+                "uncorrelated",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert "prset clockvarpr=igr;" in text
+
+
+def test_to_nexus_mrbayes_local_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--mrbayes",
+                "--clock",
+                "local",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert (
+            "prset clockvarpr=strict;" in text
+        )  # MrBayes does not presently support local clock models, so we default to strict models
+
+
 def test_to_hennig86():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
@@ -733,6 +828,96 @@ def test_to_beast_intrinsic_odds_no_relations():
         root_frequencies_xml = beast_xml.find("//rootFrequencies/frequencies")
         assert root_frequencies_xml.get("value") is not None
         assert root_frequencies_xml.get("value") == "0.25 0.25 0.25 0.25"
+
+
+def test_to_beast_strict_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--clock",
+                "strict",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//branchRateModel") is not None
+        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert branch_rate_model.get("spec") == "StrictClockModel"
+
+
+def test_to_beast_uncorrelated_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--clock",
+                "uncorrelated",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//branchRateModel") is not None
+        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert branch_rate_model.get("spec") == "UCRelaxedClockModel"
+
+
+def test_to_beast_local_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--clock",
+                "local",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//branchRateModel") is not None
+        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert branch_rate_model.get("spec") == "RandomLocalClockModel"
 
 
 def test_to_csv():
