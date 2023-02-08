@@ -29,7 +29,7 @@
         <samplingProportion spec="parameter.RealParameter" id="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
     </birthDeathSkylineModel>
     {%- if clock_model == "strict" %}
-    <branchRateModel spec="StrictClockModel" id="clock" tree="@tree" clock.rate="@clock.mean"/>
+    <branchRateModel spec="StrictClockModel" id="clock" clock.rate="@clock.mean"/>
     {%- elif clock_model == "uncorrelated" %}
     <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree" clock.rate="@clock.mean" rateCategories="@clock.rateCategories">
         <distr spec="LogNormalDistributionModel" meanInRealSpace="true" M="@clock.mean" S="@clock.stdDev"/>
