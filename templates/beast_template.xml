@@ -195,6 +195,7 @@
         </operator>
         <operator spec="ScaleOperator" id="clock.rateScaler" scaleFactor=".75" weight="1" parameter="@clock.mean"/>
         <operator spec="ScaleOperator" id="clock.stdDevScaler" scaleFactor=".75" weight="1" parameter="@clock.stdDev"/>
+        <operator spec="UniformOperator" id="clock.rateCategoriesUniform" weight="1" parameter="@clock.rateCategories"/>
         {%- elif clock_model == "local" %}
         <operator spec="UpDownOperator" id="tree_updown" scaleFactor=".75" weight="10">
             <up idref="tree"/>

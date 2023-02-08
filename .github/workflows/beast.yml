@@ -46,7 +46,7 @@ jobs:
         ~/.beast/beast/bin/packagemanager -add BDSKY
     - name: Phylogenetics Run
       run: |
-        ~/.beast/beast/bin/beast beast_strict_example.xml
-        ~/.beast/beast/bin/beast beast_uncorrelated_example.xml
-        ~/.beast/beast/bin/beast beast_local_example.xml
+        ~/.beast/beast/bin/beast -overwrite beast_strict_example.xml
+        ~/.beast/beast/bin/beast -overwrite beast_uncorrelated_example.xml
+        ~/.beast/beast/bin/beast -overwrite beast_local_example.xml
         
