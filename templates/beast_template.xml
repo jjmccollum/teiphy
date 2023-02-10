@@ -133,7 +133,7 @@
                     <siteModel spec="SiteModel" id="morphSiteModel.{{ loop.index }}">
                         <mutationRate spec="parameter.RealParameter" id="mutationRate.{{ loop.index }}" value="1.0" estimate="false"/>
                         <shape spec="parameter.RealParameter" id="gammaShape.{{ loop.index }}" value="1.0" estimate="false"/>
-                        <substModel spec="ComplexSubstitutionModel" id="substModel.{{ loop.index }}">
+                        <substModel spec="GeneralSubstitutionModel" id="substModel.{{ loop.index }}">
                             <!-- Equilibrium frequencies -->
                             <frequencies spec="Frequencies" id="equilibriumfreqs.{{ loop.index }}">
                                 <frequencies spec="parameter.RealParameter" id="equilibriumfrequencies.{{ loop.index }}" value="{{ vu.equilibrium_frequencies }}" estimate="false"/>
