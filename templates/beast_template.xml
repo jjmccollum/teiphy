@@ -111,6 +111,12 @@
                     <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
                 </distribution>
                 {%- endif %}
+                <!-- Priors for transcriptional rate parameters -->
+                {%- for tc in transcriptional_categories %}
+                <distribution spec="Prior" id="{{ tc.id }}_ratePrior" x="@{{ tc.id }}_rate">
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="1.0"/>
+                </distribution>
+                {%- endfor %}
                 <!-- Priors for witness dates -->
                 {%- for wit in witnesses %}
                 {%- if wit.min_date and wit.max_date and wit.min_date != wit.max_date %}
