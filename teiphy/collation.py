@@ -1433,9 +1433,9 @@ class Collation:
             # Copy the ID of this transcriptional category:
             transcriptional_category_object["id"] = transcriptional_category
             # Then copy the rate of this transcriptional category,
-            # setting it to 1.0 if it is not specified and setting the estimate attribute accordingly:
+            # setting it to 2.0 if it is not specified and setting the estimate attribute accordingly:
             rate = self.transcriptional_rates_by_id[transcriptional_category]
-            transcriptional_category_object["rate"] = rate if rate is not None else 1.0
+            transcriptional_category_object["rate"] = rate if rate is not None else 2.0
             transcriptional_category_object["estimate"] = "false" if rate is not None else "true"
             transcriptional_category_objects.append(transcriptional_category_object)
         # Now render the output XML file using the Jinja template:

@@ -62,7 +62,7 @@
 
             <!-- Start transcriptional rate parameters -->
             {%- for tc in transcriptional_categories %}
-            <stateNode spec="parameter.RealParameter" id="{{ tc.id }}_rate" lower="0.0" upper="Infinity" value="{{ tc.rate }}" estimate="{{ tc.estimate }}"/>
+            <stateNode spec="parameter.RealParameter" id="{{ tc.id }}_rate" lower="1.0" upper="Infinity" value="{{ tc.rate }}" estimate="{{ tc.estimate }}"/>
             {%- endfor %}
             <!-- We include a "default" rate fixed at 1 that corresponds to (unlikely) transitions with no transcriptional explanation.
             All other rates in the substitution matrices will be estimated relative to this.
@@ -113,9 +113,11 @@
                 {%- endif %}
                 <!-- Priors for transcriptional rate parameters -->
                 {%- for tc in transcriptional_categories %}
+                {%- if tc.estimate == "true" %}
                 <distribution spec="Prior" id="{{ tc.id }}_ratePrior" x="@{{ tc.id }}_rate">
-                    <distr spec="LogNormalDistributionModel" M="1.0" S="1.0"/>
+                    <distr spec="LogNormalDistributionModel" offset="1.0" M="1.0" S="1.0"/>
                 </distribution>
+                {%- endif %}
                 {%- endfor %}
                 <!-- Priors for witness dates -->
                 {%- for wit in witnesses %}
@@ -215,7 +217,9 @@
 
         <!-- Start transcriptional rate operators -->
         {%- for tc in transcriptional_categories %}
+        {%- if tc.estimate == "true" %}
         <operator spec="ScaleOperator" id="scaler.{{ tc.id }}_rate" scaleFactor="0.5" weight="1" parameter="@{{ tc.id }}_rate"/>
+        {%- endif %}
         {%- endfor %}
         <!-- Start witness date operators -->
         {%- for wit in witnesses %}
@@ -248,7 +252,9 @@
 
             <!-- Start transcriptional rate loggers -->
             {%- for tc in transcriptional_categories %}
+            {%- if tc.estimate == "true" %}
             <log idref="{{ tc.id }}_rate"/>
+            {%- endif %}
             {%- endfor %}
             <!-- Start witness date loggers -->
             {%- for wit in witnesses %}
