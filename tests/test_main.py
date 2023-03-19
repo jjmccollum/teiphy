@@ -708,7 +708,7 @@ def test_to_beast_variable_rates():
                 "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
             )
             assert len(beast_xml_transcriptional_rate_categories) == 1
-            assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == 1.0
+            assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == 2.0
             assert beast_xml_transcriptional_rate_categories[0].get("estimate") == "true"
 
 
