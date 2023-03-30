@@ -10,7 +10,7 @@ from lxml import etree as et  # for reading TEI XML inputs
 import numpy as np  # for collation matrix outputs
 import pandas as pd  # for writing to DataFrames, CSV, Excel, etc.
 from slugify import slugify  # for converting Unicode text from readings to ASCII for NEXUS
-from jinja2 import Environment, FileSystemLoader, select_autoescape  # for filling output XML templates
+from jinja2 import Environment, PackageLoader, select_autoescape  # for filling output XML templates
 
 from .common import xml_ns, tei_ns
 from .format import Format
@@ -476,21 +476,29 @@ class Collation:
         for rdg in vu.readings:
             # Initialize the dictionary indicating support for this reading (or its disambiguations):
             rdg_support = [0] * len(self.substantive_readings_by_variation_unit_id[vu.id])
-            # If this is a missing reading (e.g., a lacuna or an overlap), then we can skip this reading, as its corresponding set will be empty:
+            # If this is a missing reading (e.g., a lacuna or an overlap), then we can skip it, as its corresponding set will be empty:
             if rdg.type in self.missing_reading_types:
                 continue
-            # If this reading is trivial, then it will contain an entry for the index of its parent substantive reading:
+            # Otherwise, if this reading is trivial, then it will contain an entry for the index of its parent substantive reading:
             elif rdg.type in self.trivial_reading_types:
-                rdg_support[reading_id_to_index[rdg.id]] += 1
-            # If this reading has one or more target readings, then add an entry for each of those readings according to their certainty in this reading:
-            elif len(rdg.certainties) > 0:
+                rdg_support[reading_id_to_index[rdg.id]] = 1
+            # Otherwise, if this reading has one or more nonzero certainty degrees,
+            # then set the entries for these readings to their degrees:
+            elif sum(rdg.certainties.values()) > 0:
                 for t in rdg.certainties:
-                    # For overlaps, the target may be to a reading not included in this unit, so skip it if its ID is unrecognized:
+                    # Skip any reading whose ID is unrecognized in this unit:
                     if t in reading_id_to_index:
-                        rdg_support[reading_id_to_index[t]] += rdg.certainties[t]
-            # Otherwise, this reading is itself substantive; add an entry for the index of this reading:
+                        rdg_support[reading_id_to_index[t]] = rdg.certainties[t]
+            # Otherwise, if this reading has one or more targets (i.e., if it is an ambiguous reading),
+            # then set the entries for each of its targets to 1:
+            elif len(rdg.targets) > 0:
+                for t in rdg.targets:
+                    # Skip any reading whose ID is unrecognized in this unit:
+                    if t in reading_id_to_index:
+                        rdg_support[reading_id_to_index[t]] = 1
+            # Otherwise, this reading is itself substantive; set the entry for the index of this reading to 1:
             else:
-                rdg_support[reading_id_to_index[rdg.id]] += 1
+                rdg_support[reading_id_to_index[rdg.id]] = 1
             # Proceed for each witness siglum in the support for this reading:
             for wit in rdg.wits:
                 # Is this siglum a base siglum?
@@ -508,17 +516,9 @@ class Collation:
                 # normally the existing set will be empty, but if we reduce two suffixed sigla to the same base witness,
                 # then that witness may attest to multiple readings in the same unit:
                 readings_by_witness_for_unit[base_wit] = [
-                    (readings_by_witness_for_unit[base_wit][i] + rdg_support[i]) for i in range(len(rdg_support))
+                    (min(readings_by_witness_for_unit[base_wit][i] + rdg_support[i], 1))
+                    for i in range(len(rdg_support))
                 ]
-        # In a third pass, normalize the reading weights for all non-lacunose readings:
-        for wit in readings_by_witness_for_unit:
-            rdg_support = readings_by_witness_for_unit[wit]
-            norm = sum(rdg_support)
-            # Skip lacunae, as we can't normalize the vector of reading weights:
-            if norm == 0:
-                continue
-            for i in range(len(rdg_support)):
-                rdg_support[i] = rdg_support[i] / norm
         return readings_by_witness_for_unit
 
     def parse_readings_by_witness(self):
@@ -1440,7 +1440,7 @@ class Collation:
             transcriptional_category_objects.append(transcriptional_category_object)
         # Now render the output XML file using the Jinja template:
         root_dir = Path(__file__).parent.parent
-        env = Environment(loader=FileSystemLoader(root_dir / "templates"), autoescape=select_autoescape())
+        env = Environment(loader=PackageLoader("teiphy", "templates"), autoescape=select_autoescape())
         template = env.get_template("beast_template.xml")
         rendered = template.render(
             nsymbols=len(symbols),

@@ -274,8 +274,8 @@ class CollationManuscriptSuffixesTestCase(unittest.TestCase):
         vu_ind = self.collation.variation_unit_ids.index("B10K3V14U14-18")
         rdg_support = self.collation.readings_by_witness["1910"][vu_ind]
         self.assertEqual(
-            rdg_support, [0.5, 0.5, 0]
-        )  # all entries in the reading support vector for this witness to an overlapping reading should be 0
+            rdg_support, [1, 1, 0]
+        )  # all entries in the reading support vector for this witness with multiple attestations should have all attested readings supported
 
 
 class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):

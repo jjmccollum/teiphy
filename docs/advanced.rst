@@ -148,7 +148,7 @@ and 1 for the ``@degree`` attribute of each ``certainty`` element, this
 is not necessary; the values you specify will be normalized in the
 conversion.
 
-This example above follows the TEI Guidelines more strictly, in that it
+The example above follows the TEI Guidelines more strictly, in that it
 uses the ``@xml:id`` attribute instead of the ``@n`` attribute to assign
 URIs to individual readings, and it references these URIs in the
 ``@target`` attributes of the ``witDetail`` element and the
@@ -183,14 +183,27 @@ must reference that attribute’s value in the ``witDetail`` and
 ``certainty`` elements; otherwise, you must use and reference the ``@n``
 attribute.
 
-For NEXUS output, the character states for each witness is encoded using
+For NEXUS output, the character states for each witness are encoded using
 ``StatesFormat=StatesPresent`` by default, meaning that each non-missing character is
 represented by a single symbol or by a set of symbols between braces (in the case of ambiguous readings).
 But if you want to encode the character states for each witness using ``StatesFormat=Frequency``,
 with each character represented by a vector of frequencies for each reading/state, you can do this with the ``--frequency`` option to ``teiphy``.
 For unambiguous readings, the corresponding state vector will have a value of 1 for a single
-reading/state, while for ambiguous readings, it should have multiple
-values for different readings/states that sum to 1.
+reading/state; for simple ambiguous readings encoded as ``witDetail`` elements
+with the potential readings specified in the ``@target`` attribute, 
+the state vector will have a value of 1 for each specified reading/state;
+and for ``witDetail`` elements containing ``certainty``
+elements with varying ``@degree`` attributes,
+the ``@degree`` value for each specified reading will be copied to the state vector.
+
+For current phylogenetic software that accepts NEXUS input, the ``StatesFormat=Frequency`` setting is not supported,
+so for most output formats, ``witDetail`` elements containing ``certainty``
+elements with varying ``@degree`` attributes will simply be mapped to ambiguous states
+with a 1 for every reading covered by a ``certainty`` element.
+For formats that do not even support ambiguities with specified target states, 
+ambiguous ``witDetail`` elements, with or without ``certainty`` elements,
+will be mapped to missing states (i.e., the ``?`` symbol).
+At this time, only BEAST 2 supports tip likelihoods, so ``certainty`` values are preserved in BEAST 2.7 XML outputs.
 
 Lacunae and Other Missing Data
 ------------------------------
@@ -359,11 +372,154 @@ You should consult the documentation for your phylogenetic software package to d
 For example, `IQ-TREE <http://www.iqtree.org/doc/Substitution-Models#ascertainment-bias-correction>`_ allows users to correct for ascertainment bias by adding ``+ASC`` to the model name.
 (Just keep in mind that your input must be free of constant sites for this to work!)
 
+Tree Priors, Clock Models, and Tip Dates
+----------------------------------------
+
+For outputs for MrBayes (i.e., NEXUS files generated with the ``--mrbayes`` option) and BEAST (i.e., XML files following the conventions of BEAST 2.7),
+tree priors based on birth-death models and strict clock models are used by default.
+For MrBayes, the ``clock:birthdeath`` prior is used for the tree, and for BEAST, the ``BDSKY`` (Birth-Death Skyline model) prior is used.
+For both formats, the origin of the model is set based on the earliest possible date for the textual tradition, if it is known.
+In TEI XML, this is specified in a ``bibl`` element under the ``sourceDesc`` element, as in the following example:
+
+.. code:: xml
+
+    <bibl>
+        <title xml:lang="grc">Πρὸς Ἐφεσίους</title>
+        <date notBefore="50" notAfter="80"/>
+    </bibl>
+
+If an earliest possible date is specified, then the origin for the model is assigned a uniform prior 
+between this date and the latest possible date for the tradition 
+(which, if is it not specified explicitly, is set according to the earliest witness, or, absent witness dates, the current date).
+If no earliest possible date it specified, then the origin for the model is assigned a gamma prior in MrBayes or a log-normal prior in BEAST; 
+in either case, the prior distribution is offset according to the latest possible date for the tradition.
+The speciation/reproductive number, extinction/become-uninfectious rate, and sampling proportion priors are set to default distibutions by ``teiphy``.
+
+The clock model set in the output file by ``teiphy`` can be selected using the ``--clock`` command-line option.
+Presently, the following three models are supported:
+* ``strict``: a strict clock model, with the same mutation rate applied at all branches. 
+This is the default option.
+* ``uncorrelated``: an uncorrelated random clock model, with mutation rates assigned randomly to branches according to a particular distribution.
+For MrBayes, this corresponds to the independent gamma rate (IGR) model with a log-normal prior on the mean clock rate and an exponential prior on the variance.
+For BEAST, the clock rate's mean and standard deviation both have log-normal priors.
+* ``local``: a local random clock model, where branches inherit their parent branch's clock rate subject to random perturbations.
+This option is only supported for BEAST outputs.
+
+Finally, for both MrBayes and BEAST, tip dates are calibrated according to the dates specified for witnesses.
+These dates can be specified either exactly (in which case the tip date has a fixed distribution) 
+or within a range (in which case the tip date has a uniform distribution of the witness's date span),
+as in the following examples:
+
+.. code:: xml
+
+    <witness n="18">
+        <origDate when="1364"/>
+    </witness>
+    <witness n="33">
+        <origDate notBefore="800" notAfter="900"/>
+    </witness>
+
+As part of the Bayesian phylogenetic analysis, the distributions of the tip dates for witnesses with date ranges will also be estimated.
+
+Root Frequencies and Substitution Models
+----------------------------------------
+
+Since BEAST's XML input format supports phylogenetic analogues of intrinsic probabilities 
+(i.e., probabilities of certain readings being authorial)
+and transcriptional probabilities (i.e., probabilities of scribes and readers changing some readings into others)
+in the forms of root frequencies at variation units
+and rate variables used in the substitution models of variation units,
+``teiphy`` can map TEI XML encodings of these judgments to the appropriate elements in BEAST 2.7 XML.
+
+.. code:: xml
+
+    <interpGrp type="intrinsic">
+        <interp xml:id="RatingA">
+            <p>The current reading is absolutely more likely than the linked reading.</p>
+            <certainty locus="value" degree="19"/>
+        </interp>
+        <interp xml:id="RatingB">
+            <p>The current reading is strongly 
+            more likely than the linked reading.</p>
+            <certainty locus="value" degree="4"/>
+        </interp>
+        <interp xml:id="RatingC">
+            <p>The current reading is more likely
+            than the linked reading.</p>
+            <certainty locus="value" degree="1.5"/>
+        </interp>
+        <interp xml:id="RatingD">
+            <p>The current reading is slightly more likely than the linked reading.</p>
+            <certainty locus="value" degree="1.1"/>
+        </interp>
+        <interp xml:id="EqualRating">
+            <p>The current reading and the linked reading 
+            are equally likely.</p>
+            <certainty locus="value" degree="1"/>
+        </interp>
+    </interpGrp>
+
+.. code:: xml
+
+    <listRelation type="intrinsic">
+        <relation active="1" passive="2" ana="#RatingA"/>
+        <relation active="2" passive="3" ana="#EqualRating"/>
+        <relation active="3" passive="4" ana="#EqualRating"/>
+    </listRelation>
+
+.. code:: xml
+
+    <interpGrp type="transcriptional">
+        <interp xml:id="Clar">
+            <p>Clarification of the text in terms of grammar, 
+            style, or theology.</p>
+        </interp>
+        <interp xml:id="AurConf">
+            <p>Aural confusion concerning letters or dipthongs 
+            that came to have the same sound in later Greek.</p>
+        </interp>
+        <interp xml:id="LingConf">
+            <p>Linguistic confusion concerning rules 
+            of Greek grammar.</p>
+            <p><i>Constructiones ad sensum</i> that reflect 
+            changes in grammatical rules over time 
+            also fall under this rubric.</p>
+        </interp>
+        <interp xml:id="VisErr">
+            <p>Visual error, such as paleographic confusion 
+            of similar letters, haplography, dittography, 
+            and other skips of the eye resulting in small omissions. 
+            Rarer situations, like duplication or omission 
+            of letters related to the presence or absence 
+            of an ornamental capital at the start of a line, 
+            also fall under this rubric.</p>
+        </interp>
+        <interp xml:id="Harm">
+            <p>Harmonization, either to a parallel passage 
+            or to the near context.</p>
+        </interp>
+        <interp xml:id="Byz">
+            <p>The text is brought into conformity 
+            with the Byzantine text.</p>
+        </interp>
+    </interpGrp>
+
+.. code:: xml
+
+    <listRelation type="transcriptional">
+        <relation active="1 2 3" passive="4" ana="#Harm"/>
+        <relation active="1" passive="2 3 4" ana="#Clar"/>
+        <relation active="2" passive="1" ana="#VisErr"/>
+        <relation active="2" passive="3" ana="#Clar #Harm"/>
+        <relation active="3" passive="4" ana="#Clar"/>
+        <relation active="1 2 4" passive="3" ana="#Byz"/>
+    </listRelation>
+
 Supported Output Formats and Options
 ------------------------------------
 
 You can specify a preferred output format for the conversion explicitly with the ``--format`` flag.
-Supported options include ``nexus``, ``hennig86``, ``phylip`` (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), ``fasta``, ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
+Supported options include ``nexus``, ``hennig86``, ``phylip`` (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), ``fasta``, ``xml`` (specifically, the flavor of XML read by BEAST 2.7), ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
 If you do not supply a ``--format`` argument, then ``teiphy`` will attempt to infer the correct format from the file extension of the output file name.
 
 For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-readable labels for variation units and readings) is included in the output file by default, but you can disable it by specifying the ``--no-labels`` flag.

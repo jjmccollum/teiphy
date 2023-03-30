@@ -72,7 +72,7 @@ class ReadingTestCase(unittest.TestCase):
     def test_init_certainties_default(self):
         xml = et.fromstring("<witDetail target=\"1 2\"/>")
         reading = Reading(xml, verbose=True)
-        self.assertEqual(reading.certainties, {"1": 0.5, "2": 0.5})
+        self.assertEqual(reading.certainties, {"1": 0.0, "2": 0.0})
 
     def test_init_certainties_specified(self):
         xml = et.fromstring(

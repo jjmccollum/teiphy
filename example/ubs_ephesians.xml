@@ -15,7 +15,7 @@
             <sourceDesc>
                 <!-- Description of the work (including a date range of origin) whose manuscript tradition is detailed below -->
                 <bibl>
-                    <title>Πρὸς Ἐφεσίους</title>
+                    <title xml:lang="grc">Πρὸς Ἐφεσίους</title>
                     <date notBefore="50" notAfter="80"/>
                 </bibl>
                 <listWit>
@@ -146,23 +146,26 @@
     <text xml:lang="grc">
         <interpGrp type="intrinsic">
             <interp xml:id="RatingA">
-                <p>The text is certain.</p>
+                <p>The current reading is absolutely more likely than the linked reading.</p>
                 <certainty locus="value" degree="19"/>
             </interp>
             <interp xml:id="RatingB">
-                <p>The text is almost certain.</p>
+                <p>The current reading is strongly 
+                more likely than the linked reading.</p>
                 <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="RatingC">
-                <p>The Committee had difficulty in deciding which variant to place in the text.</p>
+                <p>The current reading is more likely
+                than the linked reading.</p>
                 <certainty locus="value" degree="1.5"/>
             </interp>
             <interp xml:id="RatingD">
-                <p>The Committee had great difficulty in arriving at a decision.</p>
+                <p>The current reading is slightly more likely than the linked reading.</p>
                 <certainty locus="value" degree="1.1"/>
             </interp>
             <interp xml:id="EqualRating">
-                <p>The current reading and the linked reading are equally likely.</p>
+                <p>The current reading and the linked reading 
+                are equally likely.</p>
                 <certainty locus="value" degree="1"/>
             </interp>
         </interpGrp>
@@ -339,7 +342,7 @@
             </app>
             <app xml:id="B10K3V1U14-18">
                 <lem><w>του</w><w>χριστου</w><w>ιησου</w></lem>
-                <rdg n="1" wit="UBS P46 01C1 02 03 06C1 18 33 35 1175 vg copsa copbo Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
+                <rdg n="1" wit="UBS P46 01C1 02 03 06C1 18 33 35 424* 1175 vg copsa copbo Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
                 <rdg n="2" wit="01* 06* 010 012 Ambrosiaster MariusVictorinus"><w>του</w><w>χριστου</w></rdg>
                 <rdg n="3" wit="88 424C 606 1505 1739 1910 2495"><w>χριστου</w><w>ιησου</w></rdg>
                 <rdg n="4" wit="915 1611 1881"><w>ιησου</w><w>χριστου</w></rdg>

@@ -96,17 +96,6 @@ class Reading:
             self.text = xml.text if xml.text is not None else ""
             for child in xml:
                 self.parse(child, verbose)
-            # Normalize its certainties map:
-            norm = sum(self.certainties.values())
-            if norm == 0:
-                # If the norm is zero, then presumably no certainty elements were included under this element;
-                # just set the value for each target to 1 and normalize as usual:
-                for t in self.targets:
-                    self.certainties[t] = 1
-                    norm += 1
-            if norm > 0:
-                for t in self.certainties:
-                    self.certainties[t] = self.certainties[t] / norm
             # Strip any surrounding whitespace left over from spaces added between word elements:
             self.text = self.text.strip()
             # Populate its ID, using its xml:id if it has one; otherwise, use its n attribute if it has one; otherwise, use its text:
