@@ -186,15 +186,40 @@ attribute.
 For NEXUS output, the character states for each witness are encoded using
 ``StatesFormat=StatesPresent`` by default, meaning that each non-missing character is
 represented by a single symbol or by a set of symbols between braces (in the case of ambiguous readings).
-But if you want to encode the character states for each witness using ``StatesFormat=Frequency``,
+An example of this encoding is the following: ``P46 1003110?001011000200100001000100001{01}0100``.
+This setting produces more compact outputs and is the expected states format for PAUP* and most other programs.
+The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
+
+If you want your NEXUS output to contain the character states for each witness using ``StatesFormat=Frequency``,
 with each character represented by a vector of frequencies for each reading/state, you can do this with the ``--frequency`` option to ``teiphy``.
 For unambiguous readings, the corresponding state vector will have a value of 1 for a single
-reading/state; for simple ambiguous readings encoded as ``witDetail`` elements
+reading/state.
+For simple ambiguous readings encoded as ``witDetail`` elements
 with the potential readings specified in the ``@target`` attribute, 
 the state vector will have a value of 1 for each specified reading/state;
 and for ``witDetail`` elements containing ``certainty``
 elements with varying ``@degree`` attributes,
 the ``@degree`` value for each specified reading will be copied to the state vector.
+With this setting in the NEXUS output, the sequence for witness P46 would look as follows:
+
+::
+
+    P46
+        (0:0.0000 1:1.0000)
+        (0:1.0000 1:0.0000 2:0.0000)
+        (0:1.0000 1:0.0000)
+        (0:0.0000 1:0.0000 2:0.0000 3:1.0000)
+        (0:0.0000 1:1.0000)
+        (0:0.0000 1:1.0000)
+        (0:1.0000 1:0.0000 2:0.0000 3:0.0000)
+        ?
+        (0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000)
+        ...
+        (0:0.0148 1:0.9852)
+        (0:1.0000 1:0.0000)
+        (0:0.0000 1:1.0000)
+        (0:1.0000 1:0.0000)
+        (0:1.0000 1:0.0000)
 
 For current phylogenetic software that accepts NEXUS input, the ``StatesFormat=Frequency`` setting is not supported,
 so for most output formats, ``witDetail`` elements containing ``certainty``
@@ -203,7 +228,8 @@ with a 1 for every reading covered by a ``certainty`` element.
 For formats that do not even support ambiguities with specified target states, 
 ambiguous ``witDetail`` elements, with or without ``certainty`` elements,
 will be mapped to missing states (i.e., the ``?`` symbol).
-At this time, only BEAST 2 supports tip likelihoods, so ``certainty`` values are preserved in BEAST 2.7 XML outputs.
+For NEXUS outputs with the default ``StatesPresent`` encoding, you can also include the ``--ambiguous-as-missing`` flag if you want to coerce all ambiguous states to be encoded as missing states.
+Since BEAST 2 supports tip likelihoods, ``certainty`` values are preserved in BEAST 2.7 XML outputs by default.
 
 Lacunae and Other Missing Data
 ------------------------------
@@ -421,15 +447,19 @@ as in the following examples:
 
 As part of the Bayesian phylogenetic analysis, the distributions of the tip dates for witnesses with date ranges will also be estimated.
 
+Tip dates are also used by ``teiphy`` in converting TEI XML to inputs to the STEMMA program, as STEMMA uses date ranges to constrain the relationships between witnesses that it will consider.
+
 Root Frequencies and Substitution Models
 ----------------------------------------
 
-Since BEAST's XML input format supports phylogenetic analogues of intrinsic probabilities 
-(i.e., probabilities of certain readings being authorial)
-and transcriptional probabilities (i.e., probabilities of scribes and readers changing some readings into others)
+Since BEAST's XML input format supports phylogenetic analogues of intrinsic probabilities
+(i.e., the probability that a given reading is authorial)
+and transcriptional probability (i.e., the probability that one reading would give rise to another according to common mechanisms of scribal error or innovation)
 in the forms of root frequencies at variation units
 and rate variables used in the substitution models of variation units,
 ``teiphy`` can map TEI XML encodings of these judgments to the appropriate elements in BEAST 2.7 XML.
+
+To encode intrinsic probabilities in a consistent and rigorous way, you can define discrete odds categories with fixed values as analytic tags using code like the following:
 
 .. code:: xml
 
@@ -459,6 +489,9 @@ and rate variables used in the substitution models of variation units,
         </interp>
     </interpGrp>
 
+The specified odds values are defined in the ``@degree`` attributes of ``certainty`` elements.
+These categories can be used to define the relative probabilities of variant readings in a given variation unit under a ``note`` element in that unit using ``relation`` elements as follows:
+
 .. code:: xml
 
     <listRelation type="intrinsic">
@@ -466,6 +499,12 @@ and rate variables used in the substitution models of variation units,
         <relation active="2" passive="3" ana="#EqualRating"/>
         <relation active="3" passive="4" ana="#EqualRating"/>
     </listRelation>
+
+In terms of the analytic categories defined above, this list of ``relation`` elements indicates that reading 1 is nineteen times more likely to be authorial than reading 2, and readings 2 and 3 are equally likely.
+This results in root frequencies of 0.9048, 0.0476, and 0.0476.
+If no such set of relations is specified, then the root frequencies are set according to a uniform distribution by default.
+
+If you wish to incorporate transcriptional probabilities for different classes of scribal changes into your analysis, you may do so by defining analytic tags for rate parameters as follows:
 
 .. code:: xml
 
@@ -504,6 +543,12 @@ and rate variables used in the substitution models of variation units,
         </interp>
     </interpGrp>
 
+If you wish to specify fixed rates for these transcriptional change classes, then you can do so using ``certainty`` elements 
+as in the definitions of the intrinsic odds categories above.
+Any classes without fixed rates will have their rates estimated as part of the phylogenetic model.
+Transitions between different readings in a given variation unit can then be categorized with one or more of these tags in a ``note`` element in that unit 
+(parallel to the ``listRelation`` used to encode the intrinsic probabilities of the readings) as follows:
+
 .. code:: xml
 
     <listRelation type="transcriptional">
@@ -515,6 +560,16 @@ and rate variables used in the substitution models of variation units,
         <relation active="1 2 4" passive="3" ana="#Byz"/>
     </listRelation>
 
+To allow for more succinct encodings of transitions, multiple possible source and target readings can be specified in the ``@active`` and ``@passive`` attributes of a ``relation`` element,
+and more than one analytic tag can be specified in the ``@ana`` attribute;
+thus, ``<relation active="1 2 3" passive="4" ana="#Harm"/>`` indicates that reading 1, 2, or 3 could give rise to reading 4 by harmonization, 
+``<relation active="1" passive="2 3 4" ana="#Clar"/>`` indicates that reading 1 could give rise to reading 2, 3, or 4 by clarification,
+and ``<relation active="2" passive="3" ana="#Clar #Harm"/>`` indicates that reading 2 could give to reading 3 by clarification or harmonization.
+When these transitions are tagged in this way, ``teiphy`` will map them to the off-diagonal entries of the substitution matrix for this variation unit, 
+summing multiple rates if more than one tag is specified for a transition.
+All transitions not covered by a ``relation`` element (e.g., a transition from reading 3 to reading 1, which is not covered in the example above) will be assigned the "default" rate of 1.
+Accordingly, if no ``listRelation`` for transcriptional change categories is specified at all, then the substitution model for a variation unit with *k* substantive readings will default to the Lewis Mk model.
+
 Supported Output Formats and Options
 ------------------------------------
 
@@ -522,39 +577,12 @@ You can specify a preferred output format for the conversion explicitly with the
 Supported options include ``nexus``, ``hennig86``, ``phylip`` (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), ``fasta``, ``xml`` (specifically, the flavor of XML read by BEAST 2.7), ``csv``, ``tsv``, ``excel`` (note that only ``.xlsx`` format is supported), and ``stemma``.
 If you do not supply a ``--format`` argument, then ``teiphy`` will attempt to infer the correct format from the file extension of the output file name.
 
+By default, ``teiphy`` includes constant characters (i.e., variation units where all witnesses attest to the same substantive reading) in its outputs.
+If you wish to exclude these from your analysis (as is the case if you want to use ascertainment bias correction in your phylogenetic software), then you can do so by specifying the ``--drop-constant`` flag.
+
 For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-readable labels for variation units and readings) is included in the output file by default, but you can disable it by specifying the ``--no-labels`` flag.
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.
-
-For ``nexus`` outputs, the output uses the ``StatesFormat=StatesPresent`` encoding option by default.
-With this setting, witness character states are encoded as a series of single symbols for unambiguous readings and multi-state symbols in braces representing ambiguous readings
-(e.g., ``P46 1003110?001011000200100001000100001{01}0100``).
-This setting produces more compact outputs and is the expected states format for PAUP*.
-The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
-If you wish to capture unequal degrees of certainty more precisely, then you can also include the ``--frequency`` flag,
-which will use the ``StatesFormat=Frequency`` setting in the NEXUS output and encode reading states as frequency vectors:
-
-::
-
-    P46
-        (0:0.0000 1:1.0000)
-        (0:1.0000 1:0.0000 2:0.0000)
-        (0:1.0000 1:0.0000)
-        (0:0.0000 1:0.0000 2:0.0000 3:1.0000)
-        (0:0.0000 1:1.0000)
-        (0:0.0000 1:1.0000)
-        (0:1.0000 1:0.0000 2:0.0000 3:0.0000)
-        ?
-        (0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000)
-        ...
-        (0:0.0148 1:0.9852)
-        (0:1.0000 1:0.0000)
-        (0:0.0000 1:1.0000)
-        (0:1.0000 1:0.0000)
-        (0:1.0000 1:0.0000)
-
-For ``nexus`` outputs with the default ``StatesPresent`` encoding, you can also include the ``--ambiguous-as-missing`` flag if you want to treat all ambiguous states as missing states.
-If your NEXUS-formatted output is to be used by a phylogenetic software that ignores or does not recognize ambiguous states, you may want or need to use this option.
 
 Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
