@@ -78,8 +78,8 @@
             <distribution spec="CompoundDistribution" id="prior">
                 <!-- Priors for the BICEPS model -->
                 <distribution spec="biceps.BICEPS" id="biceps" linkedMean="true" ploidy="1">
-                    <populationShape spec="parameter.RealParameter" id="bicepsPopShape" lower="0.0" upper="0.0">3.0</parameter>
-                    <populationMean spec="parameter.RealParameter" id="bicepsPopSize" lower="0.0">1.0</parameter>
+                    <populationShape spec="parameter.RealParameter" id="bicepsPopShape" lower="0.0" upper="0.0">3.0</populationShape>
+                    <populationMean spec="parameter.RealParameter" id="bicepsPopSize" lower="0.0">1.0</populationMean>
                     <groupSizes spec="parameter.IntegerParameter" id="bicepsGroupSizes" dimension="6">1</groupSizes>
                     <treeIntervals spec="TreeIntervals" id="treeIntervals" tree="@tree"/>
                 </distribution>
