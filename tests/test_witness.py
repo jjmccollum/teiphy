@@ -35,7 +35,7 @@ class WitnessTestCase(unittest.TestCase):
         xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"18\"><tei:origDate when=\"1364\"/></witness>" % tei_ns)
         witness = Witness(xml)
         self.assertEqual(witness.date_range[0], 1364)
-        self.assertEqual(witness.date_range[1], 1364)
+        self.assertEqual(witness.date_range[1], 1365)
 
     def test_init_date_range_from_to(self):
         xml = et.fromstring(
@@ -45,7 +45,7 @@ class WitnessTestCase(unittest.TestCase):
         witness = Witness(xml)
         # from and to indicate the time during which a witness was being produced, so the upper and lower bounds should both be set to the time when the work was finished:
         self.assertEqual(witness.date_range[0], 384)
-        self.assertEqual(witness.date_range[1], 384)
+        self.assertEqual(witness.date_range[1], 385)
 
     def test_init_date_range_not_before_not_after(self):
         xml = et.fromstring(

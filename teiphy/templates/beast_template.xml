@@ -18,7 +18,7 @@
         </trait>
         <taxonset spec="TaxonSet" idref="taxa"/>
     </tree>
-    <!-- <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
+    <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
         {%- if origin_span[1] %}
         <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[1] }}"/>
         {%- else %}
@@ -27,7 +27,7 @@
         <reproductiveNumber spec="parameter.RealParameter" id="reproductiveNumber" lower="0.0" upper="Infinity" value="2.0"/>
         <becomeUninfectiousRate spec="parameter.RealParameter" id="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
         <samplingProportion spec="parameter.RealParameter" id="samplingProportion" lower="0.0" upper="1.0" value="0.01"/>
-    </birthDeathSkylineModel> -->
+    </birthDeathSkylineModel>
     {%- if clock_model == "strict" %}
     <branchRateModel spec="StrictClockModel" id="clock" clock.rate="@clock.mean"/>
     {%- elif clock_model == "uncorrelated" %}
@@ -41,15 +41,11 @@
     <run spec="MCMC" id="mcmc" chainLength="100000">
         <state spec="State" id="state" storeEvery="5000">
             <stateNode idref="tree"/>
-            <!-- Start BICEPS parameters -->
-            <stateNode idref="bicepsPopShape"/>
-            <stateNode idref="bicepsPopSize"/>
-            <stateNode idref="bicepsGroupSizes"/>
             <!-- Start Birth-Death Skyline model parameters -->
-            <!-- <stateNode idref="origin"/>
+            <stateNode idref="origin"/>
             <stateNode idref="becomeUninfectiousRate"/>
             <stateNode idref="samplingProportion"/>
-            <stateNode idref="reproductiveNumber"/> -->
+            <stateNode idref="reproductiveNumber"/>
             <!-- Start clock parameters -->
             {%- if clock_model == "strict" %}
             <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
@@ -75,18 +71,8 @@
         </state>
         <distribution spec="CompoundDistribution" id="posterior">
             <distribution spec="CompoundDistribution" id="prior">
-                <!-- Priors for the BICEPS model -->
-                <distribution spec="biceps.BICEPS" id="biceps" linkedMean="true" ploidy="1">
-                    <populationShape spec="parameter.RealParameter" id="bicepsPopShape" lower="0.0" upper="0.0">3.0</populationShape>
-                    <populationMean spec="parameter.RealParameter" id="bicepsPopSize" lower="0.0">1.0</populationMean>
-                    <groupSizes spec="parameter.IntegerParameter" id="bicepsGroupSizes" dimension="6">1</groupSizes>
-                    <treeIntervals spec="TreeIntervals" id="treeIntervals" tree="@tree"/>
-                </distribution>
-                <prior id="bicepsPopSizePrior" name="distribution" x="@bicepsPopSize">
-                    <distr spec="LogNormalDistributionModel" meanInRealSpace="true" M="1.0" S="1.0"/>
-                </prior>
                 <!-- Priors for the Birth-Death Skyline model -->
-                <!-- <distribution spec="CompoundDistribution" id="bdLikelihood">
+                <distribution spec="CompoundDistribution" id="bdLikelihood">
                     <distribution idref="birthDeath"/>
                 </distribution>
                 <distribution spec="Prior" id="originPrior" x="@origin">
@@ -104,7 +90,7 @@
                 </distribution>
                 <distribution spec="Prior" id="becomeUninfectiousRatePrior" x="@becomeUninfectiousRate">
                     <distr spec="LogNormalDistributionModel" M="0.0" S="1.0"/>
-                </distribution> -->
+                </distribution>
                 <!-- Priors for the clock model parameters -->
                 {%- if clock_model == "strict" %}
                 <distribution spec="Prior" id="clock.meanPrior" x="@clock.mean">
@@ -187,18 +173,8 @@
                 {%- endfor %}
             </distribution>
         </distribution>
-        <!-- Operators for the BICEPS model -->
-        <operator spec="beast.base.evolution.operator.EpochFlexOperator" id="bicepsEpochTop" scaleFactor="0.1" tree="@tree" weight="2.0"/>
-        <operator spec="beast.base.evolution.operator.EpochFlexOperator" id="bicepsEpochAll" fromOldestTipOnly="false" scaleFactor="0.1" tree="@tree" weight="2.0"/>
-        <operator spec="beast.base.evolution.operator.TreeStretchOperator" id="bicepsTreeFlex" scaleFactor="0.01" tree="@tree" weight="2.0"/>
-        <operator spec="ScaleOperator" id="bicepsTreeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="Uniform" id="bicepsUniformOperator" tree="@tree" weight="30.0"/>
-        <operator spec="SubtreeSlide" id="bicepsSubtreeSlide" tree="@tree" weight="15.0"/>
-        <operator spec="Exchange" id="bicepsNarrow" tree="@tree" weight="15.0"/>
-        <operator spec="Exchange" id="bicepsWide" isNarrow="false" tree="@tree" weight="3.0"/>
-        <operator spec="WilsonBalding" id="bicepsWilsonBalding" tree="@tree" weight="3.0"/>
         <!-- Operators for the Birth-Death Skyline model -->
-        <!-- <operator spec="ScaleOperator" id="bdskySerialTreeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
+        <operator spec="ScaleOperator" id="bdskySerialTreeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
         <operator spec="ScaleOperator" id="bdskySerialTreeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
         <operator spec="beast.base.evolution.operator.Uniform" id="bdskySerialUniformOperator" tree="@tree" weight="30.0"/>
         <operator spec="SubtreeSlide" id="bdskySerialSubtreeSlide" tree="@tree" weight="15.0"/>
@@ -212,7 +188,7 @@
         <operator spec="UpDownOperator" id="updownBD" scaleFactor="0.75" weight="2.0">
             <up idref="reproductiveNumber"/>
             <down idref="becomeUninfectiousRate"/>
-        </operator> -->
+        </operator>
         <!-- Operators for the clock model -->
         {%- if clock_model == "strict" %}
         <operator spec="UpDownOperator" id="tree_updown" scaleFactor=".75" weight="10">
@@ -256,14 +232,11 @@
             <log idref="likelihood"/>
             <log idref="prior"/>
             <log spec="TreeHeightLogger" id="treeHeight" tree="@tree"/>
-            <!-- Operators for the BICEPS model -->
-            <log idref="biceps"/>
-            <!-- Loggers for the Birth-Death Skyline model -->
-            <!-- <log idref="birthDeath"/>
+            <log idref="birthDeath"/>
             <log idref="origin"/>
             <log idref="becomeUninfectiousRate"/>
             <log idref="reproductiveNumber"/>
-            <log idref="samplingProportion"/> -->
+            <log idref="samplingProportion"/>
             <log spec="RateStatistic" id="rate" branchratemodel="@clock" tree="@tree"/>
             {%- if clock_model == "strict" %}
             <log idref="clock.mean"/>

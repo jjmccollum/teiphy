@@ -41,12 +41,12 @@ class Witness:
             # Try the @when attribute first; if it is set, then it accounts for both ends of the date range:
             if orig_date.get("when") is not None:
                 date_range[0] = int(orig_date.get("when").split("-")[0])
-                date_range[1] = date_range[0]
+                date_range[1] = date_range[0] + 1
             # Failing that, if it has @from and @to attributes (indicating the period over which the manuscript was completed),
             # then the completion date of the work accounts for both ends of the date range:
             elif orig_date.get("to") is not None:
                 date_range[0] = int(orig_date.get("to").split("-")[0])
-                date_range[1] = date_range[0]
+                date_range[1] = date_range[0] + 1
             # Failing that, set lower and upper bounds on the witness's date using the the @notBefore and @notAfter attributes:
             elif orig_date.get("notBefore") is not None or orig_date.get("notAfter") is not None:
                 if orig_date.get("notBefore") is not None:

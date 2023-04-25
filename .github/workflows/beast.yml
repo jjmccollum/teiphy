@@ -44,7 +44,6 @@ jobs:
         tar zxvf *.tgz
         ~/.beast/beast/bin/packagemanager -add BEASTLabs
         ~/.beast/beast/bin/packagemanager -add BDSKY
-        ~/.beast/beast/bin/packagemanager -add BICEPS
     - name: Phylogenetics Run
       run: |
         ~/.beast/beast/bin/beast -overwrite beast_strict_example.xml
