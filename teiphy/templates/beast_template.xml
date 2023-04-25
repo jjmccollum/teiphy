@@ -45,7 +45,6 @@
             <stateNode idref="bicepsPopShape"/>
             <stateNode idref="bicepsPopSize"/>
             <stateNode idref="bicepsGroupSizes"/>
-            <stateNode idref="treeIntervals"/>
             <!-- Start Birth-Death Skyline model parameters -->
             <!-- <stateNode idref="origin"/>
             <stateNode idref="becomeUninfectiousRate"/>
