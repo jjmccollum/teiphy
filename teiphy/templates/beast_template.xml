@@ -12,12 +12,13 @@
             {%- endfor %}
         </userDataType>
     </data>
-    <tree spec="Tree" id="tree">
+    <tree spec="Tree" id="tree" taxa="@alignment"/>
+    <!-- <tree spec="Tree" id="tree">
         <trait spec="TraitSet" traitname="date" units="year" value="{{ date_map }}">
             <taxa spec="TaxonSet" id="taxa" alignment="@alignment"/>
         </trait>
         <taxonset spec="TaxonSet" idref="taxa"/>
-    </tree>
+    </tree> -->
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
         {%- if origin_span[1] %}
         <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[1] }}"/>
