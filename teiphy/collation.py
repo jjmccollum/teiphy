@@ -1088,33 +1088,33 @@ class Collation:
         beast_symbols = possible_symbols[:nsymbols]
         return beast_symbols
 
-    # def get_beast_date_map(self, taxlabels):
-    #     """Returns a string representing witness-to-date mappings in BEAST format.
+    def get_beast_date_map(self, taxlabels):
+        """Returns a string representing witness-to-date mappings in BEAST format.
 
-    #     Since this format requires single dates as opposed to date ranges,
-    #     witnesses with closed date ranges will be mapped to the average of their lower and upper bounds,
-    #     and witnesses with open date ranges will not be mapped.
+        Since this format requires single dates as opposed to date ranges,
+        witnesses with closed date ranges will be mapped to the average of their lower and upper bounds,
+        and witnesses with open date ranges will not be mapped.
 
-    #     Args:
-    #         taxlabels: A list of slugified taxon labels.
+        Args:
+            taxlabels: A list of slugified taxon labels.
 
-    #     Returns:
-    #         A string containing comma-separated date calibrations of the form witness_id=date.
-    #     """
-    #     calibrate_strings = []
-    #     for i, wit in enumerate(self.witnesses):
-    #         taxlabel = taxlabels[i]
-    #         date_range = wit.date_range
-    #         # If either end of this witness's date range is empty, then do not include it:
-    #         if date_range[0] is None or date_range[1] is None:
-    #             continue
-    #         # Otherwise, take the midpoint of its date range as its date:
-    #         date = int((date_range[0] + date_range[1]) / 2)
-    #         calibrate_string = "%s=%d" % (taxlabel, date)
-    #         calibrate_strings.append(calibrate_string)
-    #     # Then output the full date map string:
-    #     date_map = ",".join(calibrate_strings)
-    #     return date_map
+        Returns:
+            A string containing comma-separated date calibrations of the form witness_id=date.
+        """
+        calibrate_strings = []
+        for i, wit in enumerate(self.witnesses):
+            taxlabel = taxlabels[i]
+            date_range = wit.date_range
+            # If either end of this witness's date range is empty, then do not include it:
+            if date_range[0] is None or date_range[1] is None:
+                continue
+            # Otherwise, take the midpoint of its date range as its date:
+            date = int((date_range[0] + date_range[1]) / 2)
+            calibrate_string = "%s=%d" % (taxlabel, date)
+            calibrate_strings.append(calibrate_string)
+        # Then output the full date map string:
+        date_map = ",".join(calibrate_strings)
+        return date_map
 
     def get_beast_origin_span(self):
         """Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
@@ -1289,7 +1289,7 @@ class Collation:
         taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
         missing_symbol = '?'
         symbols = self.get_beast_symbols()
-        # date_map = self.get_beast_date_map(taxlabels)
+        date_map = self.get_beast_date_map(taxlabels)
         origin_span = self.get_beast_origin_span()
         # Then populate the necessary objects for the BEAST XML Jinja template:
         witness_objects = []
@@ -1444,7 +1444,7 @@ class Collation:
         template = env.get_template("beast_template.xml")
         rendered = template.render(
             nsymbols=len(symbols),
-            # date_map=date_map,
+            date_map=date_map,
             origin_span=origin_span,
             clock_model=clock_model.value,
             clock_rate_categories=2 * len(self.witnesses) - 1,

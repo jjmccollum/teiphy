@@ -13,7 +13,7 @@
         </userDataType>
     </data>
     <tree spec="Tree" id="tree">
-        <trait spec="TraitSet" traitname="date" units="year" value="">
+        <trait spec="TraitSet" traitname="date" units="year" value="{{ date_map }}">
             <taxa spec="TaxonSet" id="taxa" alignment="@alignment"/>
         </trait>
         <taxonset spec="TaxonSet" idref="taxa"/>
