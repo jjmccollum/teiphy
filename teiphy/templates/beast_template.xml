@@ -13,7 +13,7 @@
         </userDataType>
     </data>
     <tree spec="ClusterTree" id="tree" clusterType="upgma">
-        <taxa spec="TaxonSet" id="taxa" alignment="@alignment"/>
+        <taxa id="taxa" alignment="@alignment"/>
     </tree>
     <!-- <tree spec="Tree" id="tree">
         <trait spec="TraitSet" traitname="date" units="year" value="{{ date_map }}">
