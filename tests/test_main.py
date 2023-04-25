@@ -158,7 +158,7 @@ def test_to_nexus_calibrate_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
-        assert "CALIBRATE 18 = uniform(%d,%d)" % (datetime.now().year - 1365, datetime.now().year - 1364) in text
+        assert "CALIBRATE 18 = fixed(%d)" % (datetime.now().year - 1364) in text
         assert "CALIBRATE P46 = uniform(%d,%d)" % (datetime.now().year - 225, datetime.now().year - 175) in text
 
 
@@ -184,7 +184,7 @@ def test_to_nexus_calibrate_dates_some_dates():
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
         assert (
-            "CALIBRATE UBS = uniform(%d,%d)" % (datetime.now().year - 51, datetime.now().year - 50) in text
+            "CALIBRATE UBS = fixed(%d)" % (datetime.now().year - 50) in text
         )  # both ends of date range specified and identical
         assert "CALIBRATE P46 = offsetlognormal(0,0.0,1.0)" in text  # neither end of date range specified
         assert (
@@ -208,7 +208,7 @@ def test_to_nexus_mrbayes():
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
         assert "prset treeagepr = uniform(%d,%d)" % (datetime.now().year - 80, datetime.now().year - 50) in text
-        assert "calibrate 18 = uniform(%d,%d);" % (datetime.now().year - 1365, datetime.now().year - 1364) in text
+        assert "calibrate 18 = fixed(%d);" % (datetime.now().year - 1364) in text
         assert "calibrate P46 = uniform(%d,%d);" % (datetime.now().year - 225, datetime.now().year - 175) in text
 
 
@@ -234,9 +234,9 @@ def test_to_nexus_mrbayes_some_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
-        assert "prset treeagepr = offsetgamma(%d,1.0,1.0);" % (datetime.now().year - 51) in text
+        assert "prset treeagepr = offsetgamma(%d,1.0,1.0);" % (datetime.now().year - 50) in text
         assert (
-            "calibrate UBS = uniform(%d,%d);" % (datetime.now().year - 51, datetime.now().year - 50) in text
+            "calibrate UBS = fixed(%d);" % (datetime.now().year - 50) in text
         )  # both ends of date range specified and identical
         assert "calibrate P46 = offsetgamma(0,1.0,1.0);" in text  # neither end of date range specified
         assert (
@@ -626,10 +626,10 @@ def test_to_beast_no_dates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        # beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
-        # assert len(beast_xml_traits) == 1
-        # assert beast_xml_traits[0].get("value") is not None
-        # assert beast_xml_traits[0].get("value") == ""
+        beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
+        assert len(beast_xml_traits) == 1
+        assert beast_xml_traits[0].get("value") is not None
+        assert beast_xml_traits[0].get("value") == ""
         beast_xml_origin_parameters = beast_xml.xpath("//origin")
         assert len(beast_xml_origin_parameters) == 1
         assert float(beast_xml_origin_parameters[0].get("value")) == 1.0
@@ -660,18 +660,18 @@ def test_to_beast_some_dates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        # beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
-        # assert len(beast_xml_traits) == 1
-        # assert beast_xml_traits[0].get("value") is not None
-        # assert beast_xml_traits[0].get("value") == "UBS=%d,01=%d,06=%d" % (
-        #     50,
-        #     int((datetime.now().year + 300) / 2),
-        #     550,
-        # )
+        beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
+        assert len(beast_xml_traits) == 1
+        assert beast_xml_traits[0].get("value") is not None
+        assert beast_xml_traits[0].get("value") == "UBS=%d,01=%d,06=%d" % (
+            50,
+            int((datetime.now().year + 300) / 2),
+            550,
+        )
         beast_xml_origin_parameters = beast_xml.xpath("//origin")
         assert len(beast_xml_origin_parameters) == 1
         assert float(beast_xml_origin_parameters[0].get("value")) == 1.0
-        assert float(beast_xml_origin_parameters[0].get("lower")) == datetime.now().year - 51
+        assert float(beast_xml_origin_parameters[0].get("lower")) == datetime.now().year - 50
         assert beast_xml_origin_parameters[0].get("upper") == "Infinity"
 
 
@@ -1039,7 +1039,7 @@ def test_to_stemma_some_dates():
         assert chron_output.exists()
         chron_text = chron_output.read_text(encoding="utf-8")
         assert chron_text.startswith("UBS")
-        assert chron_text.count("50    50    51") == 1
+        assert chron_text.count("50    50    50") == 1
         assert (
             chron_text.count("300  %d  %d" % (int((datetime.now().year + 300) / 2), datetime.now().year)) == 1
         )  # for the one witness with a lower bound and no upper bound
