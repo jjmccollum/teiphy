@@ -12,7 +12,7 @@
             {%- endfor %}
         </userDataType>
     </data>
-    <tree spec="Tree" id="tree" taxa="@alignment"/>
+    <tree spec="Tree" id="tree" taxonset="@alignment"/>
     <!-- <tree spec="Tree" id="tree">
         <trait spec="TraitSet" traitname="date" units="year" value="{{ date_map }}">
             <taxa spec="TaxonSet" id="taxa" alignment="@alignment"/>
