@@ -563,6 +563,7 @@ def test_to_beast():
         assert len(beast_xml_singleton_sequences) == 1
         assert beast_xml_singleton_sequences[0].get("value") is not None
         assert "DUMMY" in beast_xml_singleton_sequences[0].get("value")
+        assert "WARNING: the latest witness" in result.stdout
 
 
 def test_to_beast_drop_constant():

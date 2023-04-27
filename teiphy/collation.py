@@ -1134,6 +1134,31 @@ class Collation:
             origin_span[1] = datetime.now().year - self.origin_date_range[0]
         return tuple(origin_span)
 
+    def validate_latest_tip(self):
+        """Checks if the witness with the latest possible date has a fixed date
+        (i.e, if the lower and upper bounds for its date are the same).
+        If this is not true, then a warning is issued.
+        """
+        latest_date = None
+        latest_wit = None
+        for i, wit in enumerate(self.witnesses):
+            wit_id = wit.id
+            date_range = wit.date_range
+            if date_range[1] is not None:
+                if latest_date is not None:
+                    if date_range[1] > latest_date:
+                        latest_date = date_range[1]
+                        latest_wit = wit
+                else:
+                    latest_date = date_range[1]
+                    latest_wit = wit
+        if latest_wit.date_range[0] is None or latest_wit.date_range[0] != latest_wit.date_range[1]:
+            print(
+                "WARNING: the latest witness, %s, has a variable date range; this may result in precisely dated witness being misaligned in the trees output by BEAST."
+                % latest_wit.id
+            )
+        return
+
     def get_beast_code_map_for_unit(self, symbols, missing_symbol, vu_ind):
         """Returns a string containing state/reading code mappings in BEAST format using the given single-state and missing state symbols for the character/variation unit at the given index.
         If the variation unit at the given index is a singleton unit (i.e., if it has only one substantive reading), then a code for a dummy state will be included.
@@ -1291,6 +1316,7 @@ class Collation:
         symbols = self.get_beast_symbols()
         date_map = self.get_beast_date_map(taxlabels)
         origin_span = self.get_beast_origin_span()
+        self.validate_latest_tip()
         # Then populate the necessary objects for the BEAST XML Jinja template:
         witness_objects = []
         variation_unit_objects = []
