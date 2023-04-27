@@ -99,8 +99,7 @@
                         <origDate notBefore="1000" notAfter="1100"/>
                     </witness>
                     <witness n="2495">
-                        <!--<origDate notBefore="1400" notAfter="1500"/>-->
-                        <origDate when="1450"/>
+                        <origDate notBefore="1400" notAfter="1500"/>
                     </witness>
                     <!-- Versions -->
                     <witness type="version" n="vg">
