@@ -89,6 +89,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
@@ -108,6 +109,13 @@
 
       <ul>
         <li><a href="cli.html#cmdoption-teiphy-calibrate-dates">teiphy command line option</a>
+</li>
+      </ul></li>
+      <li>
+    --clock
+
+      <ul>
+        <li><a href="cli.html#cmdoption-teiphy-clock">teiphy command line option</a>
 </li>
       </ul></li>
       <li>
@@ -330,12 +338,24 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference.html#teiphy.Collation.get_base_wit">get_base_wit() (teiphy.Collation method)</a>
 </li>
+      <li><a href="reference.html#teiphy.Collation.get_beast_code_map_for_unit">get_beast_code_map_for_unit() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.get_beast_date_map">get_beast_date_map() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.get_beast_equilibrium_frequencies_for_unit">get_beast_equilibrium_frequencies_for_unit() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.get_beast_origin_span">get_beast_origin_span() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.get_beast_root_frequencies_for_unit">get_beast_root_frequencies_for_unit() (teiphy.Collation method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference.html#teiphy.Collation.get_beast_symbols">get_beast_symbols() (teiphy.Collation method)</a>
+</li>
       <li><a href="reference.html#teiphy.Collation.get_fasta_symbols">get_fasta_symbols() (teiphy.Collation method)</a>
 </li>
       <li><a href="reference.html#teiphy.Collation.get_hennig86_symbols">get_hennig86_symbols() (teiphy.Collation method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference.html#teiphy.Collation.get_nexus_symbols">get_nexus_symbols() (teiphy.Collation method)</a>
 </li>
       <li><a href="reference.html#teiphy.Collation.get_phylip_symbols">get_phylip_symbols() (teiphy.Collation method)</a>
@@ -365,6 +385,8 @@
         <li><a href="cli.html#cmdoption-teiphy-arg-INPUT">teiphy command line option</a>
 </li>
       </ul></li>
+      <li><a href="reference.html#teiphy.VariationUnit.intrinsic_relations">intrinsic_relations (teiphy.VariationUnit attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -382,6 +404,10 @@
 
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference.html#teiphy.Collation.origin_date_range">origin_date_range (teiphy.Collation attribute)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     OUTPUT
@@ -402,13 +428,19 @@
         <li><a href="reference.html#teiphy.VariationUnit.parse">(teiphy.VariationUnit method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference.html#teiphy.Collation.parse_apps">parse_apps() (teiphy.Collation method)</a>
 </li>
+      <li><a href="reference.html#teiphy.Collation.parse_intrinsic_odds">parse_intrinsic_odds() (teiphy.Collation method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference.html#teiphy.Collation.parse_list_wit">parse_list_wit() (teiphy.Collation method)</a>
 </li>
+      <li><a href="reference.html#teiphy.Collation.parse_origin_date_range">parse_origin_date_range() (teiphy.Collation method)</a>
+</li>
       <li><a href="reference.html#teiphy.Collation.parse_readings_by_witness">parse_readings_by_witness() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.parse_transcriptional_rates">parse_transcriptional_rates() (teiphy.Collation method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -451,6 +483,8 @@
         <li><a href="cli.html#cmdoption-teiphy-ambiguous-as-missing">--ambiguous-as-missing</a>
 </li>
         <li><a href="cli.html#cmdoption-teiphy-calibrate-dates">--calibrate-dates</a>
+</li>
+        <li><a href="cli.html#cmdoption-teiphy-clock">--clock</a>
 </li>
         <li><a href="cli.html#cmdoption-teiphy-drop-constant">--drop-constant</a>
 </li>
@@ -513,6 +547,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference.html#teiphy.Reading.text">text (teiphy.Reading attribute)</a>
 </li>
+      <li><a href="reference.html#teiphy.Collation.to_beast">to_beast() (teiphy.Collation method)</a>
+</li>
       <li><a href="reference.html#teiphy.Collation.to_csv">to_csv() (teiphy.Collation method)</a>
 </li>
       <li><a href="reference.html#teiphy.Collation.to_dataframe">to_dataframe() (teiphy.Collation method)</a>
@@ -537,6 +573,8 @@
 </li>
       <li><a href="reference.html#teiphy.Collation.to_stemma">to_stemma() (teiphy.Collation method)</a>
 </li>
+      <li><a href="reference.html#teiphy.VariationUnit.transcriptional_relations">transcriptional_relations (teiphy.VariationUnit attribute)</a>
+</li>
       <li><a href="reference.html#teiphy.Collation.trivial_reading_types">trivial_reading_types (teiphy.Collation attribute)</a>
 </li>
       <li><a href="reference.html#teiphy.Reading.type">type (teiphy.Reading attribute)</a>
@@ -548,15 +586,31 @@
   </ul></td>
 </tr></table>
 
-<h2 id="V">V</h2>
+<h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference.html#teiphy.Collation.validate_wits">validate_wits() (teiphy.Collation method)</a>
-</li>
-      <li><a href="reference.html#teiphy.Collation.variation_units">variation_units (teiphy.Collation attribute)</a>
+      <li><a href="reference.html#teiphy.Collation.update_origin_date_range_from_witness_date_ranges">update_origin_date_range_from_witness_date_ranges() (teiphy.Collation method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference.html#teiphy.Collation.update_witness_date_ranges_from_origin_date_range">update_witness_date_ranges_from_origin_date_range() (teiphy.Collation method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference.html#teiphy.Collation.validate_intrinsic_relations">validate_intrinsic_relations() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.validate_latest_tip">validate_latest_tip() (teiphy.Collation method)</a>
+</li>
+      <li><a href="reference.html#teiphy.Collation.validate_wits">validate_wits() (teiphy.Collation method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference.html#teiphy.Collation.variation_units">variation_units (teiphy.Collation attribute)</a>
+</li>
       <li><a href="reference.html#teiphy.VariationUnit">VariationUnit (class in teiphy)</a>
 </li>
       <li><a href="reference.html#teiphy.Collation.verbose">verbose (teiphy.Collation attribute)</a>

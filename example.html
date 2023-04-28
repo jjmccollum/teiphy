@@ -50,6 +50,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Example</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#iq-tree">IQ-TREE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mrbayes">MrBayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#beast-2-7">BEAST 2.7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#stemma">STEMMA</a></li>
 </ul>
 </li>
@@ -133,7 +134,7 @@ designed to work with either identifying attribute (preferring
 to demonstrate this feature.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">witness</span></code> elements in the example collation also contain <code class="docutils literal notranslate"><span class="pre">origDate</span></code> elements that provide dates or date ranges for the corresponding witnesses.
 Where a witness can be dated to a specific year, the <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> attribute is sufficient to specify this; if it can be dated within a range of years,
-the <code class="docutils literal notranslate"><span class="pre">&#64;from</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;to</span></code> attributes or the <code class="docutils literal notranslate"><span class="pre">&#64;notBefore</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;notAfter</span></code> attributes should be used; the software will work with any of these options.
+the <code class="docutils literal notranslate"><span class="pre">&#64;notBefore</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;notAfter</span></code> attributes should be used.
 While such dating elements are not required, our software includes them in the conversion process whenever possible.
 This way, phylogenetic methods that employ clock models and other chronolological constraints can benefit from this information when it is provided.</p>
 <p>Each variation unit is encoded as an <code class="docutils literal notranslate"><span class="pre">app</span></code> element with a unique
@@ -162,14 +163,22 @@ for this example is available in the <code class="docutils literal notranslate">
 <p><a class="reference external" href="http://www.iqtree.org/">IQ-TREE</a> is a popular phylogenetic analysis package.
 To use it to perform a maximum likelihood phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians_iqtree.nexus
 </pre></div>
 </div>
 <p>This file can then be run in IQ-TREE with the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians-iqtree.nexus -m MK+ASC -bb <span class="m">1000</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians_iqtree.nexus -m MK -bb <span class="m">1000</span>
 </pre></div>
 </div>
-<p>This uses the Lewis Mk substitution model with ascertainment bias correction and with 1000 bootstrap replicates.</p>
+<p>This uses the Lewis Mk substitution model (without ascertainment bias correction) and with 1000 bootstrap replicates.
+If you wish to use ascertainment bias correction, then you must first exclude constant sites from the output as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --drop-constant --fill-correctors example/ubs_ephesians.xml ubs_ephesians_iqtree.nexus
+</pre></div>
+</div>
+<p>This file can then be run in IQ-TREE with ascertainment bias correction using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians_iqtree.nexus -m MK+ASC -bb <span class="m">1000</span>
+</pre></div>
+</div>
 <p>An example of a tree produced by IQ-TREE is found below:</p>
 <img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" /><p>Running this example with IQ-TREE is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml"><img alt="iqtree badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg" /></a></p>
 </section>
@@ -178,28 +187,50 @@ convert the TEI XML to NEXUS format using <code class="docutils literal notransl
 <p><a class="reference external" href="https://nbisweden.github.io/MrBayes/">MrBayes</a> is a Bayesian phylogenetic software package.
 To use it to perform a phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians_mrbayes.nexus
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>MrBayes requires the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.</p>
 </div>
+<p>This will generate the input file for MrBayes with the default strict clock model.
+If you would prefer to use an uncorrelated (independent gamma rate) clock model, then you can do so with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels --clock uncorrelated example/ubs_ephesians.xml ubs_ephesians_mrbayes.nexus
+</pre></div>
+</div>
 <p>This file can then be read into MrBayes as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb -i ubs_ephesians-mrbayes.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb ubs_ephesians_mrbayes.nexus
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">-i</span></code> flag will open the MrBayes interactive shell after the input has been validated.
-To run the analysis from there, enter the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcmc
-</pre></div>
-</div>
-<p>This will run the analysis for several minutes, after which it will prompt you if you want to continue the analyis.
-At this point, the variance should be low enough that you can enter <code class="docutils literal notranslate"><span class="pre">no</span></code> and exit the interactive shell by entering <code class="docutils literal notranslate"><span class="pre">quit</span></code>.</p>
 <p>More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the <a class="reference external" href="https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf">MrBayes manual</a>.</p>
-<p>An example of a maximum clade credibility tree produced by MrBayes is found below.
+<p>An example of a maximum clade credibility tree produced by MrBayes for the generated input with a strict clock is found below.
 The label on each internal node is the probability of that clade being present in the posterior:</p>
 <img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" /><p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
+</section>
+<section id="beast-2-7">
+<h2>BEAST 2.7<a class="headerlink" href="#beast-2-7" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="http://www.beast2.org/">BEAST 2</a> is another Bayesian phylogenetic software package that boasts various model options and extensive customizability.
+To use it to perform a phylogenetic analysis of the Ephesians example,
+convert the TEI XML to BEAST 2.7 XML format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians_beast.xml
+</pre></div>
+</div>
+<p>This will generate the input file for BEAST with the default strict clock model.
+If you would prefer to use an uncorrelated random clock model or a local random clock model, then you can do so with either of the following commands, respectively:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --clock uncorrelated example/ubs_ephesians.xml ubs_ephesians_beast.xml
+teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --clock <span class="nb">local</span> example/ubs_ephesians.xml ubs_ephesians_beast.xml
+</pre></div>
+</div>
+<p>To run this input, you must first make sure that you have BEAST 2.7 or later installed (as earlier versions will not be compatible with the XML format)
+and that the BEASTLabs and BDSKY packages are installed (which you can do using the <code class="docutils literal notranslate"><span class="pre">packagemanager</span></code> utility that comes with BEAST 2).
+Once these packages are installed, you can run the example with the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>beast ubs_ephesians_beast.xml
+</pre></div>
+</div>
+<p>An example of a maximum clade credibility tree produced by BEAST 2 for the generated input with a strict clock is found below.
+The label on each internal node is the probability of that clade being present in the posterior:</p>
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" /><p>Running this example with BEAST 2 is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml"><img alt="beast badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml/badge.svg" /></a></p>
 </section>
 <section id="stemma">
 <h2>STEMMA<a class="headerlink" href="#stemma" title="Permalink to this heading"></a></h2>

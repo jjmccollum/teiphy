@@ -53,6 +53,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#correctors-hands">Correctors’ Hands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">Removing First-hand Siglum Suffixes and Merging Multiple Attestations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ascertainment-bias">Ascertainment Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tree-priors-clock-models-and-tip-dates">Tree Priors, Clock Models, and Tip Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#root-frequencies-and-substitution-models">Root Frequencies and Substitution Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-output-formats-and-options">Supported Output Formats and Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#other-options">Other Options</a></li>
 </ul>
@@ -241,7 +243,7 @@ probabilities. While it is recommended that you specify values between 0
 and 1 for the <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> attribute of each <code class="docutils literal notranslate"><span class="pre">certainty</span></code> element, this
 is not necessary; the values you specify will be normalized in the
 conversion.</p>
-<p>This example above follows the TEI Guidelines more strictly, in that it
+<p>The example above follows the TEI Guidelines more strictly, in that it
 uses the <code class="docutils literal notranslate"><span class="pre">&#64;xml:id</span></code> attribute instead of the <code class="docutils literal notranslate"><span class="pre">&#64;n</span></code> attribute to assign
 URIs to individual readings, and it references these URIs in the
 <code class="docutils literal notranslate"><span class="pre">&#64;target</span></code> attributes of the <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> element and the
@@ -273,14 +275,50 @@ if you label a <code class="docutils literal notranslate"><span class="pre">rdg<
 must reference that attribute’s value in the <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> and
 <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements; otherwise, you must use and reference the <code class="docutils literal notranslate"><span class="pre">&#64;n</span></code>
 attribute.</p>
-<p>For NEXUS output, the character states for each witness is encoded using
+<p>For NEXUS output, the character states for each witness are encoded using
 <code class="docutils literal notranslate"><span class="pre">StatesFormat=StatesPresent</span></code> by default, meaning that each non-missing character is
 represented by a single symbol or by a set of symbols between braces (in the case of ambiguous readings).
-But if you want to encode the character states for each witness using <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code>,
+An example of this encoding is the following: <code class="docutils literal notranslate"><span class="pre">P46</span> <span class="pre">1003110?001011000200100001000100001{01}0100</span></code>.
+This setting produces more compact outputs and is the expected states format for PAUP* and most other programs.
+The downside is that it cannot accommodate degrees of certainty in ambiguous readings.</p>
+<p>If you want your NEXUS output to contain the character states for each witness using <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code>,
 with each character represented by a vector of frequencies for each reading/state, you can do this with the <code class="docutils literal notranslate"><span class="pre">--frequency</span></code> option to <code class="docutils literal notranslate"><span class="pre">teiphy</span></code>.
 For unambiguous readings, the corresponding state vector will have a value of 1 for a single
-reading/state, while for ambiguous readings, it should have multiple
-values for different readings/states that sum to 1.</p>
+reading/state.
+For simple ambiguous readings encoded as <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> elements
+with the potential readings specified in the <code class="docutils literal notranslate"><span class="pre">&#64;target</span></code> attribute,
+the state vector will have a value of 1 for each specified reading/state;
+and for <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> elements containing <code class="docutils literal notranslate"><span class="pre">certainty</span></code>
+elements with varying <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> attributes,
+the <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> value for each specified reading will be copied to the state vector.
+With this setting in the NEXUS output, the sequence for witness P46 would look as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>P46
+    (0:0.0000 1:1.0000)
+    (0:1.0000 1:0.0000 2:0.0000)
+    (0:1.0000 1:0.0000)
+    (0:0.0000 1:0.0000 2:0.0000 3:1.0000)
+    (0:0.0000 1:1.0000)
+    (0:0.0000 1:1.0000)
+    (0:1.0000 1:0.0000 2:0.0000 3:0.0000)
+    ?
+    (0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000)
+    ...
+    (0:0.0148 1:0.9852)
+    (0:1.0000 1:0.0000)
+    (0:0.0000 1:1.0000)
+    (0:1.0000 1:0.0000)
+    (0:1.0000 1:0.0000)
+</pre></div>
+</div>
+<p>For current phylogenetic software that accepts NEXUS input, the <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code> setting is not supported,
+so for most output formats, <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> elements containing <code class="docutils literal notranslate"><span class="pre">certainty</span></code>
+elements with varying <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> attributes will simply be mapped to ambiguous states
+with a 1 for every reading covered by a <code class="docutils literal notranslate"><span class="pre">certainty</span></code> element.
+For formats that do not even support ambiguities with specified target states,
+ambiguous <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> elements, with or without <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements,
+will be mapped to missing states (i.e., the <code class="docutils literal notranslate"><span class="pre">?</span></code> symbol).
+For NEXUS outputs with the default <code class="docutils literal notranslate"><span class="pre">StatesPresent</span></code> encoding, you can also include the <code class="docutils literal notranslate"><span class="pre">--ambiguous-as-missing</span></code> flag if you want to coerce all ambiguous states to be encoded as missing states.
+Since BEAST 2 supports tip likelihoods, <code class="docutils literal notranslate"><span class="pre">certainty</span></code> values are preserved in BEAST 2.7 XML outputs by default.</p>
 </section>
 <section id="lacunae-and-other-missing-data">
 <h2>Lacunae and Other Missing Data<a class="headerlink" href="#lacunae-and-other-missing-data" title="Permalink to this heading"></a></h2>
@@ -431,41 +469,169 @@ You should consult the documentation for your phylogenetic software package to d
 For example, <a class="reference external" href="http://www.iqtree.org/doc/Substitution-Models#ascertainment-bias-correction">IQ-TREE</a> allows users to correct for ascertainment bias by adding <code class="docutils literal notranslate"><span class="pre">+ASC</span></code> to the model name.
 (Just keep in mind that your input must be free of constant sites for this to work!)</p>
 </section>
+<section id="tree-priors-clock-models-and-tip-dates">
+<h2>Tree Priors, Clock Models, and Tip Dates<a class="headerlink" href="#tree-priors-clock-models-and-tip-dates" title="Permalink to this heading"></a></h2>
+<p>For outputs for MrBayes (i.e., NEXUS files generated with the <code class="docutils literal notranslate"><span class="pre">--mrbayes</span></code> option) and BEAST (i.e., XML files following the conventions of BEAST 2.7),
+tree priors based on birth-death models and strict clock models are used by default.
+For MrBayes, the <code class="docutils literal notranslate"><span class="pre">clock:birthdeath</span></code> prior is used for the tree, and for BEAST, the <code class="docutils literal notranslate"><span class="pre">BDSKY</span></code> (Birth-Death Skyline model) prior is used.
+For both formats, the origin of the model is set based on the earliest possible date for the textual tradition, if it is known.
+In TEI XML, this is specified in a <code class="docutils literal notranslate"><span class="pre">bibl</span></code> element under the <code class="docutils literal notranslate"><span class="pre">sourceDesc</span></code> element, as in the following example:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;bibl&gt;</span>
+    <span class="nt">&lt;title</span> <span class="na">xml:lang=</span><span class="s">&quot;grc&quot;</span><span class="nt">&gt;</span>Πρὸς Ἐφεσίους<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;date</span> <span class="na">notBefore=</span><span class="s">&quot;50&quot;</span> <span class="na">notAfter=</span><span class="s">&quot;80&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/bibl&gt;</span>
+</pre></div>
+</div>
+<p>If an earliest possible date is specified, then the origin for the model is assigned a uniform prior
+between this date and the latest possible date for the tradition
+(which, if is it not specified explicitly, is set according to the earliest witness, or, absent witness dates, the current date).
+If no earliest possible date it specified, then the origin for the model is assigned a gamma prior in MrBayes or a log-normal prior in BEAST;
+in either case, the prior distribution is offset according to the latest possible date for the tradition.
+The speciation/reproductive number, extinction/become-uninfectious rate, and sampling proportion priors are set to default distibutions by <code class="docutils literal notranslate"><span class="pre">teiphy</span></code>.</p>
+<p>The clock model set in the output file by <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can be selected using the <code class="docutils literal notranslate"><span class="pre">--clock</span></code> command-line option.
+Presently, the following three models are supported:
+* <code class="docutils literal notranslate"><span class="pre">strict</span></code>: a strict clock model, with the same mutation rate applied at all branches.
+This is the default option.
+* <code class="docutils literal notranslate"><span class="pre">uncorrelated</span></code>: an uncorrelated random clock model, with mutation rates assigned randomly to branches according to a particular distribution.
+For MrBayes, this corresponds to the independent gamma rate (IGR) model with a log-normal prior on the mean clock rate and an exponential prior on the variance.
+For BEAST, the clock rate’s mean and standard deviation both have log-normal priors.
+* <code class="docutils literal notranslate"><span class="pre">local</span></code>: a local random clock model, where branches inherit their parent branch’s clock rate subject to random perturbations.
+This option is only supported for BEAST outputs.</p>
+<p>Finally, for both MrBayes and BEAST, tip dates are calibrated according to the dates specified for witnesses.
+These dates can be specified either exactly (in which case the tip date has a fixed distribution)
+or within a range (in which case the tip date has a uniform distribution of the witness’s date span),
+as in the following examples:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;witness</span> <span class="na">n=</span><span class="s">&quot;18&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;origDate</span> <span class="na">when=</span><span class="s">&quot;1364&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/witness&gt;</span>
+<span class="nt">&lt;witness</span> <span class="na">n=</span><span class="s">&quot;33&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;origDate</span> <span class="na">notBefore=</span><span class="s">&quot;800&quot;</span> <span class="na">notAfter=</span><span class="s">&quot;900&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/witness&gt;</span>
+</pre></div>
+</div>
+<p>As part of the Bayesian phylogenetic analysis, the distributions of the tip dates for witnesses with date ranges will also be estimated.</p>
+<p>Tip dates are also used by <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> in converting TEI XML to inputs to the STEMMA program, as STEMMA uses date ranges to constrain the relationships between witnesses that it will consider.</p>
+</section>
+<section id="root-frequencies-and-substitution-models">
+<h2>Root Frequencies and Substitution Models<a class="headerlink" href="#root-frequencies-and-substitution-models" title="Permalink to this heading"></a></h2>
+<p>Since BEAST’s XML input format supports phylogenetic analogues of intrinsic probabilities
+(i.e., the probability that a given reading is authorial)
+and transcriptional probability (i.e., the probability that one reading would give rise to another according to common mechanisms of scribal error or innovation)
+in the forms of root frequencies at variation units
+and rate variables used in the substitution models of variation units,
+<code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can map TEI XML encodings of these judgments to the appropriate elements in BEAST 2.7 XML.</p>
+<p>To encode intrinsic probabilities in a consistent and rigorous way, you can define discrete odds categories with fixed values as analytic tags using code like the following:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span> <span class="na">type=</span><span class="s">&quot;intrinsic&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingA&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>The current reading is absolutely more likely than the linked reading.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;19&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingB&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>The current reading is strongly
+        more likely than the linked reading.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingC&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>The current reading is more likely
+        than the linked reading.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;1.5&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingD&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>The current reading is slightly more likely than the linked reading.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;1.1&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;EqualRating&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>The current reading and the linked reading
+        are equally likely.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+<span class="nt">&lt;/interpGrp&gt;</span>
+</pre></div>
+</div>
+<p>The specified odds values are defined in the <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> attributes of <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements.
+These categories can be used to define the relative probabilities of variant readings in a given variation unit under a <code class="docutils literal notranslate"><span class="pre">note</span></code> element in that unit using <code class="docutils literal notranslate"><span class="pre">relation</span></code> elements as follows:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span> <span class="na">type=</span><span class="s">&quot;intrinsic&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1&quot;</span> <span class="na">passive=</span><span class="s">&quot;2&quot;</span> <span class="na">ana=</span><span class="s">&quot;#RatingA&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#EqualRating&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#EqualRating&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/listRelation&gt;</span>
+</pre></div>
+</div>
+<p>In terms of the analytic categories defined above, this list of <code class="docutils literal notranslate"><span class="pre">relation</span></code> elements indicates that reading 1 is nineteen times more likely to be authorial than reading 2, and readings 2 and 3 are equally likely.
+This results in root frequencies of 0.9048, 0.0476, and 0.0476.
+If no such set of relations is specified, then the root frequencies are set according to a uniform distribution by default.</p>
+<p>If you wish to incorporate transcriptional probabilities for different classes of scribal changes into your analysis, you may do so by defining analytic tags for rate parameters as follows:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span> <span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;Clar&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Clarification of the text in terms of grammar,
+        style, or theology.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;AurConf&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Aural confusion concerning letters or dipthongs
+        that came to have the same sound in later Greek.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;LingConf&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Linguistic confusion concerning rules
+        of Greek grammar.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;p&gt;&lt;i&gt;</span>Constructiones ad sensum<span class="nt">&lt;/i&gt;</span> that reflect
+        changes in grammatical rules over time
+        also fall under this rubric.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;VisErr&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Visual error, such as paleographic confusion
+        of similar letters, haplography, dittography,
+        and other skips of the eye resulting in small omissions.
+        Rarer situations, like duplication or omission
+        of letters related to the presence or absence
+        of an ornamental capital at the start of a line,
+        also fall under this rubric.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;Harm&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Harmonization, either to a parallel passage
+        or to the near context.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;Byz&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;p&gt;</span>The text is brought into conformity
+        with the Byzantine text.<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/interp&gt;</span>
+<span class="nt">&lt;/interpGrp&gt;</span>
+</pre></div>
+</div>
+<p>If you wish to specify fixed rates for these transcriptional change classes, then you can do so using <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements
+as in the definitions of the intrinsic odds categories above.
+Any classes without fixed rates will have their rates estimated as part of the phylogenetic model.
+Transitions between different readings in a given variation unit can then be categorized with one or more of these tags in a <code class="docutils literal notranslate"><span class="pre">note</span></code> element in that unit
+(parallel to the <code class="docutils literal notranslate"><span class="pre">listRelation</span></code> used to encode the intrinsic probabilities of the readings) as follows:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span> <span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1 2 3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Harm&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1&quot;</span> <span class="na">passive=</span><span class="s">&quot;2 3 4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;1&quot;</span> <span class="na">ana=</span><span class="s">&quot;#VisErr&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar #Harm&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1 2 4&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Byz&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/listRelation&gt;</span>
+</pre></div>
+</div>
+<p>To allow for more succinct encodings of transitions, multiple possible source and target readings can be specified in the <code class="docutils literal notranslate"><span class="pre">&#64;active</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;passive</span></code> attributes of a <code class="docutils literal notranslate"><span class="pre">relation</span></code> element,
+and more than one analytic tag can be specified in the <code class="docutils literal notranslate"><span class="pre">&#64;ana</span></code> attribute;
+thus, <code class="docutils literal notranslate"><span class="pre">&lt;relation</span> <span class="pre">active=&quot;1</span> <span class="pre">2</span> <span class="pre">3&quot;</span> <span class="pre">passive=&quot;4&quot;</span> <span class="pre">ana=&quot;#Harm&quot;/&gt;</span></code> indicates that reading 1, 2, or 3 could give rise to reading 4 by harmonization,
+<code class="docutils literal notranslate"><span class="pre">&lt;relation</span> <span class="pre">active=&quot;1&quot;</span> <span class="pre">passive=&quot;2</span> <span class="pre">3</span> <span class="pre">4&quot;</span> <span class="pre">ana=&quot;#Clar&quot;/&gt;</span></code> indicates that reading 1 could give rise to reading 2, 3, or 4 by clarification,
+and <code class="docutils literal notranslate"><span class="pre">&lt;relation</span> <span class="pre">active=&quot;2&quot;</span> <span class="pre">passive=&quot;3&quot;</span> <span class="pre">ana=&quot;#Clar</span> <span class="pre">#Harm&quot;/&gt;</span></code> indicates that reading 2 could give to reading 3 by clarification or harmonization.
+When these transitions are tagged in this way, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will map them to the off-diagonal entries of the substitution matrix for this variation unit,
+summing multiple rates if more than one tag is specified for a transition.
+All transitions not covered by a <code class="docutils literal notranslate"><span class="pre">relation</span></code> element (e.g., a transition from reading 3 to reading 1, which is not covered in the example above) will be assigned the “default” rate of 1.
+Accordingly, if no <code class="docutils literal notranslate"><span class="pre">listRelation</span></code> for transcriptional change categories is specified at all, then the substitution model for a variation unit with <em>k</em> substantive readings will default to the Lewis Mk model.</p>
+</section>
 <section id="supported-output-formats-and-options">
 <h2>Supported Output Formats and Options<a class="headerlink" href="#supported-output-formats-and-options" title="Permalink to this heading"></a></h2>
 <p>You can specify a preferred output format for the conversion explicitly with the <code class="docutils literal notranslate"><span class="pre">--format</span></code> flag.
-Supported options include <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">hennig86</span></code>, <code class="docutils literal notranslate"><span class="pre">phylip</span></code> (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), <code class="docutils literal notranslate"><span class="pre">fasta</span></code>, <code class="docutils literal notranslate"><span class="pre">csv</span></code>, <code class="docutils literal notranslate"><span class="pre">tsv</span></code>, <code class="docutils literal notranslate"><span class="pre">excel</span></code> (note that only <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> format is supported), and <code class="docutils literal notranslate"><span class="pre">stemma</span></code>.
+Supported options include <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">hennig86</span></code>, <code class="docutils literal notranslate"><span class="pre">phylip</span></code> (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), <code class="docutils literal notranslate"><span class="pre">fasta</span></code>, <code class="docutils literal notranslate"><span class="pre">xml</span></code> (specifically, the flavor of XML read by BEAST 2.7), <code class="docutils literal notranslate"><span class="pre">csv</span></code>, <code class="docutils literal notranslate"><span class="pre">tsv</span></code>, <code class="docutils literal notranslate"><span class="pre">excel</span></code> (note that only <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> format is supported), and <code class="docutils literal notranslate"><span class="pre">stemma</span></code>.
 If you do not supply a <code class="docutils literal notranslate"><span class="pre">--format</span></code> argument, then <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will attempt to infer the correct format from the file extension of the output file name.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> includes constant characters (i.e., variation units where all witnesses attest to the same substantive reading) in its outputs.
+If you wish to exclude these from your analysis (as is the case if you want to use ascertainment bias correction in your phylogenetic software), then you can do so by specifying the <code class="docutils literal notranslate"><span class="pre">--drop-constant</span></code> flag.</p>
 <p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs, the <code class="docutils literal notranslate"><span class="pre">CharStateLabels</span></code> block (which provides human-readable labels for variation units and readings) is included in the output file by default, but you can disable it by specifying the <code class="docutils literal notranslate"><span class="pre">--no-labels</span></code> flag.
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs, the output uses the <code class="docutils literal notranslate"><span class="pre">StatesFormat=StatesPresent</span></code> encoding option by default.
-With this setting, witness character states are encoded as a series of single symbols for unambiguous readings and multi-state symbols in braces representing ambiguous readings
-(e.g., <code class="docutils literal notranslate"><span class="pre">P46</span> <span class="pre">1003110?001011000200100001000100001{01}0100</span></code>).
-This setting produces more compact outputs and is the expected states format for PAUP*.
-The downside is that it cannot accommodate degrees of certainty in ambiguous readings.
-If you wish to capture unequal degrees of certainty more precisely, then you can also include the <code class="docutils literal notranslate"><span class="pre">--frequency</span></code> flag,
-which will use the <code class="docutils literal notranslate"><span class="pre">StatesFormat=Frequency</span></code> setting in the NEXUS output and encode reading states as frequency vectors:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>P46
-    (0:0.0000 1:1.0000)
-    (0:1.0000 1:0.0000 2:0.0000)
-    (0:1.0000 1:0.0000)
-    (0:0.0000 1:0.0000 2:0.0000 3:1.0000)
-    (0:0.0000 1:1.0000)
-    (0:0.0000 1:1.0000)
-    (0:1.0000 1:0.0000 2:0.0000 3:0.0000)
-    ?
-    (0:1.0000 1:0.0000 2:0.0000 3:0.0000 4:0.0000 5:0.0000)
-    ...
-    (0:0.0148 1:0.9852)
-    (0:1.0000 1:0.0000)
-    (0:0.0000 1:1.0000)
-    (0:1.0000 1:0.0000)
-    (0:1.0000 1:0.0000)
-</pre></div>
-</div>
-<p>For <code class="docutils literal notranslate"><span class="pre">nexus</span></code> outputs with the default <code class="docutils literal notranslate"><span class="pre">StatesPresent</span></code> encoding, you can also include the <code class="docutils literal notranslate"><span class="pre">--ambiguous-as-missing</span></code> flag if you want to treat all ambiguous states as missing states.
-If your NEXUS-formatted output is to be used by a phylogenetic software that ignores or does not recognize ambiguous states, you may want or need to use this option.</p>
 <p>Note that for the <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">hennig86</span></code>, <code class="docutils literal notranslate"><span class="pre">phylip</span></code>, and <code class="docutils literal notranslate"><span class="pre">fasta</span></code> output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.</p>
 <p>Collations can also be converted to tabular formats.
