@@ -5,7 +5,7 @@ from lxml import etree as et  # for parsing XML input
 import typer
 
 from .format import Format
-from .collation import Collation
+from .collation import Collation, ClockModel
 
 
 app = typer.Typer(rich_markup_mode="rich")
@@ -57,19 +57,23 @@ def to_file(
     ),
     calibrate_dates: bool = typer.Option(
         False,
-        help="Add an Assumptions block containing date distributions for witnesses to NEXUS output; this option is intended for inputs to BEAST2.",
+        help="Add an Assumptions block containing age distributions for witnesses to NEXUS output; this option is intended for NEXUS inputs to BEAST 2.",
     ),
     mrbayes: bool = typer.Option(
         False,
         help="Add a MrBayes block containing model settings and age calibrations for witnesses to NEXUS output; this option is intended for inputs to MrBayes.",
     ),
+    clock: ClockModel = typer.Option(
+        ClockModel.strict,
+        help="The clock model to use; this option is intended for inputs to MrBayes and BEAST 2. MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.",
+    ),
     long_table: bool = typer.Option(
         False,
-        help="Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format. Note that if this option is set, ambiguous readings will be treated as missing data, and the --split-missing option will be ignored.",
+        help="Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for non-tabular formats. Note that if this option is set, ambiguous readings will be treated as missing data, and the --split-missing option will be ignored.",
     ),
     split_missing: bool = typer.Option(
         False,
-        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.",
+        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats.",
     ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     version: bool = typer.Option(
@@ -121,6 +125,7 @@ def to_file(
         ambiguous_as_missing=ambiguous_as_missing,
         calibrate_dates=calibrate_dates,
         mrbayes=mrbayes,
+        clock_model=clock,
         long_table=long_table,
         split_missing=split_missing,
     )

@@ -3,7 +3,7 @@
 .. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/teiphy-logo.svg
 
 |license badge| |testing badge| |coverage badge| |docs badge| |black badge| |git3moji badge| 
-|iqtree badge| |raxml badge| |mrbayes badge| |stemma badge| |joss badge| |doi badge|
+|iqtree badge| |raxml badge| |mrbayes badge| |beast badge| |stemma badge| |joss badge| |doi badge|
 
 .. |license badge| image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
     :target: https://choosealicense.com/licenses/mit/
@@ -32,6 +32,9 @@
 .. |mrbayes badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml
 
+.. |beast badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml/badge.svg
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml
+
 .. |stemma badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml
 
@@ -51,7 +54,7 @@ Textual scholars have been using phylogenetics to analyze manuscript traditions 
 Many standard phylogenetic software packages accept as input the `NEXUS file format <https://doi.org/10.1093/sysbio/46.4.590>`_.
 The ``teiphy`` program takes a collation of texts encoded using the `Text Encoding Initiative (TEI) guidelines <https://tei-c.org/release/doc/tei-p5-doc/en/html/TC.html>`_
 and converts it to a NEXUS format so that it can be used for phylogenetic analysis.
-It can also convert to other formats as well.
+It can also convert to other formats as well, including Hennig86 (for TNT), PHYLIP (for RAxML), FASTA, and the XML format used by BEAST 2.7.
 
 
 .. end-about
@@ -91,9 +94,9 @@ To use the software, run the ``teiphy`` command line tool:
 
     teiphy <input TEI XML> <output file>
 
-``teiphy`` can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, CSV, TSV, Excel and STEMMA formats. 
+``teiphy`` can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, BEAST 2.7 XML, CSV, TSV, Excel and STEMMA formats. 
 ``teiphy`` will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
-".nex", ".nexus", ".nxs", ".ph", ".phy", ".fa", ".fasta", ".tnt", ".csv", ".tsv", ".xlsx".
+".nex", ".nexus", ".nxs", ".ph", ".phy", ".fa", ".fasta", ".xml", ".tnt", ".csv", ".tsv", ".xlsx".
 
 To explicitly say which format you wish to export to, use the ``--format`` option. For example:
 

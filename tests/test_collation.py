@@ -2,13 +2,16 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 from pathlib import Path
+from datetime import datetime
 import numpy as np
 from lxml import etree as et
 
 from teiphy import tei_ns, Collation
 
-root_dir = Path("__file__").parent.parent
+test_dir = Path(__file__).parent
+root_dir = test_dir.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
+malformed_categories_example = test_dir / "malformed_categories_example.xml"
 
 
 class CollationDefaultTestCase(unittest.TestCase):
@@ -18,6 +21,12 @@ class CollationDefaultTestCase(unittest.TestCase):
         self.xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
         self.xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
         self.xml_readings = xml.xpath("//tei:rdg", namespaces={"tei": tei_ns})
+        self.xml_intrinsic_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
+        )
+        self.xml_transcriptional_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+        )
         self.collation = Collation(xml)
 
     def test_witnesses(self):
@@ -40,6 +49,122 @@ class CollationDefaultTestCase(unittest.TestCase):
 
     def test_substantive_variation_unit_reading_tuples(self):
         self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
+
+    def test_intrinsic_categories(self):
+        self.assertEqual(len(self.collation.intrinsic_categories), len(self.xml_intrinsic_relations))
+
+    def test_intrinsic_odds_by_id(self):
+        self.assertEqual(len(self.collation.intrinsic_odds_by_id), len(self.xml_intrinsic_relations))
+
+    def test_transcriptional_categories(self):
+        self.assertEqual(len(self.collation.transcriptional_categories), len(self.xml_transcriptional_relations))
+
+    def test_transcriptional_rates_by_id(self):
+        self.assertEqual(len(self.collation.transcriptional_rates_by_id), len(self.xml_transcriptional_relations))
+
+    def test_origin_date_range(self):
+        self.assertEqual(self.collation.origin_date_range[0], 50)
+        self.assertEqual(self.collation.origin_date_range[1], 80)
+
+
+class CollationMalformedCategoriesTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(malformed_categories_example, parser=parser)
+        self.xml_intrinsic_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
+        )
+        self.xml_transcriptional_relations = xml.xpath(
+            "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+        )
+        self.collation = Collation(xml)
+
+    def test_intrinsic_categories(self):
+        self.assertEqual(len(self.collation.intrinsic_categories), len(self.xml_intrinsic_relations) - 1)
+
+    def test_transcriptional_categories(self):
+        self.assertEqual(len(self.collation.transcriptional_categories), len(self.xml_transcriptional_relations) - 1)
+
+
+class CollationWhenDateTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date when=\"50\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertEqual(self.collation.origin_date_range[0], 50)
+        self.assertEqual(self.collation.origin_date_range[1], 50)
+
+
+class CollationFromToDatesTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date from=\"50\" to=\"80\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertEqual(self.collation.origin_date_range[0], 80)
+        self.assertEqual(self.collation.origin_date_range[1], 80)
+
+
+class CollationDateRangeStartOnlyTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date notBefore=\"50\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertEqual(self.collation.origin_date_range[0], 50)
+        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
+
+
+class CollationDateRangeEndOnlyTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title><tei:date notAfter=\"80\"/></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertIsNone(self.collation.origin_date_range[0])
+        self.assertEqual(self.collation.origin_date_range[1], 80)
+
+
+class CollationNoDatesTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(xml)
+
+    def test_origin_date_range(self):
+        source_desc_xml = et.fromstring(
+            "<fileDesc xmlns:tei=\"%s\"><tei:sourceDesc><tei:bibl><tei:title>Πρὸς Ἐφεσίους</tei:title></tei:bibl></tei:sourceDesc></fileDesc>"
+            % tei_ns
+        )
+        # After the parse_origin_date_range method is called, the origin date upper bound should default to the current year:
+        self.collation.parse_origin_date_range(source_desc_xml)
+        self.assertIsNone(self.collation.origin_date_range[0])
+        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
@@ -149,8 +274,8 @@ class CollationManuscriptSuffixesTestCase(unittest.TestCase):
         vu_ind = self.collation.variation_unit_ids.index("B10K3V14U14-18")
         rdg_support = self.collation.readings_by_witness["1910"][vu_ind]
         self.assertEqual(
-            rdg_support, [0.5, 0.5, 0]
-        )  # all entries in the reading support vector for this witness to an overlapping reading should be 0
+            rdg_support, [1, 1, 0]
+        )  # all entries in the reading support vector for this witness with multiple attestations should have all attested readings supported
 
 
 class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
@@ -254,6 +379,16 @@ class CollationOutputTestCase(unittest.TestCase):
         empty_collation.witnesses = []
         fasta_symbols = empty_collation.get_fasta_symbols()
         self.assertEqual(fasta_symbols, [])
+
+    def test_get_beast_symbols(self):
+        beast_symbols = self.collation.get_beast_symbols()
+        self.assertEqual(beast_symbols, ["0", "1", "2", "3", "4", "5"])
+
+    def test_get_beast_symbols_empty(self):
+        empty_collation = self.collation
+        empty_collation.witnesses = []
+        beast_symbols = empty_collation.get_beast_symbols()
+        self.assertEqual(beast_symbols, [])
 
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)

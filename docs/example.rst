@@ -29,7 +29,7 @@ to demonstrate this feature.
 
 The ``witness`` elements in the example collation also contain ``origDate`` elements that provide dates or date ranges for the corresponding witnesses.
 Where a witness can be dated to a specific year, the ``@when`` attribute is sufficient to specify this; if it can be dated within a range of years,
-the ``@from`` and ``@to`` attributes or the ``@notBefore`` and ``@notAfter`` attributes should be used; the software will work with any of these options.
+the ``@notBefore`` and ``@notAfter`` attributes should be used.
 While such dating elements are not required, our software includes them in the conversion process whenever possible.
 This way, phylogenetic methods that employ clock models and other chronolological constraints can benefit from this information when it is provided.
 
@@ -65,15 +65,26 @@ convert the TEI XML to NEXUS format using ``teiphy`` with the command
 
 .. code:: bash
 
-    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians-iqtree.nexus
+    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians_iqtree.nexus
 
 This file can then be run in IQ-TREE with the following command:
 
 .. code:: bash
 
-    iqtree -s ubs_ephesians-iqtree.nexus -m MK+ASC -bb 1000
+    iqtree -s ubs_ephesians_iqtree.nexus -m MK -bb 1000
 
-This uses the Lewis Mk substitution model with ascertainment bias correction and with 1000 bootstrap replicates.
+This uses the Lewis Mk substitution model (without ascertainment bias correction) and with 1000 bootstrap replicates.
+If you wish to use ascertainment bias correction, then you must first exclude constant sites from the output as follows:
+
+.. code:: bash
+
+    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --drop-constant --fill-correctors example/ubs_ephesians.xml ubs_ephesians_iqtree.nexus
+
+This file can then be run in IQ-TREE with ascertainment bias correction using the following command:
+
+.. code:: bash
+
+    iqtree -s ubs_ephesians_iqtree.nexus -m MK+ASC -bb 1000
 
 An example of a tree produced by IQ-TREE is found below:
 
@@ -90,36 +101,67 @@ convert the TEI XML to NEXUS format using ``teiphy`` with this command:
 
 .. code:: bash
 
-    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians-mrbayes.nexus
+    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians_mrbayes.nexus
 
 .. note::
 
     MrBayes requires the ``--no-labels`` flag.
 
+This will generate the input file for MrBayes with the default strict clock model.
+If you would prefer to use an uncorrelated (independent gamma rate) clock model, then you can do so with the following command:
+
+.. code:: bash
+
+    teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s"*" -s T --fill-correctors --no-labels --clock uncorrelated example/ubs_ephesians.xml ubs_ephesians_mrbayes.nexus
+
 This file can then be read into MrBayes as follows:
 
 .. code:: bash
 
-    mb -i ubs_ephesians-mrbayes.nexus
-
-The ``-i`` flag will open the MrBayes interactive shell after the input has been validated.
-To run the analysis from there, enter the command
-
-.. code:: bash
-
-    mcmc
-
-This will run the analysis for several minutes, after which it will prompt you if you want to continue the analyis.
-At this point, the variance should be low enough that you can enter ``no`` and exit the interactive shell by entering ``quit``.
+    mb ubs_ephesians_mrbayes.nexus
 
 More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the `MrBayes manual <https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf>`_.
 
-An example of a maximum clade credibility tree produced by MrBayes is found below. 
+An example of a maximum clade credibility tree produced by MrBayes for the generated input with a strict clock is found below. 
 The label on each internal node is the probability of that clade being present in the posterior:
 
 .. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg
 
 Running this example with MrBayes is part of the continuous integration pipeline: |mrbayes badge|
+
+BEAST 2.7
+=========
+
+`BEAST 2 <http://www.beast2.org/>`_ is another Bayesian phylogenetic software package that boasts various model options and extensive customizability.
+To use it to perform a phylogenetic analysis of the Ephesians example, 
+convert the TEI XML to BEAST 2.7 XML format using ``teiphy`` with this command:
+
+.. code:: bash
+
+    teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians_beast.xml
+
+This will generate the input file for BEAST with the default strict clock model.
+If you would prefer to use an uncorrelated random clock model or a local random clock model, then you can do so with either of the following commands, respectively:
+
+.. code:: bash
+
+    teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock uncorrelated example/ubs_ephesians.xml ubs_ephesians_beast.xml
+    teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock local example/ubs_ephesians.xml ubs_ephesians_beast.xml
+
+To run this input, you must first make sure that you have BEAST 2.7 or later installed (as earlier versions will not be compatible with the XML format)
+and that the BEASTLabs and BDSKY packages are installed (which you can do using the ``packagemanager`` utility that comes with BEAST 2).
+Once these packages are installed, you can run the example with the command
+
+.. code:: bash
+
+    beast ubs_ephesians_beast.xml
+
+An example of a maximum clade credibility tree produced by BEAST 2 for the generated input with a strict clock is found below. 
+The label on each internal node is the probability of that clade being present in the posterior:
+
+.. image:: https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg
+
+Running this example with BEAST 2 is part of the continuous integration pipeline: |beast badge|
 
 STEMMA
 =======
@@ -166,6 +208,9 @@ Running this example with STEMMA is part of the continuous integration pipeline:
 
 .. |mrbayes badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml
+
+.. |beast badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml/badge.svg
+    :target: https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml
 
 .. |stemma badge| image:: https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg
     :target: https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml

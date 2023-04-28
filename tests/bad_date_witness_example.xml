@@ -136,12 +136,11 @@
                     <witness type="father" n="Pelagius">
                         <origDate notBefore="390" notAfter="418"/>
                     </witness>
-                    <!-- The absence of the following witness should trigger a warning message in teiphy -->
-                    <!--
+                    <!-- The following witness's date upper bound being less than the lower bound on the origin of the tradition 
+                    should trigger a warning message in teiphy -->
                     <witness type="father" n="TheodoreOfMopsuestia">
-                        <origDate notBefore="392" notAfter="428"/>
+                        <origDate notBefore="0" notAfter="49"/>
                     </witness>
-                    -->
                 </listWit>
             </sourceDesc>
         </fileDesc>

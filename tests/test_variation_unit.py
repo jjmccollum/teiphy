@@ -93,6 +93,134 @@ class VariationUnitTestCase(unittest.TestCase):
         vu = VariationUnit(xml)
         self.assertEqual(len(vu.readings), 10)
 
+    def test_init_intrinsic_relations(self):
+        xml = et.fromstring(
+            """
+        <app xml:id="B10K4V6U24-28">
+            <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+            <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+            <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
+            <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+            <witDetail n="Z" type="lac" wit="syrhmg"/>
+            <note>
+                <listRelation type="intrinsic">
+                    <relation active="1" passive="2" ana="#RatingA"/>
+                    <relation active="2" passive="3" ana="#EqualRating"/>
+                </listRelation>
+                <listRelation type="transcriptional">
+                    <relation active="1" passive="2 3" ana="#Clar"/>
+                    <relation active="2 3" passive="1" ana="#VisErr"/>
+                    <relation active="1 3" passive="2" ana="#Byz"/>
+                </listRelation>
+            </note>
+        </app>
+        """
+        )
+        vu = VariationUnit(xml)
+        self.assertEqual(len(vu.intrinsic_relations), 2)
+        self.assertTrue(("1", "2") in vu.intrinsic_relations)
+        self.assertEqual(vu.intrinsic_relations[("1", "2")], "RatingA")
+        self.assertTrue(("2", "3") in vu.intrinsic_relations)
+        self.assertEqual(vu.intrinsic_relations[("2", "3")], "EqualRating")
+        self.assertTrue(("1", "3") not in vu.intrinsic_relations)
+
+    def test_init_transcriptional_relations(self):
+        xml = et.fromstring(
+            """
+        <app xml:id="B10K4V6U24-28">
+            <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+            <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+            <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
+            <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+            <witDetail n="Z" type="lac" wit="syrhmg"/>
+            <note>
+                <listRelation type="intrinsic">
+                    <relation active="1" passive="2" ana="#RatingA"/>
+                    <relation active="2" passive="3" ana="#EqualRating"/>
+                </listRelation>
+                <listRelation type="transcriptional">
+                    <relation active="1" passive="2 3" ana="#Clar"/>
+                    <relation active="2 3" passive="1" ana="#VisErr"/>
+                    <relation active="1 3" passive="2" ana="#Byz"/>
+                </listRelation>
+            </note>
+        </app>
+        """
+        )
+        vu = VariationUnit(xml)
+        self.assertEqual(len(vu.transcriptional_relations), 5)  # 2 of 6 total relationships are for the pair (1, 2)
+        self.assertTrue(("1", "2") in vu.transcriptional_relations)
+        self.assertTrue(("2", "3") not in vu.transcriptional_relations)
+        self.assertEqual(len(vu.transcriptional_relations[("1", "2")]), 2)
+        self.assertTrue("Clar" in vu.transcriptional_relations[("1", "2")])
+        self.assertTrue("Byz" in vu.transcriptional_relations[("1", "2")])
+        self.assertTrue("VisErr" not in vu.transcriptional_relations[("1", "2")])
+
+    def test_init_unknown_relations(self):
+        xml = et.fromstring(
+            """
+        <app xml:id="B10K4V6U24-28">
+            <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+            <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+            <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
+            <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+            <witDetail n="Z" type="lac" wit="syrhmg"/>
+            <note>
+                <listRelation>
+                    <relation active="1" passive="2" ana="#RatingA"/>
+                    <relation active="2" passive="3" ana="#EqualRating"/>
+                </listRelation>
+            </note>
+        </app>
+        """
+        )
+        vu = VariationUnit(xml)
+        self.assertEqual(len(vu.intrinsic_relations), 0)
+        self.assertEqual(len(vu.transcriptional_relations), 0)
+
+    def test_init_malformed_relations(self):
+        xml = et.fromstring(
+            """
+        <app xml:id="B10K4V6U24-28">
+            <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+            <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+            <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
+            <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+            <witDetail n="Z" type="lac" wit="syrhmg"/>
+            <note>
+                <listRelation type="intrinsic">
+                    <relation ana="#RatingA"/>
+                    <relation active="2" passive="3"/>
+                </listRelation>
+                <listRelation type="transcriptional">
+                    <relation passive="2 3" ana="#Clar"/>
+                    <relation active="2 3" ana="#VisErr"/>
+                    <relation active="1 3" passive="2"/>
+                </listRelation>
+            </note>
+        </app>
+        """
+        )
+        vu = VariationUnit(xml)
+        self.assertEqual(len(vu.intrinsic_relations), 0)
+        self.assertEqual(len(vu.transcriptional_relations), 0)
+
 
 if __name__ == '__main__':
     unittest.main()

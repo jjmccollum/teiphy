@@ -15,7 +15,7 @@
             <sourceDesc>
                 <!-- Description of the work (including a date range of origin) whose manuscript tradition is detailed below -->
                 <bibl>
-                    <title xml:lang="grc">Πρὸς Ἐφεσίους</title>
+                    <title>Πρὸς Ἐφεσίους</title>
                     <date notBefore="50" notAfter="80"/>
                 </bibl>
                 <listWit>
@@ -146,48 +146,51 @@
     <text xml:lang="grc">
         <interpGrp type="intrinsic">
             <interp xml:id="RatingA">
-                <p>The current reading is absolutely more likely than the linked reading.</p>
+                <p>The text is certain.</p>
                 <certainty locus="value" degree="19"/>
             </interp>
             <interp xml:id="RatingB">
-                <p>The current reading is strongly 
-                more likely than the linked reading.</p>
+                <p>The text is almost certain.</p>
                 <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="RatingC">
-                <p>The current reading is more likely
-                than the linked reading.</p>
+                <p>The Committee had difficulty in deciding which variant to place in the text.</p>
                 <certainty locus="value" degree="1.5"/>
             </interp>
             <interp xml:id="RatingD">
-                <p>The current reading is slightly more likely than the linked reading.</p>
+                <p>The Committee had great difficulty in arriving at a decision.</p>
                 <certainty locus="value" degree="1.1"/>
             </interp>
             <interp xml:id="EqualRating">
-                <p>The current reading and the linked reading 
-                are equally likely.</p>
+                <p>The current reading and the linked reading are equally likely.</p>
                 <certainty locus="value" degree="1"/>
             </interp>
         </interpGrp>
         <interpGrp type="transcriptional">
             <interp xml:id="Clar">
                 <p>Clarification of the text in terms of grammar, style, or theology.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
             <interp xml:id="AurConf">
                 <p>Aural confusion concerning letters or dipthongs that came to have the same sound in later Greek, including various itacisms (i.e., interchanges between ι, ει, η, οι, and υ), \textgreek{αι}-\textgreek{ε} interchanges, ο-ω interchanges, interchanges between similar-sounding consonants (e.g., β-υ after certain vowels and π-φ) and other less common interchanges (e.g., vowel sounds that might be confused if spoken quickly).</p>
+                <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="LingConf">
                 <p>Linguistic confusion concerning rules of Greek grammar.</p>
 		        <p><i>Constructiones ad sensum</i> that reflect changes in grammatical rules over time also fall under this rubric.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
             <interp xml:id="VisErr">
                 <p>Visual error, such as paleographic confusion of similar letters, haplography, dittography and other repetitions of nearby letters, and other skips of the eye resulting in small omissions. Rarer situations, like duplication or omission of letters related to the presence or absence of an ornamental capital at the start of a line, also fall under this rubric.</p>
+                <certainty locus="value" degree="4"/>
             </interp>
             <interp xml:id="Harm">
                 <p>Harmonization, either to a parallel passage or to the near context.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
             <interp xml:id="Byz">
                 <p>The text is brought into conformity with the Byzantine text.</p>
+                <certainty locus="value" degree="2"/>
             </interp>
         </interpGrp>
         <body>
@@ -342,7 +345,7 @@
             </app>
             <app xml:id="B10K3V1U14-18">
                 <lem><w>του</w><w>χριστου</w><w>ιησου</w></lem>
-                <rdg n="1" wit="UBS P46 01C1 02 03 06C1 18 33 35 424* 1175 vg copsa copbo Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
+                <rdg n="1" wit="UBS P46 01C1 02 03 06C1 18 33 35 1175 vg copsa copbo Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
                 <rdg n="2" wit="01* 06* 010 012 Ambrosiaster MariusVictorinus"><w>του</w><w>χριστου</w></rdg>
                 <rdg n="3" wit="88 424C 606 1505 1739 1910 2495"><w>χριστου</w><w>ιησου</w></rdg>
                 <rdg n="4" wit="915 1611 1881"><w>ιησου</w><w>χριστου</w></rdg>

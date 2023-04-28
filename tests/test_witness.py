@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime
 from lxml import etree as et
 
 from teiphy import tei_ns, Witness
@@ -42,7 +43,8 @@ class WitnessTestCase(unittest.TestCase):
             % tei_ns
         )
         witness = Witness(xml)
-        self.assertEqual(witness.date_range[0], 366)
+        # from and to indicate the time during which a witness was being produced, so the upper and lower bounds should both be set to the time when the work was finished:
+        self.assertEqual(witness.date_range[0], 384)
         self.assertEqual(witness.date_range[1], 384)
 
     def test_init_date_range_not_before_not_after(self):
@@ -58,13 +60,13 @@ class WitnessTestCase(unittest.TestCase):
         xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"/>" % tei_ns)
         witness = Witness(xml)
         self.assertIsNone(witness.date_range[0])
-        self.assertIsNone(witness.date_range[1])
+        self.assertEqual(witness.date_range[1], datetime.now().year)
 
     def test_init_date_range_start_only(self):
         xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"><tei:origDate notBefore=\"50\"/></witness>" % tei_ns)
         witness = Witness(xml)
         self.assertEqual(witness.date_range[0], 50)
-        self.assertIsNone(witness.date_range[1])
+        self.assertEqual(witness.date_range[1], datetime.now().year)
 
     def test_init_date_range_end_only(self):
         xml = et.fromstring("<witness xmlns:tei=\"%s\" n=\"A\"><tei:origDate notAfter=\"100\"/></witness>" % tei_ns)

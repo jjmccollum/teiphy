@@ -1,11 +1,12 @@
 from pathlib import Path
+from datetime import datetime
 import tempfile
 from typer.testing import CliRunner
 from lxml import etree as et
 
 from teiphy.main import app
-from teiphy.collation import ParsingException
-from teiphy.common import tei_ns
+from teiphy.collation import ParsingException, WitnessDateException, IntrinsicRelationsException
+from teiphy.common import tei_ns, xml_ns
 
 runner = CliRunner()
 
@@ -19,6 +20,11 @@ no_listwit_example = test_dir / "no_listwit_example.xml"
 extra_sigla_example = test_dir / "extra_sigla_example.xml"
 no_dates_example = test_dir / "no_dates_example.xml"
 some_dates_example = test_dir / "some_dates_example.xml"
+fixed_rates_example = test_dir / "fixed_rates_example.xml"
+bad_date_witness_example = test_dir / "bad_date_witness_example.xml"
+intrinsic_odds_excess_indegree_example = test_dir / "intrinsic_odds_excess_indegree_example.xml"
+intrinsic_odds_cycle_example = test_dir / "intrinsic_odds_cycle_example.xml"
+intrinsic_odds_no_relations_example = test_dir / "intrinsic_odds_no_relations_example.xml"
 
 
 def test_version():
@@ -59,6 +65,16 @@ def test_extra_sigla_input():
         assert "TheodoreOfMopsuestia" in result.stdout
 
 
+def test_bad_date_witness_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(app, [str(bad_date_witness_example), str(output)])
+        assert isinstance(result.exception, WitnessDateException)
+        assert "The following witnesses have their latest possible dates before the earliest date of origin" in str(
+            result.exception
+        )
+
+
 def test_to_nexus():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
@@ -68,7 +84,7 @@ def test_to_nexus():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" in text
-        assert "22 B10K4V28U24_26" in text
+        assert "\t22 B10K4V28U24_26" in text
         assert "StatesFormat=Frequency" not in text
 
 
@@ -81,7 +97,7 @@ def test_to_nexus_drop_constant():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" in text
-        assert "22 B10K4V28U24_26" not in text
+        assert "\t22 B10K4V28U24_26" not in text
         assert "StatesFormat=Frequency" not in text
 
 
@@ -105,7 +121,7 @@ def test_to_nexus_frequency():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "22 B10K4V28U24_26" in text
+        assert "\t22 B10K4V28U24_26" in text
         assert "StatesFormat=Frequency" in text
 
 
@@ -117,7 +133,7 @@ def test_to_nexus_drop_constant_frequency():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "22 B10K4V28U24_26" not in text
+        assert "\t22 B10K4V28U24_26" not in text
         assert "StatesFormat=Frequency" in text
 
 
@@ -142,8 +158,8 @@ def test_to_nexus_calibrate_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
-        assert "CALIBRATE UBS = fixed(50)" in text
-        assert "CALIBRATE P46 = uniform(175,225)" in text
+        assert "CALIBRATE 18 = fixed(%d)" % (datetime.now().year - 1364) in text
+        assert "CALIBRATE P46 = uniform(%d,%d)" % (datetime.now().year - 225, datetime.now().year - 175) in text
 
 
 def test_to_nexus_calibrate_dates_no_dates():
@@ -154,7 +170,8 @@ def test_to_nexus_calibrate_dates_no_dates():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "Begin ASSUMPTIONS;" not in text
+        assert "Begin ASSUMPTIONS;" in text
+        assert "CALIBRATE UBS = offsetlognormal(0,0.0,1.0)" in text
 
 
 def test_to_nexus_calibrate_dates_some_dates():
@@ -166,11 +183,19 @@ def test_to_nexus_calibrate_dates_some_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
-        assert "CALIBRATE UBS = fixed(50)" in text  # both ends of date range specified and identical
-        assert "CALIBRATE P46 = uniform(50,600)" in text  # neither end of date range specified
-        assert "CALIBRATE 01 = uniform(300,600)" in text  # lower bound but no upper bound
-        assert "CALIBRATE 02 = uniform(50,500)" in text  # upper bound but no lower bound
-        assert "CALIBRATE 06 = uniform(500,600)" in text  # both ends of date range specified and distinct
+        assert (
+            "CALIBRATE UBS = fixed(%d)" % (datetime.now().year - 50) in text
+        )  # both ends of date range specified and identical
+        assert "CALIBRATE P46 = offsetlognormal(0,0.0,1.0)" in text  # neither end of date range specified
+        assert (
+            "CALIBRATE 01 = uniform(%d,%d)" % (0, datetime.now().year - 300) in text
+        )  # lower bound but no upper bound
+        assert (
+            "CALIBRATE 02 = offsetlognormal(%d,0.0,1.0)" % (datetime.now().year - 500) in text
+        )  # upper bound but no lower bound
+        assert (
+            "CALIBRATE 06 = uniform(%d,%d)" % (datetime.now().year - 600, datetime.now().year - 500) in text
+        )  # both ends of date range specified and distinct
 
 
 def test_to_nexus_mrbayes():
@@ -182,8 +207,9 @@ def test_to_nexus_mrbayes():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
-        assert "calibrate UBS = fixed(1450);" in text
-        assert "calibrate P46 = uniform(1275,1325);" in text
+        assert "prset treeagepr = uniform(%d,%d)" % (datetime.now().year - 80, datetime.now().year - 50) in text
+        assert "calibrate 18 = fixed(%d);" % (datetime.now().year - 1364) in text
+        assert "calibrate P46 = uniform(%d,%d);" % (datetime.now().year - 225, datetime.now().year - 175) in text
 
 
 def test_to_nexus_mrbayes_no_dates():
@@ -194,8 +220,9 @@ def test_to_nexus_mrbayes_no_dates():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "Begin MRBAYES;" in text  # the MRBAYES block is still included, but no calibrations are
-        assert "calibrate" not in text
+        assert "Begin MRBAYES;" in text
+        assert "prset treeagepr = offsetgamma(0,1.0,1.0)" in text
+        assert "calibrate 18 = offsetgamma(0,1.0,1.0);" in text
 
 
 def test_to_nexus_mrbayes_some_dates():
@@ -207,11 +234,115 @@ def test_to_nexus_mrbayes_some_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
-        assert "calibrate UBS = fixed(550)" in text  # both ends of date range specified and identical
-        assert "calibrate P46 = uniform(0,550)" in text  # neither end of date range specified
-        assert "calibrate 01 = uniform(0,300)" in text  # lower bound but no upper bound
-        assert "calibrate 02 = uniform(100,550)" in text  # upper bound but no lower bound
-        assert "calibrate 06 = uniform(0,100)" in text  # both ends of date range specified and distinct
+        assert "prset treeagepr = offsetgamma(%d,1.0,1.0);" % (datetime.now().year - 50) in text
+        assert (
+            "calibrate UBS = fixed(%d);" % (datetime.now().year - 50) in text
+        )  # both ends of date range specified and identical
+        assert "calibrate P46 = offsetgamma(0,1.0,1.0);" in text  # neither end of date range specified
+        assert (
+            "calibrate 01 = uniform(%d,%d);" % (0, datetime.now().year - 300) in text
+        )  # lower bound but no upper bound
+        assert (
+            "calibrate 02 = offsetgamma(%d,1.0,1.0);" % (datetime.now().year - 500) in text
+        )  # upper bound but no lower bound
+        assert (
+            "calibrate 06 = uniform(%d,%d);" % (datetime.now().year - 600, datetime.now().year - 500) in text
+        )  # both ends of date range specified and distinct
+
+
+def test_to_nexus_mrbayes_strict_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--mrbayes",
+                "--clock",
+                "strict",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert "prset clockvarpr=strict;" in text
+
+
+def test_to_nexus_mrbayes_uncorrelated_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--mrbayes",
+                "--clock",
+                "uncorrelated",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert "prset clockvarpr=igr;" in text
+
+
+def test_to_nexus_mrbayes_local_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--mrbayes",
+                "--clock",
+                "local",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "Begin MRBAYES;" in text
+        assert (
+            "prset clockvarpr=strict;" in text
+        )  # MrBayes does not presently support local clock models, so we default to strict models
 
 
 def test_to_hennig86():
@@ -225,13 +356,13 @@ def test_to_hennig86():
         result = runner.invoke(
             app,
             [
-                "-t reconstructed",
-                "-t defective",
-                "-t orthographic",
-                "-m lac",
-                "-m overlap",
-                "-s *",
-                "-s T",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
                 "--fill-correctors",
                 str(input_example),
                 str(output),
@@ -256,13 +387,13 @@ def test_to_hennig86_drop_constant():
         result = runner.invoke(
             app,
             [
-                "-t reconstructed",
-                "-t defective",
-                "-t orthographic",
-                "-m lac",
-                "-m overlap",
-                "-s *",
-                "-s T",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
                 "--fill-correctors",
                 "--drop-constant",
                 str(input_example),
@@ -288,13 +419,13 @@ def test_to_phylip():
         result = runner.invoke(
             app,
             [
-                "-t reconstructed",
-                "-t defective",
-                "-t orthographic",
-                "-m lac",
-                "-m overlap",
-                "-s *",
-                "-s T",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
                 "--fill-correctors",
                 str(input_example),
                 str(output),
@@ -317,13 +448,13 @@ def test_to_phylip_drop_constant():
         result = runner.invoke(
             app,
             [
-                "-t reconstructed",
-                "-t defective",
-                "-t orthographic",
-                "-m lac",
-                "-m overlap",
-                "-s *",
-                "-s T",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
                 "--fill-correctors",
                 "--drop-constant",
                 str(input_example),
@@ -346,13 +477,13 @@ def test_to_fasta():
         result = runner.invoke(
             app,
             [
-                "-t reconstructed",
-                "-t defective",
-                "-t orthographic",
-                "-m lac",
-                "-m overlap",
-                "-s *",
-                "-s T",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
                 "--fill-correctors",
                 str(input_example),
                 str(output),
@@ -375,13 +506,13 @@ def test_to_fasta_drop_constant():
         result = runner.invoke(
             app,
             [
-                "-t reconstructed",
-                "-t defective",
-                "-t orthographic",
-                "-m lac",
-                "-m overlap",
-                "-s *",
-                "-s T",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
                 "--fill-correctors",
                 "--drop-constant",
                 str(input_example),
@@ -393,6 +524,401 @@ def test_to_fasta_drop_constant():
         text = output.read_text(encoding="ascii")
         assert text.startswith(">UBS")
         assert "0" * (len(xml_variation_units) - 2) in text
+
+
+def test_to_beast():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        beast_xml_sequences = beast_xml.xpath("//sequence")
+        beast_xml_charstatelabels = beast_xml.xpath("//charstatelabels")
+        beast_xml_site_distributions = beast_xml.xpath("//distribution[@spec=\"TreeLikelihood\"]")
+        assert len(beast_xml_sequences) == len(xml_witnesses)
+        assert len(beast_xml_charstatelabels) == len(xml_variation_units)
+        assert len(beast_xml_site_distributions) == len(xml_variation_units)
+        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K4V28U24-26\"]")
+        assert len(beast_xml_singleton_sequences) == 1
+        assert beast_xml_singleton_sequences[0].get("value") is not None
+        assert "DUMMY" in beast_xml_singleton_sequences[0].get("value")
+        assert "WARNING: the latest witness" in result.stdout
+
+
+def test_to_beast_drop_constant():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--drop-constant",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        beast_xml_sequences = beast_xml.xpath("//sequence")
+        beast_xml_charstatelabels = beast_xml.xpath("//charstatelabels")
+        beast_xml_site_distributions = beast_xml.xpath("//distribution[@spec=\"TreeLikelihood\"]")
+        assert len(beast_xml_sequences) == len(xml_witnesses)
+        assert len(beast_xml_charstatelabels) == len(xml_variation_units) - 2
+        assert len(beast_xml_site_distributions) == len(xml_variation_units) - 2
+        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K4V28U24-26\"]")
+        assert len(beast_xml_singleton_sequences) == 0
+
+
+def test_to_beast_no_dates():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(no_dates_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
+        assert len(beast_xml_traits) == 1
+        assert beast_xml_traits[0].get("value") is not None
+        assert beast_xml_traits[0].get("value") == ""
+        beast_xml_origin_parameters = beast_xml.xpath("//origin")
+        assert len(beast_xml_origin_parameters) == 1
+        assert float(beast_xml_origin_parameters[0].get("value")) == 1.0
+        assert float(beast_xml_origin_parameters[0].get("lower")) == 0.0
+        assert beast_xml_origin_parameters[0].get("upper") == "Infinity"
+
+
+def test_to_beast_some_dates():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(some_dates_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
+        assert len(beast_xml_traits) == 1
+        assert beast_xml_traits[0].get("value") is not None
+        assert beast_xml_traits[0].get("value") == "UBS=%d,01=%d,06=%d" % (
+            50,
+            int((datetime.now().year + 300) / 2),
+            550,
+        )
+        beast_xml_origin_parameters = beast_xml.xpath("//origin")
+        assert len(beast_xml_origin_parameters) == 1
+        assert float(beast_xml_origin_parameters[0].get("value")) == 1.0
+        assert float(beast_xml_origin_parameters[0].get("lower")) == datetime.now().year - 50
+        assert beast_xml_origin_parameters[0].get("upper") == "Infinity"
+
+
+def test_to_beast_variable_rates():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_transcriptional_categories = xml.xpath(
+        "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+    )
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        for xml_transcriptional_category in xml_transcriptional_categories:
+            transcriptional_category = xml_transcriptional_category.get("{%s}id" % xml_ns)
+            beast_xml_transcriptional_rate_categories = beast_xml.xpath(
+                "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
+            )
+            assert len(beast_xml_transcriptional_rate_categories) == 1
+            assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == 2.0
+            assert beast_xml_transcriptional_rate_categories[0].get("estimate") == "true"
+
+
+def test_to_beast_fixed_rates():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(fixed_rates_example, parser=parser)
+    xml_transcriptional_categories = xml.xpath(
+        "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+    )
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(fixed_rates_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        for xml_transcriptional_category in xml_transcriptional_categories:
+            transcriptional_category = xml_transcriptional_category.get("{%s}id" % xml_ns)
+            transcriptional_rate = float(
+                xml_transcriptional_category.xpath("./tei:certainty", namespaces={"tei": tei_ns})[0].get("degree")
+            )
+            beast_xml_transcriptional_rate_categories = beast_xml.xpath(
+                "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
+            )
+            assert len(beast_xml_transcriptional_rate_categories) == 1
+            assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == transcriptional_rate
+            assert beast_xml_transcriptional_rate_categories[0].get("estimate") == "false"
+
+
+def test_to_beast_intrinsic_odds_excess_indegree():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(intrinsic_odds_excess_indegree_example, parser=parser)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(intrinsic_odds_excess_indegree_example),
+                str(output),
+            ],
+        )
+        assert isinstance(result.exception, IntrinsicRelationsException)
+        assert "the following readings have more than one intrinsic relation pointing to them" in str(result.exception)
+
+
+def test_to_beast_intrinsic_odds_cycle():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(intrinsic_odds_cycle_example, parser=parser)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(intrinsic_odds_cycle_example),
+                str(output),
+            ],
+        )
+        assert isinstance(result.exception, IntrinsicRelationsException)
+        assert "the intrinsic relations contain a cycle" in str(result.exception)
+
+
+def test_to_beast_intrinsic_odds_no_relations():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                str(intrinsic_odds_no_relations_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        root_frequencies_xml = beast_xml.find("//rootFrequencies/frequencies")
+        assert root_frequencies_xml.get("value") is not None
+        assert root_frequencies_xml.get("value") == "0.25 0.25 0.25 0.25"
+
+
+def test_to_beast_strict_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--clock",
+                "strict",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//branchRateModel") is not None
+        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert branch_rate_model.get("spec") == "StrictClockModel"
+
+
+def test_to_beast_uncorrelated_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--clock",
+                "uncorrelated",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//branchRateModel") is not None
+        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert branch_rate_model.get("spec") == "UCRelaxedClockModel"
+
+
+def test_to_beast_local_clock():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--clock",
+                "local",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//branchRateModel") is not None
+        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert branch_rate_model.get("spec") == "RandomLocalClockModel"
 
 
 def test_to_csv():
@@ -487,7 +1013,7 @@ def test_to_stemma():
         assert chron_output.exists()
         chron_text = chron_output.read_text(encoding="utf-8")
         assert chron_text.startswith("UBS")
-        assert "50    50    50" in chron_text
+        assert "50    65    80" in chron_text
 
 
 def test_to_stemma_no_dates():
@@ -514,13 +1040,13 @@ def test_to_stemma_some_dates():
         assert chron_output.exists()
         chron_text = chron_output.read_text(encoding="utf-8")
         assert chron_text.startswith("UBS")
+        assert chron_text.count("50    50    50") == 1
         assert (
-            chron_text.count("50   50   50") == 1
-        )  # space between columns should be reduced because all dates are now at most 3 digits long
-        assert chron_text.count("300  450  600") == 1  # for the one witness with a lower bound and no upper bound
-        assert chron_text.count("50  275  500") == 1  # for the one witness with an upper bound and no lower bound
+            chron_text.count("300  %d  %d" % (int((datetime.now().year + 300) / 2), datetime.now().year)) == 1
+        )  # for the one witness with a lower bound and no upper bound
+        assert chron_text.count("50   275   500") == 1  # for the one witness with an upper bound and no lower bound
         assert (
-            chron_text.count("50  325  600") > 1
+            chron_text.count("50  %d  %d" % (int((datetime.now().year + 50) / 2), datetime.now().year)) > 1
         )  # for the remaining witnesses whose bounds are set to the minimum and maximum
 
 
