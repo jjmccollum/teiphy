@@ -77,6 +77,7 @@ Alternatively, you can install the package by cloning this repository and instal
 
     git clone https://github.com/jjmccollum/teiphy.git
     cd teiphy
+    pip install poetry
     poetry install
 
 Once the package is installed, you can run all unit tests via the command
