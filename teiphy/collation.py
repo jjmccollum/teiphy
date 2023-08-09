@@ -2,7 +2,7 @@
 
 from enum import Enum
 from typing import List, Union
-from pathlib import Path
+from pathlib import os, Path
 from datetime import datetime  # for calculating the current year (for dating and tree height purposes)
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
@@ -1789,7 +1789,10 @@ class Collation:
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
             f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
-            f.write("^ %s\n\n" % chron_file_addr)
+            # f.write("^ %s\n\n" % chron_file_addr) #write the relative path to the chron file
+            f.write(
+                "^ %s\n\n" % ("." + os.sep + Path(chron_file_addr).name)
+            )  # write the relative path to the chron file
             # Then add a line indicating that all witnesses are lacunose unless they are specified explicitly:
             f.write("= $? $* ;\n\n")
             # Then proceed for each variation unit:
