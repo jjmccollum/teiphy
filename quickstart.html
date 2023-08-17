@@ -110,36 +110,36 @@
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
 <p>The software can be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install teiphy
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>teiphy
 </pre></div>
 </div>
 <p>Alternatively, you can install the package by cloning this repository and installing it with poetry:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/jjmccollum/teiphy.git
-<span class="nb">cd</span> teiphy
-pip install poetry
-poetry install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jjmccollum/teiphy.git
+<span class="nb">cd</span><span class="w"> </span>teiphy
+pip<span class="w"> </span>install<span class="w"> </span>poetry
+poetry<span class="w"> </span>install
 </pre></div>
 </div>
 <p>Once the package is installed, you can run all unit tests via the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run pytest
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>pytest
 </pre></div>
 </div>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <p>To use the software, run the <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> command line tool:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy &lt;input TEI XML&gt; &lt;output file&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>&lt;input<span class="w"> </span>TEI<span class="w"> </span>XML&gt;<span class="w"> </span>&lt;output<span class="w"> </span>file&gt;
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, BEAST 2.7 XML, CSV, TSV, Excel and STEMMA formats.
 <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
 “.nex”, “.nexus”, “.nxs”, “.ph”, “.phy”, “.fa”, “.fasta”, “.xml”, “.tnt”, “.csv”, “.tsv”, “.xlsx”.</p>
 <p>To explicitly say which format you wish to export to, use the <code class="docutils literal notranslate"><span class="pre">--format</span></code> option. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy &lt;input TEI XML&gt; &lt;output file&gt; --format nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>&lt;input<span class="w"> </span>TEI<span class="w"> </span>XML&gt;<span class="w"> </span>&lt;output<span class="w"> </span>file&gt;<span class="w"> </span>--format<span class="w"> </span>nexus
 </pre></div>
 </div>
 <p>For more information about the other options, see the help with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy --help
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>--help
 </pre></div>
 </div>
 <p>Or see the documentation with explanations about <a class="reference external" href="https://jjmccollum.github.io/teiphy/advanced.html">advanced usage</a>.</p>
