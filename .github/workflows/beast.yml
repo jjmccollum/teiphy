@@ -26,9 +26,9 @@ jobs:
     - run: poetry install
     - name: Testing
       run: |
-        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock strict example/ubs_ephesians.xml beast_strict_example.xml
-        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock uncorrelated example/ubs_ephesians.xml beast_uncorrelated_example.xml
-        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock local example/ubs_ephesians.xml beast_local_example.xml
+        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock strict --seed 1337 example/ubs_ephesians.xml beast_strict_example.xml
+        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock uncorrelated --seed 1337 example/ubs_ephesians.xml beast_uncorrelated_example.xml
+        poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock local --seed 1337 example/ubs_ephesians.xml beast_local_example.xml
     - name: Install Phylogenetics Package
       run: |
         export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.6-10/x64

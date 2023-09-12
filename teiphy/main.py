@@ -75,6 +75,10 @@ def to_file(
         False,
         help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats.",
     ),
+    seed: int = typer.Option(
+        None,
+        help="Seed for random number generation (used for setting default initial values of transcriptional rate parameters for BEAST 2 XML output); if not specified, then the default seeding of the numpy.random.default_rng class will be used.",
+    ),
     verbose: bool = typer.Option(False, help="Enable verbose logging (mostly for debugging purposes)."),
     version: bool = typer.Option(
         False,
@@ -128,4 +132,5 @@ def to_file(
         clock_model=clock,
         long_table=long_table,
         split_missing=split_missing,
+        seed=seed,
     )
