@@ -7,7 +7,7 @@ from datetime import datetime  # for calculating the current year (for dating an
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
 from lxml import etree as et  # for reading TEI XML inputs
-import numpy as np  # for collation matrix outputs
+import numpy as np  # for random number sampling and collation matrix outputs
 import pandas as pd  # for writing to DataFrames, CSV, Excel, etc.
 from slugify import slugify  # for converting Unicode text from readings to ASCII for NEXUS
 from jinja2 import Environment, PackageLoader, select_autoescape  # for filling output XML templates
@@ -1291,7 +1291,11 @@ class Collation:
         return root_frequencies_string
 
     def to_beast(
-        self, file_addr: Union[Path, str], drop_constant: bool = False, clock_model: ClockModel = ClockModel.strict
+        self,
+        file_addr: Union[Path, str],
+        drop_constant: bool = False,
+        clock_model: ClockModel = ClockModel.strict,
+        seed: int = None,
     ):
         """Writes this Collation to a file in BEAST format with the given address.
 
@@ -1299,6 +1303,7 @@ class Collation:
             file_addr: A string representing the path to an output file.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             clock_model: A ClockModel option indicating which clock model to use.
+            seed: A seed for random number generation (for setting initial values of unspecified transcriptional rates).
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment:
         substantive_variation_unit_ids = self.variation_unit_ids
@@ -1453,15 +1458,16 @@ class Collation:
             intrinsic_category_object["odds"] = odds if odds is not None else 1.0
             intrinsic_category_object["estimate"] = "false" if odds is not None else "true"
             intrinsic_category_objects.append(intrinsic_category_object)
-        # The proceed to transcriptional rate categories:
+        # Then proceed to transcriptional rate categories:
+        rng = np.random.default_rng(seed)
         for transcriptional_category in self.transcriptional_categories:
             transcriptional_category_object = {}
             # Copy the ID of this transcriptional category:
             transcriptional_category_object["id"] = transcriptional_category
             # Then copy the rate of this transcriptional category,
-            # setting it to 2.0 if it is not specified and setting the estimate attribute accordingly:
+            # setting it to a random number sampled from a Gamma distribution if it is not specified and setting the estimate attribute accordingly:
             rate = self.transcriptional_rates_by_id[transcriptional_category]
-            transcriptional_category_object["rate"] = rate if rate is not None else 2.0
+            transcriptional_category_object["rate"] = rate if rate is not None else rng.gamma(5.0, 2.0)
             transcriptional_category_object["estimate"] = "false" if rate is not None else "true"
             transcriptional_category_objects.append(transcriptional_category_object)
         # Now render the output XML file using the Jinja template:
@@ -1893,6 +1899,7 @@ class Collation:
         calibrate_dates: bool = False,
         mrbayes: bool = False,
         clock_model: ClockModel = ClockModel.strict,
+        seed: int = None,
     ):
         """Writes this Collation to the file with the given address.
 
@@ -1933,6 +1940,7 @@ class Collation:
             clock_model: A ClockModel option indicating which type of clock model to use.
                 This option is intended for inputs to MrBayes and BEAST 2.
                 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
+            seed: A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
         """
         file_addr = Path(file_addr)
         format = format or Format.infer(
@@ -1961,7 +1969,7 @@ class Collation:
             return self.to_fasta(file_addr, drop_constant=drop_constant)
 
         if format == format.BEAST:
-            return self.to_beast(file_addr, drop_constant=drop_constant, clock_model=clock_model)
+            return self.to_beast(file_addr, drop_constant=drop_constant, clock_model=clock_model, seed=seed)
 
         if format == Format.CSV:
             return self.to_csv(

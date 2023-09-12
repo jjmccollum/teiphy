@@ -696,6 +696,8 @@ def test_to_beast_variable_rates():
                 "-s*",
                 "-sT",
                 "--fill-correctors",
+                "--seed",
+                "1337",
                 str(input_example),
                 str(output),
             ],
@@ -703,13 +705,21 @@ def test_to_beast_variable_rates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        for xml_transcriptional_category in xml_transcriptional_categories:
+        expected_rates = [
+            9.499649179019467,
+            8.750762619939191,
+            25.00430409157674,
+            19.873724085272503,
+            9.988999535304949,
+            21.828078913817116,
+        ]  # Gamma(5,2)-distributed numbers generated with seed 1337
+        for i, xml_transcriptional_category in enumerate(xml_transcriptional_categories):
             transcriptional_category = xml_transcriptional_category.get("{%s}id" % xml_ns)
             beast_xml_transcriptional_rate_categories = beast_xml.xpath(
                 "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
             )
             assert len(beast_xml_transcriptional_rate_categories) == 1
-            assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == 2.0
+            assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == expected_rates[i]
             assert beast_xml_transcriptional_rate_categories[0].get("estimate") == "true"
 
 
