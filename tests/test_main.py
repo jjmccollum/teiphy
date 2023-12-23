@@ -937,7 +937,7 @@ def test_to_csv():
         result = runner.invoke(app, [str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text(encoding="utf-8")
+        text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "B10K4V28U24-26," in text
 
@@ -948,7 +948,7 @@ def test_to_csv_drop_constant():
         result = runner.invoke(app, ["--drop-constant", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text(encoding="utf-8")
+        text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "B10K4V28U24-26," not in text
 
@@ -956,23 +956,97 @@ def test_to_csv_drop_constant():
 def test_to_csv_long_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--long-table", str(input_example), str(output)])
+        result = runner.invoke(app, ["--table", "long", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text(encoding="utf-8")
+        text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("taxon,character,state,value")
         assert "B10K4V28U24-26," in text
+
+
+def test_to_csv_nexus_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--table", "nexus", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
+        assert "B10K4V28U24-26," in text
+        assert "{1 2}" in text
+
+
+def test_to_csv_ambiguous_as_missing_nexus_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--ambiguous-as-missing", "--table", "nexus", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
+        assert "B10K4V28U24-26," in text
+        assert "{1 2}" not in text
+
+
+def test_to_csv_distance_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--table", "distance", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert "\nUBS," in text
+        assert ",13.0," in text
+
+
+def test_to_csv_proportion_distance_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--table", "distance", "--proportion", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert "\nUBS," in text
+        assert ",0.5," in text
 
 
 def test_to_csv_drop_constant_long_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--drop-constant", "--long-table", str(input_example), str(output)])
+        result = runner.invoke(app, ["--drop-constant", "--table", "long", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text(encoding="utf-8")
+        text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("taxon,character,state,value")
         assert "B10K4V28U24-26," not in text
+
+
+def test_to_csv_drop_constant_nexus_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--drop-constant", "--table", "nexus", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
+        assert "B10K4V28U24-26," not in text
+        assert "{1 2}" in text
+
+
+def test_to_csv_drop_constant_ambiguous_as_missing_nexus_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(
+            app, ["--drop-constant", "--ambiguous-as-missing", "--table", "nexus", str(input_example), str(output)]
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
+        assert "B10K4V28U24-26," not in text
+        assert "{1 2}" not in text
 
 
 def test_to_tsv():
@@ -981,18 +1055,42 @@ def test_to_tsv():
         result = runner.invoke(app, [str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text(encoding="utf-8")
+        text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("\tUBS\tP46\t01\t02\t03\t04\t06")
 
 
 def test_to_tsv_long_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.tsv"
-        result = runner.invoke(app, ["--long-table", str(input_example), str(output)])
+        result = runner.invoke(app, ["--table", "long", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
-        text = output.read_text(encoding="utf-8")
+        text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("taxon\tcharacter\tstate\tvalue")
+
+
+def test_to_tsv_nexus_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.tsv"
+        result = runner.invoke(app, ["--table", "nexus", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith("\tB10K1V1U24-26\tB10K1V6U20-24\tB10K1V14U2\tB10K1V15U26-40")
+        assert "B10K4V28U24-26" in text
+        assert "{1 2}" in text
+
+
+def test_to_tsv_distance_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.tsv"
+        result = runner.invoke(app, ["--table", "distance", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith("\tUBS\tP46\t01\t02\t03\t04\t06")
+        assert "\nUBS\t" in text
+        assert "\t13.0\t" in text
 
 
 def test_to_excel():
@@ -1006,7 +1104,15 @@ def test_to_excel():
 def test_to_excel_long_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xlsx"
-        result = runner.invoke(app, ["--long-table", str(input_example), str(output)])
+        result = runner.invoke(app, ["--table", "long", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+
+
+def test_to_excel_nexus_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xlsx"
+        result = runner.invoke(app, ["--table", "nexus", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
 

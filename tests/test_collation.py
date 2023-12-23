@@ -436,11 +436,16 @@ class CollationOutputTestCase(unittest.TestCase):
             abs(matrix[0, 1] - 13 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
         )  # entry for UBS and P46 should be 13 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
 
+    def test_to_nexus_table(self):
+        nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
+        self.assertEqual(row_labels[0], "UBS")
+        self.assertEqual(column_labels[0], "B10K1V1U24-26")
+        self.assertEqual(nexus_table[0, 0], "1")  # reading of UBS at B10K1V1U24-26 should have ID "1"
+        self.assertEqual(nexus_table[26, 1], "{1 2}")  # ambiguous reading of vg at B10K1V6U20-24 should have ID "{1 2}"
+
     def test_to_long_table(self):
         long_table, column_labels = self.collation.to_long_table()
-        self.assertEqual(
-            column_labels, ["taxon", "character", "state", "value"]
-        )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
+        self.assertEqual(column_labels, ["taxon", "character", "state", "value"])
         self.assertEqual(long_table[0, 0], "UBS")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
         self.assertEqual(long_table[0, 1], "B10K1V1U24-26")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
         self.assertEqual(long_table[0, 2], "0")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
