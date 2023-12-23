@@ -36,6 +36,13 @@ class ClockModel(str, Enum):
     local = "local"
 
 
+class TableType(str, Enum):
+    matrix = "matrix"
+    distance = "distance"
+    nexus = "nexus"
+    long = "long"
+
+
 class Collation:
     """Base class for storing TEI XML collation data internally.
 
@@ -635,6 +642,8 @@ class Collation:
         charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in substantive_variation_unit_ids]
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the NEXUS header:
             f.write("#NEXUS\n\n")
@@ -871,7 +880,9 @@ class Collation:
         )  # keep track of the longest taxon label for tabular alignment purposes
         missing_symbol = '?'
         symbols = self.get_hennig86_symbols()
-        with open(file_addr, "w", encoding="utf-8") as f:
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        with open(file_addr, "w", encoding="ascii") as f:
             # Start with the nstates header:
             f.write("nstates %d;\n" % len(symbols))
             # Then begin the xread block:
@@ -958,6 +969,8 @@ class Collation:
         )  # keep track of the longest taxon label for tabular alignment purposes
         missing_symbol = '?'
         symbols = self.get_phylip_symbols()
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="ascii") as f:
             # Write the dimensions:
             f.write("%d %d\n" % (ntax, nchar))
@@ -1040,6 +1053,8 @@ class Collation:
         )  # keep track of the longest taxon label for tabular alignment purposes
         missing_symbol = '?'
         symbols = self.get_fasta_symbols()
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="ascii") as f:
             # Now write the matrix:
             for i, wit in enumerate(self.witnesses):
@@ -1471,7 +1486,6 @@ class Collation:
             transcriptional_category_object["estimate"] = "false" if rate is not None else "true"
             transcriptional_category_objects.append(transcriptional_category_object)
         # Now render the output XML file using the Jinja template:
-        root_dir = Path(__file__).parent.parent
         env = Environment(loader=PackageLoader("teiphy", "templates"), autoescape=select_autoescape())
         template = env.get_template("beast_template.xml")
         rendered = template.render(
@@ -1485,6 +1499,8 @@ class Collation:
             intrinsic_categories=intrinsic_category_objects,
             transcriptional_categories=transcriptional_category_objects,
         )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="utf-8") as f:
             f.write(rendered)
         return
@@ -1552,7 +1568,7 @@ class Collation:
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
 
         Returns:
             A NumPy distance matrix with a row and column for each witness.
@@ -1602,6 +1618,80 @@ class Collation:
                 else:
                     matrix[i, j] = disagreements
         return matrix, witness_labels
+
+    def to_nexus_table(self, drop_constant: bool = False, ambiguous_as_missing: bool = False):
+        """Returns this Collation in the form of a table with rows for taxa, columns for characters, and reading IDs in cells.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
+
+        Returns:
+            A NumPy array with rows for taxa, columns for characters, and reading IDs in cells.
+            A list of substantive reading ID strings.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
+        # to the readings' IDs:
+        reading_ids_by_indices = {}
+        for j, vu in enumerate(self.variation_units):
+            if vu.id not in substantive_variation_unit_ids_set:
+                continue
+            k = 0
+            for rdg in vu.readings:
+                key = tuple([vu.id, rdg.id])
+                if key not in substantive_variation_unit_reading_tuples_set:
+                    continue
+                indices = tuple([j, k])
+                reading_ids_by_indices[indices] = rdg.id
+                k += 1
+        # Initialize the output array with the appropriate dimensions:
+        missing_symbol = '?'
+        witness_labels = [wit.id for wit in self.witnesses]
+        matrix = np.full(
+            (len(witness_labels), len(substantive_variation_unit_ids)), missing_symbol, dtype=object
+        )  # use dtype=object because the maximum string length is not known up front
+        # Then populate it with the appropriate values:
+        row_ind = 0
+        for i, wit in enumerate(self.witnesses):
+            col_ind = 0
+            for j, vu in enumerate(self.variation_units):
+                if vu.id not in substantive_variation_unit_ids_set:
+                    continue
+                rdg_support = self.readings_by_witness[wit.id][j]
+                # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                if sum(rdg_support) == 0:
+                    matrix[row_ind, col_ind] = missing_symbol
+                # Otherwise, add its coefficients normally:
+                else:
+                    rdg_inds = [
+                        k for k, w in enumerate(rdg_support) if w > 0
+                    ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                    # For singleton readings, just print the reading ID:
+                    if len(rdg_inds) == 1:
+                        k = rdg_inds[0]
+                        matrix[row_ind, col_ind] = reading_ids_by_indices[(j, k)]
+                    # For multiple readings, print the corresponding reading IDs in braces or the missing symbol depending on input settings:
+                    else:
+                        if ambiguous_as_missing:
+                            matrix[row_ind, col_ind] = missing_symbol
+                        else:
+                            matrix[row_ind, col_ind] = "{%s}" % " ".join(
+                                [reading_ids_by_indices[(j, k)] for k in rdg_inds]
+                            )
+                col_ind += 1
+            row_ind += 1
+        return matrix, witness_labels, substantive_variation_unit_ids
 
     def to_long_table(self, drop_constant: bool = False):
         """Returns this Collation in the form of a long table with columns for taxa, characters, reading indices, and reading values.
@@ -1665,37 +1755,59 @@ class Collation:
         long_table = np.array(long_table_list)
         return long_table, column_labels
 
-    def to_dataframe(self, drop_constant: bool = False, long_table: bool = False, split_missing: bool = True):
+    def to_dataframe(
+        self,
+        drop_constant: bool = False,
+        ambiguous_as_missing: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.matrix,
+        split_missing: bool = True,
+    ):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
-            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
+            ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
 
         Returns:
             A Pandas DataFrame corresponding to a collation matrix with reading frequencies or a long table with discrete reading states.
         """
         df = None
-        # Proceed based on whether the long_table option is set:
-        if long_table:
-            # Convert the collation to a long table and get its column labels first:
-            long_table, column_labels = self.to_long_table(drop_constant=drop_constant)
-            df = pd.DataFrame(long_table, columns=column_labels)
-        else:
+        # Proceed based on the table type:
+        if table_type == TableType.matrix:
             # Convert the collation to a NumPy array and get its row and column labels first:
             matrix, reading_labels, witness_labels = self.to_numpy(
                 drop_constant=drop_constant, split_missing=split_missing
             )
             df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
+        elif table_type == TableType.distance:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_distance_matrix(drop_constant=drop_constant, proportion=proportion)
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.nexus:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels, vu_labels = self.to_nexus_table(
+                drop_constant=drop_constant, ambiguous_as_missing=ambiguous_as_missing
+            )
+            df = pd.DataFrame(matrix, index=witness_labels, columns=vu_labels)
+        elif table_type == TableType.long:
+            # Convert the collation to a long table and get its column labels first:
+            long_table, column_labels = self.to_long_table(drop_constant=drop_constant)
+            df = pd.DataFrame(long_table, columns=column_labels)
         return df
 
     def to_csv(
         self,
         file_addr: Union[Path, str],
         drop_constant: bool = False,
-        long_table: bool = False,
+        ambiguous_as_missing: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.matrix,
         split_missing: bool = True,
         **kwargs
     ):
@@ -1706,23 +1818,40 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
-            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
+            ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
             **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(drop_constant=drop_constant, long_table=long_table, split_missing=split_missing)
-        # If this is a long table, then do not include row indices:
-        if long_table:
-            return df.to_csv(file_addr, encoding="utf-8", index=False, **kwargs)
-        return df.to_csv(file_addr, encoding="utf-8", **kwargs)
+        df = self.to_dataframe(
+            drop_constant=drop_constant,
+            ambiguous_as_missing=ambiguous_as_missing,
+            proportion=proportion,
+            table_type=table_type,
+            split_missing=split_missing,
+        )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        # Proceed based on the table type:
+        if table_type == TableType.long:
+            return df.to_csv(
+                file_addr, encoding="utf-8-sig", index=False, **kwargs
+            )  # add BOM to start of file so that Excel will know to read it as Unicode
+        return df.to_csv(
+            file_addr, encoding="utf-8-sig", **kwargs
+        )  # add BOM to start of file so that Excel will know to read it as Unicode
 
     def to_excel(
         self,
         file_addr: Union[Path, str],
         drop_constant: bool = False,
-        long_table: bool = False,
+        ambiguous_as_missing: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.matrix,
         split_missing: bool = True,
     ):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
@@ -1732,14 +1861,25 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
-            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
+            split_missing (bool, optional): An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(drop_constant=drop_constant, long_table=long_table, split_missing=split_missing)
-        # If this is a long table, then do not include row indices:
-        if long_table:
+        df = self.to_dataframe(
+            drop_constant=drop_constant,
+            ambiguous_as_missing=ambiguous_as_missing,
+            proportion=proportion,
+            table_type=table_type,
+            split_missing=split_missing,
+        )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        # Proceed based on the table type:
+        if table_type == TableType.long:
             return df.to_excel(file_addr, index=False)
         return df.to_excel(file_addr)
 
@@ -1791,6 +1931,9 @@ class Collation:
                 indices = tuple([j, k])
                 reading_wits_by_indices[indices].append(wit.id)
         # In a third pass, write to the STEMMA file:
+        Path(file_addr).parent.mkdir(
+            parents=True, exist_ok=True
+        )  # generate all parent folders for this file that don't already exist
         chron_file_addr = str(file_addr) + "_chron"
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
@@ -1891,14 +2034,15 @@ class Collation:
         file_addr: Union[Path, str],
         format: Format = None,
         drop_constant: bool = False,
-        long_table: bool = False,
         split_missing: bool = True,
         char_state_labels: bool = True,
         frequency: bool = False,
         ambiguous_as_missing: bool = False,
+        proportion: bool = False,
         calibrate_dates: bool = False,
         mrbayes: bool = False,
         clock_model: ClockModel = ClockModel.strict,
+        table_type: TableType = TableType.matrix,
         seed: int = None,
     ):
         """Writes this Collation to the file with the given address.
@@ -1909,11 +2053,6 @@ class Collation:
                 If None then it is infered from the file suffix.
                 Defaults to None.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table (bool, optional): An optional flag indicating whether or not to generate a long table
-                with columns for taxa, characters, reading indices, and reading values.
-                Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
-                Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
-                Defaults to False.
             split_missing (bool, optional): An optional flag indicating whether to treat
                 missing characters/variation units as having a contribution of 1 split over all states/readings;
                 if False, then missing data is ignored (i.e., all states are 0).
@@ -1931,6 +2070,11 @@ class Collation:
             ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
                 If this flag is set, then only base symbols will be generated for the NEXUS file.
                 It is only applied if the frequency option is False.
+                Default value is False.
+            proportion (bool, optional): An optional flag indicating whether to populate a distance matrix's cells
+                with a proportion of disagreements to variation units where both witnesses are extant.
+                It is only applied if the table_type option is "distance".
+                Default value is False.
             calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
                 This option is intended for inputs to BEAST 2.
@@ -1940,6 +2084,9 @@ class Collation:
             clock_model: A ClockModel option indicating which type of clock model to use.
                 This option is intended for inputs to MrBayes and BEAST 2.
                 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
+            table_type: A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
             seed: A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
         """
         file_addr = Path(file_addr)
@@ -1973,17 +2120,33 @@ class Collation:
 
         if format == Format.CSV:
             return self.to_csv(
-                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing
+                file_addr,
+                drop_constant=drop_constant,
+                ambiguous_as_missing=ambiguous_as_missing,
+                proportion=proportion,
+                table_type=table_type,
+                split_missing=split_missing,
             )
 
         if format == Format.TSV:
             return self.to_csv(
-                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing, sep="\t"
+                file_addr,
+                drop_constant=drop_constant,
+                ambiguous_as_missing=ambiguous_as_missing,
+                proportion=proportion,
+                table_type=table_type,
+                split_missing=split_missing,
+                sep="\t",
             )
 
         if format == Format.EXCEL:
             return self.to_excel(
-                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing
+                file_addr,
+                drop_constant=drop_constant,
+                ambiguous_as_missing=ambiguous_as_missing,
+                proportion=proportion,
+                table_type=table_type,
+                split_missing=split_missing,
             )
 
         if format == Format.STEMMA:

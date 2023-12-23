@@ -5,7 +5,7 @@ from lxml import etree as et  # for parsing XML input
 import typer
 
 from .format import Format
-from .collation import Collation, ClockModel
+from .collation import Collation, ClockModel, TableType
 
 
 app = typer.Typer(rich_markup_mode="rich")
@@ -55,6 +55,10 @@ def to_file(
         False,
         help="Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the --frequency option is not set.",
     ),
+    proportion: bool = typer.Option(
+        False,
+        help="If set, populate the output distance matrix's cells with proportions of disagreements over variation units where both witnesses are extant; this option is only used if --table distance is specified.",
+    ),
     calibrate_dates: bool = typer.Option(
         False,
         help="Add an Assumptions block containing age distributions for witnesses to NEXUS output; this option is intended for NEXUS inputs to BEAST 2.",
@@ -67,9 +71,9 @@ def to_file(
         ClockModel.strict,
         help="The clock model to use; this option is intended for inputs to MrBayes and BEAST 2. MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.",
     ),
-    long_table: bool = typer.Option(
-        False,
-        help="Generate a long table with columns for taxa, characters, reading indices, and reading values instead of a matrix. Not applicable for non-tabular formats. Note that if this option is set, ambiguous readings will be treated as missing data, and the --split-missing option will be ignored.",
+    table: TableType = typer.Option(
+        TableType.matrix,
+        help="The type of table to use for CSV/Excel output. If \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option). If \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option). If \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option). If \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.",
     ),
     split_missing: bool = typer.Option(
         False,
@@ -127,10 +131,11 @@ def to_file(
         char_state_labels=labels,
         frequency=frequency,
         ambiguous_as_missing=ambiguous_as_missing,
+        proportion=proportion,
         calibrate_dates=calibrate_dates,
         mrbayes=mrbayes,
         clock_model=clock,
-        long_table=long_table,
+        table_type=table,
         split_missing=split_missing,
         seed=seed,
     )
