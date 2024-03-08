@@ -20,7 +20,11 @@
     </tree>
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
         {%- if origin_span[1] %}
+        {%- if origin_span[1] == origin_span[0] %}
+        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[1] }}" estimate="false"/>
+        {%- else %}
         <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[1] }}"/>
+        {%- endif %}
         {%- else %}
         <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="Infinity" value="1.0"/>
         {%- endif %}
@@ -75,13 +79,17 @@
                 <distribution spec="CompoundDistribution" id="bdLikelihood">
                     <distribution idref="birthDeath"/>
                 </distribution>
+                {%- if origin_span[1] %}
+                {%- if origin_span[1] != origin_span[0] %}
                 <distribution spec="Prior" id="originPrior" x="@origin">
-                    {%- if origin_span[1] %}
                     <distr spec="beast.base.inference.distribution.Uniform" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}"/>
-                    {%- else %}
-                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ origin_span[0] }}"/>
-                    {%- endif %}
                 </distribution>
+                {%- endif %}
+                {%- else %}
+                <distribution spec="Prior" id="originPrior" x="@origin">
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ origin_span[0] }}"/>
+                </distribution>
+                {%- endif %}
                 <distribution spec="Prior" id="samplingProportionPrior" x="@samplingProportion">
                     <distr spec="Beta" alpha="1.0" beta="1.0" offset="0.0"/>
                 </distribution>
@@ -181,7 +189,13 @@
         <operator spec="Exchange" id="bdskySerialNarrow" tree="@tree" weight="0.0"/>
         <operator spec="Exchange" id="bdskySerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
         <operator spec="WilsonBalding" id="bdskySerialWilsonBalding" tree="@tree" weight="3.0"/>
+        {%- if origin_span[1] %}
+        {%- if origin_span[1] != origin_span[0] %}
         <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="10.0"/>
+        {%- endif %}
+        {%- else %}
+        <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="10.0"/>
+        {%- endif %}
         <operator spec="ScaleOperator" id="becomeUninfectiousRateScaler" parameter="@becomeUninfectiousRate" weight="2.0"/>
         <operator spec="ScaleOperator" id="reproductiveNumberScaler" parameter="@reproductiveNumber" weight="10.0"/>
         <operator spec="ScaleOperator" id="samplingProportionScaler" parameter="@samplingProportion" weight="10.0"/>
@@ -233,7 +247,13 @@
             <log idref="prior"/>
             <log spec="TreeHeightLogger" id="treeHeight" tree="@tree"/>
             <log idref="birthDeath"/>
+            {%- if origin_span[1] %}
+            {%- if origin_span[1] != origin_span[0] %}
             <log idref="origin"/>
+            {%- endif %}
+            {%- else %}
+            <log idref="origin"/>
+            {%- endif %}
             <log idref="becomeUninfectiousRate"/>
             <log idref="reproductiveNumber"/>
             <log idref="samplingProportion"/>
