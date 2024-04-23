@@ -249,6 +249,20 @@
 </dd></dl>
 
 <dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-ancestral-logger">
+<span class="sig-name descname"><span class="pre">--ancestral-logger</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ancestral_logger&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-ancestral-logger" title="Permalink to this definition"></a></dt>
+<dd><p>The type of logger to use for ancestral state reconstruction data; this option is intended for inputs to BEAST 2. If “state”, then only the reconstructed states at the root of each sampled tree will be logged. If “sequence”, then each sampled tree’s reconstructed states for all ancestors will be logged (WARNING: this will be memory-intensive!). If “none”, then no ancestral states will be logged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default</dt>
+<dd class="field-odd"><p>AncestralLogger.state</p>
+</dd>
+<dt class="field-even">Options</dt>
+<dd class="field-even"><p>state | sequence | none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-table">
 <span class="sig-name descname"><span class="pre">--table</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;table&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-table" title="Permalink to this definition"></a></dt>
 <dd><p>The type of table to use for CSV/Excel output. If “matrix”, then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the –split-missing flag can be used with this option). If “distance”, then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the –proportion flag can be used with this option). If “nexus”, then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the –ambiguous-as-missing flag can be used with this option). If “long”, then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.</p>
@@ -338,13 +352,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f370c1fa8f0&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f1846205240&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f370c1fa950&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f18462051e0&gt;</p>
 </dd></dl>
 
 </section>

@@ -59,6 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ascertainment-bias">Ascertainment Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tree-priors-clock-models-and-tip-dates">Tree Priors, Clock Models, and Tip Dates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#root-frequencies-and-substitution-models">Root Frequencies and Substitution Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-for-ancestral-state-reconstructions">Logging for Ancestral State Reconstructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-output-formats-and-options">Supported Output Formats and Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#other-options">Other Options</a></li>
 </ul>
@@ -119,25 +120,12 @@
 </style>
 <section id="advanced-usage">
 <h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading"></a></h1>
-<p>Lacunae, retroversions, and other sources of ambiguity occasionally make
-a one-to-one mapping of witnesses to readings impossible, and in some
-cases, one disambiguation may be more likely than another in a
-quantifiable way. Mechanisms for accommodating such situations exist in
-both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
-“soft decisions” about the states at the leaves and even the root of the
-tree can provide useful information to the inference process. For these
-reasons, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> ensures that these types of judgments, as well as
-other rich features from TEI XML, can be respected (and, where,
-necessary, preserved) in the conversion process.</p>
-<p>Collations should preserve
-as much detail as possible, including information on how certain types
-of data can be normalized and collapsed for analysis. Since we may want
-to conduct the same analysis at different levels of granularity, the
-underlying collation data should be available for us to use in any case,
-and only the output should reflect changes in the desired level of
-detail. Likewise, as noted in the previous section, uncertainty about
-witnesses’ attestations should be encoded in the collation and preserved
-in the conversion of the collation.</p>
+<p>Lacunae, retroversions, and other sources of ambiguity occasionally make a one-to-one mapping of witnesses to readings impossible, and in some cases, one disambiguation may be more likely than another in a quantifiable way.
+Mechanisms for accommodating such situations exist in both TEI XML and NEXUS, and for likelihood-based phylogenetic methods, “soft decisions” about the states at the leaves and even the root of the tree can provide useful information to the inference process.
+For these reasons, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> ensures that these types of judgments, as well as other rich features from TEI XML, can be respected (and, where, necessary, preserved) in the conversion process.</p>
+<p>Collations should preserve as much detail as possible, including information on how certain types of data can be normalized and collapsed for analysis.
+Since we may want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for us to use in any case, and only the output should reflect changes in the desired level of detail.
+Likewise, as noted in the previous section, uncertainty about witnesses’ attestations should be encoded in the collation and preserved in the conversion of the collation.</p>
 <section id="analysis-at-varying-levels-of-detail-using-reading-types">
 <h2>Analysis at Varying Levels of Detail Using Reading Types<a class="headerlink" href="#analysis-at-varying-levels-of-detail-using-reading-types" title="Permalink to this heading"></a></h2>
 <p>For text-critical purposes, differences in granularity typically concern
@@ -625,6 +613,14 @@ When these transitions are tagged in this way, <code class="docutils literal not
 summing multiple rates if more than one tag is specified for a transition.
 All transitions not covered by a <code class="docutils literal notranslate"><span class="pre">relation</span></code> element (e.g., a transition from reading 3 to reading 1, which is not covered in the example above) will be assigned the “default” rate of 1.
 Accordingly, if no <code class="docutils literal notranslate"><span class="pre">listRelation</span></code> for transcriptional change categories is specified at all, then the substitution model for a variation unit with <em>k</em> substantive readings will default to the Lewis Mk model.</p>
+</section>
+<section id="logging-for-ancestral-state-reconstructions">
+<h2>Logging for Ancestral State Reconstructions<a class="headerlink" href="#logging-for-ancestral-state-reconstructions" title="Permalink to this heading"></a></h2>
+<p>BEAST 2 offers support for the logging of the reconstructed states (i.e., variant readings) for each site (i.e., variation unit) at varying levels of detail.
+The <code class="docutils literal notranslate"><span class="pre">AncestralStateLogger</span></code> class (part of the <code class="docutils literal notranslate"><span class="pre">BEASTLabs</span></code> package) reconstructs the state of a particular clade (which, for our purposes, is chosen to be the root of the tree) in each tree sampled during the analysis, resulting in a relatively compact output.
+The <code class="docutils literal notranslate"><span class="pre">AncestralSequenceLogger</span></code> class (part of the <code class="docutils literal notranslate"><span class="pre">BEAST_CLASSIC</span></code> package) reconstructs the states of all hypothetical ancestors in each tree sampled during the analysis, which results in a more comprehensive, but also much larger output.
+In writing to BEAST 2.7 XML files, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can include elements for either (or neither) logger based on the <code class="docutils literal notranslate"><span class="pre">--ancestral-logger</span></code> argument.
+The default option, <code class="docutils literal notranslate"><span class="pre">state</span></code>, will include an <code class="docutils literal notranslate"><span class="pre">AncestralStateLogger</span></code> element in the XML file, while <code class="docutils literal notranslate"><span class="pre">sequence</span></code> will include an <code class="docutils literal notranslate"><span class="pre">AncestralSequenceLogger</span></code> element, and <code class="docutils literal notranslate"><span class="pre">none</span></code> will not include any logging elements for ancestral states.</p>
 </section>
 <section id="supported-output-formats-and-options">
 <h2>Supported Output Formats and Options<a class="headerlink" href="#supported-output-formats-and-options" title="Permalink to this heading"></a></h2>
