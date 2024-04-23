@@ -5,7 +5,7 @@ from lxml import etree as et  # for parsing XML input
 import typer
 
 from .format import Format
-from .collation import Collation, ClockModel, TableType
+from .collation import Collation, ClockModel, AncestralLogger, TableType
 
 
 app = typer.Typer(rich_markup_mode="rich")
@@ -71,6 +71,10 @@ def to_file(
         ClockModel.strict,
         help="The clock model to use; this option is intended for inputs to MrBayes and BEAST 2. MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.",
     ),
+    ancestral_logger: AncestralLogger = typer.Option(
+        AncestralLogger.state,
+        help="The type of logger to use for ancestral state reconstruction data; this option is intended for inputs to BEAST 2. If \"state\", then only the reconstructed states at the root of each sampled tree will be logged. If \"sequence\", then each sampled tree's reconstructed states for all ancestors will be logged (WARNING: this will be memory-intensive!). If \"none\", then no ancestral states will be logged.",
+    ),
     table: TableType = typer.Option(
         TableType.matrix,
         help="The type of table to use for CSV/Excel output. If \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option). If \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option). If \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option). If \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.",
@@ -135,6 +139,7 @@ def to_file(
         calibrate_dates=calibrate_dates,
         mrbayes=mrbayes,
         clock_model=clock,
+        ancestral_logger=ancestral_logger,
         table_type=table,
         split_missing=split_missing,
         seed=seed,

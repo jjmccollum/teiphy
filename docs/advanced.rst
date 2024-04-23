@@ -2,27 +2,13 @@
 Advanced Usage
 ==================
 
-Lacunae, retroversions, and other sources of ambiguity occasionally make
-a one-to-one mapping of witnesses to readings impossible, and in some
-cases, one disambiguation may be more likely than another in a
-quantifiable way. Mechanisms for accommodating such situations exist in
-both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
-“soft decisions” about the states at the leaves and even the root of the
-tree can provide useful information to the inference process. For these
-reasons, ``teiphy`` ensures that these types of judgments, as well as
-other rich features from TEI XML, can be respected (and, where,
-necessary, preserved) in the conversion process.
+Lacunae, retroversions, and other sources of ambiguity occasionally make a one-to-one mapping of witnesses to readings impossible, and in some cases, one disambiguation may be more likely than another in a quantifiable way.
+Mechanisms for accommodating such situations exist in both TEI XML and NEXUS, and for likelihood-based phylogenetic methods, “soft decisions” about the states at the leaves and even the root of the tree can provide useful information to the inference process.
+For these reasons, ``teiphy`` ensures that these types of judgments, as well as other rich features from TEI XML, can be respected (and, where, necessary, preserved) in the conversion process.
 
-
-Collations should preserve
-as much detail as possible, including information on how certain types
-of data can be normalized and collapsed for analysis. Since we may want
-to conduct the same analysis at different levels of granularity, the
-underlying collation data should be available for us to use in any case,
-and only the output should reflect changes in the desired level of
-detail. Likewise, as noted in the previous section, uncertainty about
-witnesses’ attestations should be encoded in the collation and preserved
-in the conversion of the collation.
+Collations should preserve as much detail as possible, including information on how certain types of data can be normalized and collapsed for analysis.
+Since we may want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for us to use in any case, and only the output should reflect changes in the desired level of detail.
+Likewise, as noted in the previous section, uncertainty about witnesses’ attestations should be encoded in the collation and preserved in the conversion of the collation.
 
 Analysis at Varying Levels of Detail Using Reading Types
 --------------------------------------------------------
@@ -569,6 +555,15 @@ When these transitions are tagged in this way, ``teiphy`` will map them to the o
 summing multiple rates if more than one tag is specified for a transition.
 All transitions not covered by a ``relation`` element (e.g., a transition from reading 3 to reading 1, which is not covered in the example above) will be assigned the "default" rate of 1.
 Accordingly, if no ``listRelation`` for transcriptional change categories is specified at all, then the substitution model for a variation unit with *k* substantive readings will default to the Lewis Mk model.
+
+Logging for Ancestral State Reconstructions
+-------------------------------------------
+
+BEAST 2 offers support for the logging of the reconstructed states (i.e., variant readings) for each site (i.e., variation unit) at varying levels of detail.
+The ``AncestralStateLogger`` class (part of the ``BEASTLabs`` package) reconstructs the state of a particular clade (which, for our purposes, is chosen to be the root of the tree) in each tree sampled during the analysis, resulting in a relatively compact output.
+The ``AncestralSequenceLogger`` class (part of the ``BEAST_CLASSIC`` package) reconstructs the states of all hypothetical ancestors in each tree sampled during the analysis, which results in a more comprehensive, but also much larger output.
+In writing to BEAST 2.7 XML files, ``teiphy`` can include elements for either (or neither) logger based on the ``--ancestral-logger`` argument.
+The default option, ``state``, will include an ``AncestralStateLogger`` element in the XML file, while ``sequence`` will include an ``AncestralSequenceLogger`` element, and ``none`` will not include any logging elements for ancestral states.
 
 Supported Output Formats and Options
 ------------------------------------

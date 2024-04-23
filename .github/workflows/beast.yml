@@ -43,6 +43,7 @@ jobs:
         cp /home/runner/work/teiphy/teiphy/beast2/release/Linux/*.tgz .
         tar zxvf *.tgz
         ~/.beast/beast/bin/packagemanager -add BEAST_CLASSIC
+        ~/.beast/beast/bin/packagemanager -add BEASTLabs
         ~/.beast/beast/bin/packagemanager -add BDSKY
     - name: Phylogenetics Run
       run: |

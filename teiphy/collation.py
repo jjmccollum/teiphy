@@ -36,6 +36,12 @@ class ClockModel(str, Enum):
     local = "local"
 
 
+class AncestralLogger(str, Enum):
+    state = "state"
+    sequence = ("sequence",)
+    none = "none"
+
+
 class TableType(str, Enum):
     matrix = "matrix"
     distance = "distance"
@@ -1310,6 +1316,7 @@ class Collation:
         file_addr: Union[Path, str],
         drop_constant: bool = False,
         clock_model: ClockModel = ClockModel.strict,
+        ancestral_logger: AncestralLogger = AncestralLogger.state,
         seed: int = None,
     ):
         """Writes this Collation to a file in BEAST format with the given address.
@@ -1318,6 +1325,7 @@ class Collation:
             file_addr: A string representing the path to an output file.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             clock_model: A ClockModel option indicating which clock model to use.
+            ancestral_logger: An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
             seed: A seed for random number generation (for setting initial values of unspecified transcriptional rates).
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment:
@@ -1494,6 +1502,7 @@ class Collation:
             origin_span=origin_span,
             clock_model=clock_model.value,
             clock_rate_categories=2 * len(self.witnesses) - 1,
+            ancestral_logger=ancestral_logger.value,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
             intrinsic_categories=intrinsic_category_objects,
@@ -2042,6 +2051,7 @@ class Collation:
         calibrate_dates: bool = False,
         mrbayes: bool = False,
         clock_model: ClockModel = ClockModel.strict,
+        ancestral_logger: AncestralLogger = AncestralLogger.state,
         table_type: TableType = TableType.matrix,
         seed: int = None,
     ):
@@ -2084,6 +2094,8 @@ class Collation:
             clock_model: A ClockModel option indicating which type of clock model to use.
                 This option is intended for inputs to MrBayes and BEAST 2.
                 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
+            ancestral_logger: An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
+                This option is intended for inputs to BEAST 2.
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
@@ -2116,7 +2128,13 @@ class Collation:
             return self.to_fasta(file_addr, drop_constant=drop_constant)
 
         if format == format.BEAST:
-            return self.to_beast(file_addr, drop_constant=drop_constant, clock_model=clock_model, seed=seed)
+            return self.to_beast(
+                file_addr,
+                drop_constant=drop_constant,
+                clock_model=clock_model,
+                ancestral_logger=ancestral_logger,
+                seed=seed,
+            )
 
         if format == Format.CSV:
             return self.to_csv(
