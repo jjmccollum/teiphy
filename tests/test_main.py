@@ -931,6 +931,95 @@ def test_to_beast_local_clock():
         assert branch_rate_model.get("spec") == "RandomLocalClockModel"
 
 
+def test_to_beast_state_ancestral_logger():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--ancestral-logger",
+                "state",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//logger[@id=\"ancestralStateLogger\"]") is not None
+        ancestral_log = beast_xml.find("//logger[@id=\"ancestralStateLogger\"]/log")
+        assert ancestral_log.get("spec") == "beastlabs.evolution.likelihood.AncestralStateLogger"
+
+
+def test_to_beast_sequence_ancestral_logger():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--ancestral-logger",
+                "sequence",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//logger[@id=\"ancestralSequenceLogger\"]") is not None
+        ancestral_log = beast_xml.find("//logger[@id=\"ancestralSequenceLogger\"]/log")
+        assert ancestral_log.get("spec") == "beastclassic.evolution.likelihood.AncestralSequenceLogger"
+
+
+def test_to_beast_sequence_no_logger():
+    parser = et.XMLParser(remove_comments=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.xml"
+        result = runner.invoke(
+            app,
+            [
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--ancestral-logger",
+                "none",
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        beast_xml = et.parse(output, parser=parser)
+        assert beast_xml.find("//logger[@id=\"ancestralStateLogger\"]") is None
+        assert beast_xml.find("//logger[@id=\"ancestralSequenceLogger\"]") is None
+
+
 def test_to_csv():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
