@@ -152,9 +152,9 @@ Further details on the capabilities of ``teiphy``, particularly in terms of the 
         title = {{Using Bayesian Phylogenetics to Infer Manuscript Transmission History}}, 
         journal = {Digital Scholarship in the Humanities},
         year = {2024}, 
-        volume = {TBD}, 
-        number = {TBD}, 
-        pages = {TBD},
+        volume = {39}, 
+        number = {1}, 
+        pages = {258--279},
         doi = {10.1093/llc/fqad089}, 
         url = {https://doi.org/10.1093/llc/fqad089}
     }
