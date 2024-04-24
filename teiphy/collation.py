@@ -1193,8 +1193,6 @@ class Collation:
         # If the lower bound on the date of the work's composition is defined, then set the upper bound on the height of the origin using it and the latest tip date:
         if self.origin_date_range[0] is not None:
             origin_span[1] = tip_date_range[1] - self.origin_date_range[0]
-        print(self.origin_date_range)
-        print(origin_span)
         return tuple(origin_span)
 
     def get_beast_date_map(self, taxlabels):
