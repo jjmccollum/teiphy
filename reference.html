@@ -65,7 +65,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.readings_by_witness"><code class="docutils literal notranslate"><span class="pre">Collation.readings_by_witness</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.substantive_variation_unit_ids"><code class="docutils literal notranslate"><span class="pre">Collation.substantive_variation_unit_ids</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.substantive_variation_unit_reading_tuples"><code class="docutils literal notranslate"><span class="pre">Collation.substantive_variation_unit_reading_tuples</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.origin_date_range"><code class="docutils literal notranslate"><span class="pre">Collation.origin_date_range</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.verbose"><code class="docutils literal notranslate"><span class="pre">Collation.verbose</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_base_wit"><code class="docutils literal notranslate"><span class="pre">Collation.get_base_wit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_beast_code_map_for_unit"><code class="docutils literal notranslate"><span class="pre">Collation.get_beast_code_map_for_unit()</span></code></a></li>
@@ -79,6 +78,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_nexus_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_nexus_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_phylip_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_phylip_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_readings_by_witness_for_unit"><code class="docutils literal notranslate"><span class="pre">Collation.get_readings_by_witness_for_unit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_tip_date_range"><code class="docutils literal notranslate"><span class="pre">Collation.get_tip_date_range()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_apps"><code class="docutils literal notranslate"><span class="pre">Collation.parse_apps()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_intrinsic_odds"><code class="docutils literal notranslate"><span class="pre">Collation.parse_intrinsic_odds()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_list_wit"><code class="docutils literal notranslate"><span class="pre">Collation.parse_list_wit()</span></code></a></li>
@@ -102,7 +102,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.update_origin_date_range_from_witness_date_ranges"><code class="docutils literal notranslate"><span class="pre">Collation.update_origin_date_range_from_witness_date_ranges()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.update_witness_date_ranges_from_origin_date_range"><code class="docutils literal notranslate"><span class="pre">Collation.update_witness_date_ranges_from_origin_date_range()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.validate_intrinsic_relations"><code class="docutils literal notranslate"><span class="pre">Collation.validate_intrinsic_relations()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.validate_latest_tip"><code class="docutils literal notranslate"><span class="pre">Collation.validate_latest_tip()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.validate_wits"><code class="docutils literal notranslate"><span class="pre">Collation.validate_wits()</span></code></a></li>
 </ul>
 </li>
@@ -201,7 +200,7 @@
 <h2>Collation<a class="headerlink" href="#collation" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="teiphy.Collation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_date_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for storing TEI XML collation data internally.</p>
 <p>This corresponds to the entire XML tree, rooted at the TEI element of the collation.</p>
 <dl class="py attribute">
@@ -262,12 +261,6 @@
 <dt class="sig sig-object py" id="teiphy.Collation.substantive_variation_unit_reading_tuples">
 <span class="sig-name descname"><span class="pre">substantive_variation_unit_reading_tuples</span></span><a class="headerlink" href="#teiphy.Collation.substantive_variation_unit_reading_tuples" title="Permalink to this definition"></a></dt>
 <dd><p>A list of (variation unit ID, reading ID) tuples for substantive readings.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="teiphy.Collation.origin_date_range">
-<span class="sig-name descname"><span class="pre">origin_date_range</span></span><a class="headerlink" href="#teiphy.Collation.origin_date_range" title="Permalink to this definition"></a></dt>
-<dd><p>A list containing lower and upper bounds on the origin date of the collated work.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -337,17 +330,20 @@ If the variation unit at the given index is a singleton unit (i.e., if it has on
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_beast_origin_span">
-<span class="sig-name descname"><span class="pre">get_beast_origin_span</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_beast_origin_span" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_beast_origin_span</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tip_date_range</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_beast_origin_span" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
-The upper bound on the height of the tree is the difference between the current date
+The upper bound on the height of the tree is the difference between the latest tip date
 and the lower bound on the date of the original work, if both are defined;
 otherwise, it is left undefined.
-The lower bound on the height of the tree is the difference between the latest lower bound on a witness’s date
+The lower bound on the height of the tree is the difference between the latest tip date
 and the upper bound on the date of the original work, if both are defined;
-otherwise, it is zero.</p>
+otherwise, it is the difference between the earliest tip date and the latest, if both are defined.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tip_date_range</strong> – A tuple containing the earliest and latest possible tip dates.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -444,6 +440,20 @@ If no intrinsic odds are specified, then a uniform distribution over all states 
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_tip_date_range">
+<span class="sig-name descname"><span class="pre">get_tip_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_tip_date_range" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the minimum and maximum dates attested among the witnesses.
+Also checks if the witness with the latest possible date has a fixed date
+(i.e, if the lower and upper bounds for its date are the same)
+and issues a warning if not, as this will cause unusual behavior in BEAST 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A tuple containing the earliest and latest possible tip dates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.parse_apps">
 <span class="sig-name descname"><span class="pre">parse_apps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_apps" title="Permalink to this definition"></a></dt>
 <dd><p>Given an XML tree for a collation, populates its list of variation units from its app elements.</p>
@@ -483,8 +493,7 @@ If the XML tree does not contain a listWit element, then a ParsingException is t
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.parse_origin_date_range">
 <span class="sig-name descname"><span class="pre">parse_origin_date_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_origin_date_range" title="Permalink to this definition"></a></dt>
-<dd><p>Given an XML tree for a collation, populates this Collation’s list of origin date bounds.
-If no bounds are specified, then the current year is set to the default upper bound.</p>
+<dd><p>Given an XML tree for a collation, populates this Collation’s list of origin date bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
@@ -815,16 +824,18 @@ Note that because PHYLIP format does not support NEXUS-style ambiguities, such a
 <dt class="sig sig-object py" id="teiphy.Collation.update_origin_date_range_from_witness_date_ranges">
 <span class="sig-name descname"><span class="pre">update_origin_date_range_from_witness_date_ranges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.update_origin_date_range_from_witness_date_ranges" title="Permalink to this definition"></a></dt>
 <dd><p>Conditionally updates the upper bound on the date of origin of the work represented by this Collation
-based on the upper bounds on the witnesses’ dates.
-Since all witness dates have a default upper bound on the current year, they are assumed to be defined.</p>
+based on the bounds on the witnesses’ dates.
+If none of the witnesses have bounds on their dates, then nothing is done.
+This method is only invoked if the work’s date of origin does not already have its upper bound defined.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.update_witness_date_ranges_from_origin_date_range">
 <span class="sig-name descname"><span class="pre">update_witness_date_ranges_from_origin_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.update_witness_date_ranges_from_origin_date_range" title="Permalink to this definition"></a></dt>
 <dd><p>Attempts to update the lower bounds on the witnesses’ dates of origin of the work represented by this Collation
-using the lower bound on the date of origin of the work represented by this Collation.
-This method is only invoked if the collated work has a lower bound on its date of origin specified.</p>
+using the upper bound on the date of origin of the work represented by this Collation.
+This method is only invoked if the upper bound on the work’s date of origin was not already defined
+(i.e., if update_origin_date_range_from_witness_date_ranges was not invoked).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -832,14 +843,6 @@ This method is only invoked if the collated work has a lower bound on its date o
 <span class="sig-name descname"><span class="pre">validate_intrinsic_relations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.validate_intrinsic_relations" title="Permalink to this definition"></a></dt>
 <dd><p>Checks if any VariationUnit’s intrinsic_relations map is not a forest.
 If any is not, then an IntrinsicRelationsException is thrown describing the VariationUnit at fault.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="teiphy.Collation.validate_latest_tip">
-<span class="sig-name descname"><span class="pre">validate_latest_tip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.validate_latest_tip" title="Permalink to this definition"></a></dt>
-<dd><p>Checks if the witness with the latest possible date has a fixed date
-(i.e, if the lower and upper bounds for its date are the same).
-If this is not true, then a warning is issued.</p>
 </dd></dl>
 
 <dl class="py method">
