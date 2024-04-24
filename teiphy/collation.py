@@ -65,7 +65,6 @@ class Collation:
         readings_by_witness: A dictionary mapping base witness ID strings to lists of reading support coefficients for all units (with at least two substantive readings).
         substantive_variation_unit_ids: A list of ID strings for variation units with two or more substantive readings.
         substantive_variation_unit_reading_tuples: A list of (variation unit ID, reading ID) tuples for substantive readings.
-        origin_date_range: A list containing lower and upper bounds on the origin date of the collated work.
         verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
     """
 
@@ -76,7 +75,6 @@ class Collation:
         trivial_reading_types: List[str] = [],
         missing_reading_types: List[str] = [],
         fill_corrector_lacunae: bool = False,
-        origin_date_range: List[int] = [],
         verbose: bool = False,
     ):
         """Constructs a new Collation instance with the given settings.
@@ -113,8 +111,11 @@ class Collation:
         self.parse_origin_date_range(xml)
         self.parse_list_wit(xml)
         self.validate_wits(xml)
-        self.update_origin_date_range_from_witness_date_ranges()
-        if self.origin_date_range[0] is not None:
+        # If the upper bound on a work's date of origin is not defined, then attempt to assign it an upper bound based on the witness dates;
+        # otherwise, attempt to assign lower bounds to witness dates based on it:
+        if self.origin_date_range[1] is None:
+            self.update_origin_date_range_from_witness_date_ranges()
+        else:
             self.update_witness_date_ranges_from_origin_date_range()
         self.parse_intrinsic_odds(xml)
         self.parse_transcriptional_rates(xml)
@@ -127,7 +128,6 @@ class Collation:
 
     def parse_origin_date_range(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates this Collation's list of origin date bounds.
-        If no bounds are specified, then the current year is set to the default upper bound.
 
         Args:
             xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
@@ -135,7 +135,7 @@ class Collation:
         if self.verbose:
             print("Parsing origin date range...")
         t0 = time.time()
-        self.origin_date_range = [None, datetime.now().year]
+        self.origin_date_range = [None, None]
         for date in xml.xpath(
             "//tei:sourceDesc//tei:bibl//tei:date|//tei:sourceDesc//tei:biblStruct//tei:date|//tei:sourceDesc//tei:biblFull//tei:date",
             namespaces={"tei": tei_ns},
@@ -284,15 +284,27 @@ class Collation:
 
     def update_origin_date_range_from_witness_date_ranges(self):
         """Conditionally updates the upper bound on the date of origin of the work represented by this Collation
-        based on the upper bounds on the witnesses' dates.
-        Since all witness dates have a default upper bound on the current year, they are assumed to be defined.
+        based on the bounds on the witnesses' dates.
+        If none of the witnesses have bounds on their dates, then nothing is done.
+        This method is only invoked if the work's date of origin does not already have its upper bound defined.
         """
         if self.verbose:
             print("Updating upper bound on origin date using witness dates...")
         t0 = time.time()
-        # Set the origin date to the earliest witness date upper bound:
-        min_witness_date_upper_bound = min([wit.date_range[1] for wit in self.witnesses])
-        self.origin_date_range[1] = min(self.origin_date_range[1], min_witness_date_upper_bound)
+        # Set the origin date to the earliest witness date:
+        witness_date_lower_bounds = [wit.date_range[0] for wit in self.witnesses if wit.date_range[0] is not None]
+        witness_date_upper_bounds = [wit.date_range[1] for wit in self.witnesses if wit.date_range[1] is not None]
+        min_witness_date = (
+            min(witness_date_lower_bounds + witness_date_upper_bounds)
+            if len(witness_date_lower_bounds + witness_date_upper_bounds) > 0
+            else None
+        )
+        if min_witness_date is not None:
+            self.origin_date_range[1] = (
+                min(self.origin_date_range[1], min_witness_date)
+                if self.origin_date_range[1] is not None
+                else min_witness_date
+            )
         t1 = time.time()
         if self.verbose:
             print("Finished updating upper bound on origin date in %0.4fs." % (t1 - t0))
@@ -300,19 +312,23 @@ class Collation:
 
     def update_witness_date_ranges_from_origin_date_range(self):
         """Attempts to update the lower bounds on the witnesses' dates of origin of the work represented by this Collation
-        using the lower bound on the date of origin of the work represented by this Collation.
-        This method is only invoked if the collated work has a lower bound on its date of origin specified.
+        using the upper bound on the date of origin of the work represented by this Collation.
+        This method is only invoked if the upper bound on the work's date of origin was not already defined
+        (i.e., if update_origin_date_range_from_witness_date_ranges was not invoked).
         """
         if self.verbose:
             print("Updating lower bounds on witness dates using origin date...")
         t0 = time.time()
-        # Set the origin date to the earliest witness date upper bound:
+        # Proceed for every witness:
         for i, wit in enumerate(self.witnesses):
+            # Ensure that the lower bound on this witness's date is no earlier than the upper bound on the date of the work's origin:
             wit.date_range[0] = (
-                max(wit.date_range[0], self.origin_date_range[0])
+                max(wit.date_range[0], self.origin_date_range[1])
                 if wit.date_range[0] is not None
-                else self.origin_date_range[0]
+                else self.origin_date_range[1]
             )
+            # Then ensure that the upper bound on this witness's date is no earlier than its lower bound, in case we updated it:
+            wit.date_range[1] = max(wit.date_range[0], wit.date_range[1])
         t1 = time.time()
         if self.verbose:
             print("Finished updating lower bounds on witness dates in %0.4fs." % (t1 - t0))
@@ -795,11 +811,19 @@ class Collation:
                 # Set the priors on the tree age depending on the date range for the origin of the collated work:
                 f.write("\n")
                 if self.origin_date_range[0] is not None:
-                    min_tree_age = datetime.now().year - self.origin_date_range[1]
+                    min_tree_age = (
+                        datetime.now().year - self.origin_date_range[1]
+                        if self.origin_date_range[1] is not None
+                        else 0.0
+                    )
                     max_tree_age = datetime.now().year - self.origin_date_range[0]
                     f.write("\tprset treeagepr = uniform(%d,%d);\n" % (min_tree_age, max_tree_age))
                 else:
-                    min_tree_age = datetime.now().year - self.origin_date_range[1]
+                    min_tree_age = (
+                        datetime.now().year - self.origin_date_range[1]
+                        if self.origin_date_range[1] is not None
+                        else 0.0
+                    )
                     f.write("\tprset treeagepr = offsetgamma(%d,1.0,1.0);\n" % (min_tree_age))
                 # Then calibrate the witness ages:
                 f.write("\n")
@@ -1109,6 +1133,70 @@ class Collation:
         beast_symbols = possible_symbols[:nsymbols]
         return beast_symbols
 
+    def get_tip_date_range(self):
+        """Gets the minimum and maximum dates attested among the witnesses.
+        Also checks if the witness with the latest possible date has a fixed date
+        (i.e, if the lower and upper bounds for its date are the same)
+        and issues a warning if not, as this will cause unusual behavior in BEAST 2.
+
+        Returns:
+            A tuple containing the earliest and latest possible tip dates.
+        """
+        earliest_date = None
+        earliest_wit = None
+        latest_date = None
+        latest_wit = None
+        for wit in self.witnesses:
+            wit_id = wit.id
+            date_range = wit.date_range
+            if date_range[0] is not None:
+                if earliest_date is not None:
+                    earliest_wit = wit if date_range[0] < earliest_date else earliest_wit
+                    earliest_date = min(date_range[0], earliest_date)
+                else:
+                    earliest_wit = wit
+                    earliest_date = date_range[0]
+            if date_range[1] is not None:
+                if latest_date is not None:
+                    latest_wit = wit if date_range[1] > latest_date else latest_wit
+                    latest_date = max(date_range[1], latest_date)
+                else:
+                    latest_wit = wit
+                    latest_date = date_range[1]
+        if latest_wit.date_range[0] is None or latest_wit.date_range[0] != latest_wit.date_range[1]:
+            print(
+                "WARNING: the latest witness, %s, has a variable date range; this will result in problems with time-dependent substitution models and misalignment of trees in BEAST DensiTree outputs! Please ensure that witness %s has a fixed date."
+                % (latest_wit.id, latest_wit.id)
+            )
+        return (earliest_date, latest_date)
+
+    def get_beast_origin_span(self, tip_date_range):
+        """Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
+        The upper bound on the height of the tree is the difference between the latest tip date
+        and the lower bound on the date of the original work, if both are defined;
+        otherwise, it is left undefined.
+        The lower bound on the height of the tree is the difference between the latest tip date
+        and the upper bound on the date of the original work, if both are defined;
+        otherwise, it is the difference between the earliest tip date and the latest, if both are defined.
+
+        Args:
+            tip_date_range: A tuple containing the earliest and latest possible tip dates.
+
+        Returns:
+            A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.
+        """
+        origin_span = [0, None]
+        # If the upper bound on the date of the work's composition is defined, then set the lower bound on the height of the origin using it and the latest tip date
+        # (note that if it had to be defined in terms of witness date lower bounds, then this would have happened already):
+        if self.origin_date_range[1] is not None:
+            origin_span[0] = tip_date_range[1] - self.origin_date_range[1]
+        # If the lower bound on the date of the work's composition is defined, then set the upper bound on the height of the origin using it and the latest tip date:
+        if self.origin_date_range[0] is not None:
+            origin_span[1] = tip_date_range[1] - self.origin_date_range[0]
+        print(self.origin_date_range)
+        print(origin_span)
+        return tuple(origin_span)
+
     def get_beast_date_map(self, taxlabels):
         """Returns a string representing witness-to-date mappings in BEAST format.
 
@@ -1136,49 +1224,6 @@ class Collation:
         # Then output the full date map string:
         date_map = ",".join(calibrate_strings)
         return date_map
-
-    def get_beast_origin_span(self):
-        """Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
-        The upper bound on the height of the tree is the difference between the current date
-        and the lower bound on the date of the original work, if both are defined;
-        otherwise, it is left undefined.
-        The lower bound on the height of the tree is the difference between the latest lower bound on a witness's date
-        and the upper bound on the date of the original work, if both are defined;
-        otherwise, it is zero.
-
-        Returns:
-            A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.
-        """
-        origin_span = [datetime.now().year - self.origin_date_range[1], None]
-        # If the lower bound on the original work is defined, then update the upper bound on the height of the origin:
-        if self.origin_date_range[0] is not None:
-            origin_span[1] = datetime.now().year - self.origin_date_range[0]
-        return tuple(origin_span)
-
-    def validate_latest_tip(self):
-        """Checks if the witness with the latest possible date has a fixed date
-        (i.e, if the lower and upper bounds for its date are the same).
-        If this is not true, then a warning is issued.
-        """
-        latest_date = None
-        latest_wit = None
-        for i, wit in enumerate(self.witnesses):
-            wit_id = wit.id
-            date_range = wit.date_range
-            if date_range[1] is not None:
-                if latest_date is not None:
-                    if date_range[1] > latest_date:
-                        latest_date = date_range[1]
-                        latest_wit = wit
-                else:
-                    latest_date = date_range[1]
-                    latest_wit = wit
-        if latest_wit.date_range[0] is None or latest_wit.date_range[0] != latest_wit.date_range[1]:
-            print(
-                "WARNING: the latest witness, %s, has a variable date range; this may result in precisely dated witness being misaligned in the trees output by BEAST."
-                % latest_wit.id
-            )
-        return
 
     def get_beast_code_map_for_unit(self, symbols, missing_symbol, vu_ind):
         """Returns a string containing state/reading code mappings in BEAST format using the given single-state and missing state symbols for the character/variation unit at the given index.
@@ -1342,9 +1387,9 @@ class Collation:
         taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
         missing_symbol = '?'
         symbols = self.get_beast_symbols()
+        tip_date_range = self.get_tip_date_range()
+        origin_span = self.get_beast_origin_span(tip_date_range)
         date_map = self.get_beast_date_map(taxlabels)
-        origin_span = self.get_beast_origin_span()
-        self.validate_latest_tip()
         # Then populate the necessary objects for the BEAST XML Jinja template:
         witness_objects = []
         variation_unit_objects = []
@@ -1430,45 +1475,89 @@ class Collation:
             # Then populate this unit's equilibrium frequency string and its root frequency string:
             variation_unit_object["equilibrium_frequencies"] = self.get_beast_equilibrium_frequencies_for_unit(j)
             variation_unit_object["root_frequencies"] = self.get_beast_root_frequencies_for_unit(j)
-            # Then populate its transition rate matrix off-diagonal entries:
-            rate_objects = []
-            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
-                # If this is a singleton site, then use an arbitrary 2x2 rate matrix:
-                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
-                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
-            else:
-                # Otherwise, proceed for every pair of readings in this unit:
-                for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
-                    for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
-                        # Skip diagonal elements:
-                        if k_1 == k_2:
-                            continue
-                        # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
-                        if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
+            # Then populate a dictionary mapping epoch height ranges to lists of off-diagonal entries for substitution models:
+            rate_objects_by_epoch_height_range = {}
+            epoch_height_ranges = []
+            # Then proceed based on whether the transcriptional relations for this variation unit have been defined:
+            if len(vu.transcriptional_relations_by_date_range) == 0:
+                # If there are no transcriptional relations, then map the epoch range of (None, None) to their list of off-diagonal entries:
+                epoch_height_ranges.append((None, None))
+                rate_objects_by_epoch_height_range[(None, None)] = []
+                rate_objects = rate_objects_by_epoch_height_range[(None, None)]
+                if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+                    # If this is a singleton site, then use an arbitrary 2x2 rate matrix:
+                    rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                    rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                else:
+                    # If this is a site with multiple substantive readings, but no transcriptional relations list,
+                    # then use a Lewis Mk substitution matrix with the appropriate number of states:
+                    for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                        for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                            # Skip diagonal elements:
+                            if k_1 == k_2:
+                                continue
                             rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
-                            continue
-                        # Otherwise, if only one category of transcriptional relations holds between the first and second readings,
-                        # then use its rate:
-                        if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
-                            # If there is only one such category, then add its rate as a standalone var element:
-                            transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+            else:
+                # Otherwise, proceed for every date range:
+                for date_range in vu.transcriptional_relations_by_date_range:
+                    # Get the map of transcriptional relations for reference later:
+                    transcriptional_relations = vu.transcriptional_relations_by_date_range[date_range]
+                    # Now get the epoch height range corresponding to this date range, and initialize its list in the dictionary:
+                    epoch_height_range = [None, None]
+                    epoch_height_range[0] = tip_date_range[1] - date_range[1] if date_range[1] is not None else None
+                    epoch_height_range[1] = tip_date_range[1] - date_range[0] if date_range[0] is not None else None
+                    epoch_height_range = tuple(epoch_height_range)
+                    epoch_height_ranges.append(epoch_height_range)
+                    rate_objects_by_epoch_height_range[epoch_height_range] = []
+                    rate_objects = rate_objects_by_epoch_height_range[epoch_height_range]
+                    # Then proceed for every pair of readings in this unit:
+                    for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                        for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                            # Skip diagonal elements:
+                            if k_1 == k_2:
+                                continue
+                            # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
+                            if (rdg_id_1, rdg_id_2) not in transcriptional_relations:
+                                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                                continue
+                            # Otherwise, if only one category of transcriptional relations holds between the first and second readings,
+                            # then use its rate:
+                            if len(transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
+                                # If there is only one such category, then add its rate as a standalone var element:
+                                transcriptional_category = list(transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+                                rate_objects.append(
+                                    {"transcriptional_categories": [transcriptional_category], "expression": None}
+                                )
+                                continue
+                            # If there is more than one, then add a var element that is a sum of the individual categories' rates:
+                            transcriptional_categories = list(transcriptional_relations[(rdg_id_1, rdg_id_2)])
+                            args = []
+                            for transcriptional_category in transcriptional_categories:
+                                args.append("%s_rate" % transcriptional_category)
+                            args_string = " ".join(args)
+                            ops = ["+"] * (len(args) - 1)
+                            ops_string = " ".join(ops)
+                            expression_string = " ".join([args_string, ops_string])
                             rate_objects.append(
-                                {"transcriptional_categories": [transcriptional_category], "expression": None}
+                                {
+                                    "transcriptional_categories": transcriptional_categories,
+                                    "expression": expression_string,
+                                }
                             )
-                            continue
-                        # If there is more than one, then add a var element that is a sum of the individual categories' rates:
-                        transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
-                        args = []
-                        for transcriptional_category in transcriptional_categories:
-                            args.append("%s_rate" % transcriptional_category)
-                        args_string = " ".join(args)
-                        ops = ["+"] * (len(args) - 1)
-                        ops_string = " ".join(ops)
-                        expression_string = " ".join([args_string, ops_string])
-                        rate_objects.append(
-                            {"transcriptional_categories": transcriptional_categories, "expression": expression_string}
-                        )
-            variation_unit_object["rates"] = rate_objects
+            # Now reorder the list of epoch height ranges, and get a list of non-null epoch dates in ascending order from the dictionary:
+            epoch_height_ranges.reverse()
+            epoch_heights = [
+                epoch_height_range[0] for epoch_height_range in epoch_height_ranges if epoch_height_range[0] is not None
+            ]
+            # Then add all of these data structures to the variation unit object:
+            variation_unit_object["epoch_heights"] = epoch_heights
+            variation_unit_object["epoch_heights_string"] = " ".join(
+                [str(epoch_height) for epoch_height in epoch_heights]
+            )
+            variation_unit_object["epoch_height_ranges"] = epoch_height_ranges
+            variation_unit_object["epoch_rates"] = [
+                rate_objects_by_epoch_height_range[epoch_height_range] for epoch_height_range in epoch_height_ranges
+            ]
             variation_unit_objects.append(variation_unit_object)
         # Then proceed to intrinsic odds categories:
         for intrinsic_category in self.intrinsic_categories:
