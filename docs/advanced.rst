@@ -556,6 +556,26 @@ summing multiple rates if more than one tag is specified for a transition.
 All transitions not covered by a ``relation`` element (e.g., a transition from reading 3 to reading 1, which is not covered in the example above) will be assigned the "default" rate of 1.
 Accordingly, if no ``listRelation`` for transcriptional change categories is specified at all, then the substitution model for a variation unit with *k* substantive readings will default to the Lewis Mk model.
 
+In many cases, certain transcriptional explanations are applicable only at certain times.
+For instance, assimilation to a popular text that arose at a later point in the tradition's history (modeled with the ``Byz`` class in the above example) would only be available as a transcriptional explanation after this point.
+Skips of the eye may be empirically more common for earlier scribes than for later ones.
+Certain paleographic confusions may only be possible for earlier scripts or later ones.
+Specific orthodox corruptions of sacred texts may have only become plausible after certain theological conflicts or developments had taken place to inspire them.
+If you wish to encode such transcriptional possibilities as time-dependent, you can do so by adding ``@notBefore`` and ``@notAfter`` attributes to the corresponding ``relation`` element:
+
+.. code:: xml
+
+    <listRelation type="transcriptional">
+        <relation active="1 2 3" passive="4" ana="#Harm"/>
+        <relation active="1" passive="2 3 4" ana="#Clar"/>
+        <relation active="2" passive="1" ana="#VisErr"/>
+        <relation active="2" passive="3" ana="#Clar #Harm"/>
+        <relation active="3" passive="4" ana="#Clar"/>
+        <relation active="1 2 4" passive="3" ana="#Byz" notBefore="500"/>
+    </listRelation>
+
+If you tag certain transcriptional ``relation`` elements in this way, ``teiphy`` will map the ``listRelation`` to an ``EpochSubstitutionModel`` instance consisting of multiple substitution models that apply at the corresponding points in time.
+
 Logging for Ancestral State Reconstructions
 -------------------------------------------
 

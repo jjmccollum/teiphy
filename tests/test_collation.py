@@ -131,7 +131,7 @@ class CollationDateRangeStartOnlyTestCase(unittest.TestCase):
         )
         self.collation.parse_origin_date_range(source_desc_xml)
         self.assertEqual(self.collation.origin_date_range[0], 50)
-        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
+        self.assertIsNone(self.collation.origin_date_range[1])
 
 
 class CollationDateRangeEndOnlyTestCase(unittest.TestCase):
@@ -164,7 +164,7 @@ class CollationNoDatesTestCase(unittest.TestCase):
         # After the parse_origin_date_range method is called, the origin date upper bound should default to the current year:
         self.collation.parse_origin_date_range(source_desc_xml)
         self.assertIsNone(self.collation.origin_date_range[0])
-        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
+        self.assertIsNone(self.collation.origin_date_range[1])
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):

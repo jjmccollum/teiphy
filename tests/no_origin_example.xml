@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>A limited collation of Ephesians at selected variation units from the United Bible Societies Greek New Testament, 5th Edition</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority xml:id="JJM">Edited by Joey McCollum</authority>
+                <date>2022</date>
+                <availability>
+                    <p>This is an open access work licensed under a Creative Commons Attribution 4.0 International license.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <!-- Description of the work (not including a date range of origin) whose manuscript tradition is detailed below -->
+                <bibl>
+                    <title>Πρὸς Ἐφεσίους</title>
+                </bibl>
+                <listWit>
+                    <!-- Reconstructed texts -->
+                    <witness n="UBS">
+                        <origDate notBefore="50" notAfter="80"/>
+                    </witness>
+                    <!-- Papyri -->
+                    <witness n="P46">
+                        <origDate notBefore="175" notAfter="225"/>
+                    </witness>
+                    <!-- Majuscules -->
+                    <witness n="01">
+                        <origDate notBefore="300" notAfter="400"/>
+                    </witness>
+                    <witness n="02">
+                        <origDate notBefore="400" notAfter="500"/>
+                    </witness>
+                    <witness n="03">
+                        <origDate notBefore="300" notAfter="400"/>
+                    </witness>
+                    <witness n="04">
+                        <origDate notBefore="400" notAfter="500"/>
+                    </witness>
+                    <witness n="06">
+                        <origDate notBefore="500" notAfter="600"/>
+                    </witness>
+                    <witness type="corrector" n="06C1">
+                        <origDate notBefore="600" notAfter="700"/>
+                    </witness>
+                    <witness type="corrector" n="06C2">
+                        <origDate notBefore="800" notAfter="900"/>
+                    </witness>
+                    <witness n="010">
+                        <origDate notBefore="800" notAfter="900"/>
+                    </witness>
+                    <witness n="012">
+                        <origDate notBefore="800" notAfter="900"/>
+                    </witness>
+                    <!-- Minuscules -->
+                    <witness n="18">
+                        <origDate when="1364"/>
+                    </witness>
+                    <witness n="33">
+                        <origDate notBefore="800" notAfter="900"/>
+                    </witness>
+                    <witness n="35">
+                        <origDate notBefore="1000" notAfter="1100"/>
+                    </witness>
+                    <witness n="88">
+                        <origDate notBefore="1100" notAfter="1200"/>
+                    </witness>
+                    <witness n="424">
+                        <origDate notBefore="1150" notAfter="1250"/>
+                    </witness>
+                    <witness type="corrector" n="424C">
+                        <origDate notBefore="1150" notAfter="1250"/>
+                    </witness>
+                    <witness type="commentary" n="606">
+                        <origDate notBefore="1000" notAfter="1100"/>
+                    </witness>
+                    <witness n="915">
+                        <origDate notBefore="1200" notAfter="1300"/>
+                    </witness>
+                    <witness n="1175">
+                        <origDate notBefore="1000" notAfter="1100"/>
+                    </witness>
+                    <witness n="1505">
+                        <origDate notBefore="1100" notAfter="1200"/>
+                    </witness>
+                    <witness n="1611">
+                        <origDate notBefore="900" notAfter="1000"/>
+                    </witness>
+                    <witness n="1739">
+                        <origDate notBefore="900" notAfter="1000"/>
+                    </witness>
+                    <witness n="1881">
+                        <origDate notBefore="1300" notAfter="1400"/>
+                    </witness>
+                    <witness type="commentary" n="1910">
+                        <origDate notBefore="1000" notAfter="1100"/>
+                    </witness>
+                    <witness n="2495">
+                        <origDate notBefore="1400" notAfter="1500"/>
+                    </witness>
+                    <!-- Versions -->
+                    <witness type="version" n="vg">
+                        <origDate notBefore="400" notAfter="700"/>
+                    </witness>
+                    <witness type="version" n="syrp">
+                        <origDate notBefore="450" notAfter="550"/>
+                    </witness>
+                    <witness type="version" n="syrh">
+                        <origDate notBefore="616" notAfter="715"/>
+                    </witness>
+                    <witness type="corrector" n="syrhmg">
+                        <origDate notBefore="616" notAfter="715"/>
+                    </witness>
+                    <witness type="version" n="copsa">
+                        <origDate notBefore="300" notAfter="400"/>
+                    </witness>
+                    <witness type="version" n="copbo">
+                        <origDate notBefore="800" notAfter="900"/>
+                    </witness>
+                    <!-- Church fathers -->
+                    <witness type="father" n="Ambrosiaster">
+                        <origDate notBefore="366" notAfter="384"/>
+                    </witness>
+                    <witness type="father" n="Chrysostom">
+                        <origDate when="407"/>
+                    </witness>
+                    <witness type="father" n="Jerome">
+                        <origDate notBefore="390" notAfter="420"/>
+                    </witness>
+                    <witness type="father" n="MariusVictorinus">
+                        <origDate notBefore="360" notAfter="362"/>
+                    </witness>
+                    <witness type="father" n="Pelagius">
+                        <origDate notBefore="390" notAfter="418"/>
+                    </witness>
+                    <witness type="father" n="TheodoreOfMopsuestia">
+                        <origDate notBefore="392" notAfter="428"/>
+                    </witness>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text xml:lang="grc">
+        <interpGrp type="intrinsic">
+            <interp xml:id="RatingA">
+                <p>The text is certain.</p>
+                <certainty locus="value" degree="19"/>
+            </interp>
+            <interp xml:id="RatingB">
+                <p>The text is almost certain.</p>
+                <certainty locus="value" degree="4"/>
+            </interp>
+            <interp xml:id="RatingC">
+                <p>The Committee had difficulty in deciding which variant to place in the text.</p>
+                <certainty locus="value" degree="1.5"/>
+            </interp>
+            <interp xml:id="RatingD">
+                <p>The Committee had great difficulty in arriving at a decision.</p>
+                <certainty locus="value" degree="1.1"/>
+            </interp>
+            <interp xml:id="EqualRating">
+                <p>The current reading and the linked reading are equally likely.</p>
+                <certainty locus="value" degree="1"/>
+            </interp>
+        </interpGrp>
+        <interpGrp type="transcriptional">
+            <interp xml:id="Clar">
+                <p>Clarification of the text in terms of grammar, style, or theology.</p>
+            </interp>
+            <interp xml:id="AurConf">
+                <p>Aural confusion concerning letters or dipthongs that came to have the same sound in later Greek, including various itacisms (i.e., interchanges between ι, ει, η, οι, and υ), \textgreek{αι}-\textgreek{ε} interchanges, ο-ω interchanges, interchanges between similar-sounding consonants (e.g., β-υ after certain vowels and π-φ) and other less common interchanges (e.g., vowel sounds that might be confused if spoken quickly).</p>
+            </interp>
+            <interp xml:id="LingConf">
+                <p>Linguistic confusion concerning rules of Greek grammar.</p>
+		        <p><i>Constructiones ad sensum</i> that reflect changes in grammatical rules over time also fall under this rubric.</p>
+            </interp>
+            <interp xml:id="VisErr">
+                <p>Visual error, such as paleographic confusion of similar letters, haplography, dittography and other repetitions of nearby letters, and other skips of the eye resulting in small omissions. Rarer situations, like duplication or omission of letters related to the presence or absence of an ornamental capital at the start of a line, also fall under this rubric.</p>
+            </interp>
+            <interp xml:id="Harm">
+                <p>Harmonization, either to a parallel passage or to the near context.</p>
+            </interp>
+            <interp xml:id="Byz">
+                <p>The text is brought into conformity with the Byzantine text.</p>
+            </interp>
+        </interpGrp>
+        <body>
+            <app xml:id="B10K1V1U24-26">
+                <lem><w>εν</w><w>εφεσω</w></lem>
+                <rdg n="1" wit="UBS 01C2 02 03C2 06 012 18 33 35 88 424* 606 915 1175 1505 1611 1881 1910 2495 vg syrp syrh copsa copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
+                <rdg n="1-f1" type="defective" cause="parablepsis" wit="010"><w>εν</w><w>εφεω</w></rdg>
+                <rdg n="2" wit="01* 03* P46 424C 1739"/>
+                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
+                <note>
+                    <listRelation type="intrinsic">
+                        <relation active="1" passive="2" ana="#RatingC"/>
+                    </listRelation>
+                    <listRelation type="transcriptional">
+                        <relation active="2" passive="1" ana="#Clar"/>
+                        <relation active="2" passive="1" ana="#Byz"/>
+                    </listRelation>
+                </note>
+            </app>
+        </body>
+    </text>
+</TEI>

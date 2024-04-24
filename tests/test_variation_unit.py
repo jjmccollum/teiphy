@@ -128,7 +128,7 @@ class VariationUnitTestCase(unittest.TestCase):
         self.assertEqual(vu.intrinsic_relations[("2", "3")], "EqualRating")
         self.assertTrue(("1", "3") not in vu.intrinsic_relations)
 
-    def test_init_transcriptional_relations(self):
+    def test_init_transcriptional_relations_by_date_range_no_dates(self):
         xml = et.fromstring(
             """
         <app xml:id="B10K4V6U24-28">
@@ -156,13 +156,147 @@ class VariationUnitTestCase(unittest.TestCase):
         """
         )
         vu = VariationUnit(xml)
-        self.assertEqual(len(vu.transcriptional_relations), 5)  # 2 of 6 total relationships are for the pair (1, 2)
-        self.assertTrue(("1", "2") in vu.transcriptional_relations)
-        self.assertTrue(("2", "3") not in vu.transcriptional_relations)
-        self.assertEqual(len(vu.transcriptional_relations[("1", "2")]), 2)
-        self.assertTrue("Clar" in vu.transcriptional_relations[("1", "2")])
-        self.assertTrue("Byz" in vu.transcriptional_relations[("1", "2")])
-        self.assertTrue("VisErr" not in vu.transcriptional_relations[("1", "2")])
+        self.assertEqual(len(vu.transcriptional_relations_by_date_range), 1)  # only one date range: (None, None)
+        self.assertTrue((None, None) in vu.transcriptional_relations_by_date_range)
+        self.assertEqual(
+            len(vu.transcriptional_relations_by_date_range[(None, None)]), 5
+        )  # 2 of 6 total relationships are for the pair (1, 2)
+        self.assertTrue(("1", "2") in vu.transcriptional_relations_by_date_range[(None, None)])
+        self.assertTrue(("2", "3") not in vu.transcriptional_relations_by_date_range[(None, None)])
+        self.assertEqual(len(vu.transcriptional_relations_by_date_range[(None, None)][("1", "2")]), 2)
+        self.assertTrue("Clar" in vu.transcriptional_relations_by_date_range[(None, None)][("1", "2")])
+        self.assertTrue("Byz" in vu.transcriptional_relations_by_date_range[(None, None)][("1", "2")])
+        self.assertTrue("VisErr" not in vu.transcriptional_relations_by_date_range[(None, None)][("1", "2")])
+
+    def test_init_transcriptional_relations_by_date_range_one_date(self):
+        xml = et.fromstring(
+            """
+        <app xml:id="B10K4V6U24-28">
+            <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+            <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+            <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
+            <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+            <witDetail n="Z" type="lac" wit="syrhmg"/>
+            <note>
+                <listRelation type="intrinsic">
+                    <relation active="1" passive="2" ana="#RatingA"/>
+                    <relation active="2" passive="3" ana="#EqualRating"/>
+                </listRelation>
+                <listRelation type="transcriptional">
+                    <relation active="1" passive="2 3" ana="#Clar"/>
+                    <relation active="2 3" passive="1" ana="#VisErr"/>
+                    <relation active="1 3" passive="2" ana="#Byz" notBefore="600"/>
+                </listRelation>
+            </note>
+        </app>
+        """
+        )
+        vu = VariationUnit(xml)
+        self.assertEqual(
+            len(vu.transcriptional_relations_by_date_range), 2
+        )  # two date ranges: (None, 600) and (600, None)
+        self.assertTrue((None, None) not in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((None, 600) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((600, None) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue(
+            ("3", "2") not in vu.transcriptional_relations_by_date_range[(None, 600)]
+        )  # no transcriptional relation from 3 to 2 before 600
+        self.assertTrue(
+            ("3", "2") in vu.transcriptional_relations_by_date_range[(600, None)]
+        )  # but there should be a transcriptional relation from 3 to 2 after 600
+        self.assertTrue(
+            "Clar" in vu.transcriptional_relations_by_date_range[(None, 600)][("1", "2")]
+        )  # the relation from 1 to 2 should include a clarification category before 600
+        self.assertTrue(
+            "Clar" in vu.transcriptional_relations_by_date_range[(600, None)][("1", "2")]
+        )  # the relation from 1 to 2 should include a clarification category after 600
+        self.assertTrue(
+            "Byz" not in vu.transcriptional_relations_by_date_range[(None, 600)][("1", "2")]
+        )  # the relation from 1 to 2 should not include a Byzantine assimilation category before 600
+        self.assertTrue(
+            "Byz" in vu.transcriptional_relations_by_date_range[(600, None)][("1", "2")]
+        )  # the relation from 1 to 2 should include a Byzantine assimilation category after 600
+
+    def test_init_transcriptional_relations_by_date_range_multiple_dates(self):
+        xml = et.fromstring(
+            """
+        <app xml:id="B10K4V6U24-28">
+            <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
+            <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
+            <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
+            <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
+            <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
+            <witDetail n="W1/2" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+            <witDetail n="Z" type="lac" wit="syrhmg"/>
+            <note>
+                <listRelation type="intrinsic">
+                    <relation active="1" passive="2" ana="#RatingA"/>
+                    <relation active="2" passive="3" ana="#EqualRating"/>
+                </listRelation>
+                <listRelation type="transcriptional">
+                    <relation active="1" passive="2 3" ana="#Clar" notBefore="200" notAfter="800"/>
+                    <relation active="2 3" passive="1" ana="#VisErr" notAfter="400"/>
+                    <relation active="1 3" passive="2" ana="#Byz" notBefore="600"/>
+                </listRelation>
+            </note>
+        </app>
+        """
+        )
+        vu = VariationUnit(xml)
+        self.assertEqual(
+            len(vu.transcriptional_relations_by_date_range), 5
+        )  # five date ranges: (None, 200), (200, 400), (400, 600), (600, 800), and (800, None)
+        self.assertTrue((None, None) not in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((None, 200) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((200, 400) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((400, 600) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((600, 800) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue((800, None) in vu.transcriptional_relations_by_date_range)
+        self.assertTrue(
+            ("1", "2") not in vu.transcriptional_relations_by_date_range[(None, 200)]
+        )  # no relation from 1 to 2 before 200
+        self.assertTrue(
+            ("1", "2") in vu.transcriptional_relations_by_date_range[(200, 400)]
+        )  # but one should exist between 200 and 400
+        self.assertTrue(
+            "Clar" in vu.transcriptional_relations_by_date_range[(200, 400)][("1", "2")]
+        )  # it should contain a clarification
+        self.assertTrue(
+            "Byz" not in vu.transcriptional_relations_by_date_range[(200, 400)][("1", "2")]
+        )  # but not a Byzantine assimilation
+        self.assertTrue(
+            ("1", "2") in vu.transcriptional_relations_by_date_range[(600, 800)]
+        )  # a relation from 1 to 2 should also exist between 600 and 800
+        self.assertTrue(
+            "Clar" in vu.transcriptional_relations_by_date_range[(600, 800)][("1", "2")]
+        )  # this time, it should contain a clarification
+        self.assertTrue(
+            "Byz" in vu.transcriptional_relations_by_date_range[(600, 800)][("1", "2")]
+        )  # and it should contain a Byzantine assimilation
+        self.assertTrue(
+            ("1", "2") in vu.transcriptional_relations_by_date_range[(800, None)]
+        )  # a relation from 1 to 2 should also exist after 800
+        self.assertTrue(
+            "Byz" in vu.transcriptional_relations_by_date_range[(800, None)][("1", "2")]
+        )  # this time, it should contain a Byzantine assimilation
+        self.assertTrue(
+            "Clar" not in vu.transcriptional_relations_by_date_range[(800, None)][("1", "2")]
+        )  # but not a clarification
+        self.assertTrue(
+            ("2", "1") in vu.transcriptional_relations_by_date_range[(None, 200)]
+        )  # there should be a relation from 2 to 1 before 200
+        self.assertTrue(
+            "VisErr" in vu.transcriptional_relations_by_date_range[(None, 200)][("2", "1")]
+        )  # it should contain a visual error
+        self.assertTrue(
+            ("2", "1") not in vu.transcriptional_relations_by_date_range[(400, 600)]
+        )  # no relation from 2 to 1 between 400 and 600
 
     def test_init_unknown_relations(self):
         xml = et.fromstring(
@@ -188,7 +322,7 @@ class VariationUnitTestCase(unittest.TestCase):
         )
         vu = VariationUnit(xml)
         self.assertEqual(len(vu.intrinsic_relations), 0)
-        self.assertEqual(len(vu.transcriptional_relations), 0)
+        self.assertEqual(len(vu.transcriptional_relations_by_date_range), 0)
 
     def test_init_malformed_relations(self):
         xml = et.fromstring(
@@ -219,7 +353,8 @@ class VariationUnitTestCase(unittest.TestCase):
         )
         vu = VariationUnit(xml)
         self.assertEqual(len(vu.intrinsic_relations), 0)
-        self.assertEqual(len(vu.transcriptional_relations), 0)
+        self.assertEqual(len(vu.transcriptional_relations_by_date_range), 1)  # one entry for date range (None, None)
+        self.assertEqual(len(vu.transcriptional_relations_by_date_range[(None, None)]), 0)  # it should contain nothing
 
 
 if __name__ == '__main__':

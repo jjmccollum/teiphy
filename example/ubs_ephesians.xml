@@ -203,7 +203,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -222,7 +222,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -238,7 +238,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#LingConf"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -262,7 +262,7 @@
                         <relation active="1" passive="4" ana="#VisErr"/>
                         <relation active="2" passive="3" ana="#Clar"/>
                         <relation active="4" passive="2 3" ana="#Clar"/>
-                        <relation active="2 3 4" passive="1" ana="#Byz"/>
+                        <relation active="2 3 4" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -279,7 +279,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -296,7 +296,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Harm #VisErr"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -319,7 +319,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -336,7 +336,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#AurConf"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -374,7 +374,7 @@
                         <relation active="5" passive="1" ana="#Clar"/>
                         <relation active="5" passive="4" ana="#VisErr"/>
                         <relation active="6" passive="1" ana="#VisErr"/>
-                        <relation active="2 3 4 5 6" passive="1" ana="#Byz"/>
+                        <relation active="2 3 4 5 6" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -391,7 +391,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar #VisErr"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -408,7 +408,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#AurConf"/>
                         <relation active="1" passive="2" ana="#AurConf"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -424,7 +424,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar #Harm"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -445,7 +445,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -461,7 +461,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -483,7 +483,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2 3" ana="#Clar"/>
                         <relation active="2 3" passive="1" ana="#VisErr"/>
-                        <relation active="1 3" passive="2" ana="#Byz"/>
+                        <relation active="1 3" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -507,7 +507,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2 3" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="1 3" passive="2" ana="#Byz"/>
+                        <relation active="1 3" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -523,7 +523,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -544,7 +544,7 @@
                         <relation active="2" passive="1" ana="#Clar"/>
                         <relation active="2" passive="3" ana="#VisErr"/>
                         <relation active="3" passive="2" ana="#Clar"/>
-                        <relation active="2 3" passive="1" ana="#Byz"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
                 <witDetail n="Z" type="lac" wit="06C1 424C syrhmg"/>
@@ -563,7 +563,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -594,7 +594,7 @@
                         <relation active="#B10K4V28U18-26R1" passive="#B10K4V28U18-26R2" ana="#Clar"/>
                         <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R2" passive="#B10K4V28U18-26R3" ana="#Clar"/>
                         <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R2" passive="#B10K4V28U18-26R4" ana="#Clar"/>
-                        <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R3 #B10K4V28U18-26R4" passive="#B10K4V28U18-26R2" ana="#Byz"/>
+                        <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R3 #B10K4V28U18-26R4" passive="#B10K4V28U18-26R2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -615,7 +615,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
                         <relation active="2" passive="1" ana="#Harm"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -641,7 +641,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="1 2" passive="3" ana="#VisErr"/>
-                        <relation active="2 3" passive="1" ana="#Byz"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -663,7 +663,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#AurConf #Clar"/>
                         <relation active="2" passive="1" ana="#AurConf #Harm"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -680,7 +680,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#AurConf #Harm"/>
                         <relation active="2" passive="1" ana="#AurConf #Clar #Harm"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -707,7 +707,7 @@
                         <relation active="1" passive="4" ana="#Harm"/>
                         <relation active="2" passive="1" ana="#AurConf #Clar #Harm"/>
                         <relation active="3" passive="1" ana="#VisErr"/>
-                        <relation active="2 3 4" passive="1" ana="#Byz"/>
+                        <relation active="2 3 4" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -723,7 +723,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Harm"/>
                         <relation active="2" passive="1" ana="#Harm"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -745,7 +745,7 @@
                         <relation active="1" passive="2 3" ana="#Clar"/>
                         <relation active="1" passive="3" ana="#VisErr"/>
                         <relation active="3" passive="2" ana="#Clar"/>
-                        <relation active="2 3" passive="1" ana="#Byz"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -760,7 +760,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -776,7 +776,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -794,7 +794,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
                         <relation active="2" passive="1" ana="#Harm"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -809,7 +809,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Harm"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -836,7 +836,7 @@
                         <relation active="2" passive="1" ana="#VisErr"/>
                         <relation active="2" passive="3" ana="#Clar #Harm"/>
                         <relation active="3" passive="4" ana="#Clar"/>
-                        <relation active="1 2 4" passive="3" ana="#Byz"/>
+                        <relation active="1 2 4" passive="3" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -857,7 +857,7 @@
                         <relation active="1" passive="2" ana="#Harm"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
                         <relation active="2" passive="3" ana="#Clar"/>
-                        <relation active="1 3" passive="2" ana="#Byz"/>
+                        <relation active="1 3" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -873,7 +873,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#Harm"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -890,7 +890,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#AurConf #Harm"/>
                         <relation active="2" passive="1" ana="#AurConf #Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -910,7 +910,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Harm #VisErr"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -933,7 +933,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#Clar"/>
-                        <relation active="#B10K6V20U12-18R2" passive="#B10K6V20U12-18R1" ana="#Byz"/>
+                        <relation active="#B10K6V20U12-18R2" passive="#B10K6V20U12-18R1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -954,7 +954,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -973,7 +973,7 @@
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#AurConf"/>
                         <relation active="2" passive="1" ana="#AurConf #Clar"/>
-                        <relation active="2" passive="1" ana="#Byz"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
@@ -990,7 +990,7 @@
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="1" passive="2" ana="#Byz"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="500"/>
                     </listRelation>
                 </note>
             </app>
