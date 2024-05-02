@@ -143,7 +143,7 @@ If you use this software, please cite the paper: Joey McCollum and Robert Turnbu
         url = {https://doi.org/10.21105/joss.04879}
     }
 
-Further details on the capabilities of ``teiphy``, particularly in terms of the text-critically valuable features it can map from TEI XML collations to BEAST 2 inputs, are discussed in Joey McCollum and Robert Turnbull, "Using Bayesian Phylogenetics to Infer Manuscript Transmission History," *DSH* TBD (2024), DOI: 10.1093/llc/fqad089.
+Further details on the capabilities of ``teiphy``, particularly in terms of the text-critically valuable features it can map from TEI XML collations to BEAST 2 inputs, are discussed in Joey McCollum and Robert Turnbull, "Using Bayesian Phylogenetics to Infer Manuscript Transmission History," *DSH* 39.1 (2024): 258–279, DOI: 10.1093/llc/fqad089.
 
 .. code-block:: bibtex
 
