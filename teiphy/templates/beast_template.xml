@@ -332,14 +332,14 @@
         <logger id="ancestralStateLogger" fileName="$(tree).ancestral.trees" logEvery="1000" mode="tree">
             <!-- Start character ancestral state loggers -->
             {%- for vu in variation_units %}
-            <log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" data="@filter.{{ loop.index }}" taxonset="@taxa" siteModel="@morphSiteModel.{{ loop.index }}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
+            <log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" value="site.{{ loop.index }}" data="@filter.{{ loop.index }}" taxonset="@taxa" siteModel="@morphSiteModel.{{ loop.index }}" rootFrequencies="@rootfreqs.{{loop.index}}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
             {%- endfor %}
         </logger>
         {%- elif ancestral_logger == "sequence" %}
         <logger id="ancestralSequenceLogger" fileName="$(tree).ancestral.trees" logEvery="1000" mode="tree">
             <!-- Start character ancestral sequence loggers -->
             {%- for vu in variation_units %}
-            <log spec="beastclassic.evolution.likelihood.AncestralSequenceLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" tag="morphTreeLikelihood.character.{{ loop.index }}" data="@filter.{{ loop.index }}" siteModel="@morphSiteModel.{{ loop.index }}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
+            <log spec="beastclassic.evolution.likelihood.AncestralSequenceLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" value="site.{{ loop.index }}" tag="morphTreeLikelihood.character.{{ loop.index }}" data="@filter.{{ loop.index }}" siteModel="@morphSiteModel.{{ loop.index }}" rootFrequencies="@rootfreqs.{{loop.index}}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
             {%- endfor %}
         </logger>
         {%- endif %}
