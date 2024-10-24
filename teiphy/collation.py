@@ -1979,6 +1979,28 @@ class Collation:
             return df.to_excel(file_addr, index=False)
         return df.to_excel(file_addr)
 
+    def get_stemma_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in STEMMA format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_lowercase)[:14]
+        )  # NOTE: the maximum number of symbols allowed in STEMMA format is 24
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        stemma_symbols = possible_symbols[:nsymbols]
+        return stemma_symbols
+
     def to_stemma(self, file_addr: Union[Path, str]):
         """Writes this Collation to a STEMMA file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.
 
@@ -2027,6 +2049,7 @@ class Collation:
                 indices = tuple([j, k])
                 reading_wits_by_indices[indices].append(wit.id)
         # In a third pass, write to the STEMMA file:
+        symbols = self.get_stemma_symbols()
         Path(file_addr).parent.mkdir(
             parents=True, exist_ok=True
         )  # generate all parent folders for this file that don't already exist
@@ -2075,13 +2098,14 @@ class Collation:
                     indices = tuple([j, k])
                     if indices not in reading_wits_by_indices:
                         break
+                    rdg_symbol = symbols[k]  # get the one-character alphanumeric code for this state
                     wits = " ".join(reading_wits_by_indices[indices])
                     # Open the variant reading support block with an angle bracket:
                     if k == 0:
-                        f.write("%d %s" % (k, wits))
+                        f.write("%s %s" % (rdg_symbol, wits))
                     # Open all subsequent variant reading support blocks with pipes on the next line:
                     else:
-                        f.write("\n\t| %d %s" % (k, wits))
+                        f.write("\n\t| %s %s" % (rdg_symbol, wits))
                     k += 1
                 f.write(" >\n")
         # In a fourth pass, write to the chron file:

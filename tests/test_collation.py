@@ -390,6 +390,16 @@ class CollationOutputTestCase(unittest.TestCase):
         beast_symbols = empty_collation.get_beast_symbols()
         self.assertEqual(beast_symbols, [])
 
+    def test_get_stemma_symbols(self):
+        stemma_symbols = self.collation.get_stemma_symbols()
+        self.assertEqual(stemma_symbols, ["0", "1", "2", "3", "4", "5"])
+
+    def test_get_stemma_symbols_empty(self):
+        empty_collation = self.collation
+        empty_collation.witnesses = []
+        stemma_symbols = empty_collation.get_stemma_symbols()
+        self.assertEqual(stemma_symbols, [])
+
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
         self.assertTrue(
