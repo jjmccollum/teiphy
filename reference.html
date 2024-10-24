@@ -78,6 +78,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_nexus_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_nexus_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_phylip_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_phylip_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_readings_by_witness_for_unit"><code class="docutils literal notranslate"><span class="pre">Collation.get_readings_by_witness_for_unit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_stemma_symbols"><code class="docutils literal notranslate"><span class="pre">Collation.get_stemma_symbols()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.get_tip_date_range"><code class="docutils literal notranslate"><span class="pre">Collation.get_tip_date_range()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_apps"><code class="docutils literal notranslate"><span class="pre">Collation.parse_apps()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_intrinsic_odds"><code class="docutils literal notranslate"><span class="pre">Collation.parse_intrinsic_odds()</span></code></a></li>
@@ -435,6 +436,18 @@ If no intrinsic odds are specified, then a uniform distribution over all states 
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A dictionary mapping witness ID strings to a list of their coefficients for all substantive readings in this VariationUnit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.get_stemma_symbols">
+<span class="sig-name descname"><span class="pre">get_stemma_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_stemma_symbols" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in STEMMA format.</p>
+<p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of individual characters representing states in readings.</p>
 </dd>
 </dl>
 </dd></dl>
