@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teiphy"
-version = "0.1.13"
+version = "0.1.14"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
@@ -30,7 +30,7 @@ openpyxl = "^3.0.10"
 typer = "^0.6.1"
 rich = "^12.5.1"
 python-slugify = "^6.1.2"
-Jinja2 = "^3.1.4"
+Jinja2 = "^3.1.5"
 setuptools = "^70.0.0"
 
 [tool.poetry.dev-dependencies]
@@ -45,7 +45,7 @@ sphinx-copybutton = "^0.4.0"
 black = "^24.3.0"
 sphinxcontrib-bibtex = "^2.4.1"
 sphinx-click = {git = "https://github.com/rbturnbull/sphinx-click.git"}
-tornado = "^6.4.1"
+tornado = "^6.4.2"
 requests = "^2.32.0"
 idna = "^3.7"
 urllib3 = "^2.2.2"
