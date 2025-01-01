@@ -1988,8 +1988,8 @@ class Collation:
             A list of individual characters representing states in readings.
         """
         possible_symbols = (
-            list(string.digits) + list(string.ascii_lowercase)[:12]
-        )  # NOTE: the maximum number of symbols allowed in STEMMA format is 22
+            list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
+        )  # NOTE: the maximum number of symbols allowed in STEMMA format (other than "?" and "-") is 62
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
