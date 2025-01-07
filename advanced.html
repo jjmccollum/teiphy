@@ -59,6 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#tree-priors-clock-models-and-tip-dates">Tree Priors, Clock Models, and Tip Dates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#root-frequencies-and-substitution-models">Root Frequencies and Substitution Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging-for-ancestral-state-reconstructions">Logging for Ancestral State Reconstructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overriding-or-supplying-dates-from-a-csv-file">Overriding or Supplying Dates from a CSV file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-output-formats-and-options">Supported Output Formats and Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#other-options">Other Options</a></li>
 </ul>
@@ -638,6 +639,13 @@ The <code class="docutils literal notranslate"><span class="pre">AncestralSequen
 In writing to BEAST 2.7 XML files, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can include elements for either (or neither) logger based on the <code class="docutils literal notranslate"><span class="pre">--ancestral-logger</span></code> argument.
 The default option, <code class="docutils literal notranslate"><span class="pre">state</span></code>, will include an <code class="docutils literal notranslate"><span class="pre">AncestralStateLogger</span></code> element in the XML file, while <code class="docutils literal notranslate"><span class="pre">sequence</span></code> will include an <code class="docutils literal notranslate"><span class="pre">AncestralSequenceLogger</span></code> element, and <code class="docutils literal notranslate"><span class="pre">none</span></code> will not include any logging elements for ancestral states.</p>
 </section>
+<section id="overriding-or-supplying-dates-from-a-csv-file">
+<h2>Overriding or Supplying Dates from a CSV file<a class="headerlink" href="#overriding-or-supplying-dates-from-a-csv-file" title="Permalink to this heading"></a></h2>
+<p>You can also specify date ranges for some witnesses in a separate CSV file.
+For the sake of completeness, it is recommended that you specify date ranges for witnesses in your TEI XML collation, but you may have pulled your collation data and witness date ranges from different sources, or you might want to overwrite existing date ranges in the collation with updated values.
+You can specify a path to the CSV file containing witness IDs and their date ranges using the <code class="docutils literal notranslate"><span class="pre">--dates-file</span></code> command-line option.
+The CSV file should not have any header rows, and every row should be formatted as <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;,min,max</span></code>, where the first column contains a string (encoded as such by being surrounded by double quotes) corresponding to the witness ID and the other two columns are either empty (if one or both ends of the date range are unknown) or integers corresponding to years (where negative integers are assumed to refer to dates BCE).</p>
+</section>
 <section id="supported-output-formats-and-options">
 <h2>Supported Output Formats and Options<a class="headerlink" href="#supported-output-formats-and-options" title="Permalink to this heading"></a></h2>
 <p>You can specify a preferred output format for the conversion explicitly with the <code class="docutils literal notranslate"><span class="pre">--format</span></code> flag.
@@ -649,7 +657,8 @@ If you wish to exclude these from your analysis (as is the case if you want to u
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.</p>
 <p>Note that for the <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">hennig86</span></code>, <code class="docutils literal notranslate"><span class="pre">phylip</span></code>, and <code class="docutils literal notranslate"><span class="pre">fasta</span></code> output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
-This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.</p>
+This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
+The <code class="docutils literal notranslate"><span class="pre">stemma</span></code> output format currently supports up to 62 states.</p>
 <p>Collations can also be converted to tabular formats.
 Within Python, the <code class="docutils literal notranslate"><span class="pre">collation</span></code> class’s <code class="docutils literal notranslate"><span class="pre">to_numpy</span></code> method can be invoked to convert a collation to a NumPy <code class="docutils literal notranslate"><span class="pre">array</span></code> with rows for variant readings, columns for witnesses, and frequency values in the cells.
 Where a witness has missing data at a variation, its frequencies for different readings at this unit can be split evenly over 1 using the <code class="docutils literal notranslate"><span class="pre">split_missing</span></code> argument; otherwise, the witness will have frequencies of 0 for all readings at that unit.

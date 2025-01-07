@@ -100,6 +100,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_phylip"><code class="docutils literal notranslate"><span class="pre">Collation.to_phylip()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_stemma"><code class="docutils literal notranslate"><span class="pre">Collation.to_stemma()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.update_origin_date_range_from_witness_date_ranges"><code class="docutils literal notranslate"><span class="pre">Collation.update_origin_date_range_from_witness_date_ranges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.update_witness_date_ranges_from_dates_file"><code class="docutils literal notranslate"><span class="pre">Collation.update_witness_date_ranges_from_dates_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.update_witness_date_ranges_from_origin_date_range"><code class="docutils literal notranslate"><span class="pre">Collation.update_witness_date_ranges_from_origin_date_range()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.validate_intrinsic_relations"><code class="docutils literal notranslate"><span class="pre">Collation.validate_intrinsic_relations()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.validate_wits"><code class="docutils literal notranslate"><span class="pre">Collation.validate_wits()</span></code></a></li>
@@ -200,7 +201,7 @@
 <h2>Collation<a class="headerlink" href="#collation" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="teiphy.Collation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">teiphy.</span></span><span class="sig-name descname"><span class="pre">Collation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manuscript_suffixes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trivial_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_reading_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_corrector_lacunae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dates_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for storing TEI XML collation data internally.</p>
 <p>This corresponds to the entire XML tree, rooted at the TEI element of the collation.</p>
 <dl class="py attribute">
@@ -558,10 +559,10 @@ If a category does not contain a certainty element specifying its number, then i
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_addr</strong> – A string representing the path to an output CSV file; the file type should be .csv.</p></li>
-<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
+<li><p><strong>drop_constant</strong> – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
 <li><p><strong>ambiguous_as_missing</strong> – An optional flag indicating whether to treat all ambiguous states as missing data.</p></li>
-<li><p><strong>proportion</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.</p></li>
-<li><p><strong>table_type</strong> (<em>TableType</em><em>, </em><em>optional</em>) – A TableType option indicating which type of tabular output to generate.
+<li><p><strong>proportion</strong> – An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.</p></li>
+<li><p><strong>table_type</strong> – A TableType option indicating which type of tabular output to generate.
 Only applicable for tabular outputs.
 Default value is “matrix”.</p></li>
 <li><p><strong>split_missing</strong> – An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p></li>
@@ -621,13 +622,13 @@ A list of witness ID strings.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_addr</strong> – A string representing the path to an output Excel file; the file type should be .xlsx.</p></li>
-<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
+<li><p><strong>drop_constant</strong> – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
 <li><p><strong>ambiguous_as_missing</strong> – An optional flag indicating whether to treat all ambiguous states as missing data.</p></li>
-<li><p><strong>proportion</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.</p></li>
-<li><p><strong>table_type</strong> (<em>TableType</em><em>, </em><em>optional</em>) – A TableType option indicating which type of tabular output to generate.
+<li><p><strong>proportion</strong> – An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.</p></li>
+<li><p><strong>table_type</strong> – A TableType option indicating which type of tabular output to generate.
 Only applicable for tabular outputs.
 Default value is “matrix”.</p></li>
-<li><p><strong>split_missing</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p></li>
+<li><p><strong>split_missing</strong> – An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.</p></li>
 </ul>
 </dd>
 </dl>
@@ -682,21 +683,21 @@ Default value is False.</p></li>
 with a proportion of disagreements to variation units where both witnesses are extant.
 It is only applied if the table_type option is “distance”.
 Default value is False.</p></li>
-<li><p><strong>calibrate_dates</strong> – An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
+<li><p><strong>calibrate_dates</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
 in NEXUS output.
 This option is intended for inputs to BEAST 2.</p></li>
-<li><p><strong>mrbayes</strong> – An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
+<li><p><strong>mrbayes</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
 in NEXUS output.
 This option is intended for inputs to MrBayes.</p></li>
-<li><p><strong>clock_model</strong> – A ClockModel option indicating which type of clock model to use.
+<li><p><strong>clock_model</strong> (<em>ClockModel</em><em>, </em><em>optional</em>) – A ClockModel option indicating which type of clock model to use.
 This option is intended for inputs to MrBayes and BEAST 2.
 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.</p></li>
-<li><p><strong>ancestral_logger</strong> – An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
+<li><p><strong>ancestral_logger</strong> (<em>AncestralLogger</em><em>, </em><em>optional</em>) – An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
 This option is intended for inputs to BEAST 2.</p></li>
-<li><p><strong>table_type</strong> – A TableType option indicating which type of tabular output to generate.
+<li><p><strong>table_type</strong> (<em>TableType</em><em>, </em><em>optional</em>) – A TableType option indicating which type of tabular output to generate.
 Only applicable for tabular outputs.
 Default value is “matrix”.</p></li>
-<li><p><strong>seed</strong> – A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).</p></li>
+<li><p><strong>seed</strong> (<em>optional</em><em>, </em><em>int</em>) – A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).</p></li>
 </ul>
 </dd>
 </dl>
@@ -741,7 +742,7 @@ A list of column label strings.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_addr</strong> – A string representing the path to an output NEXUS file; the file type should be .nex, .nexus, or .nxs.</p></li>
-<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
+<li><p><strong>drop_constant</strong> – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
 <li><p><strong>char_state_labels</strong> – An optional flag indicating whether or not to include the CharStateLabels block.</p></li>
 <li><p><strong>frequency</strong> – An optional flag indicating whether to use the StatesFormat=Frequency setting
 instead of the StatesFormat=StatesPresent setting
@@ -826,7 +827,7 @@ Note that because PHYLIP format does not support NEXUS-style ambiguities, such a
 <li><p><strong>file_addr</strong> – A string representing the path to an output STEMMA prep file; the file should have no extension.</p></li>
 <li><p><strong>name</strong> (<em>The accompanying chron file will match this file</em>) – </p></li>
 <li><p><strong>end.</strong> (<em>except that it will have &quot;_chron&quot; appended to the</em>) – </p></li>
-<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
+<li><p><strong>drop_constant</strong> – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
 </ul>
 </dd>
 </dl>
@@ -839,6 +840,13 @@ Note that because PHYLIP format does not support NEXUS-style ambiguities, such a
 based on the bounds on the witnesses’ dates.
 If none of the witnesses have bounds on their dates, then nothing is done.
 This method is only invoked if the work’s date of origin does not already have its upper bound defined.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.update_witness_date_ranges_from_dates_file">
+<span class="sig-name descname"><span class="pre">update_witness_date_ranges_from_dates_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.update_witness_date_ranges_from_dates_file" title="Permalink to this definition"></a></dt>
+<dd><p>Given a CSV-formatted dates file, update the date ranges of all witnesses whose IDs are in the first column of the dates file
+(overwriting existing date ranges if necessary).</p>
 </dd></dl>
 
 <dl class="py method">

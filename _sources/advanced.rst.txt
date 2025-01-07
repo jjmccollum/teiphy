@@ -585,6 +585,14 @@ The ``AncestralSequenceLogger`` class (part of the ``BEAST_CLASSIC`` package) re
 In writing to BEAST 2.7 XML files, ``teiphy`` can include elements for either (or neither) logger based on the ``--ancestral-logger`` argument.
 The default option, ``state``, will include an ``AncestralStateLogger`` element in the XML file, while ``sequence`` will include an ``AncestralSequenceLogger`` element, and ``none`` will not include any logging elements for ancestral states.
 
+Overriding or Supplying Dates from a CSV file
+---------------------------------------------
+
+You can also specify date ranges for some witnesses in a separate CSV file.
+For the sake of completeness, it is recommended that you specify date ranges for witnesses in your TEI XML collation, but you may have pulled your collation data and witness date ranges from different sources, or you might want to overwrite existing date ranges in the collation with updated values.
+You can specify a path to the CSV file containing witness IDs and their date ranges using the ``--dates-file`` command-line option.
+The CSV file should not have any header rows, and every row should be formatted as ``"id",min,max``, where the first column contains a string (encoded as such by being surrounded by double quotes) corresponding to the witness ID and the other two columns are either empty (if one or both ends of the date range are unknown) or integers corresponding to years (where negative integers are assumed to refer to dates BCE). 
+
 Supported Output Formats and Options
 ------------------------------------
 
@@ -601,6 +609,7 @@ Note that all reading labels will be slugified so that all characters (e.g., Gre
 
 Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
+The ``stemma`` output format currently supports up to 62 states.
 
 Collations can also be converted to tabular formats.
 Within Python, the ``collation`` class's ``to_numpy`` method can be invoked to convert a collation to a NumPy ``array`` with rows for variant readings, columns for witnesses, and frequency values in the cells.
