@@ -28,6 +28,9 @@ bad_date_witness_example = test_dir / "bad_date_witness_example.xml"
 intrinsic_odds_excess_indegree_example = test_dir / "intrinsic_odds_excess_indegree_example.xml"
 intrinsic_odds_cycle_example = test_dir / "intrinsic_odds_cycle_example.xml"
 intrinsic_odds_no_relations_example = test_dir / "intrinsic_odds_no_relations_example.xml"
+some_dates_csv_file = test_dir / "some_dates.csv"
+bad_dates_csv_file = test_dir / "bad_dates.csv"
+non_csv_dates_file = test_dir / "non_csv_dates.txt"
 
 
 def test_version():
@@ -75,6 +78,76 @@ def test_bad_date_witness_input():
         assert isinstance(result.exception, WitnessDateException)
         assert "The following witnesses have their latest possible dates before the earliest date of origin" in str(
             result.exception
+        )
+
+
+def test_dates_file_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "--calibrate-dates",
+                "--dates-file",
+                str(some_dates_csv_file),
+                str(input_example),
+                str(output),
+            ],
+        )
+        text = output.read_text(encoding="utf-8")
+        assert "Begin ASSUMPTIONS;" in text
+        assert (
+            "CALIBRATE UBS = fixed(%d)" % (datetime.now().year - 80) in text
+        )  # the UBS witness, whose lower and upper bounds equal 50, will have its lower and upper bounds updated to 80 to ensure that it is not earlier than the origin
+        assert (
+            "CALIBRATE P46 = uniform(%d,%d)" % (0, datetime.now().year - 80) in text
+        )  # neither bound specified, but both inferred
+        assert (
+            "CALIBRATE 01 = uniform(%d,%d)" % (0, datetime.now().year - 300) in text
+        )  # lower bound specified, upper bound inferred
+        assert (
+            "CALIBRATE 02 = uniform(%d,%d)" % (datetime.now().year - 500, datetime.now().year - 80) in text
+        )  # upper bound specified, lower bound inferred
+        assert (
+            "CALIBRATE 06 = uniform(%d,%d)" % (datetime.now().year - 600, datetime.now().year - 500) in text
+        )  # both bounds specified and distinct
+
+
+def test_bad_dates_file_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "--calibrate-dates",
+                "--dates-file",
+                str(bad_dates_csv_file),
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert isinstance(result.exception, ParsingException)
+        assert "In dates file" in str(result.exception)
+
+
+def test_non_csv_dates_file_input():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "--calibrate-dates",
+                "--dates-file",
+                str(non_csv_dates_file),
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.stdout.startswith(
+            "Error opening dates file: The dates file is not a CSV file. Make sure the dates file type is .csv."
         )
 
 

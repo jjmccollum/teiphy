@@ -95,6 +95,16 @@ def to_file(
         help="Print the current version.",
     ),
     format: Format = typer.Option(None, case_sensitive=False, help="The output format."),
+    dates_file: Path = typer.Option(
+        None,
+        exists=True,
+        file_okay=True,
+        dir_okay=False,
+        writable=False,
+        readable=True,
+        resolve_path=True,
+        help="CSV file containing witness IDs in the first column and minimum and maximum dates for those witnesses in the next two columns. If specified, then for all witnesses in the first column, any existing date ranges for them in the TEI XML collation will be ignored.",
+    ),
     input: Path = typer.Argument(
         ...,
         exists=True,
@@ -119,6 +129,7 @@ def to_file(
     # Make sure the input is an XML file:
     if input.suffix.lower() != ".xml":
         print("Error opening input file: The input file is not an XML file. Make sure the input file type is .xml.")
+        exit(1)
     # If it is, then try to parse it:
     xml = None
     try:
@@ -126,8 +137,12 @@ def to_file(
         xml = et.parse(input, parser=parser)
     except Exception as err:
         print(f"Error opening input file: {err}")
-
-    coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, verbose)
+        exit(1)
+    # Make sure the dates_file input, if specified, is a CSV file:
+    if dates_file is not None and dates_file.suffix.lower() != ".csv":
+        print("Error opening dates file: The dates file is not a CSV file. Make sure the dates file type is .csv.")
+        exit(1)
+    coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, dates_file, verbose)
     coll.to_file(
         output,
         format=format,

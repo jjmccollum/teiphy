@@ -75,6 +75,7 @@ class Collation:
         trivial_reading_types: List[str] = [],
         missing_reading_types: List[str] = [],
         fill_corrector_lacunae: bool = False,
+        dates_file: Union[Path, str] = None,
         verbose: bool = False,
     ):
         """Constructs a new Collation instance with the given settings.
@@ -85,6 +86,7 @@ class Collation:
             trivial_reading_types: An optional set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
             missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
             fill_corrector_lacunae: An optional flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+            dates_file: An optional path to a CSV file containing witness IDs, minimum dates, and maximum dates. If specified, then for all witnesses in the first column, any existing date ranges for them in the TEI XML collation will be ignored.
             verbose: An optional flag indicating whether or not to print timing and debugging details for the user.
         """
         self.manuscript_suffixes = manuscript_suffixes
@@ -111,6 +113,9 @@ class Collation:
         self.parse_origin_date_range(xml)
         self.parse_list_wit(xml)
         self.validate_wits(xml)
+        # If a dates file was specified, then update the witness date ranges manually:
+        if dates_file is not None:
+            self.update_witness_date_ranges_from_dates_file(dates_file)
         # If the upper bound on a work's date of origin is not defined, then attempt to assign it an upper bound based on the witness dates;
         # otherwise, attempt to assign lower bounds to witness dates based on it:
         if self.origin_date_range[1] is None:
@@ -280,6 +285,37 @@ class Collation:
         t1 = time.time()
         if self.verbose:
             print("Finished witness validation in %0.4fs." % (t1 - t0))
+        return
+
+    def update_witness_date_ranges_from_dates_file(self, dates_file: Union[Path, str]):
+        """Given a CSV-formatted dates file, update the date ranges of all witnesses whose IDs are in the first column of the dates file
+        (overwriting existing date ranges if necessary).
+        """
+        if self.verbose:
+            print("Updating witness dates from file %s..." % (str(dates_file)))
+        t0 = time.time()
+        dates_df = pd.read_csv(dates_file, index_col=0, names=["id", "min", "max"])
+        for witness in self.witnesses:
+            wit_id = witness.id
+            if wit_id in dates_df.index:
+                # For every witness in the list whose ID is specified in the dates file,
+                # update their date ranges (as long as the date ranges in the file are are well-formed):
+                min_date = int(dates_df.loc[wit_id]["min"]) if not np.isnan(dates_df.loc[wit_id]["min"]) else None
+                max_date = (
+                    int(dates_df.loc[wit_id]["max"])
+                    if not np.isnan(dates_df.loc[wit_id]["max"])
+                    else datetime.now().year
+                )
+                print(min_date, max_date)
+                if min_date is not None and max_date is not None and min_date > max_date:
+                    raise ParsingException(
+                        "In dates file %s, for witness ID %s, the minimum date %d is greater than the maximum date %d."
+                        % (str(dates_file), wit_id, min_date, max_date)
+                    )
+                witness.date_range = [min_date, max_date]
+        t1 = time.time()
+        if self.verbose:
+            print("Finished witness date range updates in %0.4fs." % (t1 - t0))
         return
 
     def update_origin_date_range_from_witness_date_ranges(self):
@@ -627,7 +663,7 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output NEXUS file; the file type should be .nex, .nexus, or .nxs.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
             char_state_labels: An optional flag indicating whether or not to include the CharStateLabels block.
             frequency: An optional flag indicating whether to use the StatesFormat=Frequency setting
                 instead of the StatesFormat=StatesPresent setting
@@ -1913,10 +1949,10 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
             ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
-            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
-            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+            table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
             split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
@@ -1956,13 +1992,13 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
             ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
-            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
-            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+            table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing (bool, optional): An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
         """
         # Convert the collation to a Pandas DataFrame first:
         df = self.to_dataframe(
@@ -2009,7 +2045,7 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
             The accompanying chron file will match this file name, except that it will have "_chron" appended to the end.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment
         # (by default, constant sites are dropped):
@@ -2196,21 +2232,21 @@ class Collation:
                 with a proportion of disagreements to variation units where both witnesses are extant.
                 It is only applied if the table_type option is "distance".
                 Default value is False.
-            calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
+            calibrate_dates (bool, optional): An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
                 This option is intended for inputs to BEAST 2.
-            mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
+            mrbayes (bool, optional): An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
                 in NEXUS output.
                 This option is intended for inputs to MrBayes.
-            clock_model: A ClockModel option indicating which type of clock model to use.
+            clock_model (ClockModel, optional): A ClockModel option indicating which type of clock model to use.
                 This option is intended for inputs to MrBayes and BEAST 2.
                 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
-            ancestral_logger: An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
+            ancestral_logger (AncestralLogger, optional): An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
                 This option is intended for inputs to BEAST 2.
-            table_type: A TableType option indicating which type of tabular output to generate.
+            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            seed: A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
+            seed (optional, int): A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
         """
         file_addr = Path(file_addr)
         format = format or Format.infer(
