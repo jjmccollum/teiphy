@@ -27,12 +27,14 @@ class VariationUnit:
             xml: An lxml.etree.Element representing an app element.
             verbose: An optional boolean flag indicating whether or not to print status updates.
         """
-        # Use its xml:id if it has one; otherwise, use its n attribute if it has one:
+        # Use its xml:id if it has one; otherwise, use its n, from, and to attributes if it has them:
         self.id = ""
         if xml.get("{%s}id" % xml_ns) is not None:
             self.id = xml.get("{%s}id" % xml_ns)
         elif xml.get("n") is not None:
             self.id = xml.get("n")
+            if xml.get("from") is not None and xml.get("to") is not None:
+                self.id += "_" + xml.get("from") + "_" + xml.get("to")
         # Initialize its list of readings:
         self.readings = []
         # Initialize its dictionaries of intrinsic and transcriptional relations:
