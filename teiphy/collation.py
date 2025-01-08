@@ -1156,8 +1156,8 @@ class Collation:
             A list of individual characters representing states in readings.
         """
         possible_symbols = (
-            list(string.digits) + list(string.ascii_lowercase)[:22]
-        )  # NOTE: for BEAST, any number of states should theoretically be permissible, but since code maps are required for some reason, we will limit the number of symbols to 32 for now
+            list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
+        )  # NOTE: for BEAST, any number of states should theoretically be permissible, but since code maps are required for some reason, we will limit the number of symbols to 62 for now
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
