@@ -47,6 +47,10 @@ def to_file(
         False,
         help="Use the StatesFormat=Frequency setting instead of the StatesFormat=StatesPresent setting (and thus represent all states with frequency vectors rather than symbols) in NEXUS output.",
     ),
+    fragmentary_threshold: float = typer.Option(
+        None,
+        help="Ignore all witnesses that are extant at fewer than the specified proportion of variation units. For the purposes of this calculation, a witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the -m option). This calculation is performed after the reading sequences of correctors have been filled in (if the --fill-correctors flag was specified). Thus, a threshold of 0.7 means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.",
+    ),
     drop_constant: bool = typer.Option(
         False,
         help="If set, do not write constant sites (i.e., variation units with one substantive reading) to output.",
@@ -138,11 +142,27 @@ def to_file(
     except Exception as err:
         print(f"Error opening input file: {err}")
         exit(1)
+    # Make sure the fragmentary_threshold input, if specified, is between 0 and 1:
+    if fragmentary_threshold is not None and (fragmentary_threshold < 0.0 or fragmentary_threshold > 1.0):
+        print(
+            "Error: the fragmentary variation unit proportion threshold is %f. It must be a value in [0, 1]."
+            % fragmentary_threshold
+        )
+        exit(1)
     # Make sure the dates_file input, if specified, is a CSV file:
     if dates_file is not None and dates_file.suffix.lower() != ".csv":
         print("Error opening dates file: The dates file is not a CSV file. Make sure the dates file type is .csv.")
         exit(1)
-    coll = Collation(xml, suffixes, trivial_reading_types, missing_reading_types, fill_correctors, dates_file, verbose)
+    coll = Collation(
+        xml,
+        suffixes,
+        trivial_reading_types,
+        missing_reading_types,
+        fill_correctors,
+        fragmentary_threshold,
+        dates_file,
+        verbose,
+    )
     coll.to_file(
         output,
         format=format,
