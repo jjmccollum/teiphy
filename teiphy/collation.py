@@ -59,6 +59,7 @@ class Collation:
         trivial_reading_types: A set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
         missing_reading_types: A set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
         fill_corrector_lacunae: A boolean flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+        fragmentary_threshold: A float representing the proportion such that all witnesses extant at fewer than this proportion of variation units are filtered out of the collation.
         witnesses: A list of Witness instances contained in this Collation.
         witness_index_by_id: A dictionary mapping base witness ID strings to their int indices in the witnesses list.
         variation_units: A list of VariationUnit instances contained in this Collation.
@@ -75,6 +76,7 @@ class Collation:
         trivial_reading_types: List[str] = [],
         missing_reading_types: List[str] = [],
         fill_corrector_lacunae: bool = False,
+        fragmentary_threshold: float = None,
         dates_file: Union[Path, str] = None,
         verbose: bool = False,
     ):
@@ -86,6 +88,7 @@ class Collation:
             trivial_reading_types: An optional set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
             missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
             fill_corrector_lacunae: An optional flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+            fragmentary_threshold: An optional float representing the proportion such that all witnesses extant at fewer than this proportion of variation units are filtered out of the collation.
             dates_file: An optional path to a CSV file containing witness IDs, minimum dates, and maximum dates. If specified, then for all witnesses in the first column, any existing date ranges for them in the TEI XML collation will be ignored.
             verbose: An optional flag indicating whether or not to print timing and debugging details for the user.
         """
@@ -93,6 +96,7 @@ class Collation:
         self.trivial_reading_types = set(trivial_reading_types)
         self.missing_reading_types = set(missing_reading_types)
         self.fill_corrector_lacunae = fill_corrector_lacunae
+        self.fragmentary_threshold = fragmentary_threshold
         self.verbose = verbose
         self.witnesses = []
         self.witness_index_by_id = {}
@@ -127,6 +131,9 @@ class Collation:
         self.parse_apps(xml)
         self.validate_intrinsic_relations()
         self.parse_readings_by_witness()
+        # If a threshold of readings for fragmentary witnesses is specified, then filter the witness list using the dictionary mapping witness IDs to readings:
+        if self.fragmentary_threshold is not None:
+            self.filter_fragmentary_witnesses(xml)
         t1 = time.time()
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
@@ -623,6 +630,43 @@ class Collation:
             print(
                 "Populated dictionary for %d witnesses over %d substantive variation units in %0.4fs."
                 % (len(self.witnesses), len(self.variation_unit_ids), t1 - t0)
+            )
+        return
+
+    def filter_fragmentary_witnesses(self, xml):
+        """Filters the original witness list and readings by witness dictionary to exclude witnesses whose proportions of extant passages fall below the fragmentary readings threshold."""
+        if self.verbose:
+            print(
+                "Filtering fragmentary witnesses (extant in < %f of all variation units) out of internal witness list and dictionary of witness readings..."
+                % self.fragmentary_threshold
+            )
+        t0 = time.time()
+        fragmentary_witness_set = set()
+        # Proceed for each witness in order:
+        for wit in self.witnesses:
+            wit_id = wit.id
+            # We count the number of variation units at which this witness has an extant (i.e., non-missing) reading:
+            extant_reading_count = 0
+            total_reading_count = len(self.readings_by_witness[wit.id])
+            # Proceed through all reading support lists:
+            for rdg_support in self.readings_by_witness[wit_id]:
+                # If the current reading support list is not all zeroes, then increment this witness's count of extant readings:
+                if sum(rdg_support) != 0:
+                    extant_reading_count += 1
+            # If the proportion of extant readings falls below the threshold, then add this witness to the list of fragmentary witnesses:
+            if extant_reading_count / total_reading_count < self.fragmentary_threshold:
+                fragmentary_witness_set.add(wit_id)
+        # Then filter the witness list to exclude the fragmentary witnesses:
+        filtered_witnesses = [wit for wit in self.witnesses if wit.id not in fragmentary_witness_set]
+        self.witnesses = filtered_witnesses
+        # Then remove the entries for the fragmentary witnesses from the witnesses-to-readings dictionary:
+        for wit_id in fragmentary_witness_set:
+            del self.readings_by_witness[wit_id]
+        t1 = time.time()
+        if self.verbose:
+            print(
+                "Filtered out %d fragmentary witness(es) (%s) in %0.4fs."
+                % (len(fragmentary_witness_set), str(list(fragmentary_witness_set)), t1 - t0)
             )
         return
 

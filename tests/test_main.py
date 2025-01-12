@@ -225,6 +225,90 @@ def test_to_nexus_ambiguous_as_missing():
         assert "{" not in text
 
 
+def test_to_nexus_fragmentary_threshold():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fragmentary-threshold",
+                0.5,
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "04                   " not in text
+        assert "06C2                 " not in text
+
+
+def test_to_nexus_fragmentary_threshold_fill_correctors():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--fragmentary-threshold",
+                0.5,
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8")
+        assert text.startswith("#NEXUS")
+        assert "04                   " not in text
+        assert "06C2                 " in text
+
+
+def test_to_nexus_fragmentary_threshold_bad_threshold():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fragmentary-threshold",
+                1.1,
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 1
+        assert result.stdout.startswith("Error: the fragmentary variation unit proportion threshold is")
+
+
 def test_to_nexus_calibrate_dates():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"
