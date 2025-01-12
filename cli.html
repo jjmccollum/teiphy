@@ -179,6 +179,12 @@
 </dd></dl>
 
 <dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-fragmentary-threshold">
+<span class="sig-name descname"><span class="pre">--fragmentary-threshold</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;fragmentary_threshold&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-fragmentary-threshold" title="Permalink to this definition"></a></dt>
+<dd><p>Ignore all witnesses that are extant at fewer than the specified proportion of variation units. For the purposes of this calculation, a witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the -m option). This calculation is performed after the reading sequences of correctors have been filled in (if the –fill-correctors flag was specified). Thus, a threshold of 0.7 means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.</p>
+</dd></dl>
+
+<dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-drop-constant">
 <span class="sig-name descname"><span class="pre">--drop-constant</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-drop-constant</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-drop-constant" title="Permalink to this definition"></a></dt>
 <dd><p>If set, do not write constant sites (i.e., variation units with one substantive reading) to output.</p>
@@ -357,13 +363,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7fd4b4f07e20&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f88ca967af0&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7fd4b4f07eb0&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f88ca967b80&gt;</p>
 </dd></dl>
 
 </section>

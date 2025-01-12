@@ -319,6 +319,17 @@ correctors of Codex Bezae follows:
 
 Then, when you invoke any conversion command through the CLI, make sure that you include the ``--fill-correctors`` argument.
 
+Excluding Fragmentary witnesses
+-------------------------------
+
+Fragmentary witnesses with too many missing readings can introduce more noise than signal to a phylogenetic analysis, so it is often helpful to exclude such witnesses from the phylogenetic software inputs you generate.
+You can do this using the ``--fragmentary-threshold`` command-line option.
+With this option, you must specify a number between 0 and 1 that represents the proportion of extant readings that a witness must have in order to be included in the output.
+For the purposes of determining whether a witness meets or falls below this threshold, that witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the ``-m`` option).
+This calculation is performed after the reading sequences of correctors have been filled in (if the ``--fill-correctors flag`` was specified).
+A threshold specified with ``--fragmentary-threshold 0.7``, for example, means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.
+By comparison, ``--fragmentary-threshold 1.0`` will exclude any witness that has even one missing reading.
+
 Removing First-hand Siglum Suffixes and Merging Multiple Attestations
 ---------------------------------------------------------------------
 

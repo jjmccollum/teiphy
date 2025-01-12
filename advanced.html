@@ -54,6 +54,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ambiguities-and-judgments-of-certainty">Ambiguities and Judgments of Certainty</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lacunae-and-other-missing-data">Lacunae and Other Missing Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#correctors-hands">Correctors’ Hands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#excluding-fragmentary-witnesses">Excluding Fragmentary witnesses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">Removing First-hand Siglum Suffixes and Merging Multiple Attestations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ascertainment-bias">Ascertainment Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tree-priors-clock-models-and-tip-dates">Tree Priors, Clock Models, and Tip Dates</a></li>
@@ -404,6 +405,16 @@ correctors of Codex Bezae follows:</p>
 </pre></div>
 </div>
 <p>Then, when you invoke any conversion command through the CLI, make sure that you include the <code class="docutils literal notranslate"><span class="pre">--fill-correctors</span></code> argument.</p>
+</section>
+<section id="excluding-fragmentary-witnesses">
+<h2>Excluding Fragmentary witnesses<a class="headerlink" href="#excluding-fragmentary-witnesses" title="Permalink to this heading"></a></h2>
+<p>Fragmentary witnesses with too many missing readings can introduce more noise than signal to a phylogenetic analysis, so it is often helpful to exclude such witnesses from the phylogenetic software inputs you generate.
+You can do this using the <code class="docutils literal notranslate"><span class="pre">--fragmentary-threshold</span></code> command-line option.
+With this option, you must specify a number between 0 and 1 that represents the proportion of extant readings that a witness must have in order to be included in the output.
+For the purposes of determining whether a witness meets or falls below this threshold, that witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the <code class="docutils literal notranslate"><span class="pre">-m</span></code> option).
+This calculation is performed after the reading sequences of correctors have been filled in (if the <code class="docutils literal notranslate"><span class="pre">--fill-correctors</span> <span class="pre">flag</span></code> was specified).
+A threshold specified with <code class="docutils literal notranslate"><span class="pre">--fragmentary-threshold</span> <span class="pre">0.7</span></code>, for example, means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.
+By comparison, <code class="docutils literal notranslate"><span class="pre">--fragmentary-threshold</span> <span class="pre">1.0</span></code> will exclude any witness that has even one missing reading.</p>
 </section>
 <section id="removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">
 <h2>Removing First-hand Siglum Suffixes and Merging Multiple Attestations<a class="headerlink" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations" title="Permalink to this heading"></a></h2>
