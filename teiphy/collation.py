@@ -38,13 +38,14 @@ class ClockModel(str, Enum):
 
 class AncestralLogger(str, Enum):
     state = "state"
-    sequence = ("sequence",)
+    sequence = "sequence"
     none = "none"
 
 
 class TableType(str, Enum):
     matrix = "matrix"
     distance = "distance"
+    similarity = "similarity"
     nexus = "nexus"
     long = "long"
 
@@ -1738,13 +1739,19 @@ class Collation:
             col_ind += 1
         return matrix, reading_labels, witness_labels
 
-    def to_distance_matrix(self, drop_constant: bool = False, proportion=False):
+    def to_distance_matrix(self, drop_constant: bool = False, proportion: bool = False, show_ext: bool = False):
         """Transforms this Collation into a NumPy distance matrix between witnesses, along with an array of its labels for the witnesses.
         Distances can be computed either as counts of disagreements (the default setting), or as proportions of disagreements over all variation units where both witnesses have singleton readings.
+        Optionally, the count of units where both witnesses have singleton readings can be included after the count/proportion of disagreements.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
             proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+                should include the number of their extant, unambiguous variation units after the number of their disagreements.
+                Default value is False.
 
         Returns:
             A NumPy distance matrix with a row and column for each witness.
@@ -1762,19 +1769,25 @@ class Collation:
         substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Initialize the output array with the appropriate dimensions:
         witness_labels = [wit.id for wit in self.witnesses]
-        matrix = np.zeros((len(witness_labels), len(witness_labels)), dtype=float)
+        # The type of the matrix will depend on the input options:
+        matrix = None
+        if show_ext:
+            matrix = np.full((len(witness_labels), len(witness_labels)), "NA", dtype=object) # strings of the form "disagreements/extant"
+        elif proportion:
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0.0, dtype=float) # floats of the form disagreements/extant
+        else:
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int) # ints of the form disagreements
         for i, wit_1 in enumerate(witness_labels):
             for j, wit_2 in enumerate(witness_labels):
                 extant_units = 0
                 disagreements = 0
-                # If both witnesses are the same, then the matrix entry is trivially 0:
-                if j == i:
-                    matrix[i, j] = 0
-                    continue
-                # If either of the cells for this pair of witnesses has been populated already, then just copy the distance without recalculating:
+                # If either of the cells for this pair of witnesses has been populated already, 
+                # then just copy the entry from the other side of the diagonal without recalculating:
                 if i > j:
                     matrix[i, j] = matrix[j, i]
                     continue
+                # Otherwise, calculate the number of units where both witnesses have unambiguous readings
+                # and the number of units where they disagree:
                 for k, vu_id in enumerate(self.variation_unit_ids):
                     if vu_id not in substantive_variation_unit_ids_set:
                         continue
@@ -1787,12 +1800,91 @@ class Collation:
                     extant_units += 1
                     if wit_1_rdg_inds[0] != wit_2_rdg_inds[0]:
                         disagreements += 1
+                cell_entry = None
                 if proportion:
-                    matrix[i, j] = disagreements / max(
+                    cell_entry = disagreements / max(
                         extant_units, 1
                     )  # the max in the denominator is to prevent division by 0; the distance entry will be 0 if the two witnesses have no overlap
                 else:
-                    matrix[i, j] = disagreements
+                    cell_entry = disagreements
+                if show_ext:
+                    cell_entry = str(cell_entry) + "/" + str(extant_units)
+                matrix[i, j] = cell_entry
+        return matrix, witness_labels
+
+    def to_similarity_matrix(self, drop_constant: bool = False, proportion: bool = False, show_ext: bool = False):
+        """Transforms this Collation into a NumPy similarity matrix between witnesses, along with an array of its labels for the witnesses.
+        Similarities can be computed either as counts of agreements (the default setting), or as proportions of agreements over all variation units where both witnesses have singleton readings.
+        Optionally, the count of units where both witnesses have singleton readings can be included after the count/proportion of agreements.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate similarities as proportions over extant, unambiguous variation units.
+                Default value is False.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+                should include the number of their extant, unambiguous variation units after the number of agreements.
+                Default value is False.
+
+        Returns:
+            A NumPy distance matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        # The type of the matrix will depend on the input options:
+        matrix = None
+        if show_ext:
+            matrix = np.full((len(witness_labels), len(witness_labels)), "NA", dtype=object) # strings of the form "agreements/extant"
+        elif proportion:
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0.0, dtype=float) # floats of the form agreements/extant
+        else:
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int) # ints of the form agreements
+        for i, wit_1 in enumerate(witness_labels):
+            for j, wit_2 in enumerate(witness_labels):
+                extant_units = 0
+                agreements = 0
+                # If either of the cells for this pair of witnesses has been populated already, 
+                # then just copy the entry from the other side of the diagonal without recalculating:
+                if i > j:
+                    matrix[i, j] = matrix[j, i]
+                    continue
+                # Otherwise, calculate the number of units where both witnesses have unambiguous readings
+                # and the number of units where they agree:
+                for k, vu_id in enumerate(self.variation_unit_ids):
+                    if vu_id not in substantive_variation_unit_ids_set:
+                        continue
+                    wit_1_rdg_support = self.readings_by_witness[wit_1][k]
+                    wit_2_rdg_support = self.readings_by_witness[wit_2][k]
+                    wit_1_rdg_inds = [l for l, w in enumerate(wit_1_rdg_support) if w > 0]
+                    wit_2_rdg_inds = [l for l, w in enumerate(wit_2_rdg_support) if w > 0]
+                    if len(wit_1_rdg_inds) != 1 or len(wit_2_rdg_inds) != 1:
+                        continue
+                    if i == 0 and j == 1:
+                        print(vu_id, wit_1_rdg_inds[0], wit_2_rdg_inds[0])
+                    extant_units += 1
+                    if wit_1_rdg_inds[0] == wit_2_rdg_inds[0]:
+                        agreements += 1
+                cell_entry = None
+                if proportion:
+                    cell_entry = agreements / max(
+                        extant_units, 1
+                    )  # the max in the denominator is to prevent division by 0; the distance entry will be 0 if the two witnesses have no overlap
+                else:
+                    cell_entry = agreements
+                if show_ext:
+                    cell_entry = str(cell_entry) + "/" + str(extant_units)
+                matrix[i, j] = cell_entry
         return matrix, witness_labels
 
     def to_nexus_table(self, drop_constant: bool = False, ambiguous_as_missing: bool = False):
@@ -1800,7 +1892,9 @@ class Collation:
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
             ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
 
         Returns:
             A NumPy array with rows for taxa, columns for characters, and reading IDs in cells.
@@ -1875,6 +1969,7 @@ class Collation:
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
 
         Returns:
             A NumPy array with columns for taxa, characters, reading indices, and reading values, and rows for each combination of these values in the matrix.
@@ -1938,17 +2033,27 @@ class Collation:
         proportion: bool = False,
         table_type: TableType = TableType.matrix,
         split_missing: bool = True,
+        show_ext: bool = False,
     ):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
             ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
             proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
             table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; 
+                if False, then missing data is ignored (i.e., all states are 0). 
+                Default value is True.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
 
         Returns:
             A Pandas DataFrame corresponding to a collation matrix with reading frequencies or a long table with discrete reading states.
@@ -1963,7 +2068,11 @@ class Collation:
             df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         elif table_type == TableType.distance:
             # Convert the collation to a NumPy array and get its row and column labels first:
-            matrix, witness_labels = self.to_distance_matrix(drop_constant=drop_constant, proportion=proportion)
+            matrix, witness_labels = self.to_distance_matrix(drop_constant=drop_constant, proportion=proportion, show_ext=show_ext)
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.similarity:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_similarity_matrix(drop_constant=drop_constant, proportion=proportion, show_ext=show_ext)
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.nexus:
             # Convert the collation to a NumPy array and get its row and column labels first:
@@ -1985,6 +2094,7 @@ class Collation:
         proportion: bool = False,
         table_type: TableType = TableType.matrix,
         split_missing: bool = True,
+        show_ext: bool = False,
         **kwargs
     ):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
@@ -1994,12 +2104,21 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
             drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
             ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
             proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; 
+                if False, then missing data is ignored (i.e., all states are 0). 
+                Default value is True.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
             **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
@@ -2009,6 +2128,7 @@ class Collation:
             proportion=proportion,
             table_type=table_type,
             split_missing=split_missing,
+            show_ext=show_ext,
         )
         # Generate all parent folders for this file that don't already exist:
         Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
@@ -2029,6 +2149,7 @@ class Collation:
         proportion: bool = False,
         table_type: TableType = TableType.matrix,
         split_missing: bool = True,
+        show_ext: bool = False,
     ):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
@@ -2037,12 +2158,21 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
             drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
             ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
             proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; 
+                if False, then missing data is ignored (i.e., all states are 0). 
+                Default value is True.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
         """
         # Convert the collation to a Pandas DataFrame first:
         df = self.to_dataframe(
@@ -2051,6 +2181,7 @@ class Collation:
             proportion=proportion,
             table_type=table_type,
             split_missing=split_missing,
+            show_ext=show_ext,
         )
         # Generate all parent folders for this file that don't already exist:
         Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
@@ -2244,6 +2375,7 @@ class Collation:
         clock_model: ClockModel = ClockModel.strict,
         ancestral_logger: AncestralLogger = AncestralLogger.state,
         table_type: TableType = TableType.matrix,
+        show_ext: bool = False,
         seed: int = None,
     ):
         """Writes this Collation to the file with the given address.
@@ -2254,6 +2386,7 @@ class Collation:
                 If None then it is infered from the file suffix.
                 Defaults to None.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
             split_missing (bool, optional): An optional flag indicating whether to treat
                 missing characters/variation units as having a contribution of 1 split over all states/readings;
                 if False, then missing data is ignored (i.e., all states are 0).
@@ -2279,17 +2412,24 @@ class Collation:
             calibrate_dates (bool, optional): An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
                 This option is intended for inputs to BEAST 2.
+                Default value is False.
             mrbayes (bool, optional): An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
                 in NEXUS output.
                 This option is intended for inputs to MrBayes.
+                Default value is False.
             clock_model (ClockModel, optional): A ClockModel option indicating which type of clock model to use.
                 This option is intended for inputs to MrBayes and BEAST 2.
                 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
+                Default value is "strict".
             ancestral_logger (AncestralLogger, optional): An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
                 This option is intended for inputs to BEAST 2.
             table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
+            show_ext (bool, optional): An optional flag indicating whether each cell in a distance or similarity matrix 
+                should include the number of variation units where both witnesses are extant after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
             seed (optional, int): A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
         """
         file_addr = Path(file_addr)
@@ -2335,6 +2475,7 @@ class Collation:
                 proportion=proportion,
                 table_type=table_type,
                 split_missing=split_missing,
+                show_ext=show_ext,
             )
 
         if format == Format.TSV:
@@ -2345,6 +2486,7 @@ class Collation:
                 proportion=proportion,
                 table_type=table_type,
                 split_missing=split_missing,
+                show_ext=show_ext,
                 sep="\t",
             )
 
@@ -2356,6 +2498,7 @@ class Collation:
                 proportion=proportion,
                 table_type=table_type,
                 split_missing=split_missing,
+                show_ext=show_ext,
             )
 
         if format == Format.STEMMA:
