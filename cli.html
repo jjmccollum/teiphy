@@ -270,13 +270,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-table">
 <span class="sig-name descname"><span class="pre">--table</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;table&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-table" title="Permalink to this definition"></a></dt>
-<dd><p>The type of table to use for CSV/Excel output. If “matrix”, then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the –split-missing flag can be used with this option). If “distance”, then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the –proportion flag can be used with this option). If “nexus”, then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the –ambiguous-as-missing flag can be used with this option). If “long”, then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.</p>
+<dd><p>The type of table to use for CSV/Excel output. If “matrix”, then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the –split-missing flag can be used with this option). If “distance”, then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the –proportion flag can be used with this option). If “similarity”, then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the –proportion flag can be used with this option). If “nexus”, then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the –ambiguous-as-missing flag can be used with this option). If “long”, then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
 <dd class="field-odd"><p>TableType.matrix</p>
 </dd>
 <dt class="field-even">Options<span class="colon">:</span></dt>
-<dd class="field-even"><p>matrix | distance | nexus | long</p>
+<dd class="field-even"><p>matrix | distance | similarity | nexus | long</p>
 </dd>
 </dl>
 </dd></dl>
@@ -285,6 +285,17 @@
 <dt class="sig sig-object std" id="cmdoption-teiphy-split-missing">
 <span class="sig-name descname"><span class="pre">--split-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-split-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-split-missing" title="Permalink to this definition"></a></dt>
 <dd><p>Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-show-ext">
+<span class="sig-name descname"><span class="pre">--show-ext</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-show-ext</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-show-ext" title="Permalink to this definition"></a></dt>
+<dd><p>If set, each cell in a distance or similarity matrix will display the count/proportion of disagreements/agreements, followed by the number of variation units where both witnesses are extant and have unambiguous readings. (For example, a cell containing 47/50 in a similarity table would indicate that the row and column witnesses agree at 47 of the 50 units where they both have readings.) This option is only valid for tabular output formats of type “distance” or “similarity”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
 <dd class="field-odd"><p>False</p>
@@ -363,13 +374,13 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f88ca967af0&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7fd8a919a280&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f88ca967b80&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7fd8a919a310&gt;</p>
 </dd></dl>
 
 </section>
