@@ -1749,7 +1749,7 @@ class Collation:
                 Default value is False.
             proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
                 Default value is False.
-            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements.
                 Default value is False.
 
@@ -1772,16 +1772,20 @@ class Collation:
         # The type of the matrix will depend on the input options:
         matrix = None
         if show_ext:
-            matrix = np.full((len(witness_labels), len(witness_labels)), "NA", dtype=object) # strings of the form "disagreements/extant"
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), "NA", dtype=object
+            )  # strings of the form "disagreements/extant"
         elif proportion:
-            matrix = np.full((len(witness_labels), len(witness_labels)), 0.0, dtype=float) # floats of the form disagreements/extant
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), 0.0, dtype=float
+            )  # floats of the form disagreements/extant
         else:
-            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int) # ints of the form disagreements
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int)  # ints of the form disagreements
         for i, wit_1 in enumerate(witness_labels):
             for j, wit_2 in enumerate(witness_labels):
                 extant_units = 0
                 disagreements = 0
-                # If either of the cells for this pair of witnesses has been populated already, 
+                # If either of the cells for this pair of witnesses has been populated already,
                 # then just copy the entry from the other side of the diagonal without recalculating:
                 if i > j:
                     matrix[i, j] = matrix[j, i]
@@ -1822,7 +1826,7 @@ class Collation:
                 Default value is False.
             proportion (bool, optional): An optional flag indicating whether or not to calculate similarities as proportions over extant, unambiguous variation units.
                 Default value is False.
-            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of agreements.
                 Default value is False.
 
@@ -1845,16 +1849,20 @@ class Collation:
         # The type of the matrix will depend on the input options:
         matrix = None
         if show_ext:
-            matrix = np.full((len(witness_labels), len(witness_labels)), "NA", dtype=object) # strings of the form "agreements/extant"
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), "NA", dtype=object
+            )  # strings of the form "agreements/extant"
         elif proportion:
-            matrix = np.full((len(witness_labels), len(witness_labels)), 0.0, dtype=float) # floats of the form agreements/extant
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), 0.0, dtype=float
+            )  # floats of the form agreements/extant
         else:
-            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int) # ints of the form agreements
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int)  # ints of the form agreements
         for i, wit_1 in enumerate(witness_labels):
             for j, wit_2 in enumerate(witness_labels):
                 extant_units = 0
                 agreements = 0
-                # If either of the cells for this pair of witnesses has been populated already, 
+                # If either of the cells for this pair of witnesses has been populated already,
                 # then just copy the entry from the other side of the diagonal without recalculating:
                 if i > j:
                     matrix[i, j] = matrix[j, i]
@@ -1870,8 +1878,6 @@ class Collation:
                     wit_2_rdg_inds = [l for l, w in enumerate(wit_2_rdg_support) if w > 0]
                     if len(wit_1_rdg_inds) != 1 or len(wit_2_rdg_inds) != 1:
                         continue
-                    if i == 0 and j == 1:
-                        print(vu_id, wit_1_rdg_inds[0], wit_2_rdg_inds[0])
                     extant_units += 1
                     if wit_1_rdg_inds[0] == wit_2_rdg_inds[0]:
                         agreements += 1
@@ -2047,10 +2053,10 @@ class Collation:
             table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; 
-                if False, then missing data is ignored (i.e., all states are 0). 
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
                 Default value is True.
-            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
                 Default value is False.
@@ -2068,11 +2074,15 @@ class Collation:
             df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
         elif table_type == TableType.distance:
             # Convert the collation to a NumPy array and get its row and column labels first:
-            matrix, witness_labels = self.to_distance_matrix(drop_constant=drop_constant, proportion=proportion, show_ext=show_ext)
+            matrix, witness_labels = self.to_distance_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.similarity:
             # Convert the collation to a NumPy array and get its row and column labels first:
-            matrix, witness_labels = self.to_similarity_matrix(drop_constant=drop_constant, proportion=proportion, show_ext=show_ext)
+            matrix, witness_labels = self.to_similarity_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.nexus:
             # Convert the collation to a NumPy array and get its row and column labels first:
@@ -2112,10 +2122,10 @@ class Collation:
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; 
-                if False, then missing data is ignored (i.e., all states are 0). 
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
                 Default value is True.
-            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
                 Default value is False.
@@ -2166,10 +2176,10 @@ class Collation:
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; 
-                if False, then missing data is ignored (i.e., all states are 0). 
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
                 Default value is True.
-            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix 
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
                 Default value is False.
@@ -2426,7 +2436,7 @@ class Collation:
             table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            show_ext (bool, optional): An optional flag indicating whether each cell in a distance or similarity matrix 
+            show_ext (bool, optional): An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of variation units where both witnesses are extant after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
                 Default value is False.
