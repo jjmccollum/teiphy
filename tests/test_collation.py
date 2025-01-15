@@ -446,6 +446,68 @@ class CollationOutputTestCase(unittest.TestCase):
             abs(matrix[0, 1] - 13 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
         )  # entry for UBS and P46 should be 13 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
 
+    def test_to_distance_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_distance_matrix(show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "13/40"
+        )
+
+    def test_to_distance_matrix_proportion_show_ext(self):
+        matrix, witness_labels = self.collation.to_distance_matrix(proportion=True, show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "0.325/40"
+        )
+
+    def test_to_similarity_matrix(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix()
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], 27
+        )  # entry for UBS and P46 should be 27 (remember not to count P46 lacunae and ambiguities and to count P46 defective readings as agreeing with the UBS reading)
+
+    def test_to_similarity_matrix_drop_constant(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be 0
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], 25
+        )  # entry for UBS and P46 should be 25 (the two constant variation units should be dropped)
+
+    def test_to_similarity_matrix_proportion(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True)
+        self.assertEqual(np.trace(matrix), 38)  # diagonal entries should be 1
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
+        self.assertTrue(
+            abs(matrix[0, 1] - 27 / (len(self.xml_variation_units) - 2)) < 1e-4
+        )  # entry for UBS and P46 should be 27 divided by the number of variation units where neither witness is lacunose or ambiguous
+
+    def test_to_similarity_matrix_drop_constant_proportion(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True, proportion=True)
+        self.assertEqual(np.trace(matrix), 38)  # diagonal entries should be 0
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
+        self.assertTrue(
+            abs(matrix[0, 1] - 25 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
+        )  # entry for UBS and P46 should be 25 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
+
+    def test_to_similarity_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "27/40"
+        )
+
+    def test_to_similarity_matrix_proportion_show_ext(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True, show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "0.675/40"
+        )
+
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
         self.assertEqual(row_labels[0], "UBS")
