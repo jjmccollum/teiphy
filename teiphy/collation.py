@@ -679,9 +679,11 @@ class Collation:
         Returns:
             A list of individual characters representing states in readings.
         """
-        # NOTE: PAUP* allows up to 64 symbols, but IQTREE does not appear to support symbols outside of 0-9 and a-z, and base symbols must be case-insensitive,
-        # so we will settle for a maximum of 32 singleton symbols for now
-        possible_symbols = list(string.digits) + list(string.ascii_lowercase)[:22]
+        # NOTE: IQTREE does not appear to support symbols outside of 0-9 and a-z, and its base symbols must be case-insensitive.
+        # The official version of MrBayes is likewise limited to 32 symbols.
+        # But PAUP* allows up to 64 symbols, and Andrew Edmondson's fork of MrBayes does, as well.
+        # So this method will support symbols from 0-9, a-z, and A-Z (for a total of 62 states)
+        possible_symbols = list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
@@ -2200,6 +2202,55 @@ class Collation:
             return df.to_excel(file_addr, index=False)
         return df.to_excel(file_addr)
 
+    def to_phylip_matrix(
+        self,
+        file_addr: Union[Path, str],
+        drop_constant: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.distance,
+        show_ext: bool = False,
+    ):
+        """Writes this Collation as a PHYLIP-formatted distance/similarity matrix to the file with the given address.
+
+        Args:
+            file_addr: A string representing the path to an output PHYLIP file; the file type should be .ph or .phy.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            table_type: A TableType option indicating which type of tabular output to generate.
+                For PHYLIP-formatted outputs, distance and similarity matrices are the only supported table types.
+                Default value is "distance".
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
+        """
+        # Convert the collation to a Pandas DataFrame first:
+        matrix = None
+        witness_labels = []
+        # Proceed based on the table type:
+        if table_type == TableType.distance:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_distance_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
+        elif table_type == TableType.similarity:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_similarity_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        with open(file_addr, "w", encoding="utf-8") as f:
+            # The first line contains the number of taxa:
+            f.write("%d\n" % len(witness_labels))
+            # Every subsequent line contains a witness label, followed by the values in its row of the matrix:
+            for i, wit_id in enumerate(witness_labels):
+                wit_label = slugify(wit_id, lowercase=False, allow_unicode=True, separator='_')
+                f.write("%s %s\n" % (wit_label, " ".join([str(v) for v in matrix[i]])))
+        return
+
     def get_stemma_symbols(self):
         """Returns a list of one-character symbols needed to represent the states of all substantive readings in STEMMA format.
 
@@ -2434,11 +2485,12 @@ class Collation:
             ancestral_logger (AncestralLogger, optional): An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
                 This option is intended for inputs to BEAST 2.
             table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
-                Only applicable for tabular outputs.
+                Only applicable for tabular outputs and PHYLIP outputs.
+                If the output is a PHYLIP file, then the type of tabular output must be "distance" or "similarity"; otherwise, it will be ignored.
                 Default value is "matrix".
             show_ext (bool, optional): An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of variation units where both witnesses are extant after the number of their disagreements/agreements.
-                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Only applicable for tabular output formats of type "distance" or "similarity".
                 Default value is False.
             seed (optional, int): A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
         """
@@ -2463,6 +2515,14 @@ class Collation:
             return self.to_hennig86(file_addr, drop_constant=drop_constant)
 
         if format == format.PHYLIP:
+            if table_type in [TableType.distance, TableType.similarity]:
+                return self.to_phylip_matrix(
+                    file_addr,
+                    drop_constant=drop_constant,
+                    proportion=proportion,
+                    table_type=table_type,
+                    show_ext=show_ext,
+                )
             return self.to_phylip(file_addr, drop_constant=drop_constant)
 
         if format == format.FASTA:
