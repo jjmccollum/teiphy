@@ -14,9 +14,9 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
         <script src="_static/copybutton.js?v=71494f10"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -111,7 +111,7 @@
 }
 </style>
 <section id="example">
-<h1>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h1>
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h1>
 <p>Due to the availability of extensive collation data for the Greek New
 Testament, and because this project was originally developed for use
 with such data, we tested this library on a sample collation of the book of
@@ -162,7 +162,7 @@ these disambiguations using <code class="docutils literal notranslate"><span cla
 <p>The <a class="reference external" href="https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml">TEI XML file</a>
 for this example is available in the <code class="docutils literal notranslate"><span class="pre">example</span></code> directory in the GitHub repository.</p>
 <section id="iq-tree">
-<h2>IQ-TREE<a class="headerlink" href="#iq-tree" title="Permalink to this heading"></a></h2>
+<h2>IQ-TREE<a class="headerlink" href="#iq-tree" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="http://www.iqtree.org/">IQ-TREE</a> is a popular phylogenetic analysis package.
 To use it to perform a maximum likelihood phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with the command</p>
@@ -186,7 +186,7 @@ If you wish to use ascertainment bias correction, then you must first exclude co
 <img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" /><p>Running this example with IQ-TREE is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml"><img alt="iqtree badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg" /></a></p>
 </section>
 <section id="mrbayes">
-<h2>MrBayes<a class="headerlink" href="#mrbayes" title="Permalink to this heading"></a></h2>
+<h2>MrBayes<a class="headerlink" href="#mrbayes" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="https://nbisweden.github.io/MrBayes/">MrBayes</a> is a Bayesian phylogenetic software package.
 To use it to perform a phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
@@ -212,7 +212,7 @@ The label on each internal node is the probability of that clade being present i
 <img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" /><p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
 </section>
 <section id="beast-2-7">
-<h2>BEAST 2.7<a class="headerlink" href="#beast-2-7" title="Permalink to this heading"></a></h2>
+<h2>BEAST 2.7<a class="headerlink" href="#beast-2-7" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="http://www.beast2.org/">BEAST 2</a> is another Bayesian phylogenetic software package that boasts various model options and extensive customizability.
 To use it to perform a phylogenetic analysis of the Ephesians example,
 convert the TEI XML to BEAST 2.7 XML format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
@@ -236,7 +236,7 @@ The label on each internal node is the probability of that clade being present i
 <img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" /><p>Running this example with BEAST 2 is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml"><img alt="beast badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml/badge.svg" /></a></p>
 </section>
 <section id="stemma">
-<h2>STEMMA<a class="headerlink" href="#stemma" title="Permalink to this heading"></a></h2>
+<h2>STEMMA<a class="headerlink" href="#stemma" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="https://github.com/stemmatic/stemma">STEMMA</a> is a phylogenetic analysis program written by Stephen C. Carlson.
 It searches for an optimal stemma topology according to the maximum-parsimony criterion
 and uses reticulating links to model contamination between branches to form a phylogenetic network.</p>

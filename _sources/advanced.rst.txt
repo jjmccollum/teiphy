@@ -618,9 +618,10 @@ For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-reada
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.
 
-Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
+Note that for ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
 The ``stemma`` output format currently supports up to 62 states.
+Outputs in ``nexus`` format also support up to 62 states to accommodate software like PAUP* and Andrew Edmondson's fork of MrBayes (https://github.com/edmondac/MrBayes), but note that some of the programs listed above will not work with ``nexus`` inputs with a state alphabet this large. 
 
 Collations can also be converted to tabular formats.
 Within Python, the ``collation`` class's ``to_numpy`` method can be invoked to convert a collation to a NumPy ``array`` with rows for variant readings, columns for witnesses, and frequency values in the cells.
@@ -637,12 +638,15 @@ The same class's ``to_long_table`` method produces a NumPy ``array`` with column
 The ``to_dataframe`` method invokes ``to_numpy`` by default, but if the ``table_type`` argument is ``distance``, ``nexus`` or ``long``, then it will invoke ``to_distance_matrix``, ``to_nexus_table`` or ``to_long_table``, respectively.
 It returns a Pandas ``DataFrame`` augmented with row and column labels (or, in the case of a long table, just column labels).
 
-From the command line, the standard reading-witness matrix or long table can be written to a specified CSV, TSV, or Excel (.xlsx) file.
+From the command line, the types of matrices listed above can be written to a specified CSV, TSV, or Excel (.xlsx) file.
 If you specify the output filename with its extension, ``teiphy`` will infer which format to use.
 If you want to write a distance matrix, a similarity matrix, a NEXUS-style table, or a long table to output instead of a reading-witness matrix, then you can do so by specifying the ``--table distance``, ``--table similarity``, ``--table nexus``, or ``--table long`` command-line argument, respectively.
 If you are writing a reading-witness matrix to output, you can set the method's ``split_missing`` argument using the ``--split-missing`` command-line flag.
 If you are writing a distance or similarity matrix to output, then you can set the method's ``proportion`` and ``show_ext`` arguments using using the ``--proportion`` and ``--show-ext`` command-line flags, respectively.
 As with plain NEXUS outputs, if you are writing a NEXUS table to output, then you can set the method's ``ambiguous_as_missing`` argument using the ``--ambiguous-as-missing`` command-line flag.
+You can also write a pairwise distance or similarity matrix to a PHYLIP (.phy, .ph) file if you specify ``--table distance`` or ``--table similarity`` as an option with a PHYLIP output.
+(Note that only these two table types are support for this output format; if you specify any other type of table with a PHYLIP output, then the option will be ignored, and a standard PHYLIP output will be generated instead.)
+The ``--proportion`` and ``--show-ext`` flags are supported for PHYLIP matrix outputs.
 
 Other Options
 -------------
