@@ -1415,19 +1415,25 @@ def test_to_csv_show_ext_distance_table():
         print(text)
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
-        assert ",19/41," in text # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert (
+            ",19/41," in text
+        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
 def test_to_csv_proportion_show_ext_distance_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "distance", "--proportion", "--show-ext", str(input_example), str(output)])
+        result = runner.invoke(
+            app, ["--verbose", "--table", "distance", "--proportion", "--show-ext", str(input_example), str(output)]
+        )
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
-        assert ",0.4634146341463415/41," in text # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert (
+            ",0.4634146341463415/41," in text
+        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
 def test_to_csv_similarity_table():
@@ -1459,26 +1465,34 @@ def test_to_csv_proportion_similarity_table():
 def test_to_csv_show_ext_similarity_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "similarity", "--show-ext", str(input_example), str(output)])
+        result = runner.invoke(
+            app, ["--verbose", "--table", "similarity", "--show-ext", str(input_example), str(output)]
+        )
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         print(text)
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
-        assert "22/41" in text # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert (
+            "22/41" in text
+        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
 def test_to_csv_proportion_show_ext_similarity_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "similarity", "--proportion", "--show-ext", str(input_example), str(output)])
+        result = runner.invoke(
+            app, ["--verbose", "--table", "similarity", "--proportion", "--show-ext", str(input_example), str(output)]
+        )
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
-        assert "0.5365853658536586/41" in text # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert (
+            "0.5365853658536586/41" in text
+        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
 def test_to_csv_drop_constant_long_table():
@@ -1597,6 +1611,38 @@ def test_to_excel_nexus_table():
         result = runner.invoke(app, ["--verbose", "--table", "nexus", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
+
+
+def test_to_phylip_distance_matrix():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.phy"
+        result = runner.invoke(app, ["--verbose", "--table", "distance", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith("%d" % (len(xml_witnesses)))
+        assert (
+            "UBS 0 19" in text
+        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted as a disagreement is the one where P46 is ambiguous
+
+
+def test_to_phylip_similarity_matrix():
+    parser = et.XMLParser(remove_comments=True)
+    xml = et.parse(input_example, parser=parser)
+    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.phy"
+        result = runner.invoke(app, ["--verbose", "--table", "similarity", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith("%d" % (len(xml_witnesses)))
+        assert "UBS 42 22" in text  # UBS agrees with itself 42 times and agrees with P46 22 times
 
 
 def test_to_stemma():
