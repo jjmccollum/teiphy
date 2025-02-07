@@ -2328,7 +2328,12 @@ class Collation:
         chron_file_addr = str(file_addr) + "_chron"
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
-            f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
+            f.write(
+                "* %s ;\n\n"
+                % " ".join(
+                    [slugify(wit.id, lowercase=False, allow_unicode=True, separator='_') for wit in self.witnesses]
+                )
+            )
             # f.write("^ %s\n\n" % chron_file_addr) #write the relative path to the chron file
             f.write(
                 "^ %s\n\n" % ("." + os.sep + Path(chron_file_addr).name)
