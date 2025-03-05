@@ -1,24 +1,24 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example &mdash; teiphy  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=8f9e6779" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="_static/copybutton.js?v=71494f10"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -86,32 +86,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="example">
-<h1>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h1>
+  <section id="example">
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h1>
 <p>Due to the availability of extensive collation data for the Greek New
 Testament, and because this project was originally developed for use
 with such data, we tested this library on a sample collation of the book of
@@ -162,35 +138,36 @@ these disambiguations using <code class="docutils literal notranslate"><span cla
 <p>The <a class="reference external" href="https://github.com/jjmccollum/teiphy/blob/main/example/ubs_ephesians.xml">TEI XML file</a>
 for this example is available in the <code class="docutils literal notranslate"><span class="pre">example</span></code> directory in the GitHub repository.</p>
 <section id="iq-tree">
-<h2>IQ-TREE<a class="headerlink" href="#iq-tree" title="Permalink to this heading"></a></h2>
+<h2>IQ-TREE<a class="headerlink" href="#iq-tree" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="http://www.iqtree.org/">IQ-TREE</a> is a popular phylogenetic analysis package.
 To use it to perform a maximum likelihood phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians_iqtree.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_iqtree.nexus
 </pre></div>
 </div>
 <p>This file can then be run in IQ-TREE with the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians_iqtree.nexus -m MK -bb <span class="m">1000</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree<span class="w"> </span>-s<span class="w"> </span>ubs_ephesians_iqtree.nexus<span class="w"> </span>-m<span class="w"> </span>MK<span class="w"> </span>-bb<span class="w"> </span><span class="m">1000</span>
 </pre></div>
 </div>
 <p>This uses the Lewis Mk substitution model (without ascertainment bias correction) and with 1000 bootstrap replicates.
 If you wish to use ascertainment bias correction, then you must first exclude constant sites from the output as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --drop-constant --fill-correctors example/ubs_ephesians.xml ubs_ephesians_iqtree.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--drop-constant<span class="w"> </span>--fill-correctors<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_iqtree.nexus
 </pre></div>
 </div>
 <p>This file can then be run in IQ-TREE with ascertainment bias correction using the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree -s ubs_ephesians_iqtree.nexus -m MK+ASC -bb <span class="m">1000</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>iqtree<span class="w"> </span>-s<span class="w"> </span>ubs_ephesians_iqtree.nexus<span class="w"> </span>-m<span class="w"> </span>MK+ASC<span class="w"> </span>-bb<span class="w"> </span><span class="m">1000</span>
 </pre></div>
 </div>
 <p>An example of a tree produced by IQ-TREE is found below:</p>
-<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" /><p>Running this example with IQ-TREE is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml"><img alt="iqtree badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg" /></a></p>
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/iqtree.svg" />
+<p>Running this example with IQ-TREE is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml"><img alt="iqtree badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/iqtree.yml/badge.svg" /></a></p>
 </section>
 <section id="mrbayes">
-<h2>MrBayes<a class="headerlink" href="#mrbayes" title="Permalink to this heading"></a></h2>
+<h2>MrBayes<a class="headerlink" href="#mrbayes" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="https://nbisweden.github.io/MrBayes/">MrBayes</a> is a Bayesian phylogenetic software package.
 To use it to perform a phylogenetic analysis of the Ephesians example,
 convert the TEI XML to NEXUS format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels example/ubs_ephesians.xml ubs_ephesians_mrbayes.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>--no-labels<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_mrbayes.nexus
 </pre></div>
 </div>
 <div class="admonition note">
@@ -199,64 +176,67 @@ convert the TEI XML to NEXUS format using <code class="docutils literal notransl
 </div>
 <p>This will generate the input file for MrBayes with the default strict clock model.
 If you would prefer to use an uncorrelated (independent gamma rate) clock model, then you can do so with the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --no-labels --clock uncorrelated example/ubs_ephesians.xml ubs_ephesians_mrbayes.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>--no-labels<span class="w"> </span>--clock<span class="w"> </span>uncorrelated<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_mrbayes.nexus
 </pre></div>
 </div>
 <p>This file can then be read into MrBayes as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb ubs_ephesians_mrbayes.nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mb<span class="w"> </span>ubs_ephesians_mrbayes.nexus
 </pre></div>
 </div>
 <p>More settings can be added manually to the NEXUS file to control the Bayesian analysis as described in the <a class="reference external" href="https://github.com/NBISweden/MrBayes/blob/develop/doc/manual/Manual_MrBayes_v3.2.pdf">MrBayes manual</a>.</p>
 <p>An example of a maximum clade credibility tree produced by MrBayes for the generated input with a strict clock is found below.
 The label on each internal node is the probability of that clade being present in the posterior:</p>
-<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" /><p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/mrbayes.svg" />
+<p>Running this example with MrBayes is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml"><img alt="mrbayes badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/mrbayes.yml/badge.svg" /></a></p>
 </section>
 <section id="beast-2-7">
-<h2>BEAST 2.7<a class="headerlink" href="#beast-2-7" title="Permalink to this heading"></a></h2>
+<h2>BEAST 2.7<a class="headerlink" href="#beast-2-7" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="http://www.beast2.org/">BEAST 2</a> is another Bayesian phylogenetic software package that boasts various model options and extensive customizability.
 To use it to perform a phylogenetic analysis of the Ephesians example,
 convert the TEI XML to BEAST 2.7 XML format using <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> with this command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors example/ubs_ephesians.xml ubs_ephesians_beast.xml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-t<span class="w"> </span>subreading<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_beast.xml
 </pre></div>
 </div>
 <p>This will generate the input file for BEAST with the default strict clock model.
 If you would prefer to use an uncorrelated random clock model or a local random clock model, then you can do so with either of the following commands, respectively:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --clock uncorrelated example/ubs_ephesians.xml ubs_ephesians_beast.xml
-teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --clock <span class="nb">local</span> example/ubs_ephesians.xml ubs_ephesians_beast.xml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-t<span class="w"> </span>subreading<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>--clock<span class="w"> </span>uncorrelated<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_beast.xml
+teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-t<span class="w"> </span>subreading<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>--clock<span class="w"> </span><span class="nb">local</span><span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>ubs_ephesians_beast.xml
 </pre></div>
 </div>
 <p>To run this input, you must first make sure that you have BEAST 2.7 or later installed (as earlier versions will not be compatible with the XML format)
 and that the BEASTLabs and BDSKY packages are installed (which you can do using the <code class="docutils literal notranslate"><span class="pre">packagemanager</span></code> utility that comes with BEAST 2).
 Once these packages are installed, you can run the example with the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>beast ubs_ephesians_beast.xml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>beast<span class="w"> </span>ubs_ephesians_beast.xml
 </pre></div>
 </div>
 <p>An example of a maximum clade credibility tree produced by BEAST 2 for the generated input with a strict clock is found below.
 The label on each internal node is the probability of that clade being present in the posterior:</p>
-<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" /><p>Running this example with BEAST 2 is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml"><img alt="beast badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml/badge.svg" /></a></p>
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/beast.svg" />
+<p>Running this example with BEAST 2 is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml"><img alt="beast badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/beast.yml/badge.svg" /></a></p>
 </section>
 <section id="stemma">
-<h2>STEMMA<a class="headerlink" href="#stemma" title="Permalink to this heading"></a></h2>
+<h2>STEMMA<a class="headerlink" href="#stemma" title="Link to this heading"></a></h2>
 <p><a class="reference external" href="https://github.com/stemmatic/stemma">STEMMA</a> is a phylogenetic analysis program written by Stephen C. Carlson.
 It searches for an optimal stemma topology according to the maximum-parsimony criterion
 and uses reticulating links to model contamination between branches to form a phylogenetic network.</p>
 <p>To create the files required for STEMMA, run this command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy -t reconstructed -t defective -t orthographic -m overlap -m lac -s<span class="s2">&quot;*&quot;</span> -s T --fill-correctors --format stemma example/ubs_ephesians.xml stemma_example
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>-t<span class="w"> </span>reconstructed<span class="w"> </span>-t<span class="w"> </span>defective<span class="w"> </span>-t<span class="w"> </span>orthographic<span class="w"> </span>-m<span class="w"> </span>overlap<span class="w"> </span>-m<span class="w"> </span>lac<span class="w"> </span>-s<span class="s2">&quot;*&quot;</span><span class="w"> </span>-s<span class="w"> </span>T<span class="w"> </span>--fill-correctors<span class="w"> </span>--format<span class="w"> </span>stemma<span class="w"> </span>example/ubs_ephesians.xml<span class="w"> </span>stemma_example
 </pre></div>
 </div>
 <p>This will create two files: <code class="docutils literal notranslate"><span class="pre">stemma_example</span></code> (containing the textual information from the collation) and <code class="docutils literal notranslate"><span class="pre">stemma_example_chron</span></code> (containing date ranges for witnesses).</p>
 <p>These can then be used with Carlson’s <a class="reference external" href="https://github.com/stemmatic/prep">prep</a> program to prepare the file for phylogenetic analysis:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prep stemma_example
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prep<span class="w"> </span>stemma_example
 </pre></div>
 </div>
 <p>Finally, the analysis is run with these commands:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>stemma stemma_example a <span class="m">100</span>
-soln stemma_example SOLN
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>stemma<span class="w"> </span>stemma_example<span class="w"> </span>a<span class="w"> </span><span class="m">100</span>
+soln<span class="w"> </span>stemma_example<span class="w"> </span>SOLN
 </pre></div>
 </div>
 <p>This begins a heuristic search for the optimal stemma using a simulated annealing approach (option <code class="docutils literal notranslate"><span class="pre">a</span></code>) for 100 iterations.</p>
 <p>An example of a tree produced by STEMMA is found below:</p>
-<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" /><p>Note that some witnesses (e.g., 012, 35) from the collation are excluded from this tree by STEMMA
+<img alt="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" src="https://raw.githubusercontent.com/jjmccollum/teiphy/main/docs/img/stemma.svg" />
+<p>Note that some witnesses (e.g., 012, 35) from the collation are excluded from this tree by STEMMA
 because they have the same reading sequence as another witness
 after their reconstructed, defective, and orthographic readings have been regularized.</p>
 <p>Running this example with STEMMA is part of the continuous integration pipeline: <a class="reference external" href="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml"><img alt="stemma badge" src="https://github.com/jjmccollum/teiphy/actions/workflows/stemma.yml/badge.svg" /></a></p>

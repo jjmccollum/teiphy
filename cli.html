@@ -1,24 +1,24 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Command Line Interface Reference &mdash; teiphy  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=8f9e6779" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="_static/copybutton.js?v=71494f10"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -83,41 +83,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="command-line-interface-reference">
-<h1>Command Line Interface Reference<a class="headerlink" href="#command-line-interface-reference" title="Permalink to this heading"></a></h1>
+  <section id="command-line-interface-reference">
+<h1>Command Line Interface Reference<a class="headerlink" href="#command-line-interface-reference" title="Link to this heading"></a></h1>
 <section id="teiphy">
-<h2>teiphy<a class="headerlink" href="#teiphy" title="Permalink to this heading"></a></h2>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>teiphy <span class="o">[</span>OPTIONS<span class="o">]</span> INPUT OUTPUT
+<h2>teiphy<a class="headerlink" href="#teiphy" title="Link to this heading"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>INPUT<span class="w"> </span>OUTPUT
 </pre></div>
 </div>
 <p class="rubric">Options</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-t">
-<span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;trivial_reading_types&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-t" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;trivial_reading_types&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-t" title="Link to this definition"></a></dt>
 <dd><p>Reading types to treat as trivial and collapse with the previous substantive reading (e.g., reconstructed, defective, orthographic, subreading). If more than one type is applicable, this argument can be specified multiple times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -127,7 +103,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-m">
-<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;missing_reading_types&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-m" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;missing_reading_types&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-m" title="Link to this definition"></a></dt>
 <dd><p>Reading types to treat as missing data (e.g., lac, overlap). If more than one type is applicable, this argument can be specified multiple times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -137,7 +113,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-s">
-<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;suffixes&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-s" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;suffixes&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-s" title="Link to this definition"></a></dt>
 <dd><p>Suffixes to ignore for manuscript witness sigla. Typically, these will be things like the sigla for first hands (*) and main texts (T), although you may also wish to use it to combine multiple attestations (often signified by /1, /2 in lectionaries) in the same witness. If more than one suffix is used, this argument can be specified multiple times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -147,7 +123,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-fill-correctors">
-<span class="sig-name descname"><span class="pre">--fill-correctors</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-fill-correctors</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-fill-correctors" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--fill-correctors</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-fill-correctors</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-fill-correctors" title="Link to this definition"></a></dt>
 <dd><p>Fill in missing readings in witnesses with type “corrector” using the witnesses they follow in the TEI XML witness list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -158,7 +134,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-labels">
-<span class="sig-name descname"><span class="pre">--labels</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-labels</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-labels" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--labels</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-labels</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-labels" title="Link to this definition"></a></dt>
 <dd><p>Print the CharStateLabels block (containing variation unit labels and reading texts converted to ASCII) in NEXUS output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -169,7 +145,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-frequency">
-<span class="sig-name descname"><span class="pre">--frequency</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-frequency</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-frequency" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--frequency</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-frequency</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-frequency" title="Link to this definition"></a></dt>
 <dd><p>Use the StatesFormat=Frequency setting instead of the StatesFormat=StatesPresent setting (and thus represent all states with frequency vectors rather than symbols) in NEXUS output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -180,13 +156,13 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-fragmentary-threshold">
-<span class="sig-name descname"><span class="pre">--fragmentary-threshold</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;fragmentary_threshold&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-fragmentary-threshold" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--fragmentary-threshold</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;fragmentary_threshold&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-fragmentary-threshold" title="Link to this definition"></a></dt>
 <dd><p>Ignore all witnesses that are extant at fewer than the specified proportion of variation units. For the purposes of this calculation, a witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the -m option). This calculation is performed after the reading sequences of correctors have been filled in (if the –fill-correctors flag was specified). Thus, a threshold of 0.7 means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-drop-constant">
-<span class="sig-name descname"><span class="pre">--drop-constant</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-drop-constant</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-drop-constant" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--drop-constant</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-drop-constant</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-drop-constant" title="Link to this definition"></a></dt>
 <dd><p>If set, do not write constant sites (i.e., variation units with one substantive reading) to output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -197,7 +173,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-ambiguous-as-missing">
-<span class="sig-name descname"><span class="pre">--ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-ambiguous-as-missing" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-ambiguous-as-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-ambiguous-as-missing" title="Link to this definition"></a></dt>
 <dd><p>Use the missing symbol instead of multistate symbols (and thus treat all ambiguities as missing data) in NEXUS output; this option is only applied if the –frequency option is not set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -208,7 +184,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-proportion">
-<span class="sig-name descname"><span class="pre">--proportion</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-proportion</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-proportion" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--proportion</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-proportion</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-proportion" title="Link to this definition"></a></dt>
 <dd><p>If set, populate the output distance matrix’s cells with proportions of disagreements over variation units where both witnesses are extant; this option is only used if –table distance is specified.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -219,7 +195,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-calibrate-dates">
-<span class="sig-name descname"><span class="pre">--calibrate-dates</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-calibrate-dates</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-calibrate-dates" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--calibrate-dates</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-calibrate-dates</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-calibrate-dates" title="Link to this definition"></a></dt>
 <dd><p>Add an Assumptions block containing age distributions for witnesses to NEXUS output; this option is intended for NEXUS inputs to BEAST 2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -230,7 +206,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-mrbayes">
-<span class="sig-name descname"><span class="pre">--mrbayes</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-mrbayes</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-mrbayes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--mrbayes</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-mrbayes</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-mrbayes" title="Link to this definition"></a></dt>
 <dd><p>Add a MrBayes block containing model settings and age calibrations for witnesses to NEXUS output; this option is intended for inputs to MrBayes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -241,7 +217,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-clock">
-<span class="sig-name descname"><span class="pre">--clock</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;clock&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-clock" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--clock</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;clock&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-clock" title="Link to this definition"></a></dt>
 <dd><p>The clock model to use; this option is intended for inputs to MrBayes and BEAST 2. MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -255,7 +231,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-ancestral-logger">
-<span class="sig-name descname"><span class="pre">--ancestral-logger</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ancestral_logger&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-ancestral-logger" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--ancestral-logger</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;ancestral_logger&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-ancestral-logger" title="Link to this definition"></a></dt>
 <dd><p>The type of logger to use for ancestral state reconstruction data; this option is intended for inputs to BEAST 2. If “state”, then only the reconstructed states at the root of each sampled tree will be logged. If “sequence”, then each sampled tree’s reconstructed states for all ancestors will be logged (WARNING: this will be memory-intensive!). If “none”, then no ancestral states will be logged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -269,7 +245,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-table">
-<span class="sig-name descname"><span class="pre">--table</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;table&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-table" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--table</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;table&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-table" title="Link to this definition"></a></dt>
 <dd><p>The type of table to use for CSV/TSV/Excel/PHYLIP output. If “matrix”, then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the –split-missing flag can be used with this option). If “distance”, then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the –proportion flag can be used with this option). If “similarity”, then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the –proportion flag can be used with this option). If “nexus”, then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the –ambiguous-as-missing flag can be used with this option). If “long”, then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts. If the output is a PHYLIP file, then the type of tabular output must be “distance” or “similarity”; otherwise, it will be ignored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -283,7 +259,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-split-missing">
-<span class="sig-name descname"><span class="pre">--split-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-split-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-split-missing" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--split-missing</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-split-missing</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-split-missing" title="Link to this definition"></a></dt>
 <dd><p>Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -294,7 +270,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-show-ext">
-<span class="sig-name descname"><span class="pre">--show-ext</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-show-ext</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-show-ext" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--show-ext</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-show-ext</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-show-ext" title="Link to this definition"></a></dt>
 <dd><p>If set, each cell in a distance or similarity matrix will display the count/proportion of disagreements/agreements, followed by the number of variation units where both witnesses are extant and have unambiguous readings. (For example, a cell containing 47/50 in a similarity table would indicate that the row and column witnesses agree at 47 of the 50 units where they both have readings.) This option is only valid for tabular output formats of type “distance” or “similarity”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -305,13 +281,13 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-seed">
-<span class="sig-name descname"><span class="pre">--seed</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;seed&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-seed" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--seed</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;seed&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-seed" title="Link to this definition"></a></dt>
 <dd><p>Seed for random number generation (used for setting default initial values of transcriptional rate parameters for BEAST 2 XML output); if not specified, then the default seeding of the numpy.random.default_rng class will be used.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-verbose">
-<span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-verbose" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-verbose" title="Link to this definition"></a></dt>
 <dd><p>Enable verbose logging (mostly for debugging purposes).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -322,7 +298,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-version">
-<span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-version</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-version" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--version</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-version</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-version" title="Link to this definition"></a></dt>
 <dd><p>Print the current version.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Default<span class="colon">:</span></dt>
@@ -333,7 +309,7 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-format">
-<span class="sig-name descname"><span class="pre">--format</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;format&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-format" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--format</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;format&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-format" title="Link to this definition"></a></dt>
 <dd><p>The output format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Options<span class="colon">:</span></dt>
@@ -344,43 +320,33 @@
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-dates-file">
-<span class="sig-name descname"><span class="pre">--dates-file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dates_file&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-dates-file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">--dates-file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dates_file&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-dates-file" title="Link to this definition"></a></dt>
 <dd><p>CSV file containing witness IDs in the first column and minimum and maximum dates for those witnesses in the next two columns. If specified, then for all witnesses in the first column, any existing date ranges for them in the TEI XML collation will be ignored.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-install-completion">
-<span class="sig-name descname"><span class="pre">--install-completion</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;install_completion&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-install-completion" title="Permalink to this definition"></a></dt>
-<dd><p>Install completion for the specified shell.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Options<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bash | zsh | fish | powershell | pwsh</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">--install-completion</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-install-completion" title="Link to this definition"></a></dt>
+<dd><p>Install completion for the current shell.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-show-completion">
-<span class="sig-name descname"><span class="pre">--show-completion</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;show_completion&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-show-completion" title="Permalink to this definition"></a></dt>
-<dd><p>Show completion for the specified shell, to copy it or customize the installation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Options<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bash | zsh | fish | powershell | pwsh</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">--show-completion</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-show-completion" title="Link to this definition"></a></dt>
+<dd><p>Show completion for the current shell, to copy it or customize the installation.</p>
 </dd></dl>
 
 <p class="rubric">Arguments</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
-<span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7facd57d5cd0&gt;</p>
+<span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Link to this definition"></a></dt>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;click.types.Path object at 0x7f740547f250&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
-<span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Permalink to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7facd57d59a0&gt;</p>
+<span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Link to this definition"></a></dt>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;click.types.Path object at 0x7f740547f130&gt;</p>
 </dd></dl>
 
 </section>

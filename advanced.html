@@ -1,24 +1,24 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Advanced Usage &mdash; teiphy  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=8f9e6779" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="_static/copybutton.js?v=71494f10"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -95,32 +95,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="advanced-usage">
-<h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading"></a></h1>
+  <section id="advanced-usage">
+<h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Link to this heading"></a></h1>
 <p>Lacunae, retroversions, and other sources of ambiguity occasionally make a one-to-one mapping of witnesses to readings impossible, and in some cases, one disambiguation may be more likely than another in a quantifiable way.
 Mechanisms for accommodating such situations exist in both TEI XML and NEXUS, and for likelihood-based phylogenetic methods, “soft decisions” about the states at the leaves and even the root of the tree can provide useful information to the inference process.
 For these reasons, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> ensures that these types of judgments, as well as other rich features from TEI XML, can be respected (and, where, necessary, preserved) in the conversion process.</p>
@@ -128,7 +104,7 @@ For these reasons, <code class="docutils literal notranslate"><span class="pre">
 Since we may want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for us to use in any case, and only the output should reflect changes in the desired level of detail.
 Likewise, as noted in the previous section, uncertainty about witnesses’ attestations should be encoded in the collation and preserved in the conversion of the collation.</p>
 <section id="analysis-at-varying-levels-of-detail-using-reading-types">
-<h2>Analysis at Varying Levels of Detail Using Reading Types<a class="headerlink" href="#analysis-at-varying-levels-of-detail-using-reading-types" title="Permalink to this heading"></a></h2>
+<h2>Analysis at Varying Levels of Detail Using Reading Types<a class="headerlink" href="#analysis-at-varying-levels-of-detail-using-reading-types" title="Link to this heading"></a></h2>
 <p>For text-critical purposes, differences in granularity typically concern
 which types of variant readings we consider important for analysis. At
 the lowest level, readings with uncertain or reconstructed portions are
@@ -149,39 +125,39 @@ a hierarchical ordering of reading types (e.g., <code class="docutils literal no
 up” readings with types lower in the hierarchy into their “parent”
 readings with types higher in the hierarchy. This can be done with a
 flat list of <code class="docutils literal notranslate"><span class="pre">rdg</span></code> elements alone, as follows:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K2V5U20-24&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lem&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1-f1&quot;</span> <span class="na">type=</span><span class="s">&quot;defective&quot;</span> <span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span> <span class="na">wit=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1-f1-v1&quot;</span> <span class="na">type=</span><span class="s">&quot;reconstructed&quot;</span> <span class="na">wit=</span><span class="s">&quot;02&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σ<span class="nt">&lt;unclear&gt;</span>ε<span class="nt">&lt;/unclear&gt;&lt;supplied</span> <span class="na">reason=</span><span class="s">&quot;lacuna&quot;</span><span class="nt">&gt;</span>σω<span class="nt">&lt;/supplied&gt;</span>σμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2&quot;</span> <span class="na">wit=</span><span class="s">&quot;Ambrosiaster MariusVictorinus Pelagius&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2-f1&quot;</span> <span class="na">type=</span><span class="s">&quot;defective&quot;</span> <span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span> <span class="na">wit=</span><span class="s">&quot;010C 012&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2-f2&quot;</span> <span class="na">type=</span><span class="s">&quot;defective&quot;</span> <span class="na">wit=</span><span class="s">&quot;010*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2-s1&quot;</span> <span class="na">type=</span><span class="s">&quot;subreading&quot;</span> <span class="na">cause=</span><span class="s">&quot;clarification&quot;</span> <span class="na">wit=</span><span class="s">&quot;06*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>τη<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;3&quot;</span> <span class="na">wit=</span><span class="s">&quot;copsa copbo&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>γαρ<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K2V5U20-24&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;lem&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1-f1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1-f1-v1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;reconstructed&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;02&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σ<span class="nt">&lt;unclear&gt;</span>ε<span class="nt">&lt;/unclear&gt;&lt;supplied</span><span class="w"> </span><span class="na">reason=</span><span class="s">&quot;lacuna&quot;</span><span class="nt">&gt;</span>σω<span class="nt">&lt;/supplied&gt;</span>σμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;Ambrosiaster MariusVictorinus Pelagius&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2-f1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;010C 012&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2-f2&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;010*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2-s1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;subreading&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;clarification&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;06*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>τη<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;copsa copbo&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>γαρ<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
 </pre></div>
 </div>
 <p>Alternatively, this can be done in a more precise and hierarchical
 fashion using <code class="docutils literal notranslate"><span class="pre">rdgGrp</span></code> elements with the appropriate types:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K2V5U20-24&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lem&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdgGrp</span> <span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1-f1&quot;</span> <span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span> <span class="na">wit=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-        <span class="nt">&lt;rdgGrp</span> <span class="na">type=</span><span class="s">&quot;reconstructed&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1-f1-v1&quot;</span> <span class="na">wit=</span><span class="s">&quot;02&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σ<span class="nt">&lt;unclear&gt;</span>ε<span class="nt">&lt;/unclear&gt;&lt;supplied</span> <span class="na">reason=</span><span class="s">&quot;lacuna&quot;</span><span class="nt">&gt;</span>σω<span class="nt">&lt;/supplied&gt;</span>σμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-        <span class="nt">&lt;/rdgGrp&gt;</span>
-    <span class="nt">&lt;/rdgGrp&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2&quot;</span> <span class="na">wit=</span><span class="s">&quot;Ambrosiaster MariusVictorinus Pelagius&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdgGrp</span> <span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2-f1&quot;</span> <span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span> <span class="na">wit=</span><span class="s">&quot;010C 012&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-        <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2-f2&quot;</span> <span class="na">wit=</span><span class="s">&quot;010*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;/rdgGrp&gt;</span>
-    <span class="nt">&lt;rdgGrp</span> <span class="na">type=</span><span class="s">&quot;subreading&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2-s1&quot;</span> <span class="na">cause=</span><span class="s">&quot;clarification&quot;</span> <span class="na">wit=</span><span class="s">&quot;06*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>τη<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;/rdgGrp&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;3&quot;</span> <span class="na">wit=</span><span class="s">&quot;copsa copbo&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>γαρ<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K2V5U20-24&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;lem&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh Jerome TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdgGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1-f1&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">        </span><span class="nt">&lt;rdgGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;reconstructed&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1-f1-v1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;02&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σ<span class="nt">&lt;unclear&gt;</span>ε<span class="nt">&lt;/unclear&gt;&lt;supplied</span><span class="w"> </span><span class="na">reason=</span><span class="s">&quot;lacuna&quot;</span><span class="nt">&gt;</span>σω<span class="nt">&lt;/supplied&gt;</span>σμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/rdgGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdgGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;Ambrosiaster MariusVictorinus Pelagius&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdgGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2-f1&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;010C 012&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">        </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2-f2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;010*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εσται<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdgGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdgGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;subreading&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2-s1&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;clarification&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;06*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ου<span class="nt">&lt;/w&gt;&lt;w&gt;</span>τη<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdgGrp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;copsa copbo&quot;</span><span class="nt">&gt;&lt;w&gt;</span>χαριτι<span class="nt">&lt;/w&gt;&lt;w&gt;</span>γαρ<span class="nt">&lt;/w&gt;&lt;w&gt;</span>εστε<span class="nt">&lt;/w&gt;&lt;w&gt;</span>σεσωσμενοι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
 </pre></div>
 </div>
@@ -210,7 +186,7 @@ readings (<code class="docutils literal notranslate"><span class="pre">1</span><
 <code class="docutils literal notranslate"><span class="pre">3</span></code>).</p>
 </section>
 <section id="ambiguities-and-judgments-of-certainty">
-<h2>Ambiguities and Judgments of Certainty<a class="headerlink" href="#ambiguities-and-judgments-of-certainty" title="Permalink to this heading"></a></h2>
+<h2>Ambiguities and Judgments of Certainty<a class="headerlink" href="#ambiguities-and-judgments-of-certainty" title="Link to this heading"></a></h2>
 <p>When you have one or more witnesses with an ambiguous attestation, you may
 wish to express which readings the witness(es) in question might have.
 The TEI Guidelines
@@ -219,11 +195,11 @@ describe a <code class="docutils literal notranslate"><span class="pre">witDetai
 <code class="docutils literal notranslate"><span class="pre">rdg</span></code> element, it includes a <code class="docutils literal notranslate"><span class="pre">&#64;wit</span></code> attribute (for the one or more
 witnesses it describes) and a <code class="docutils literal notranslate"><span class="pre">&#64;target</span></code> attribute (which can point to
 one or more readings these witnesses might have). For example:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lem&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6R1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6R2&quot;</span> <span class="na">wit=</span><span class="s">&quot;01* 02 424C 1739 1881 Jerome&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;W1/2&quot;</span> <span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span> <span class="na">target=</span><span class="s">&quot;#B10K3V9U6R1 #B10K3V9U6R2&quot;</span> <span class="na">wit=</span><span class="s">&quot;Ambrosiaster&quot;</span><span class="nt">&gt;&lt;certainty</span> <span class="na">target=</span><span class="s">&quot;1&quot;</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;certainty</span> <span class="na">target=</span><span class="s">&quot;2&quot;</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;/witDetail&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;lem&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6R1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6R2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;01* 02 424C 1739 1881 Jerome&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;W1/2&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K3V9U6R1 #B10K3V9U6R2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;Ambrosiaster&quot;</span><span class="nt">&gt;&lt;certainty</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;certainty</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;/witDetail&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
 </pre></div>
 </div>
@@ -255,11 +231,11 @@ start with <code class="docutils literal notranslate"><span class="pre">#</span>
 for readings within the same <code class="docutils literal notranslate"><span class="pre">app</span></code> element). So the following more
 compact format is also supported, even if it is not strictly valid TEI
 XML:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lem&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2&quot;</span> <span class="na">wit=</span><span class="s">&quot;01* 02 424C 1739 1881 Jerome&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;W1/2&quot;</span> <span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span> <span class="na">target=</span><span class="s">&quot;1 2&quot;</span> <span class="na">wit=</span><span class="s">&quot;Ambrosiaster&quot;</span><span class="nt">&gt;&lt;certainty</span> <span class="na">target=</span><span class="s">&quot;1&quot;</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;certainty</span> <span class="na">target=</span><span class="s">&quot;2&quot;</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;/witDetail&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K3V9U6&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;lem&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>παντας<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;01* 02 424C 1739 1881 Jerome&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;W1/2&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;1 2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;Ambrosiaster&quot;</span><span class="nt">&gt;&lt;certainty</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;certainty</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;0.5000&quot;</span><span class="nt">/&gt;&lt;/witDetail&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
 </pre></div>
 </div>
@@ -314,7 +290,7 @@ For NEXUS outputs with the default <code class="docutils literal notranslate"><s
 Since BEAST 2 supports tip likelihoods, <code class="docutils literal notranslate"><span class="pre">certainty</span></code> values are preserved in BEAST 2.7 XML outputs by default.</p>
 </section>
 <section id="lacunae-and-other-missing-data">
-<h2>Lacunae and Other Missing Data<a class="headerlink" href="#lacunae-and-other-missing-data" title="Permalink to this heading"></a></h2>
+<h2>Lacunae and Other Missing Data<a class="headerlink" href="#lacunae-and-other-missing-data" title="Link to this heading"></a></h2>
 <p>In the interest of accounting for all witnesses, a collation might
 include placeholder <code class="docutils literal notranslate"><span class="pre">rdg</span></code> or <code class="docutils literal notranslate"><span class="pre">witDetail</span></code> elements for witnesses that
 are entirely lacunose, illegible, or otherwise unavailable (e.g., due to
@@ -325,40 +301,40 @@ they correspond to missing data using the <code class="docutils literal notransl
 invoked through the CLI.</p>
 <p>Consider the following set of variation units:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cm">&lt;!-- a large transposition is encoded as an overlapping unit below --&gt;</span>
-<span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-26&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS P46 01 02 03 06 010 012 1175 vg copbo Ambrosiaster Jerome MariusVictorinus Pelagius&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;ref</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U18-22&quot;</span><span class="nt">&gt;</span>[B10K4V28U18-22]<span class="nt">&lt;/ref&gt;</span>
-        <span class="nt">&lt;ref</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U24-26&quot;</span><span class="nt">&gt;</span>[B10K4V28U24-26]<span class="nt">&lt;/ref&gt;</span>
-    <span class="nt">&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2&quot;</span> <span class="na">wit=</span><span class="s">&quot;18 35 88 424* 606 915 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;ref</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U24-26&quot;</span><span class="nt">&gt;</span>[B10K4V28U24-26]<span class="nt">&lt;/ref&gt;</span>
-        <span class="nt">&lt;ref</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U18-22&quot;</span><span class="nt">&gt;</span>[B10K4V28U18-22]<span class="nt">&lt;/ref&gt;</span>
-    <span class="nt">&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-24R3&quot;</span> <span class="na">n=</span><span class="s">&quot;3&quot;</span> <span class="na">wit=</span><span class="s">&quot;33 424C 1739 1881&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;ref</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U18-20&quot;</span><span class="nt">&gt;</span>[B10K4V28U18-20]<span class="nt">&lt;/ref&gt;</span>
-    <span class="nt">&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-24R4&quot;</span> <span class="na">n=</span><span class="s">&quot;4&quot;</span> <span class="na">wit=</span><span class="s">&quot;copsa&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;ref</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U22-24&quot;</span><span class="nt">&gt;</span>[B10K4V28U22-24]<span class="nt">&lt;/ref&gt;</span>
-    <span class="nt">&lt;/rdg&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;Z&quot;</span> <span class="na">type=</span><span class="s">&quot;lac&quot;</span> <span class="na">wit=</span><span class="s">&quot;04 06C1 06C2 syrp syrhmg&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-26&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS P46 01 02 03 06 010 012 1175 vg copbo Ambrosiaster Jerome MariusVictorinus Pelagius&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;ref</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U18-22&quot;</span><span class="nt">&gt;</span>[B10K4V28U18-22]<span class="nt">&lt;/ref&gt;</span>
+<span class="w">        </span><span class="nt">&lt;ref</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U24-26&quot;</span><span class="nt">&gt;</span>[B10K4V28U24-26]<span class="nt">&lt;/ref&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;18 35 88 424* 606 915 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;ref</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U24-26&quot;</span><span class="nt">&gt;</span>[B10K4V28U24-26]<span class="nt">&lt;/ref&gt;</span>
+<span class="w">        </span><span class="nt">&lt;ref</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U18-22&quot;</span><span class="nt">&gt;</span>[B10K4V28U18-22]<span class="nt">&lt;/ref&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-24R3&quot;</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;33 424C 1739 1881&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;ref</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U18-20&quot;</span><span class="nt">&gt;</span>[B10K4V28U18-20]<span class="nt">&lt;/ref&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-24R4&quot;</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;copsa&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;ref</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U22-24&quot;</span><span class="nt">&gt;</span>[B10K4V28U22-24]<span class="nt">&lt;/ref&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;Z&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;lac&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;04 06C1 06C2 syrp syrhmg&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
-<span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-22&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lem&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσιν<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS 01* 02 03C2 06C1 06C2 010 012 606 915 1175 1505 2495 copbo Jerome MariusVictorinus TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσιν<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1-f1&quot;</span> <span class="na">type=</span><span class="s">&quot;defective&quot;</span> <span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span> <span class="na">wit=</span><span class="s">&quot;06*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χιρσιν<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1-o1&quot;</span> <span class="na">type=</span><span class="s">&quot;orthographic&quot;</span> <span class="na">wit=</span><span class="s">&quot;1611&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;2&quot;</span> <span class="na">wit=</span><span class="s">&quot;P46 01C2 03* 18 35 88 424* 1910 copsa Ambrosiaster Chrysostom Pelagius&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσιν<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;W1/2-1&quot;</span> <span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span> <span class="na">target=</span><span class="s">&quot;1 2&quot;</span> <span class="na">cause=</span><span class="s">&quot;translation&quot;</span> <span class="na">xml:lang=</span><span class="s">&quot;syr&quot;</span> <span class="na">wit=</span><span class="s">&quot;syrp syrh&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ܒܐܝܕܘܗܝ<span class="nt">&lt;/w&gt;&lt;/witDetail&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;W1/2-2&quot;</span> <span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span> <span class="na">target=</span><span class="s">&quot;1 2&quot;</span> <span class="na">wit=</span><span class="s">&quot;vg&quot;</span><span class="nt">&gt;&lt;certainty</span> <span class="na">target=</span><span class="s">&quot;1&quot;</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;0.3333&quot;</span><span class="nt">/&gt;&lt;certainty</span> <span class="na">target=</span><span class="s">&quot;2&quot;</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;0.6667&quot;</span><span class="nt">/&gt;&lt;/witDetail&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;↑B10K4V28U18-24R3&quot;</span> <span class="na">type=</span><span class="s">&quot;overlap&quot;</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U18-24R3&quot;</span> <span class="na">wit=</span><span class="s">&quot;33 424C 1739 1881&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;Z&quot;</span> <span class="na">type=</span><span class="s">&quot;lac&quot;</span> <span class="na">wit=</span><span class="s">&quot;04 syrhmg&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K4V28U18-22&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;lem&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσιν<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS 01* 02 03C2 06C1 06C2 010 012 606 915 1175 1505 2495 copbo Jerome MariusVictorinus TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσιν<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1-f1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;defective&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;aural-confusion&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;06*&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χιρσιν<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1-o1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;orthographic&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;1611&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>ιδιαις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσι<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;P46 01C2 03* 18 35 88 424* 1910 copsa Ambrosiaster Chrysostom Pelagius&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ταις<span class="nt">&lt;/w&gt;&lt;w&gt;</span>χερσιν<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;W1/2-1&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;1 2&quot;</span><span class="w"> </span><span class="na">cause=</span><span class="s">&quot;translation&quot;</span><span class="w"> </span><span class="na">xml:lang=</span><span class="s">&quot;syr&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;syrp syrh&quot;</span><span class="nt">&gt;&lt;w&gt;</span>ܒܐܝܕܘܗܝ<span class="nt">&lt;/w&gt;&lt;/witDetail&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;W1/2-2&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;ambiguous&quot;</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;1 2&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;vg&quot;</span><span class="nt">&gt;&lt;certainty</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;0.3333&quot;</span><span class="nt">/&gt;&lt;certainty</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;0.6667&quot;</span><span class="nt">/&gt;&lt;/witDetail&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;↑B10K4V28U18-24R3&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;overlap&quot;</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U18-24R3&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;33 424C 1739 1881&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;Z&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;lac&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;04 syrhmg&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
 <span class="cm">&lt;!-- this unit should be ignored --&gt;</span>
-<span class="nt">&lt;app</span> <span class="na">xml:id=</span><span class="s">&quot;B10K4V28U24-26&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;lem&gt;&lt;w&gt;</span>το<span class="nt">&lt;/w&gt;&lt;w&gt;</span>αγαθον<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
-    <span class="nt">&lt;rdg</span> <span class="na">n=</span><span class="s">&quot;1&quot;</span> <span class="na">wit=</span><span class="s">&quot;UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>το<span class="nt">&lt;/w&gt;&lt;w&gt;</span>αγαθον<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;↑B10K4V28U18-24R4&quot;</span> <span class="na">type=</span><span class="s">&quot;overlap&quot;</span> <span class="na">target=</span><span class="s">&quot;#B10K4V28U18-24R4&quot;</span> <span class="na">wit=</span><span class="s">&quot;copsa&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;witDetail</span> <span class="na">n=</span><span class="s">&quot;Z&quot;</span> <span class="na">type=</span><span class="s">&quot;lac&quot;</span> <span class="na">wit=</span><span class="s">&quot;04 06C1 06C2 424C syrhmg&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K4V28U24-26&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;lem&gt;&lt;w&gt;</span>το<span class="nt">&lt;/w&gt;&lt;w&gt;</span>αγαθον<span class="nt">&lt;/w&gt;&lt;/lem&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdg</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copbo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia&quot;</span><span class="nt">&gt;&lt;w&gt;</span>το<span class="nt">&lt;/w&gt;&lt;w&gt;</span>αγαθον<span class="nt">&lt;/w&gt;&lt;/rdg&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;↑B10K4V28U18-24R4&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;overlap&quot;</span><span class="w"> </span><span class="na">target=</span><span class="s">&quot;#B10K4V28U18-24R4&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;copsa&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;witDetail</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;Z&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;lac&quot;</span><span class="w"> </span><span class="na">wit=</span><span class="s">&quot;04 06C1 06C2 424C syrhmg&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/app&gt;</span>
 </pre></div>
 </div>
@@ -378,7 +354,7 @@ arguments when invoking any conversion command through the CLI:</p>
 </div>
 </section>
 <section id="correctors-hands">
-<h2>Correctors’ Hands<a class="headerlink" href="#correctors-hands" title="Permalink to this heading"></a></h2>
+<h2>Correctors’ Hands<a class="headerlink" href="#correctors-hands" title="Link to this heading"></a></h2>
 <p>Collation data often distinguishes the first hand responsible for a
 manuscript from the hands of correctors who introduced changed readings
 either into the text or into the margin of the same manuscript. Some
@@ -399,15 +375,15 @@ correctors have their own <code class="docutils literal notranslate"><span class
 <code class="docutils literal notranslate"><span class="pre">listWit</span></code> element and that they have a <code class="docutils literal notranslate"><span class="pre">&#64;type</span></code> value of
 <code class="docutils literal notranslate"><span class="pre">corrector</span></code>. An example for the first hand and the first two
 correctors of Codex Bezae follows:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;witness</span> <span class="na">n=</span><span class="s">&quot;06&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;witness</span> <span class="na">type=</span><span class="s">&quot;corrector&quot;</span> <span class="na">n=</span><span class="s">&quot;06C1&quot;</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;witness</span> <span class="na">type=</span><span class="s">&quot;corrector&quot;</span> <span class="na">n=</span><span class="s">&quot;06C2&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;witness</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;06&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;witness</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;corrector&quot;</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;06C1&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;witness</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;corrector&quot;</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;06C2&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
 <p>Then, when you invoke any conversion command through the CLI, make sure that you include the <code class="docutils literal notranslate"><span class="pre">--fill-correctors</span></code> argument.</p>
 </section>
 <section id="excluding-fragmentary-witnesses">
-<h2>Excluding Fragmentary witnesses<a class="headerlink" href="#excluding-fragmentary-witnesses" title="Permalink to this heading"></a></h2>
+<h2>Excluding Fragmentary witnesses<a class="headerlink" href="#excluding-fragmentary-witnesses" title="Link to this heading"></a></h2>
 <p>Fragmentary witnesses with too many missing readings can introduce more noise than signal to a phylogenetic analysis, so it is often helpful to exclude such witnesses from the phylogenetic software inputs you generate.
 You can do this using the <code class="docutils literal notranslate"><span class="pre">--fragmentary-threshold</span></code> command-line option.
 With this option, you must specify a number between 0 and 1 that represents the proportion of extant readings that a witness must have in order to be included in the output.
@@ -417,7 +393,7 @@ A threshold specified with <code class="docutils literal notranslate"><span clas
 By comparison, <code class="docutils literal notranslate"><span class="pre">--fragmentary-threshold</span> <span class="pre">1.0</span></code> will exclude any witness that has even one missing reading.</p>
 </section>
 <section id="removing-first-hand-siglum-suffixes-and-merging-multiple-attestations">
-<h2>Removing First-hand Siglum Suffixes and Merging Multiple Attestations<a class="headerlink" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations" title="Permalink to this heading"></a></h2>
+<h2>Removing First-hand Siglum Suffixes and Merging Multiple Attestations<a class="headerlink" href="#removing-first-hand-siglum-suffixes-and-merging-multiple-attestations" title="Link to this heading"></a></h2>
 <p>In some instances, the siglum for a manuscript may have a first-hand
 suffix added to it when the manuscript was corrected at the unit in
 question. In New Testament textual criticism, the first hand in the
@@ -458,7 +434,7 @@ attestations, then you can do so via</p>
 <p>assuming that there are at most three multiple attestations in any unit.</p>
 </section>
 <section id="ascertainment-bias">
-<h2>Ascertainment Bias<a class="headerlink" href="#ascertainment-bias" title="Permalink to this heading"></a></h2>
+<h2>Ascertainment Bias<a class="headerlink" href="#ascertainment-bias" title="Link to this heading"></a></h2>
 <p>To facilitate accurate branch length estimation, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> includes all constant sites (i.e., variation units with only one substantive reading after trivial readings have been merged with their parents) in its output by default.
 (The only exception is output for the STEMMA program, which is parsimony-based and does not estimate branch lengths.)
 If you want only informative sites to be included in your output, then you can ensure that this happens by including the <code class="docutils literal notranslate"><span class="pre">--drop-constant</span></code> flag in your command.</p>
@@ -473,15 +449,15 @@ For example, <a class="reference external" href="http://www.iqtree.org/doc/Subst
 (Just keep in mind that your input must be free of constant sites for this to work!)</p>
 </section>
 <section id="tree-priors-clock-models-and-tip-dates">
-<h2>Tree Priors, Clock Models, and Tip Dates<a class="headerlink" href="#tree-priors-clock-models-and-tip-dates" title="Permalink to this heading"></a></h2>
+<h2>Tree Priors, Clock Models, and Tip Dates<a class="headerlink" href="#tree-priors-clock-models-and-tip-dates" title="Link to this heading"></a></h2>
 <p>For outputs for MrBayes (i.e., NEXUS files generated with the <code class="docutils literal notranslate"><span class="pre">--mrbayes</span></code> option) and BEAST (i.e., XML files following the conventions of BEAST 2.7),
 tree priors based on birth-death models and strict clock models are used by default.
 For MrBayes, the <code class="docutils literal notranslate"><span class="pre">clock:birthdeath</span></code> prior is used for the tree, and for BEAST, the <code class="docutils literal notranslate"><span class="pre">BDSKY</span></code> (Birth-Death Skyline model) prior is used.
 For both formats, the origin of the model is set based on the earliest possible date for the textual tradition, if it is known.
 In TEI XML, this is specified in a <code class="docutils literal notranslate"><span class="pre">bibl</span></code> element under the <code class="docutils literal notranslate"><span class="pre">sourceDesc</span></code> element, as in the following example:</p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;bibl&gt;</span>
-    <span class="nt">&lt;title</span> <span class="na">xml:lang=</span><span class="s">&quot;grc&quot;</span><span class="nt">&gt;</span>Πρὸς Ἐφεσίους<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;date</span> <span class="na">notBefore=</span><span class="s">&quot;50&quot;</span> <span class="na">notAfter=</span><span class="s">&quot;80&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;title</span><span class="w"> </span><span class="na">xml:lang=</span><span class="s">&quot;grc&quot;</span><span class="nt">&gt;</span>Πρὸς<span class="w"> </span>Ἐφεσίους<span class="nt">&lt;/title&gt;</span>
+<span class="w">    </span><span class="nt">&lt;date</span><span class="w"> </span><span class="na">notBefore=</span><span class="s">&quot;50&quot;</span><span class="w"> </span><span class="na">notAfter=</span><span class="s">&quot;80&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/bibl&gt;</span>
 </pre></div>
 </div>
@@ -504,11 +480,11 @@ This option is only supported for BEAST outputs.</p>
 These dates can be specified either exactly (in which case the tip date has a fixed distribution)
 or within a range (in which case the tip date has a uniform distribution of the witness’s date span),
 as in the following examples:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;witness</span> <span class="na">n=</span><span class="s">&quot;18&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;origDate</span> <span class="na">when=</span><span class="s">&quot;1364&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;witness</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;18&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;origDate</span><span class="w"> </span><span class="na">when=</span><span class="s">&quot;1364&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/witness&gt;</span>
-<span class="nt">&lt;witness</span> <span class="na">n=</span><span class="s">&quot;33&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;origDate</span> <span class="na">notBefore=</span><span class="s">&quot;800&quot;</span> <span class="na">notAfter=</span><span class="s">&quot;900&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;witness</span><span class="w"> </span><span class="na">n=</span><span class="s">&quot;33&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;origDate</span><span class="w"> </span><span class="na">notBefore=</span><span class="s">&quot;800&quot;</span><span class="w"> </span><span class="na">notAfter=</span><span class="s">&quot;900&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/witness&gt;</span>
 </pre></div>
 </div>
@@ -516,7 +492,7 @@ as in the following examples:</p>
 <p>Tip dates are also used by <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> in converting TEI XML to inputs to the STEMMA program, as STEMMA uses date ranges to constrain the relationships between witnesses that it will consider.</p>
 </section>
 <section id="root-frequencies-and-substitution-models">
-<h2>Root Frequencies and Substitution Models<a class="headerlink" href="#root-frequencies-and-substitution-models" title="Permalink to this heading"></a></h2>
+<h2>Root Frequencies and Substitution Models<a class="headerlink" href="#root-frequencies-and-substitution-models" title="Link to this heading"></a></h2>
 <p>Since BEAST’s XML input format supports phylogenetic analogues of intrinsic probabilities
 (i.e., the probability that a given reading is authorial)
 and transcriptional probability (i.e., the probability that one reading would give rise to another according to common mechanisms of scribal error or innovation)
@@ -524,39 +500,39 @@ in the forms of root frequencies at variation units
 and rate variables used in the substitution models of variation units,
 <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can map TEI XML encodings of these judgments to the appropriate elements in BEAST 2.7 XML.</p>
 <p>To encode intrinsic probabilities in a consistent and rigorous way, you can define discrete odds categories with fixed values as analytic tags using code like the following:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span> <span class="na">type=</span><span class="s">&quot;intrinsic&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingA&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>The current reading is absolutely more likely than the linked reading.<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;19&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingB&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>The current reading is strongly
-        more likely than the linked reading.<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingC&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>The current reading is more likely
-        than the linked reading.<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;1.5&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;RatingD&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>The current reading is slightly more likely than the linked reading.<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;1.1&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;EqualRating&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>The current reading and the linked reading
-        are equally likely.<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;certainty</span> <span class="na">locus=</span><span class="s">&quot;value&quot;</span> <span class="na">degree=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;intrinsic&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;RatingA&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>reading<span class="w"> </span>is<span class="w"> </span>absolutely<span class="w"> </span>more<span class="w"> </span>likely<span class="w"> </span>than<span class="w"> </span>the<span class="w"> </span>linked<span class="w"> </span>reading.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;19&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;RatingB&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>reading<span class="w"> </span>is<span class="w"> </span>strongly
+<span class="w">        </span>more<span class="w"> </span>likely<span class="w"> </span>than<span class="w"> </span>the<span class="w"> </span>linked<span class="w"> </span>reading.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;RatingC&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>reading<span class="w"> </span>is<span class="w"> </span>more<span class="w"> </span>likely
+<span class="w">        </span>than<span class="w"> </span>the<span class="w"> </span>linked<span class="w"> </span>reading.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;1.5&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;RatingD&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>reading<span class="w"> </span>is<span class="w"> </span>slightly<span class="w"> </span>more<span class="w"> </span>likely<span class="w"> </span>than<span class="w"> </span>the<span class="w"> </span>linked<span class="w"> </span>reading.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;1.1&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;EqualRating&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>reading<span class="w"> </span>and<span class="w"> </span>the<span class="w"> </span>linked<span class="w"> </span>reading
+<span class="w">        </span>are<span class="w"> </span>equally<span class="w"> </span>likely.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
 <span class="nt">&lt;/interpGrp&gt;</span>
 </pre></div>
 </div>
 <p>The specified odds values are defined in the <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> attributes of <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements.
 These categories can be used to define the relative probabilities of variant readings in a given variation unit under a <code class="docutils literal notranslate"><span class="pre">note</span></code> element in that unit using <code class="docutils literal notranslate"><span class="pre">relation</span></code> elements as follows:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span> <span class="na">type=</span><span class="s">&quot;intrinsic&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1&quot;</span> <span class="na">passive=</span><span class="s">&quot;2&quot;</span> <span class="na">ana=</span><span class="s">&quot;#RatingA&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#EqualRating&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#EqualRating&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;intrinsic&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#RatingA&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#EqualRating&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#EqualRating&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/listRelation&gt;</span>
 </pre></div>
 </div>
@@ -564,39 +540,39 @@ These categories can be used to define the relative probabilities of variant rea
 This results in root frequencies of 0.9048, 0.0476, and 0.0476.
 If no such set of relations is specified, then the root frequencies are set according to a uniform distribution by default.</p>
 <p>If you wish to incorporate transcriptional probabilities for different classes of scribal changes into your analysis, you may do so by defining analytic tags for rate parameters as follows:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span> <span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;Clar&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>Clarification of the text in terms of grammar,
-        style, or theology.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;AurConf&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>Aural confusion concerning letters or dipthongs
-        that came to have the same sound in later Greek.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;LingConf&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>Linguistic confusion concerning rules
-        of Greek grammar.<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;p&gt;&lt;i&gt;</span>Constructiones ad sensum<span class="nt">&lt;/i&gt;</span> that reflect
-        changes in grammatical rules over time
-        also fall under this rubric.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;VisErr&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>Visual error, such as paleographic confusion
-        of similar letters, haplography, dittography,
-        and other skips of the eye resulting in small omissions.
-        Rarer situations, like duplication or omission
-        of letters related to the presence or absence
-        of an ornamental capital at the start of a line,
-        also fall under this rubric.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;Harm&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>Harmonization, either to a parallel passage
-        or to the near context.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
-    <span class="nt">&lt;interp</span> <span class="na">xml:id=</span><span class="s">&quot;Byz&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;p&gt;</span>The text is brought into conformity
-        with the Byzantine text.<span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;/interp&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Clar&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>Clarification<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>text<span class="w"> </span>in<span class="w"> </span>terms<span class="w"> </span>of<span class="w"> </span>grammar,
+<span class="w">        </span>style,<span class="w"> </span>or<span class="w"> </span>theology.<span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;AurConf&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>Aural<span class="w"> </span>confusion<span class="w"> </span>concerning<span class="w"> </span>letters<span class="w"> </span>or<span class="w"> </span>dipthongs
+<span class="w">        </span>that<span class="w"> </span>came<span class="w"> </span>to<span class="w"> </span>have<span class="w"> </span>the<span class="w"> </span>same<span class="w"> </span>sound<span class="w"> </span>in<span class="w"> </span>later<span class="w"> </span>Greek.<span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;LingConf&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>Linguistic<span class="w"> </span>confusion<span class="w"> </span>concerning<span class="w"> </span>rules
+<span class="w">        </span>of<span class="w"> </span>Greek<span class="w"> </span>grammar.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;&lt;i&gt;</span>Constructiones<span class="w"> </span>ad<span class="w"> </span>sensum<span class="nt">&lt;/i&gt;</span><span class="w"> </span>that<span class="w"> </span>reflect
+<span class="w">        </span>changes<span class="w"> </span>in<span class="w"> </span>grammatical<span class="w"> </span>rules<span class="w"> </span>over<span class="w"> </span>time
+<span class="w">        </span>also<span class="w"> </span>fall<span class="w"> </span>under<span class="w"> </span>this<span class="w"> </span>rubric.<span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;VisErr&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>Visual<span class="w"> </span>error,<span class="w"> </span>such<span class="w"> </span>as<span class="w"> </span>paleographic<span class="w"> </span>confusion
+<span class="w">        </span>of<span class="w"> </span>similar<span class="w"> </span>letters,<span class="w"> </span>haplography,<span class="w"> </span>dittography,
+<span class="w">        </span>and<span class="w"> </span>other<span class="w"> </span>skips<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>eye<span class="w"> </span>resulting<span class="w"> </span>in<span class="w"> </span>small<span class="w"> </span>omissions.
+<span class="w">        </span>Rarer<span class="w"> </span>situations,<span class="w"> </span>like<span class="w"> </span>duplication<span class="w"> </span>or<span class="w"> </span>omission
+<span class="w">        </span>of<span class="w"> </span>letters<span class="w"> </span>related<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>presence<span class="w"> </span>or<span class="w"> </span>absence
+<span class="w">        </span>of<span class="w"> </span>an<span class="w"> </span>ornamental<span class="w"> </span>capital<span class="w"> </span>at<span class="w"> </span>the<span class="w"> </span>start<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>line,
+<span class="w">        </span>also<span class="w"> </span>fall<span class="w"> </span>under<span class="w"> </span>this<span class="w"> </span>rubric.<span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Harm&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>Harmonization,<span class="w"> </span>either<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>parallel<span class="w"> </span>passage
+<span class="w">        </span>or<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>near<span class="w"> </span>context.<span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Byz&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>text<span class="w"> </span>is<span class="w"> </span>brought<span class="w"> </span>into<span class="w"> </span>conformity
+<span class="w">        </span>with<span class="w"> </span>the<span class="w"> </span>Byzantine<span class="w"> </span>text.<span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
 <span class="nt">&lt;/interpGrp&gt;</span>
 </pre></div>
 </div>
@@ -605,13 +581,13 @@ as in the definitions of the intrinsic odds categories above.
 Any classes without fixed rates will have their rates estimated as part of the phylogenetic model.
 Transitions between different readings in a given variation unit can then be categorized with one or more of these tags in a <code class="docutils literal notranslate"><span class="pre">note</span></code> element in that unit
 (parallel to the <code class="docutils literal notranslate"><span class="pre">listRelation</span></code> used to encode the intrinsic probabilities of the readings) as follows:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span> <span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1 2 3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Harm&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1&quot;</span> <span class="na">passive=</span><span class="s">&quot;2 3 4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;1&quot;</span> <span class="na">ana=</span><span class="s">&quot;#VisErr&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar #Harm&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1 2 4&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Byz&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1 2 3&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Harm&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;2 3 4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#VisErr&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Clar #Harm&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1 2 4&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Byz&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/listRelation&gt;</span>
 </pre></div>
 </div>
@@ -630,20 +606,20 @@ Skips of the eye may be empirically more common for earlier scribes than for lat
 Certain paleographic confusions may only be possible for earlier scripts or later ones.
 Specific orthodox corruptions of sacred texts may have only become plausible after certain theological conflicts or developments had taken place to inspire them.
 If you wish to encode such transcriptional possibilities as time-dependent, you can do so by adding <code class="docutils literal notranslate"><span class="pre">&#64;notBefore</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;notAfter</span></code> attributes to the corresponding <code class="docutils literal notranslate"><span class="pre">relation</span></code> element:</p>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span> <span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1 2 3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Harm&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1&quot;</span> <span class="na">passive=</span><span class="s">&quot;2 3 4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;1&quot;</span> <span class="na">ana=</span><span class="s">&quot;#VisErr&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;2&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar #Harm&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;3&quot;</span> <span class="na">passive=</span><span class="s">&quot;4&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;relation</span> <span class="na">active=</span><span class="s">&quot;1 2 4&quot;</span> <span class="na">passive=</span><span class="s">&quot;3&quot;</span> <span class="na">ana=</span><span class="s">&quot;#Byz&quot;</span> <span class="na">notBefore=</span><span class="s">&quot;500&quot;</span><span class="nt">/&gt;</span>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;listRelation</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;transcriptional&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1 2 3&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Harm&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;2 3 4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#VisErr&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Clar #Harm&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Clar&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;relation</span><span class="w"> </span><span class="na">active=</span><span class="s">&quot;1 2 4&quot;</span><span class="w"> </span><span class="na">passive=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Byz&quot;</span><span class="w"> </span><span class="na">notBefore=</span><span class="s">&quot;500&quot;</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/listRelation&gt;</span>
 </pre></div>
 </div>
 <p>If you tag certain transcriptional <code class="docutils literal notranslate"><span class="pre">relation</span></code> elements in this way, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will map the <code class="docutils literal notranslate"><span class="pre">listRelation</span></code> to an <code class="docutils literal notranslate"><span class="pre">EpochSubstitutionModel</span></code> instance consisting of multiple substitution models that apply at the corresponding points in time.</p>
 </section>
 <section id="logging-for-ancestral-state-reconstructions">
-<h2>Logging for Ancestral State Reconstructions<a class="headerlink" href="#logging-for-ancestral-state-reconstructions" title="Permalink to this heading"></a></h2>
+<h2>Logging for Ancestral State Reconstructions<a class="headerlink" href="#logging-for-ancestral-state-reconstructions" title="Link to this heading"></a></h2>
 <p>BEAST 2 offers support for the logging of the reconstructed states (i.e., variant readings) for each site (i.e., variation unit) at varying levels of detail.
 The <code class="docutils literal notranslate"><span class="pre">AncestralStateLogger</span></code> class (part of the <code class="docutils literal notranslate"><span class="pre">BEASTLabs</span></code> package) reconstructs the state of a particular clade (which, for our purposes, is chosen to be the root of the tree) in each tree sampled during the analysis, resulting in a relatively compact output.
 The <code class="docutils literal notranslate"><span class="pre">AncestralSequenceLogger</span></code> class (part of the <code class="docutils literal notranslate"><span class="pre">BEAST_CLASSIC</span></code> package) reconstructs the states of all hypothetical ancestors in each tree sampled during the analysis, which results in a more comprehensive, but also much larger output.
@@ -651,14 +627,14 @@ In writing to BEAST 2.7 XML files, <code class="docutils literal notranslate"><s
 The default option, <code class="docutils literal notranslate"><span class="pre">state</span></code>, will include an <code class="docutils literal notranslate"><span class="pre">AncestralStateLogger</span></code> element in the XML file, while <code class="docutils literal notranslate"><span class="pre">sequence</span></code> will include an <code class="docutils literal notranslate"><span class="pre">AncestralSequenceLogger</span></code> element, and <code class="docutils literal notranslate"><span class="pre">none</span></code> will not include any logging elements for ancestral states.</p>
 </section>
 <section id="overriding-or-supplying-dates-from-a-csv-file">
-<h2>Overriding or Supplying Dates from a CSV file<a class="headerlink" href="#overriding-or-supplying-dates-from-a-csv-file" title="Permalink to this heading"></a></h2>
+<h2>Overriding or Supplying Dates from a CSV file<a class="headerlink" href="#overriding-or-supplying-dates-from-a-csv-file" title="Link to this heading"></a></h2>
 <p>You can also specify date ranges for some witnesses in a separate CSV file.
 For the sake of completeness, it is recommended that you specify date ranges for witnesses in your TEI XML collation, but you may have pulled your collation data and witness date ranges from different sources, or you might want to overwrite existing date ranges in the collation with updated values.
 You can specify a path to the CSV file containing witness IDs and their date ranges using the <code class="docutils literal notranslate"><span class="pre">--dates-file</span></code> command-line option.
 The CSV file should not have any header rows, and every row should be formatted as <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;,min,max</span></code>, where the first column contains a string (encoded as such by being surrounded by double quotes) corresponding to the witness ID and the other two columns are either empty (if one or both ends of the date range are unknown) or integers corresponding to years (where negative integers are assumed to refer to dates BCE).</p>
 </section>
 <section id="supported-output-formats-and-options">
-<h2>Supported Output Formats and Options<a class="headerlink" href="#supported-output-formats-and-options" title="Permalink to this heading"></a></h2>
+<h2>Supported Output Formats and Options<a class="headerlink" href="#supported-output-formats-and-options" title="Link to this heading"></a></h2>
 <p>You can specify a preferred output format for the conversion explicitly with the <code class="docutils literal notranslate"><span class="pre">--format</span></code> flag.
 Supported options include <code class="docutils literal notranslate"><span class="pre">nexus</span></code>, <code class="docutils literal notranslate"><span class="pre">hennig86</span></code>, <code class="docutils literal notranslate"><span class="pre">phylip</span></code> (note that the relaxed version of this format used by RAxML, which has better support for multi-state characters, is used rather than the strict version), <code class="docutils literal notranslate"><span class="pre">fasta</span></code>, <code class="docutils literal notranslate"><span class="pre">xml</span></code> (specifically, the flavor of XML read by BEAST 2.7), <code class="docutils literal notranslate"><span class="pre">csv</span></code>, <code class="docutils literal notranslate"><span class="pre">tsv</span></code>, <code class="docutils literal notranslate"><span class="pre">excel</span></code> (note that only <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code> format is supported), and <code class="docutils literal notranslate"><span class="pre">stemma</span></code>.
 If you do not supply a <code class="docutils literal notranslate"><span class="pre">--format</span></code> argument, then <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will attempt to infer the correct format from the file extension of the output file name.</p>
@@ -696,7 +672,7 @@ You can also write a pairwise distance or similarity matrix to a PHYLIP (.phy, .
 The <code class="docutils literal notranslate"><span class="pre">--proportion</span></code> and <code class="docutils literal notranslate"><span class="pre">--show-ext</span></code> flags are supported for PHYLIP matrix outputs.</p>
 </section>
 <section id="other-options">
-<h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this heading"></a></h2>
+<h2>Other Options<a class="headerlink" href="#other-options" title="Link to this heading"></a></h2>
 <p>If you wish to include status messages for the purposes of measuring
 performance or validating your collation, you can include the
 <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> flag when you invoke any conversion command through
