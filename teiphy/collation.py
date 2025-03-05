@@ -2,12 +2,12 @@
 
 from enum import Enum
 from typing import List, Union
-from pathlib import Path
+from pathlib import os, Path
 from datetime import datetime  # for calculating the current year (for dating and tree height purposes)
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
 from lxml import etree as et  # for reading TEI XML inputs
-import numpy as np  # for collation matrix outputs
+import numpy as np  # for random number sampling and collation matrix outputs
 import pandas as pd  # for writing to DataFrames, CSV, Excel, etc.
 from slugify import slugify  # for converting Unicode text from readings to ASCII for NEXUS
 from jinja2 import Environment, PackageLoader, select_autoescape  # for filling output XML templates
@@ -36,6 +36,20 @@ class ClockModel(str, Enum):
     local = "local"
 
 
+class AncestralLogger(str, Enum):
+    state = "state"
+    sequence = "sequence"
+    none = "none"
+
+
+class TableType(str, Enum):
+    matrix = "matrix"
+    distance = "distance"
+    similarity = "similarity"
+    nexus = "nexus"
+    long = "long"
+
+
 class Collation:
     """Base class for storing TEI XML collation data internally.
 
@@ -46,13 +60,13 @@ class Collation:
         trivial_reading_types: A set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
         missing_reading_types: A set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
         fill_corrector_lacunae: A boolean flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+        fragmentary_threshold: A float representing the proportion such that all witnesses extant at fewer than this proportion of variation units are filtered out of the collation.
         witnesses: A list of Witness instances contained in this Collation.
         witness_index_by_id: A dictionary mapping base witness ID strings to their int indices in the witnesses list.
         variation_units: A list of VariationUnit instances contained in this Collation.
         readings_by_witness: A dictionary mapping base witness ID strings to lists of reading support coefficients for all units (with at least two substantive readings).
         substantive_variation_unit_ids: A list of ID strings for variation units with two or more substantive readings.
         substantive_variation_unit_reading_tuples: A list of (variation unit ID, reading ID) tuples for substantive readings.
-        origin_date_range: A list containing lower and upper bounds on the origin date of the collated work.
         verbose: A boolean flag indicating whether or not to print timing and debugging details for the user.
     """
 
@@ -63,7 +77,8 @@ class Collation:
         trivial_reading_types: List[str] = [],
         missing_reading_types: List[str] = [],
         fill_corrector_lacunae: bool = False,
-        origin_date_range: List[int] = [],
+        fragmentary_threshold: float = None,
+        dates_file: Union[Path, str] = None,
         verbose: bool = False,
     ):
         """Constructs a new Collation instance with the given settings.
@@ -74,12 +89,15 @@ class Collation:
             trivial_reading_types: An optional set of reading types (e.g., "reconstructed", "defective", "orthographic", "subreading") whose readings should be collapsed under the previous substantive reading.
             missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
             fill_corrector_lacunae: An optional flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
+            fragmentary_threshold: An optional float representing the proportion such that all witnesses extant at fewer than this proportion of variation units are filtered out of the collation.
+            dates_file: An optional path to a CSV file containing witness IDs, minimum dates, and maximum dates. If specified, then for all witnesses in the first column, any existing date ranges for them in the TEI XML collation will be ignored.
             verbose: An optional flag indicating whether or not to print timing and debugging details for the user.
         """
         self.manuscript_suffixes = manuscript_suffixes
         self.trivial_reading_types = set(trivial_reading_types)
         self.missing_reading_types = set(missing_reading_types)
         self.fill_corrector_lacunae = fill_corrector_lacunae
+        self.fragmentary_threshold = fragmentary_threshold
         self.verbose = verbose
         self.witnesses = []
         self.witness_index_by_id = {}
@@ -100,21 +118,29 @@ class Collation:
         self.parse_origin_date_range(xml)
         self.parse_list_wit(xml)
         self.validate_wits(xml)
-        self.update_origin_date_range_from_witness_date_ranges()
-        if self.origin_date_range[0] is not None:
+        # If a dates file was specified, then update the witness date ranges manually:
+        if dates_file is not None:
+            self.update_witness_date_ranges_from_dates_file(dates_file)
+        # If the upper bound on a work's date of origin is not defined, then attempt to assign it an upper bound based on the witness dates;
+        # otherwise, attempt to assign lower bounds to witness dates based on it:
+        if self.origin_date_range[1] is None:
+            self.update_origin_date_range_from_witness_date_ranges()
+        else:
             self.update_witness_date_ranges_from_origin_date_range()
         self.parse_intrinsic_odds(xml)
         self.parse_transcriptional_rates(xml)
         self.parse_apps(xml)
         self.validate_intrinsic_relations()
         self.parse_readings_by_witness()
+        # If a threshold of readings for fragmentary witnesses is specified, then filter the witness list using the dictionary mapping witness IDs to readings:
+        if self.fragmentary_threshold is not None:
+            self.filter_fragmentary_witnesses(xml)
         t1 = time.time()
         if self.verbose:
             print("Total time to initialize collation: %0.4fs." % (t1 - t0))
 
     def parse_origin_date_range(self, xml: et.ElementTree):
         """Given an XML tree for a collation, populates this Collation's list of origin date bounds.
-        If no bounds are specified, then the current year is set to the default upper bound.
 
         Args:
             xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
@@ -122,7 +148,7 @@ class Collation:
         if self.verbose:
             print("Parsing origin date range...")
         t0 = time.time()
-        self.origin_date_range = [None, datetime.now().year]
+        self.origin_date_range = [None, None]
         for date in xml.xpath(
             "//tei:sourceDesc//tei:bibl//tei:date|//tei:sourceDesc//tei:biblStruct//tei:date|//tei:sourceDesc//tei:biblFull//tei:date",
             namespaces={"tei": tei_ns},
@@ -269,17 +295,60 @@ class Collation:
             print("Finished witness validation in %0.4fs." % (t1 - t0))
         return
 
+    def update_witness_date_ranges_from_dates_file(self, dates_file: Union[Path, str]):
+        """Given a CSV-formatted dates file, update the date ranges of all witnesses whose IDs are in the first column of the dates file
+        (overwriting existing date ranges if necessary).
+        """
+        if self.verbose:
+            print("Updating witness dates from file %s..." % (str(dates_file)))
+        t0 = time.time()
+        dates_df = pd.read_csv(dates_file, index_col=0, names=["id", "min", "max"])
+        for witness in self.witnesses:
+            wit_id = witness.id
+            if wit_id in dates_df.index:
+                # For every witness in the list whose ID is specified in the dates file,
+                # update their date ranges (as long as the date ranges in the file are are well-formed):
+                min_date = int(dates_df.loc[wit_id]["min"]) if not np.isnan(dates_df.loc[wit_id]["min"]) else None
+                max_date = (
+                    int(dates_df.loc[wit_id]["max"])
+                    if not np.isnan(dates_df.loc[wit_id]["max"])
+                    else datetime.now().year
+                )
+                print(min_date, max_date)
+                if min_date is not None and max_date is not None and min_date > max_date:
+                    raise ParsingException(
+                        "In dates file %s, for witness ID %s, the minimum date %d is greater than the maximum date %d."
+                        % (str(dates_file), wit_id, min_date, max_date)
+                    )
+                witness.date_range = [min_date, max_date]
+        t1 = time.time()
+        if self.verbose:
+            print("Finished witness date range updates in %0.4fs." % (t1 - t0))
+        return
+
     def update_origin_date_range_from_witness_date_ranges(self):
         """Conditionally updates the upper bound on the date of origin of the work represented by this Collation
-        based on the upper bounds on the witnesses' dates.
-        Since all witness dates have a default upper bound on the current year, they are assumed to be defined.
+        based on the bounds on the witnesses' dates.
+        If none of the witnesses have bounds on their dates, then nothing is done.
+        This method is only invoked if the work's date of origin does not already have its upper bound defined.
         """
         if self.verbose:
             print("Updating upper bound on origin date using witness dates...")
         t0 = time.time()
-        # Set the origin date to the earliest witness date upper bound:
-        min_witness_date_upper_bound = min([wit.date_range[1] for wit in self.witnesses])
-        self.origin_date_range[1] = min(self.origin_date_range[1], min_witness_date_upper_bound)
+        # Set the origin date to the earliest witness date:
+        witness_date_lower_bounds = [wit.date_range[0] for wit in self.witnesses if wit.date_range[0] is not None]
+        witness_date_upper_bounds = [wit.date_range[1] for wit in self.witnesses if wit.date_range[1] is not None]
+        min_witness_date = (
+            min(witness_date_lower_bounds + witness_date_upper_bounds)
+            if len(witness_date_lower_bounds + witness_date_upper_bounds) > 0
+            else None
+        )
+        if min_witness_date is not None:
+            self.origin_date_range[1] = (
+                min(self.origin_date_range[1], min_witness_date)
+                if self.origin_date_range[1] is not None
+                else min_witness_date
+            )
         t1 = time.time()
         if self.verbose:
             print("Finished updating upper bound on origin date in %0.4fs." % (t1 - t0))
@@ -287,19 +356,23 @@ class Collation:
 
     def update_witness_date_ranges_from_origin_date_range(self):
         """Attempts to update the lower bounds on the witnesses' dates of origin of the work represented by this Collation
-        using the lower bound on the date of origin of the work represented by this Collation.
-        This method is only invoked if the collated work has a lower bound on its date of origin specified.
+        using the upper bound on the date of origin of the work represented by this Collation.
+        This method is only invoked if the upper bound on the work's date of origin was not already defined
+        (i.e., if update_origin_date_range_from_witness_date_ranges was not invoked).
         """
         if self.verbose:
             print("Updating lower bounds on witness dates using origin date...")
         t0 = time.time()
-        # Set the origin date to the earliest witness date upper bound:
+        # Proceed for every witness:
         for i, wit in enumerate(self.witnesses):
+            # Ensure that the lower bound on this witness's date is no earlier than the upper bound on the date of the work's origin:
             wit.date_range[0] = (
-                max(wit.date_range[0], self.origin_date_range[0])
+                max(wit.date_range[0], self.origin_date_range[1])
                 if wit.date_range[0] is not None
-                else self.origin_date_range[0]
+                else self.origin_date_range[1]
             )
+            # Then ensure that the upper bound on this witness's date is no earlier than its lower bound, in case we updated it:
+            wit.date_range[1] = max(wit.date_range[0], wit.date_range[1])
         t1 = time.time()
         if self.verbose:
             print("Finished updating lower bounds on witness dates in %0.4fs." % (t1 - t0))
@@ -561,6 +634,43 @@ class Collation:
             )
         return
 
+    def filter_fragmentary_witnesses(self, xml):
+        """Filters the original witness list and readings by witness dictionary to exclude witnesses whose proportions of extant passages fall below the fragmentary readings threshold."""
+        if self.verbose:
+            print(
+                "Filtering fragmentary witnesses (extant in < %f of all variation units) out of internal witness list and dictionary of witness readings..."
+                % self.fragmentary_threshold
+            )
+        t0 = time.time()
+        fragmentary_witness_set = set()
+        # Proceed for each witness in order:
+        for wit in self.witnesses:
+            wit_id = wit.id
+            # We count the number of variation units at which this witness has an extant (i.e., non-missing) reading:
+            extant_reading_count = 0
+            total_reading_count = len(self.readings_by_witness[wit.id])
+            # Proceed through all reading support lists:
+            for rdg_support in self.readings_by_witness[wit_id]:
+                # If the current reading support list is not all zeroes, then increment this witness's count of extant readings:
+                if sum(rdg_support) != 0:
+                    extant_reading_count += 1
+            # If the proportion of extant readings falls below the threshold, then add this witness to the list of fragmentary witnesses:
+            if extant_reading_count / total_reading_count < self.fragmentary_threshold:
+                fragmentary_witness_set.add(wit_id)
+        # Then filter the witness list to exclude the fragmentary witnesses:
+        filtered_witnesses = [wit for wit in self.witnesses if wit.id not in fragmentary_witness_set]
+        self.witnesses = filtered_witnesses
+        # Then remove the entries for the fragmentary witnesses from the witnesses-to-readings dictionary:
+        for wit_id in fragmentary_witness_set:
+            del self.readings_by_witness[wit_id]
+        t1 = time.time()
+        if self.verbose:
+            print(
+                "Filtered out %d fragmentary witness(es) (%s) in %0.4fs."
+                % (len(fragmentary_witness_set), str(list(fragmentary_witness_set)), t1 - t0)
+            )
+        return
+
     def get_nexus_symbols(self):
         """Returns a list of one-character symbols needed to represent the states of all substantive readings in NEXUS.
 
@@ -569,9 +679,11 @@ class Collation:
         Returns:
             A list of individual characters representing states in readings.
         """
-        # NOTE: PAUP* allows up to 64 symbols, but IQTREE does not appear to support symbols outside of 0-9 and a-z, and base symbols must be case-insensitive,
-        # so we will settle for a maximum of 32 singleton symbols for now
-        possible_symbols = list(string.digits) + list(string.ascii_lowercase)[:22]
+        # NOTE: IQTREE does not appear to support symbols outside of 0-9 and a-z, and its base symbols must be case-insensitive.
+        # The official version of MrBayes is likewise limited to 32 symbols.
+        # But PAUP* allows up to 64 symbols, and Andrew Edmondson's fork of MrBayes does, as well.
+        # So this method will support symbols from 0-9, a-z, and A-Z (for a total of 62 states)
+        possible_symbols = list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
@@ -598,7 +710,7 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output NEXUS file; the file type should be .nex, .nexus, or .nxs.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
             char_state_labels: An optional flag indicating whether or not to include the CharStateLabels block.
             frequency: An optional flag indicating whether to use the StatesFormat=Frequency setting
                 instead of the StatesFormat=StatesPresent setting
@@ -635,6 +747,8 @@ class Collation:
         charlabels = [slugify(vu_id, lowercase=False, separator='_') for vu_id in substantive_variation_unit_ids]
         missing_symbol = '?'
         symbols = self.get_nexus_symbols()
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the NEXUS header:
             f.write("#NEXUS\n\n")
@@ -780,11 +894,19 @@ class Collation:
                 # Set the priors on the tree age depending on the date range for the origin of the collated work:
                 f.write("\n")
                 if self.origin_date_range[0] is not None:
-                    min_tree_age = datetime.now().year - self.origin_date_range[1]
+                    min_tree_age = (
+                        datetime.now().year - self.origin_date_range[1]
+                        if self.origin_date_range[1] is not None
+                        else 0.0
+                    )
                     max_tree_age = datetime.now().year - self.origin_date_range[0]
                     f.write("\tprset treeagepr = uniform(%d,%d);\n" % (min_tree_age, max_tree_age))
                 else:
-                    min_tree_age = datetime.now().year - self.origin_date_range[1]
+                    min_tree_age = (
+                        datetime.now().year - self.origin_date_range[1]
+                        if self.origin_date_range[1] is not None
+                        else 0.0
+                    )
                     f.write("\tprset treeagepr = offsetgamma(%d,1.0,1.0);\n" % (min_tree_age))
                 # Then calibrate the witness ages:
                 f.write("\n")
@@ -871,7 +993,9 @@ class Collation:
         )  # keep track of the longest taxon label for tabular alignment purposes
         missing_symbol = '?'
         symbols = self.get_hennig86_symbols()
-        with open(file_addr, "w", encoding="utf-8") as f:
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        with open(file_addr, "w", encoding="ascii") as f:
             # Start with the nstates header:
             f.write("nstates %d;\n" % len(symbols))
             # Then begin the xread block:
@@ -958,6 +1082,8 @@ class Collation:
         )  # keep track of the longest taxon label for tabular alignment purposes
         missing_symbol = '?'
         symbols = self.get_phylip_symbols()
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="ascii") as f:
             # Write the dimensions:
             f.write("%d %d\n" % (ntax, nchar))
@@ -1040,6 +1166,8 @@ class Collation:
         )  # keep track of the longest taxon label for tabular alignment purposes
         missing_symbol = '?'
         symbols = self.get_fasta_symbols()
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="ascii") as f:
             # Now write the matrix:
             for i, wit in enumerate(self.witnesses):
@@ -1075,8 +1203,8 @@ class Collation:
             A list of individual characters representing states in readings.
         """
         possible_symbols = (
-            list(string.digits) + list(string.ascii_lowercase)[:22]
-        )  # NOTE: for BEAST, any number of states should theoretically be permissible, but since code maps are required for some reason, we will limit the number of symbols to 32 for now
+            list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
+        )  # NOTE: for BEAST, any number of states should theoretically be permissible, but since code maps are required for some reason, we will limit the number of symbols to 62 for now
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
@@ -1087,6 +1215,68 @@ class Collation:
             nsymbols = max(nsymbols, len(rdg_support))
         beast_symbols = possible_symbols[:nsymbols]
         return beast_symbols
+
+    def get_tip_date_range(self):
+        """Gets the minimum and maximum dates attested among the witnesses.
+        Also checks if the witness with the latest possible date has a fixed date
+        (i.e, if the lower and upper bounds for its date are the same)
+        and issues a warning if not, as this will cause unusual behavior in BEAST 2.
+
+        Returns:
+            A tuple containing the earliest and latest possible tip dates.
+        """
+        earliest_date = None
+        earliest_wit = None
+        latest_date = None
+        latest_wit = None
+        for wit in self.witnesses:
+            wit_id = wit.id
+            date_range = wit.date_range
+            if date_range[0] is not None:
+                if earliest_date is not None:
+                    earliest_wit = wit if date_range[0] < earliest_date else earliest_wit
+                    earliest_date = min(date_range[0], earliest_date)
+                else:
+                    earliest_wit = wit
+                    earliest_date = date_range[0]
+            if date_range[1] is not None:
+                if latest_date is not None:
+                    latest_wit = wit if date_range[1] > latest_date else latest_wit
+                    latest_date = max(date_range[1], latest_date)
+                else:
+                    latest_wit = wit
+                    latest_date = date_range[1]
+        if latest_wit.date_range[0] is None or latest_wit.date_range[0] != latest_wit.date_range[1]:
+            print(
+                "WARNING: the latest witness, %s, has a variable date range; this will result in problems with time-dependent substitution models and misalignment of trees in BEAST DensiTree outputs! Please ensure that witness %s has a fixed date."
+                % (latest_wit.id, latest_wit.id)
+            )
+        return (earliest_date, latest_date)
+
+    def get_beast_origin_span(self, tip_date_range):
+        """Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
+        The upper bound on the height of the tree is the difference between the latest tip date
+        and the lower bound on the date of the original work, if both are defined;
+        otherwise, it is left undefined.
+        The lower bound on the height of the tree is the difference between the latest tip date
+        and the upper bound on the date of the original work, if both are defined;
+        otherwise, it is the difference between the earliest tip date and the latest, if both are defined.
+
+        Args:
+            tip_date_range: A tuple containing the earliest and latest possible tip dates.
+
+        Returns:
+            A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.
+        """
+        origin_span = [0, None]
+        # If the upper bound on the date of the work's composition is defined, then set the lower bound on the height of the origin using it and the latest tip date
+        # (note that if it had to be defined in terms of witness date lower bounds, then this would have happened already):
+        if self.origin_date_range[1] is not None:
+            origin_span[0] = tip_date_range[1] - self.origin_date_range[1]
+        # If the lower bound on the date of the work's composition is defined, then set the upper bound on the height of the origin using it and the latest tip date:
+        if self.origin_date_range[0] is not None:
+            origin_span[1] = tip_date_range[1] - self.origin_date_range[0]
+        return tuple(origin_span)
 
     def get_beast_date_map(self, taxlabels):
         """Returns a string representing witness-to-date mappings in BEAST format.
@@ -1115,49 +1305,6 @@ class Collation:
         # Then output the full date map string:
         date_map = ",".join(calibrate_strings)
         return date_map
-
-    def get_beast_origin_span(self):
-        """Returns a tuple containing the lower and upper bounds for the height of the origin of the Birth-Death Skyline model.
-        The upper bound on the height of the tree is the difference between the current date
-        and the lower bound on the date of the original work, if both are defined;
-        otherwise, it is left undefined.
-        The lower bound on the height of the tree is the difference between the latest lower bound on a witness's date
-        and the upper bound on the date of the original work, if both are defined;
-        otherwise, it is zero.
-
-        Returns:
-            A tuple containing lower and upper bounds on the origin height for the Birth-Death Skyline model.
-        """
-        origin_span = [datetime.now().year - self.origin_date_range[1], None]
-        # If the lower bound on the original work is defined, then update the upper bound on the height of the origin:
-        if self.origin_date_range[0] is not None:
-            origin_span[1] = datetime.now().year - self.origin_date_range[0]
-        return tuple(origin_span)
-
-    def validate_latest_tip(self):
-        """Checks if the witness with the latest possible date has a fixed date
-        (i.e, if the lower and upper bounds for its date are the same).
-        If this is not true, then a warning is issued.
-        """
-        latest_date = None
-        latest_wit = None
-        for i, wit in enumerate(self.witnesses):
-            wit_id = wit.id
-            date_range = wit.date_range
-            if date_range[1] is not None:
-                if latest_date is not None:
-                    if date_range[1] > latest_date:
-                        latest_date = date_range[1]
-                        latest_wit = wit
-                else:
-                    latest_date = date_range[1]
-                    latest_wit = wit
-        if latest_wit.date_range[0] is None or latest_wit.date_range[0] != latest_wit.date_range[1]:
-            print(
-                "WARNING: the latest witness, %s, has a variable date range; this may result in precisely dated witness being misaligned in the trees output by BEAST."
-                % latest_wit.id
-            )
-        return
 
     def get_beast_code_map_for_unit(self, symbols, missing_symbol, vu_ind):
         """Returns a string containing state/reading code mappings in BEAST format using the given single-state and missing state symbols for the character/variation unit at the given index.
@@ -1291,7 +1438,12 @@ class Collation:
         return root_frequencies_string
 
     def to_beast(
-        self, file_addr: Union[Path, str], drop_constant: bool = False, clock_model: ClockModel = ClockModel.strict
+        self,
+        file_addr: Union[Path, str],
+        drop_constant: bool = False,
+        clock_model: ClockModel = ClockModel.strict,
+        ancestral_logger: AncestralLogger = AncestralLogger.state,
+        seed: int = None,
     ):
         """Writes this Collation to a file in BEAST format with the given address.
 
@@ -1299,6 +1451,8 @@ class Collation:
             file_addr: A string representing the path to an output file.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
             clock_model: A ClockModel option indicating which clock model to use.
+            ancestral_logger: An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
+            seed: A seed for random number generation (for setting initial values of unspecified transcriptional rates).
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment:
         substantive_variation_unit_ids = self.variation_unit_ids
@@ -1314,9 +1468,9 @@ class Collation:
         taxlabels = [slugify(wit.id, lowercase=False, separator='_') for wit in self.witnesses]
         missing_symbol = '?'
         symbols = self.get_beast_symbols()
+        tip_date_range = self.get_tip_date_range()
+        origin_span = self.get_beast_origin_span(tip_date_range)
         date_map = self.get_beast_date_map(taxlabels)
-        origin_span = self.get_beast_origin_span()
-        self.validate_latest_tip()
         # Then populate the necessary objects for the BEAST XML Jinja template:
         witness_objects = []
         variation_unit_objects = []
@@ -1402,45 +1556,89 @@ class Collation:
             # Then populate this unit's equilibrium frequency string and its root frequency string:
             variation_unit_object["equilibrium_frequencies"] = self.get_beast_equilibrium_frequencies_for_unit(j)
             variation_unit_object["root_frequencies"] = self.get_beast_root_frequencies_for_unit(j)
-            # Then populate its transition rate matrix off-diagonal entries:
-            rate_objects = []
-            if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
-                # If this is a singleton site, then use an arbitrary 2x2 rate matrix:
-                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
-                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
-            else:
-                # Otherwise, proceed for every pair of readings in this unit:
-                for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
-                    for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
-                        # Skip diagonal elements:
-                        if k_1 == k_2:
-                            continue
-                        # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
-                        if (rdg_id_1, rdg_id_2) not in vu.transcriptional_relations:
+            # Then populate a dictionary mapping epoch height ranges to lists of off-diagonal entries for substitution models:
+            rate_objects_by_epoch_height_range = {}
+            epoch_height_ranges = []
+            # Then proceed based on whether the transcriptional relations for this variation unit have been defined:
+            if len(vu.transcriptional_relations_by_date_range) == 0:
+                # If there are no transcriptional relations, then map the epoch range of (None, None) to their list of off-diagonal entries:
+                epoch_height_ranges.append((None, None))
+                rate_objects_by_epoch_height_range[(None, None)] = []
+                rate_objects = rate_objects_by_epoch_height_range[(None, None)]
+                if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1:
+                    # If this is a singleton site, then use an arbitrary 2x2 rate matrix:
+                    rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                    rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                else:
+                    # If this is a site with multiple substantive readings, but no transcriptional relations list,
+                    # then use a Lewis Mk substitution matrix with the appropriate number of states:
+                    for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                        for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                            # Skip diagonal elements:
+                            if k_1 == k_2:
+                                continue
                             rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
-                            continue
-                        # Otherwise, if only one category of transcriptional relations holds between the first and second readings,
-                        # then use its rate:
-                        if len(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
-                            # If there is only one such category, then add its rate as a standalone var element:
-                            transcriptional_category = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+            else:
+                # Otherwise, proceed for every date range:
+                for date_range in vu.transcriptional_relations_by_date_range:
+                    # Get the map of transcriptional relations for reference later:
+                    transcriptional_relations = vu.transcriptional_relations_by_date_range[date_range]
+                    # Now get the epoch height range corresponding to this date range, and initialize its list in the dictionary:
+                    epoch_height_range = [None, None]
+                    epoch_height_range[0] = tip_date_range[1] - date_range[1] if date_range[1] is not None else None
+                    epoch_height_range[1] = tip_date_range[1] - date_range[0] if date_range[0] is not None else None
+                    epoch_height_range = tuple(epoch_height_range)
+                    epoch_height_ranges.append(epoch_height_range)
+                    rate_objects_by_epoch_height_range[epoch_height_range] = []
+                    rate_objects = rate_objects_by_epoch_height_range[epoch_height_range]
+                    # Then proceed for every pair of readings in this unit:
+                    for k_1, rdg_id_1 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                        for k_2, rdg_id_2 in enumerate(self.substantive_readings_by_variation_unit_id[vu.id]):
+                            # Skip diagonal elements:
+                            if k_1 == k_2:
+                                continue
+                            # If the first reading has no transcriptional relation to the second in this unit, then use the default rate:
+                            if (rdg_id_1, rdg_id_2) not in transcriptional_relations:
+                                rate_objects.append({"transcriptional_categories": ["default"], "expression": None})
+                                continue
+                            # Otherwise, if only one category of transcriptional relations holds between the first and second readings,
+                            # then use its rate:
+                            if len(transcriptional_relations[(rdg_id_1, rdg_id_2)]) == 1:
+                                # If there is only one such category, then add its rate as a standalone var element:
+                                transcriptional_category = list(transcriptional_relations[(rdg_id_1, rdg_id_2)])[0]
+                                rate_objects.append(
+                                    {"transcriptional_categories": [transcriptional_category], "expression": None}
+                                )
+                                continue
+                            # If there is more than one, then add a var element that is a sum of the individual categories' rates:
+                            transcriptional_categories = list(transcriptional_relations[(rdg_id_1, rdg_id_2)])
+                            args = []
+                            for transcriptional_category in transcriptional_categories:
+                                args.append("%s_rate" % transcriptional_category)
+                            args_string = " ".join(args)
+                            ops = ["+"] * (len(args) - 1)
+                            ops_string = " ".join(ops)
+                            expression_string = " ".join([args_string, ops_string])
                             rate_objects.append(
-                                {"transcriptional_categories": [transcriptional_category], "expression": None}
+                                {
+                                    "transcriptional_categories": transcriptional_categories,
+                                    "expression": expression_string,
+                                }
                             )
-                            continue
-                        # If there is more than one, then add a var element that is a sum of the individual categories' rates:
-                        transcriptional_categories = list(vu.transcriptional_relations[(rdg_id_1, rdg_id_2)])
-                        args = []
-                        for transcriptional_category in transcriptional_categories:
-                            args.append("%s_rate" % transcriptional_category)
-                        args_string = " ".join(args)
-                        ops = ["+"] * (len(args) - 1)
-                        ops_string = " ".join(ops)
-                        expression_string = " ".join([args_string, ops_string])
-                        rate_objects.append(
-                            {"transcriptional_categories": transcriptional_categories, "expression": expression_string}
-                        )
-            variation_unit_object["rates"] = rate_objects
+            # Now reorder the list of epoch height ranges, and get a list of non-null epoch dates in ascending order from the dictionary:
+            epoch_height_ranges.reverse()
+            epoch_heights = [
+                epoch_height_range[0] for epoch_height_range in epoch_height_ranges if epoch_height_range[0] is not None
+            ]
+            # Then add all of these data structures to the variation unit object:
+            variation_unit_object["epoch_heights"] = epoch_heights
+            variation_unit_object["epoch_heights_string"] = " ".join(
+                [str(epoch_height) for epoch_height in epoch_heights]
+            )
+            variation_unit_object["epoch_height_ranges"] = epoch_height_ranges
+            variation_unit_object["epoch_rates"] = [
+                rate_objects_by_epoch_height_range[epoch_height_range] for epoch_height_range in epoch_height_ranges
+            ]
             variation_unit_objects.append(variation_unit_object)
         # Then proceed to intrinsic odds categories:
         for intrinsic_category in self.intrinsic_categories:
@@ -1453,19 +1651,19 @@ class Collation:
             intrinsic_category_object["odds"] = odds if odds is not None else 1.0
             intrinsic_category_object["estimate"] = "false" if odds is not None else "true"
             intrinsic_category_objects.append(intrinsic_category_object)
-        # The proceed to transcriptional rate categories:
+        # Then proceed to transcriptional rate categories:
+        rng = np.random.default_rng(seed)
         for transcriptional_category in self.transcriptional_categories:
             transcriptional_category_object = {}
             # Copy the ID of this transcriptional category:
             transcriptional_category_object["id"] = transcriptional_category
             # Then copy the rate of this transcriptional category,
-            # setting it to 2.0 if it is not specified and setting the estimate attribute accordingly:
+            # setting it to a random number sampled from a Gamma distribution if it is not specified and setting the estimate attribute accordingly:
             rate = self.transcriptional_rates_by_id[transcriptional_category]
-            transcriptional_category_object["rate"] = rate if rate is not None else 2.0
+            transcriptional_category_object["rate"] = rate if rate is not None else rng.gamma(5.0, 2.0)
             transcriptional_category_object["estimate"] = "false" if rate is not None else "true"
             transcriptional_category_objects.append(transcriptional_category_object)
         # Now render the output XML file using the Jinja template:
-        root_dir = Path(__file__).parent.parent
         env = Environment(loader=PackageLoader("teiphy", "templates"), autoescape=select_autoescape())
         template = env.get_template("beast_template.xml")
         rendered = template.render(
@@ -1474,11 +1672,14 @@ class Collation:
             origin_span=origin_span,
             clock_model=clock_model.value,
             clock_rate_categories=2 * len(self.witnesses) - 1,
+            ancestral_logger=ancestral_logger.value,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
             intrinsic_categories=intrinsic_category_objects,
             transcriptional_categories=transcriptional_category_objects,
         )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
         with open(file_addr, "w", encoding="utf-8") as f:
             f.write(rendered)
         return
@@ -1540,13 +1741,19 @@ class Collation:
             col_ind += 1
         return matrix, reading_labels, witness_labels
 
-    def to_distance_matrix(self, drop_constant: bool = False, proportion=False):
+    def to_distance_matrix(self, drop_constant: bool = False, proportion: bool = False, show_ext: bool = False):
         """Transforms this Collation into a NumPy distance matrix between witnesses, along with an array of its labels for the witnesses.
         Distances can be computed either as counts of disagreements (the default setting), or as proportions of disagreements over all variation units where both witnesses have singleton readings.
+        Optionally, the count of units where both witnesses have singleton readings can be included after the count/proportion of disagreements.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of their disagreements.
+                Default value is False.
 
         Returns:
             A NumPy distance matrix with a row and column for each witness.
@@ -1564,19 +1771,29 @@ class Collation:
         substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Initialize the output array with the appropriate dimensions:
         witness_labels = [wit.id for wit in self.witnesses]
-        matrix = np.zeros((len(witness_labels), len(witness_labels)), dtype=float)
+        # The type of the matrix will depend on the input options:
+        matrix = None
+        if show_ext:
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), "NA", dtype=object
+            )  # strings of the form "disagreements/extant"
+        elif proportion:
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), 0.0, dtype=float
+            )  # floats of the form disagreements/extant
+        else:
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int)  # ints of the form disagreements
         for i, wit_1 in enumerate(witness_labels):
             for j, wit_2 in enumerate(witness_labels):
                 extant_units = 0
                 disagreements = 0
-                # If both witnesses are the same, then the matrix entry is trivially 0:
-                if j == i:
-                    matrix[i, j] = 0
-                    continue
-                # If either of the cells for this pair of witnesses has been populated already, then just copy the distance without recalculating:
+                # If either of the cells for this pair of witnesses has been populated already,
+                # then just copy the entry from the other side of the diagonal without recalculating:
                 if i > j:
                     matrix[i, j] = matrix[j, i]
                     continue
+                # Otherwise, calculate the number of units where both witnesses have unambiguous readings
+                # and the number of units where they disagree:
                 for k, vu_id in enumerate(self.variation_unit_ids):
                     if vu_id not in substantive_variation_unit_ids_set:
                         continue
@@ -1589,13 +1806,170 @@ class Collation:
                     extant_units += 1
                     if wit_1_rdg_inds[0] != wit_2_rdg_inds[0]:
                         disagreements += 1
+                cell_entry = None
                 if proportion:
-                    matrix[i, j] = disagreements / max(
+                    cell_entry = disagreements / max(
                         extant_units, 1
                     )  # the max in the denominator is to prevent division by 0; the distance entry will be 0 if the two witnesses have no overlap
                 else:
-                    matrix[i, j] = disagreements
+                    cell_entry = disagreements
+                if show_ext:
+                    cell_entry = str(cell_entry) + "/" + str(extant_units)
+                matrix[i, j] = cell_entry
         return matrix, witness_labels
+
+    def to_similarity_matrix(self, drop_constant: bool = False, proportion: bool = False, show_ext: bool = False):
+        """Transforms this Collation into a NumPy similarity matrix between witnesses, along with an array of its labels for the witnesses.
+        Similarities can be computed either as counts of agreements (the default setting), or as proportions of agreements over all variation units where both witnesses have singleton readings.
+        Optionally, the count of units where both witnesses have singleton readings can be included after the count/proportion of agreements.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate similarities as proportions over extant, unambiguous variation units.
+                Default value is False.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of agreements.
+                Default value is False.
+
+        Returns:
+            A NumPy distance matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        # The type of the matrix will depend on the input options:
+        matrix = None
+        if show_ext:
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), "NA", dtype=object
+            )  # strings of the form "agreements/extant"
+        elif proportion:
+            matrix = np.full(
+                (len(witness_labels), len(witness_labels)), 0.0, dtype=float
+            )  # floats of the form agreements/extant
+        else:
+            matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=int)  # ints of the form agreements
+        for i, wit_1 in enumerate(witness_labels):
+            for j, wit_2 in enumerate(witness_labels):
+                extant_units = 0
+                agreements = 0
+                # If either of the cells for this pair of witnesses has been populated already,
+                # then just copy the entry from the other side of the diagonal without recalculating:
+                if i > j:
+                    matrix[i, j] = matrix[j, i]
+                    continue
+                # Otherwise, calculate the number of units where both witnesses have unambiguous readings
+                # and the number of units where they agree:
+                for k, vu_id in enumerate(self.variation_unit_ids):
+                    if vu_id not in substantive_variation_unit_ids_set:
+                        continue
+                    wit_1_rdg_support = self.readings_by_witness[wit_1][k]
+                    wit_2_rdg_support = self.readings_by_witness[wit_2][k]
+                    wit_1_rdg_inds = [l for l, w in enumerate(wit_1_rdg_support) if w > 0]
+                    wit_2_rdg_inds = [l for l, w in enumerate(wit_2_rdg_support) if w > 0]
+                    if len(wit_1_rdg_inds) != 1 or len(wit_2_rdg_inds) != 1:
+                        continue
+                    extant_units += 1
+                    if wit_1_rdg_inds[0] == wit_2_rdg_inds[0]:
+                        agreements += 1
+                cell_entry = None
+                if proportion:
+                    cell_entry = agreements / max(
+                        extant_units, 1
+                    )  # the max in the denominator is to prevent division by 0; the distance entry will be 0 if the two witnesses have no overlap
+                else:
+                    cell_entry = agreements
+                if show_ext:
+                    cell_entry = str(cell_entry) + "/" + str(extant_units)
+                matrix[i, j] = cell_entry
+        return matrix, witness_labels
+
+    def to_nexus_table(self, drop_constant: bool = False, ambiguous_as_missing: bool = False):
+        """Returns this Collation in the form of a table with rows for taxa, columns for characters, and reading IDs in cells.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
+
+        Returns:
+            A NumPy array with rows for taxa, columns for characters, and reading IDs in cells.
+            A list of substantive reading ID strings.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # In a first pass, populate a dictionary mapping (variation unit index, reading index) tuples from the readings_by_witness dictionary
+        # to the readings' IDs:
+        reading_ids_by_indices = {}
+        for j, vu in enumerate(self.variation_units):
+            if vu.id not in substantive_variation_unit_ids_set:
+                continue
+            k = 0
+            for rdg in vu.readings:
+                key = tuple([vu.id, rdg.id])
+                if key not in substantive_variation_unit_reading_tuples_set:
+                    continue
+                indices = tuple([j, k])
+                reading_ids_by_indices[indices] = rdg.id
+                k += 1
+        # Initialize the output array with the appropriate dimensions:
+        missing_symbol = '?'
+        witness_labels = [wit.id for wit in self.witnesses]
+        matrix = np.full(
+            (len(witness_labels), len(substantive_variation_unit_ids)), missing_symbol, dtype=object
+        )  # use dtype=object because the maximum string length is not known up front
+        # Then populate it with the appropriate values:
+        row_ind = 0
+        for i, wit in enumerate(self.witnesses):
+            col_ind = 0
+            for j, vu in enumerate(self.variation_units):
+                if vu.id not in substantive_variation_unit_ids_set:
+                    continue
+                rdg_support = self.readings_by_witness[wit.id][j]
+                # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                if sum(rdg_support) == 0:
+                    matrix[row_ind, col_ind] = missing_symbol
+                # Otherwise, add its coefficients normally:
+                else:
+                    rdg_inds = [
+                        k for k, w in enumerate(rdg_support) if w > 0
+                    ]  # the index list consists of the indices of all readings with any degree of certainty assigned to them
+                    # For singleton readings, just print the reading ID:
+                    if len(rdg_inds) == 1:
+                        k = rdg_inds[0]
+                        matrix[row_ind, col_ind] = reading_ids_by_indices[(j, k)]
+                    # For multiple readings, print the corresponding reading IDs in braces or the missing symbol depending on input settings:
+                    else:
+                        if ambiguous_as_missing:
+                            matrix[row_ind, col_ind] = missing_symbol
+                        else:
+                            matrix[row_ind, col_ind] = "{%s}" % " ".join(
+                                [reading_ids_by_indices[(j, k)] for k in rdg_inds]
+                            )
+                col_ind += 1
+            row_ind += 1
+        return matrix, witness_labels, substantive_variation_unit_ids
 
     def to_long_table(self, drop_constant: bool = False):
         """Returns this Collation in the form of a long table with columns for taxa, characters, reading indices, and reading values.
@@ -1603,6 +1977,7 @@ class Collation:
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
 
         Returns:
             A NumPy array with columns for taxa, characters, reading indices, and reading values, and rows for each combination of these values in the matrix.
@@ -1659,38 +2034,79 @@ class Collation:
         long_table = np.array(long_table_list)
         return long_table, column_labels
 
-    def to_dataframe(self, drop_constant: bool = False, long_table: bool = False, split_missing: bool = True):
+    def to_dataframe(
+        self,
+        drop_constant: bool = False,
+        ambiguous_as_missing: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.matrix,
+        split_missing: bool = True,
+        show_ext: bool = False,
+    ):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
-            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+                Default value is False.
+            ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
+            proportion (bool, optional): An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
+                Default value is True.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
 
         Returns:
             A Pandas DataFrame corresponding to a collation matrix with reading frequencies or a long table with discrete reading states.
         """
         df = None
-        # Proceed based on whether the long_table option is set:
-        if long_table:
-            # Convert the collation to a long table and get its column labels first:
-            long_table, column_labels = self.to_long_table(drop_constant=drop_constant)
-            df = pd.DataFrame(long_table, columns=column_labels)
-        else:
+        # Proceed based on the table type:
+        if table_type == TableType.matrix:
             # Convert the collation to a NumPy array and get its row and column labels first:
             matrix, reading_labels, witness_labels = self.to_numpy(
                 drop_constant=drop_constant, split_missing=split_missing
             )
             df = pd.DataFrame(matrix, index=reading_labels, columns=witness_labels)
+        elif table_type == TableType.distance:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_distance_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.similarity:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_similarity_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.nexus:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels, vu_labels = self.to_nexus_table(
+                drop_constant=drop_constant, ambiguous_as_missing=ambiguous_as_missing
+            )
+            df = pd.DataFrame(matrix, index=witness_labels, columns=vu_labels)
+        elif table_type == TableType.long:
+            # Convert the collation to a long table and get its column labels first:
+            long_table, column_labels = self.to_long_table(drop_constant=drop_constant)
+            df = pd.DataFrame(long_table, columns=column_labels)
         return df
 
     def to_csv(
         self,
         file_addr: Union[Path, str],
         drop_constant: bool = False,
-        long_table: bool = False,
+        ambiguous_as_missing: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.matrix,
         split_missing: bool = True,
+        show_ext: bool = False,
         **kwargs
     ):
         """Writes this Collation to a comma-separated value (CSV) file with the given address.
@@ -1699,25 +2115,53 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output CSV file; the file type should be .csv.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
-            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            table_type: A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
+                Default value is True.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
             **kwargs: Keyword arguments for pandas.DataFrame.to_csv.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(drop_constant=drop_constant, long_table=long_table, split_missing=split_missing)
-        # If this is a long table, then do not include row indices:
-        if long_table:
-            return df.to_csv(file_addr, encoding="utf-8", index=False, **kwargs)
-        return df.to_csv(file_addr, encoding="utf-8", **kwargs)
+        df = self.to_dataframe(
+            drop_constant=drop_constant,
+            ambiguous_as_missing=ambiguous_as_missing,
+            proportion=proportion,
+            table_type=table_type,
+            split_missing=split_missing,
+            show_ext=show_ext,
+        )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        # Proceed based on the table type:
+        if table_type == TableType.long:
+            return df.to_csv(
+                file_addr, encoding="utf-8-sig", index=False, **kwargs
+            )  # add BOM to start of file so that Excel will know to read it as Unicode
+        return df.to_csv(
+            file_addr, encoding="utf-8-sig", **kwargs
+        )  # add BOM to start of file so that Excel will know to read it as Unicode
 
     def to_excel(
         self,
         file_addr: Union[Path, str],
         drop_constant: bool = False,
-        long_table: bool = False,
+        ambiguous_as_missing: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.matrix,
         split_missing: bool = True,
+        show_ext: bool = False,
     ):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
 
@@ -1725,17 +2169,109 @@ class Collation:
 
         Args:
             file_addr: A string representing the path to an output Excel file; the file type should be .xlsx.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table: An optional flag indicating whether or not to generate a long table with columns for taxa, characters, reading indices, and reading values.
-            Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            ambiguous_as_missing: An optional flag indicating whether to treat all ambiguous states as missing data.
+                Default value is False.
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            table_type: A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs.
+                Default value is "matrix".
+            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
+                if False, then missing data is ignored (i.e., all states are 0).
+                Default value is True.
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
         """
         # Convert the collation to a Pandas DataFrame first:
-        df = self.to_dataframe(drop_constant=drop_constant, long_table=long_table, split_missing=split_missing)
-        # If this is a long table, then do not include row indices:
-        if long_table:
+        df = self.to_dataframe(
+            drop_constant=drop_constant,
+            ambiguous_as_missing=ambiguous_as_missing,
+            proportion=proportion,
+            table_type=table_type,
+            split_missing=split_missing,
+            show_ext=show_ext,
+        )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        # Proceed based on the table type:
+        if table_type == TableType.long:
             return df.to_excel(file_addr, index=False)
         return df.to_excel(file_addr)
+
+    def to_phylip_matrix(
+        self,
+        file_addr: Union[Path, str],
+        drop_constant: bool = False,
+        proportion: bool = False,
+        table_type: TableType = TableType.distance,
+        show_ext: bool = False,
+    ):
+        """Writes this Collation as a PHYLIP-formatted distance/similarity matrix to the file with the given address.
+
+        Args:
+            file_addr: A string representing the path to an output PHYLIP file; the file type should be .ph or .phy.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            proportion: An optional flag indicating whether or not to calculate distances as proportions over extant, unambiguous variation units.
+                Default value is False.
+            table_type: A TableType option indicating which type of tabular output to generate.
+                For PHYLIP-formatted outputs, distance and similarity matrices are the only supported table types.
+                Default value is "distance".
+            show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type \"distance\" or \"similarity\".
+                Default value is False.
+        """
+        # Convert the collation to a Pandas DataFrame first:
+        matrix = None
+        witness_labels = []
+        # Proceed based on the table type:
+        if table_type == TableType.distance:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_distance_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
+        elif table_type == TableType.similarity:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_similarity_matrix(
+                drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
+            )
+        # Generate all parent folders for this file that don't already exist:
+        Path(file_addr).parent.mkdir(parents=True, exist_ok=True)
+        with open(file_addr, "w", encoding="utf-8") as f:
+            # The first line contains the number of taxa:
+            f.write("%d\n" % len(witness_labels))
+            # Every subsequent line contains a witness label, followed by the values in its row of the matrix:
+            for i, wit_id in enumerate(witness_labels):
+                wit_label = slugify(wit_id, lowercase=False, allow_unicode=True, separator='_')
+                f.write("%s %s\n" % (wit_label, " ".join([str(v) for v in matrix[i]])))
+        return
+
+    def get_stemma_symbols(self):
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in STEMMA format.
+
+        The number of symbols equals the maximum number of substantive readings at any variation unit.
+
+        Returns:
+            A list of individual characters representing states in readings.
+        """
+        possible_symbols = (
+            list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
+        )  # NOTE: the maximum number of symbols allowed in STEMMA format (other than "?" and "-") is 62
+        # The number of symbols needed is equal to the length of the longest substantive reading vector:
+        nsymbols = 0
+        # If there are no witnesses, then no symbols are needed at all:
+        if len(self.witnesses) == 0:
+            return []
+        wit_id = self.witnesses[0].id
+        for rdg_support in self.readings_by_witness[wit_id]:
+            nsymbols = max(nsymbols, len(rdg_support))
+        stemma_symbols = possible_symbols[:nsymbols]
+        return stemma_symbols
 
     def to_stemma(self, file_addr: Union[Path, str]):
         """Writes this Collation to a STEMMA file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.
@@ -1745,7 +2281,7 @@ class Collation:
         Args:
             file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
             The accompanying chron file will match this file name, except that it will have "_chron" appended to the end.
-            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+            drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment
         # (by default, constant sites are dropped):
@@ -1785,11 +2321,23 @@ class Collation:
                 indices = tuple([j, k])
                 reading_wits_by_indices[indices].append(wit.id)
         # In a third pass, write to the STEMMA file:
+        symbols = self.get_stemma_symbols()
+        Path(file_addr).parent.mkdir(
+            parents=True, exist_ok=True
+        )  # generate all parent folders for this file that don't already exist
         chron_file_addr = str(file_addr) + "_chron"
         with open(file_addr, "w", encoding="utf-8") as f:
             # Start with the witness list:
-            f.write("* %s ;\n\n" % " ".join([wit.id for wit in self.witnesses]))
-            f.write("^ %s\n\n" % chron_file_addr)
+            f.write(
+                "* %s ;\n\n"
+                % " ".join(
+                    [slugify(wit.id, lowercase=False, allow_unicode=True, separator='_') for wit in self.witnesses]
+                )
+            )
+            # f.write("^ %s\n\n" % chron_file_addr) #write the relative path to the chron file
+            f.write(
+                "^ %s\n\n" % ("." + os.sep + Path(chron_file_addr).name)
+            )  # write the relative path to the chron file
             # Then add a line indicating that all witnesses are lacunose unless they are specified explicitly:
             f.write("= $? $* ;\n\n")
             # Then proceed for each variation unit:
@@ -1827,13 +2375,14 @@ class Collation:
                     indices = tuple([j, k])
                     if indices not in reading_wits_by_indices:
                         break
+                    rdg_symbol = symbols[k]  # get the one-character alphanumeric code for this state
                     wits = " ".join(reading_wits_by_indices[indices])
                     # Open the variant reading support block with an angle bracket:
                     if k == 0:
-                        f.write("%d %s" % (k, wits))
+                        f.write("%s %s" % (rdg_symbol, wits))
                     # Open all subsequent variant reading support blocks with pipes on the next line:
                     else:
-                        f.write("\n\t| %d %s" % (k, wits))
+                        f.write("\n\t| %s %s" % (rdg_symbol, wits))
                     k += 1
                 f.write(" >\n")
         # In a fourth pass, write to the chron file:
@@ -1882,14 +2431,18 @@ class Collation:
         file_addr: Union[Path, str],
         format: Format = None,
         drop_constant: bool = False,
-        long_table: bool = False,
         split_missing: bool = True,
         char_state_labels: bool = True,
         frequency: bool = False,
         ambiguous_as_missing: bool = False,
+        proportion: bool = False,
         calibrate_dates: bool = False,
         mrbayes: bool = False,
         clock_model: ClockModel = ClockModel.strict,
+        ancestral_logger: AncestralLogger = AncestralLogger.state,
+        table_type: TableType = TableType.matrix,
+        show_ext: bool = False,
+        seed: int = None,
     ):
         """Writes this Collation to the file with the given address.
 
@@ -1899,11 +2452,7 @@ class Collation:
                 If None then it is infered from the file suffix.
                 Defaults to None.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            long_table (bool, optional): An optional flag indicating whether or not to generate a long table
-                with columns for taxa, characters, reading indices, and reading values.
-                Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
-                Note that if this option is set, ambiguous readings will be treated as missing data, and the split_missing option will be ignored.
-                Defaults to False.
+                Default value is False.
             split_missing (bool, optional): An optional flag indicating whether to treat
                 missing characters/variation units as having a contribution of 1 split over all states/readings;
                 if False, then missing data is ignored (i.e., all states are 0).
@@ -1921,15 +2470,34 @@ class Collation:
             ambiguous_as_missing (bool, optional): An optional flag indicating whether to treat all ambiguous states as missing data.
                 If this flag is set, then only base symbols will be generated for the NEXUS file.
                 It is only applied if the frequency option is False.
-            calibrate_dates: An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
+                Default value is False.
+            proportion (bool, optional): An optional flag indicating whether to populate a distance matrix's cells
+                with a proportion of disagreements to variation units where both witnesses are extant.
+                It is only applied if the table_type option is "distance".
+                Default value is False.
+            calibrate_dates (bool, optional): An optional flag indicating whether to add an Assumptions block that specifies date distributions for witnesses
                 in NEXUS output.
                 This option is intended for inputs to BEAST 2.
-            mrbayes: An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
+                Default value is False.
+            mrbayes (bool, optional): An optional flag indicating whether to add a MrBayes block that specifies model settings and age calibrations for witnesses
                 in NEXUS output.
                 This option is intended for inputs to MrBayes.
-            clock_model: A ClockModel option indicating which type of clock model to use.
+                Default value is False.
+            clock_model (ClockModel, optional): A ClockModel option indicating which type of clock model to use.
                 This option is intended for inputs to MrBayes and BEAST 2.
                 MrBayes does not presently support a local clock model, so it will default to a strict clock model if a local clock model is specified.
+                Default value is "strict".
+            ancestral_logger (AncestralLogger, optional): An AncestralLogger option indicating which class of logger (if any) to use for ancestral states.
+                This option is intended for inputs to BEAST 2.
+            table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
+                Only applicable for tabular outputs and PHYLIP outputs.
+                If the output is a PHYLIP file, then the type of tabular output must be "distance" or "similarity"; otherwise, it will be ignored.
+                Default value is "matrix".
+            show_ext (bool, optional): An optional flag indicating whether each cell in a distance or similarity matrix
+                should include the number of variation units where both witnesses are extant after the number of their disagreements/agreements.
+                Only applicable for tabular output formats of type "distance" or "similarity".
+                Default value is False.
+            seed (optional, int): A seed for random number generation (for setting initial values of unspecified transcriptional rates in BEAST 2 XML output).
         """
         file_addr = Path(file_addr)
         format = format or Format.infer(
@@ -1952,27 +2520,60 @@ class Collation:
             return self.to_hennig86(file_addr, drop_constant=drop_constant)
 
         if format == format.PHYLIP:
+            if table_type in [TableType.distance, TableType.similarity]:
+                return self.to_phylip_matrix(
+                    file_addr,
+                    drop_constant=drop_constant,
+                    proportion=proportion,
+                    table_type=table_type,
+                    show_ext=show_ext,
+                )
             return self.to_phylip(file_addr, drop_constant=drop_constant)
 
         if format == format.FASTA:
             return self.to_fasta(file_addr, drop_constant=drop_constant)
 
         if format == format.BEAST:
-            return self.to_beast(file_addr, drop_constant=drop_constant, clock_model=clock_model)
+            return self.to_beast(
+                file_addr,
+                drop_constant=drop_constant,
+                clock_model=clock_model,
+                ancestral_logger=ancestral_logger,
+                seed=seed,
+            )
 
         if format == Format.CSV:
             return self.to_csv(
-                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing
+                file_addr,
+                drop_constant=drop_constant,
+                ambiguous_as_missing=ambiguous_as_missing,
+                proportion=proportion,
+                table_type=table_type,
+                split_missing=split_missing,
+                show_ext=show_ext,
             )
 
         if format == Format.TSV:
             return self.to_csv(
-                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing, sep="\t"
+                file_addr,
+                drop_constant=drop_constant,
+                ambiguous_as_missing=ambiguous_as_missing,
+                proportion=proportion,
+                table_type=table_type,
+                split_missing=split_missing,
+                show_ext=show_ext,
+                sep="\t",
             )
 
         if format == Format.EXCEL:
             return self.to_excel(
-                file_addr, drop_constant=drop_constant, long_table=long_table, split_missing=split_missing
+                file_addr,
+                drop_constant=drop_constant,
+                ambiguous_as_missing=ambiguous_as_missing,
+                proportion=proportion,
+                table_type=table_type,
+                split_missing=split_missing,
+                show_ext=show_ext,
             )
 
         if format == Format.STEMMA:

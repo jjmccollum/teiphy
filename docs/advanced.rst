@@ -2,27 +2,13 @@
 Advanced Usage
 ==================
 
-Lacunae, retroversions, and other sources of ambiguity occasionally make
-a one-to-one mapping of witnesses to readings impossible, and in some
-cases, one disambiguation may be more likely than another in a
-quantifiable way. Mechanisms for accommodating such situations exist in
-both TEI XML and NEXUS, and for likelihood-based phylogenetic methods,
-“soft decisions” about the states at the leaves and even the root of the
-tree can provide useful information to the inference process. For these
-reasons, ``teiphy`` ensures that these types of judgments, as well as
-other rich features from TEI XML, can be respected (and, where,
-necessary, preserved) in the conversion process.
+Lacunae, retroversions, and other sources of ambiguity occasionally make a one-to-one mapping of witnesses to readings impossible, and in some cases, one disambiguation may be more likely than another in a quantifiable way.
+Mechanisms for accommodating such situations exist in both TEI XML and NEXUS, and for likelihood-based phylogenetic methods, “soft decisions” about the states at the leaves and even the root of the tree can provide useful information to the inference process.
+For these reasons, ``teiphy`` ensures that these types of judgments, as well as other rich features from TEI XML, can be respected (and, where, necessary, preserved) in the conversion process.
 
-
-Collations should preserve
-as much detail as possible, including information on how certain types
-of data can be normalized and collapsed for analysis. Since we may want
-to conduct the same analysis at different levels of granularity, the
-underlying collation data should be available for us to use in any case,
-and only the output should reflect changes in the desired level of
-detail. Likewise, as noted in the previous section, uncertainty about
-witnesses’ attestations should be encoded in the collation and preserved
-in the conversion of the collation.
+Collations should preserve as much detail as possible, including information on how certain types of data can be normalized and collapsed for analysis.
+Since we may want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for us to use in any case, and only the output should reflect changes in the desired level of detail.
+Likewise, as noted in the previous section, uncertainty about witnesses’ attestations should be encoded in the collation and preserved in the conversion of the collation.
 
 Analysis at Varying Levels of Detail Using Reading Types
 --------------------------------------------------------
@@ -333,6 +319,17 @@ correctors of Codex Bezae follows:
 
 Then, when you invoke any conversion command through the CLI, make sure that you include the ``--fill-correctors`` argument.
 
+Excluding Fragmentary witnesses
+-------------------------------
+
+Fragmentary witnesses with too many missing readings can introduce more noise than signal to a phylogenetic analysis, so it is often helpful to exclude such witnesses from the phylogenetic software inputs you generate.
+You can do this using the ``--fragmentary-threshold`` command-line option.
+With this option, you must specify a number between 0 and 1 that represents the proportion of extant readings that a witness must have in order to be included in the output.
+For the purposes of determining whether a witness meets or falls below this threshold, that witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the ``-m`` option).
+This calculation is performed after the reading sequences of correctors have been filled in (if the ``--fill-correctors flag`` was specified).
+A threshold specified with ``--fragmentary-threshold 0.7``, for example, means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.
+By comparison, ``--fragmentary-threshold 1.0`` will exclude any witness that has even one missing reading.
+
 Removing First-hand Siglum Suffixes and Merging Multiple Attestations
 ---------------------------------------------------------------------
 
@@ -570,6 +567,43 @@ summing multiple rates if more than one tag is specified for a transition.
 All transitions not covered by a ``relation`` element (e.g., a transition from reading 3 to reading 1, which is not covered in the example above) will be assigned the "default" rate of 1.
 Accordingly, if no ``listRelation`` for transcriptional change categories is specified at all, then the substitution model for a variation unit with *k* substantive readings will default to the Lewis Mk model.
 
+In many cases, certain transcriptional explanations are applicable only at certain times.
+For instance, assimilation to a popular text that arose at a later point in the tradition's history (modeled with the ``Byz`` class in the above example) would only be available as a transcriptional explanation after this point.
+Skips of the eye may be empirically more common for earlier scribes than for later ones.
+Certain paleographic confusions may only be possible for earlier scripts or later ones.
+Specific orthodox corruptions of sacred texts may have only become plausible after certain theological conflicts or developments had taken place to inspire them.
+If you wish to encode such transcriptional possibilities as time-dependent, you can do so by adding ``@notBefore`` and ``@notAfter`` attributes to the corresponding ``relation`` element:
+
+.. code:: xml
+
+    <listRelation type="transcriptional">
+        <relation active="1 2 3" passive="4" ana="#Harm"/>
+        <relation active="1" passive="2 3 4" ana="#Clar"/>
+        <relation active="2" passive="1" ana="#VisErr"/>
+        <relation active="2" passive="3" ana="#Clar #Harm"/>
+        <relation active="3" passive="4" ana="#Clar"/>
+        <relation active="1 2 4" passive="3" ana="#Byz" notBefore="500"/>
+    </listRelation>
+
+If you tag certain transcriptional ``relation`` elements in this way, ``teiphy`` will map the ``listRelation`` to an ``EpochSubstitutionModel`` instance consisting of multiple substitution models that apply at the corresponding points in time.
+
+Logging for Ancestral State Reconstructions
+-------------------------------------------
+
+BEAST 2 offers support for the logging of the reconstructed states (i.e., variant readings) for each site (i.e., variation unit) at varying levels of detail.
+The ``AncestralStateLogger`` class (part of the ``BEASTLabs`` package) reconstructs the state of a particular clade (which, for our purposes, is chosen to be the root of the tree) in each tree sampled during the analysis, resulting in a relatively compact output.
+The ``AncestralSequenceLogger`` class (part of the ``BEAST_CLASSIC`` package) reconstructs the states of all hypothetical ancestors in each tree sampled during the analysis, which results in a more comprehensive, but also much larger output.
+In writing to BEAST 2.7 XML files, ``teiphy`` can include elements for either (or neither) logger based on the ``--ancestral-logger`` argument.
+The default option, ``state``, will include an ``AncestralStateLogger`` element in the XML file, while ``sequence`` will include an ``AncestralSequenceLogger`` element, and ``none`` will not include any logging elements for ancestral states.
+
+Overriding or Supplying Dates from a CSV file
+---------------------------------------------
+
+You can also specify date ranges for some witnesses in a separate CSV file.
+For the sake of completeness, it is recommended that you specify date ranges for witnesses in your TEI XML collation, but you may have pulled your collation data and witness date ranges from different sources, or you might want to overwrite existing date ranges in the collation with updated values.
+You can specify a path to the CSV file containing witness IDs and their date ranges using the ``--dates-file`` command-line option.
+The CSV file should not have any header rows, and every row should be formatted as ``"id",min,max``, where the first column contains a string (encoded as such by being surrounded by double quotes) corresponding to the witness ID and the other two columns are either empty (if one or both ends of the date range are unknown) or integers corresponding to years (where negative integers are assumed to refer to dates BCE). 
+
 Supported Output Formats and Options
 ------------------------------------
 
@@ -584,21 +618,35 @@ For ``nexus`` outputs, the ``CharStateLabels`` block (which provides human-reada
 This is necessary if you intend to pass your NEXUS-formatted data to phylogenetic programs like MrBayes that do not recognize this block.
 Note that all reading labels will be slugified so that all characters (e.g., Greek characters) are converted to ASCII characters and spaces and other punctuation marks are replaced by underscores; this is to conformance with the recommendations for the NEXUS format.
 
-Note that for the ``nexus``, ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
+Note that for ``hennig86``, ``phylip``, and ``fasta`` output formats, only up to 32 states (represented by the symbols 0-9 and a-v) are supported at this time.
 This is a requirement for Hennig86 format, and some phylogenetic programs that use these formats (such as IQTREE and RAxML) do not support symbols outside of the basic 36 alphanumeric characters or a 32-character alphabet at this time.
+The ``stemma`` output format currently supports up to 62 states.
+Outputs in ``nexus`` format also support up to 62 states to accommodate software like PAUP* and Andrew Edmondson's fork of MrBayes (https://github.com/edmondac/MrBayes), but note that some of the programs listed above will not work with ``nexus`` inputs with a state alphabet this large. 
 
 Collations can also be converted to tabular formats.
-Within Python, the ``collation`` class's ``to_numpy`` method can be invoked to convert a collation to a NumPy matrix with rows for variant readings, columns for witnesses, and frequency values in the cells.
+Within Python, the ``collation`` class's ``to_numpy`` method can be invoked to convert a collation to a NumPy ``array`` with rows for variant readings, columns for witnesses, and frequency values in the cells.
 Where a witness has missing data at a variation, its frequencies for different readings at this unit can be split evenly over 1 using the ``split_missing`` argument; otherwise, the witness will have frequencies of 0 for all readings at that unit.
-The same class's ``to_distance_matrix`` method produces a NumPy matrix with rows and columns for witnesses, where each cell contains the number of units where the row witness and column witness both have unambiguous readings and these readings disagree.
-The cells can instead be populated with the proportion of disagreements to units where the row and column witnesses have readings with the ``proportion`` argument.
-The same class's ``to_long_table`` method produces a NumPy matrix with columns for witness ID, variation unit ID, reading index, and reading text and rows for all combinations of these values found in the collation.
-The ``to_dataframe`` method invokes either ``to_numpy`` or ``to_long_table`` (depending on whether its ``long_table`` argument is true) and returns a Pandas ``DataFrame`` augmented with row and column labels (or, in the case of a long table, just column labels). 
+The same class's ``to_distance_matrix`` method produces a NumPy ``array`` with rows and columns for witnesses, where each cell contains the number of units where the row witness and column witness both have unambiguous readings and these readings disagree.
+The cells can instead be populated with the proportion of disagreements among units where the row and column witnesses have readings with the ``proportion`` argument.
+If you specify the ``show_ext`` argument as True, then each cell will be populated by the number or proportion of disagreements followed by the number of units where both witnesses have have unambiguous readings (e.g., 3/50 or 0.06/50).
+The same class's ``to_similarity_matrix`` method produces a NumPy ``array`` with rows and columns for witnesses, where each cell contains the number of units where the row witness and column witness both have unambiguous readings and these readings agree.
+The cells can instead be populated with the proportion of agreements among units where the row and column witnesses have readings with the ``proportion`` argument.
+If you specify the ``show_ext`` argument as True, then each cell will be populated by the number or proportion of agreements followed by the number of units where both witnesses have have unambiguous readings (e.g., 47/50 or 0.94/50).
+The same class's ``to_nexus_table`` method produces a NumPy ``array`` with rows for witnesses, columns for variation unit IDs, and attested reading IDs in the cells, resembling a NEXUS sequence.
+By default, cells corresponding to ambiguous readings are written as space-separated sequences of readings between braces, but they can be written as missing states with the ``ambiguous_as_missing`` argument.
+The same class's ``to_long_table`` method produces a NumPy ``array`` with columns for witness ID, variation unit ID, reading index, and reading text and rows for all combinations of these values found in the collation.
+The ``to_dataframe`` method invokes ``to_numpy`` by default, but if the ``table_type`` argument is ``distance``, ``nexus`` or ``long``, then it will invoke ``to_distance_matrix``, ``to_nexus_table`` or ``to_long_table``, respectively.
+It returns a Pandas ``DataFrame`` augmented with row and column labels (or, in the case of a long table, just column labels).
 
-From the command line, the standard reading-witness matrix or long table can be written to a specified CSV, TSV, or Excel (.xlsx) file.
-If you specify the output filename with its extension, ``teiphy`` will infer which format to use. 
+From the command line, the types of matrices listed above can be written to a specified CSV, TSV, or Excel (.xlsx) file.
+If you specify the output filename with its extension, ``teiphy`` will infer which format to use.
+If you want to write a distance matrix, a similarity matrix, a NEXUS-style table, or a long table to output instead of a reading-witness matrix, then you can do so by specifying the ``--table distance``, ``--table similarity``, ``--table nexus``, or ``--table long`` command-line argument, respectively.
 If you are writing a reading-witness matrix to output, you can set the method's ``split_missing`` argument using the ``--split-missing`` command-line flag.
-If you want to write a long table to output instead of a reading-witness matrix, then you can do so by including the ``--long-table`` command-line flag.
+If you are writing a distance or similarity matrix to output, then you can set the method's ``proportion`` and ``show_ext`` arguments using using the ``--proportion`` and ``--show-ext`` command-line flags, respectively.
+As with plain NEXUS outputs, if you are writing a NEXUS table to output, then you can set the method's ``ambiguous_as_missing`` argument using the ``--ambiguous-as-missing`` command-line flag.
+You can also write a pairwise distance or similarity matrix to a PHYLIP (.phy, .ph) file if you specify ``--table distance`` or ``--table similarity`` as an option with a PHYLIP output.
+(Note that only these two table types are support for this output format; if you specify any other type of table with a PHYLIP output, then the option will be ignored, and a standard PHYLIP output will be generated instead.)
+The ``--proportion`` and ``--show-ext`` flags are supported for PHYLIP matrix outputs.
 
 Other Options
 -------------

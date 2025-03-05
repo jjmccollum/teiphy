@@ -130,7 +130,7 @@ If you use this software, please cite the paper: Joey McCollum and Robert Turnbu
 
 .. code-block:: bibtex
 
-    @article{McCollum2022, 
+    @article{MT2022, 
         author = {Joey McCollum and Robert Turnbull}, 
         title = {{teiphy: A Python Package for Converting TEI XML Collations to NEXUS and Other Formats}}, 
         journal = {Journal of Open Source Software},
@@ -143,5 +143,20 @@ If you use this software, please cite the paper: Joey McCollum and Robert Turnbu
         url = {https://doi.org/10.21105/joss.04879}
     }
 
+Further details on the capabilities of ``teiphy``, particularly in terms of the text-critically valuable features it can map from TEI XML collations to BEAST 2 inputs, are discussed in Joey McCollum and Robert Turnbull, "Using Bayesian Phylogenetics to Infer Manuscript Transmission History," *DSH* 39.1 (2024): 258–279, DOI: 10.1093/llc/fqad089.
+
+.. code-block:: bibtex
+
+    @article{MT2024, 
+        author = {Joey McCollum and Robert Turnbull}, 
+        title = {{Using Bayesian Phylogenetics to Infer Manuscript Transmission History}}, 
+        journal = {Digital Scholarship in the Humanities},
+        year = {2024}, 
+        volume = {39}, 
+        number = {1}, 
+        pages = {258--279},
+        doi = {10.1093/llc/fqad089}, 
+        url = {https://doi.org/10.1093/llc/fqad089}
+    }
 
 .. end-credits

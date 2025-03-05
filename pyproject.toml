@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teiphy"
-version = "0.1.6"
+version = "0.1.20"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
@@ -15,25 +15,27 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-lxml = ">=4.9.1"
+lxml = ">=4.9.3"
 numpy = ">=1.23.2"
 pandas = ">=1.4.4"
 openpyxl = ">=3.0.10"
 typer = ">=0.6.1"
 rich = ">=12.5.1"
 python-slugify = ">=6.1.2"
-Jinja2 = ">=3.1.2"
+Jinja2 = ">=3.1.5"
+setuptools = ">=70.0.0"
 
 [tool.poetry.group.dev.dependencies]
-Sphinx = ">=5.1.1"
+Sphinx = ">=7.0.0"
 pytest = ">=7.2.0"
 coverage = ">=6.4.4"
 nbsphinx = ">=0.8.9"
@@ -41,9 +43,14 @@ sphinx-rtd-theme = ">=1.0.0"
 sphinx-autobuild = ">=2021.3.14"
 pre-commit = ">=2.15.0"
 sphinx-copybutton = ">=0.4.0"
-black = ">=22.3.0"
+black = ">=24.3.0"
 sphinxcontrib-bibtex = ">=2.4.1"
 sphinx-click = {git = "https://github.com/rbturnbull/sphinx-click.git"}
+tornado = ">=6.4.2"
+requests = ">=2.32.0"
+idna = ">=3.7"
+urllib3 = ">=2.2.2"
+zipp = ">=3.19.1"
 
 
 [tool.black]

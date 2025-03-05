@@ -131,7 +131,7 @@ class CollationDateRangeStartOnlyTestCase(unittest.TestCase):
         )
         self.collation.parse_origin_date_range(source_desc_xml)
         self.assertEqual(self.collation.origin_date_range[0], 50)
-        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
+        self.assertIsNone(self.collation.origin_date_range[1])
 
 
 class CollationDateRangeEndOnlyTestCase(unittest.TestCase):
@@ -164,7 +164,7 @@ class CollationNoDatesTestCase(unittest.TestCase):
         # After the parse_origin_date_range method is called, the origin date upper bound should default to the current year:
         self.collation.parse_origin_date_range(source_desc_xml)
         self.assertIsNone(self.collation.origin_date_range[0])
-        self.assertEqual(self.collation.origin_date_range[1], datetime.now().year)
+        self.assertIsNone(self.collation.origin_date_range[1])
 
 
 class CollationTrivialReconstructedTestCase(unittest.TestCase):
@@ -390,6 +390,16 @@ class CollationOutputTestCase(unittest.TestCase):
         beast_symbols = empty_collation.get_beast_symbols()
         self.assertEqual(beast_symbols, [])
 
+    def test_get_stemma_symbols(self):
+        stemma_symbols = self.collation.get_stemma_symbols()
+        self.assertEqual(stemma_symbols, ["0", "1", "2", "3", "4", "5"])
+
+    def test_get_stemma_symbols_empty(self):
+        empty_collation = self.collation
+        empty_collation.witnesses = []
+        stemma_symbols = empty_collation.get_stemma_symbols()
+        self.assertEqual(stemma_symbols, [])
+
     def test_to_numpy_ignore_missing(self):
         matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
         self.assertTrue(
@@ -436,11 +446,78 @@ class CollationOutputTestCase(unittest.TestCase):
             abs(matrix[0, 1] - 13 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
         )  # entry for UBS and P46 should be 13 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
 
+    def test_to_distance_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_distance_matrix(show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "13/40"
+        )
+
+    def test_to_distance_matrix_proportion_show_ext(self):
+        matrix, witness_labels = self.collation.to_distance_matrix(proportion=True, show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "0.325/40"
+        )
+
+    def test_to_similarity_matrix(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix()
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], 27
+        )  # entry for UBS and P46 should be 27 (remember not to count P46 lacunae and ambiguities and to count P46 defective readings as agreeing with the UBS reading)
+
+    def test_to_similarity_matrix_drop_constant(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be 0
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], 25
+        )  # entry for UBS and P46 should be 25 (the two constant variation units should be dropped)
+
+    def test_to_similarity_matrix_proportion(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True)
+        self.assertEqual(np.trace(matrix), 38)  # diagonal entries should be 1
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
+        self.assertTrue(
+            abs(matrix[0, 1] - 27 / (len(self.xml_variation_units) - 2)) < 1e-4
+        )  # entry for UBS and P46 should be 27 divided by the number of variation units where neither witness is lacunose or ambiguous
+
+    def test_to_similarity_matrix_drop_constant_proportion(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True, proportion=True)
+        self.assertEqual(np.trace(matrix), 38)  # diagonal entries should be 0
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
+        self.assertTrue(
+            abs(matrix[0, 1] - 25 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
+        )  # entry for UBS and P46 should be 25 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
+
+    def test_to_similarity_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "27/40"
+        )
+
+    def test_to_similarity_matrix_proportion_show_ext(self):
+        matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True, show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertEqual(
+            matrix[0, 1], "0.675/40"
+        )
+
+    def test_to_nexus_table(self):
+        nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
+        self.assertEqual(row_labels[0], "UBS")
+        self.assertEqual(column_labels[0], "B10K1V1U24-26")
+        self.assertEqual(nexus_table[0, 0], "1")  # reading of UBS at B10K1V1U24-26 should have ID "1"
+        self.assertEqual(nexus_table[26, 1], "{1 2}")  # ambiguous reading of vg at B10K1V6U20-24 should have ID "{1 2}"
+
     def test_to_long_table(self):
         long_table, column_labels = self.collation.to_long_table()
-        self.assertEqual(
-            column_labels, ["taxon", "character", "state", "value"]
-        )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
+        self.assertEqual(column_labels, ["taxon", "character", "state", "value"])
         self.assertEqual(long_table[0, 0], "UBS")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
         self.assertEqual(long_table[0, 1], "B10K1V1U24-26")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω
         self.assertEqual(long_table[0, 2], "0")  # first row should contain UBS,B10K1V1U24-26,0,εν εφεσω

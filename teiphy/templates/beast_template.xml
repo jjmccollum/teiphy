@@ -20,9 +20,13 @@
     </tree>
     <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
         {%- if origin_span[1] %}
-        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[1] }}"/>
+        {%- if origin_span[1] == origin_span[0] %}
+        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[0] }}" estimate="false"/>
         {%- else %}
-        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="Infinity" value="1.0"/>
+        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[0] }}"/>
+        {%- endif %}
+        {%- else %}
+        <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="Infinity" value="{{ origin_span[0] }}"/>
         {%- endif %}
         <reproductiveNumber spec="parameter.RealParameter" id="reproductiveNumber" lower="0.0" upper="Infinity" value="2.0"/>
         <becomeUninfectiousRate spec="parameter.RealParameter" id="becomeUninfectiousRate" lower="0.0" upper="Infinity" value="1.0"/>
@@ -62,7 +66,7 @@
 
             <!-- Start transcriptional rate parameters -->
             {%- for tc in transcriptional_categories %}
-            <stateNode spec="parameter.RealParameter" id="{{ tc.id }}_rate" lower="1.0" upper="Infinity" value="{{ tc.rate }}" estimate="{{ tc.estimate }}"/>
+            <stateNode spec="parameter.RealParameter" id="{{ tc.id }}_rate" lower="0.0" upper="Infinity" value="{{ tc.rate }}" estimate="{{ tc.estimate }}"/>
             {%- endfor %}
             <!-- We include a "default" rate fixed at 1 that corresponds to (unlikely) transitions with no transcriptional explanation.
             All other rates in the substitution matrices will be estimated relative to this.
@@ -75,13 +79,17 @@
                 <distribution spec="CompoundDistribution" id="bdLikelihood">
                     <distribution idref="birthDeath"/>
                 </distribution>
+                {%- if origin_span[1] %}
+                {%- if origin_span[1] != origin_span[0] %}
                 <distribution spec="Prior" id="originPrior" x="@origin">
-                    {%- if origin_span[1] %}
                     <distr spec="beast.base.inference.distribution.Uniform" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}"/>
-                    {%- else %}
-                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ origin_span[0] }}"/>
-                    {%- endif %}
                 </distribution>
+                {%- endif %}
+                {%- else %}
+                <distribution spec="Prior" id="originPrior" x="@origin">
+                    <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ origin_span[0] }}"/>
+                </distribution>
+                {%- endif %}
                 <distribution spec="Prior" id="samplingProportionPrior" x="@samplingProportion">
                     <distr spec="Beta" alpha="1.0" beta="1.0" offset="0.0"/>
                 </distribution>
@@ -115,7 +123,7 @@
                 {%- for tc in transcriptional_categories %}
                 {%- if tc.estimate == "true" %}
                 <distribution spec="Prior" id="{{ tc.id }}_ratePrior" x="@{{ tc.id }}_rate">
-                    <distr spec="LogNormalDistributionModel" offset="1.0" M="1.0" S="1.0"/>
+                    <distr spec="Gamma" alpha="5.0" beta="2.0"/>
                 </distribution>
                 {%- endif %}
                 {%- endfor %}
@@ -134,21 +142,55 @@
             <distribution spec="CompoundDistribution" id="likelihood" useThreads="true">
                 <!-- Start character distributions -->
                 {%- for vu in variation_units %}
-                <distribution spec="TreeLikelihood" id="morphTreeLikelihood.{{ loop.index }}" useAmbiguities="true" useTipLikelihoods="true" tree="@tree">
-                    <data spec="FilteredAlignment" id="filter.{{ loop.index }}" data="@alignment" filter="{{ loop.index }}">
-                        <userDataType spec="StandardData" id="morphDataType.{{ loop.index }}" nrOfStates="{{ vu.nstates }}"/>
+                {%- set vu_ind = loop.index %}
+                <distribution spec="TreeLikelihood" id="morphTreeLikelihood.{{ vu_ind }}" useAmbiguities="true" useTipLikelihoods="true" tree="@tree">
+                    <data spec="FilteredAlignment" id="filter.{{ vu_ind }}" data="@alignment" filter="{{ vu_ind }}">
+                        <userDataType spec="StandardData" id="morphDataType.{{ vu_ind }}" nrOfStates="{{ vu.nstates }}"/>
                     </data>
-                    <siteModel spec="SiteModel" id="morphSiteModel.{{ loop.index }}">
-                        <mutationRate spec="parameter.RealParameter" id="mutationRate.{{ loop.index }}" value="1.0" estimate="false"/>
-                        <shape spec="parameter.RealParameter" id="gammaShape.{{ loop.index }}" value="1.0" estimate="false"/>
-                        <substModel spec="ComplexSubstitutionModel" id="substModel.{{ loop.index }}">
-                            <!-- Equilibrium frequencies -->
-                            <frequencies spec="Frequencies" id="equilibriumfreqs.{{ loop.index }}">
-                                <frequencies spec="parameter.RealParameter" id="equilibriumfrequencies.{{ loop.index }}" value="{{ vu.equilibrium_frequencies }}" estimate="false"/>
+                    <siteModel spec="SiteModel" id="morphSiteModel.{{ vu_ind }}">
+                        <mutationRate spec="parameter.RealParameter" id="mutationRate.{{ vu_ind }}" value="1.0" estimate="false"/>
+                        <shape spec="parameter.RealParameter" id="gammaShape.{{ vu_ind }}" value="1.0" estimate="false"/>
+                        {%- if vu.epoch_heights_string != "" %}
+                        <substModel spec="beastlabs.evolution.substitutionmodel.EpochSubstitutionModel" id="substModel.{{ vu_ind }}">
+                            <epochDates spec="parameter.RealParameter">{{ vu.epoch_heights_string }}</epochDates>
+                            {%- for er in vu.epoch_rates %}
+                            {%- set er_ind = loop.index %}
+                            <model spec="ComplexSubstitutionModel" id="substModel.{{ vu_ind }}.{{ er_ind }}">
+                                <!-- Equilibrium frequencies -->
+                                <frequencies idref="equilibriumfreqs.{{ vu_ind }}"/>
+                                <rates spec="parameter.CompoundValuable" id="rates.{{ vu_ind }}.{{ er_ind }}">
+                                    <!-- Start transition rate matrix off-diagonal entries -->
+                                    {%- for r in er %}
+                                    {%- if r.expression %}
+                                    <var spec="RPNcalculator" expression="{{ r.expression }}">
+                                        {%- for tc in r.transcriptional_categories %}
+                                        <parameter idref="{{ tc }}_rate"/>
+                                        {%- endfor %}
+                                    </var>
+                                    {%- else %}
+                                    {%- for tc in r.transcriptional_categories %}
+                                    <var idref="{{ tc }}_rate"/>
+                                    {%- endfor %}
+                                    {%- endif %}
+                                    {%- endfor %}
+                                </rates>
+                            </model>
+                            {%- endfor %}
+                            <frequencies spec="Frequencies" id="equilibriumfreqs.{{ vu_ind }}">
+                                <frequencies spec="parameter.RealParameter" id="equilibriumfrequencies.{{ vu_ind }}" value="{{ vu.equilibrium_frequencies }}" estimate="false"/>
                             </frequencies>
-                            <rates spec="parameter.CompoundValuable" id="rates.{{ loop.index }}">
+                        </substModel>
+                        {%- else %}
+                        {%- for er in vu.epoch_rates %}
+                        {%- set er_ind = loop.index %}
+                        <substModel spec="ComplexSubstitutionModel" id="substModel.{{ vu_ind }}">
+                            <!-- Equilibrium frequencies -->
+                            <frequencies spec="Frequencies" id="equilibriumfreqs.{{ vu_ind }}">
+                                <frequencies spec="parameter.RealParameter" id="equilibriumfrequencies.{{ vu_ind }}" value="{{ vu.equilibrium_frequencies }}" estimate="false"/>
+                            </frequencies>
+                            <rates spec="parameter.CompoundValuable" id="rates.{{ vu_ind }}">
                                 <!-- Start transition rate matrix off-diagonal entries -->
-                                {%- for r in vu.rates %}
+                                {%- for r in er %}
                                 {%- if r.expression %}
                                 <var spec="RPNcalculator" expression="{{ r.expression }}">
                                     {%- for tc in r.transcriptional_categories %}
@@ -163,10 +205,12 @@
                                 {%- endfor %}
                             </rates>
                         </substModel>
+                        {%- endfor %}
+                        {%- endif %}
                     </siteModel>
                     <!-- root frequencies -->
-                    <rootFrequencies spec="Frequencies" id="rootfreqs.{{ loop.index }}">
-                        <frequencies spec="parameter.RealParameter" id="rootfrequencies.{{ loop.index }}" value="{{ vu.root_frequencies }}" estimate="false"/>
+                    <rootFrequencies spec="Frequencies" id="rootfreqs.{{ vu_ind }}">
+                        <frequencies spec="parameter.RealParameter" id="rootfrequencies.{{ vu_ind }}" value="{{ vu.root_frequencies }}" estimate="false"/>
                     </rootFrequencies>
                     <branchRateModel idref="clock"/>
                 </distribution>
@@ -181,7 +225,13 @@
         <operator spec="Exchange" id="bdskySerialNarrow" tree="@tree" weight="0.0"/>
         <operator spec="Exchange" id="bdskySerialWide" isNarrow="false" tree="@tree" weight="3.0"/>
         <operator spec="WilsonBalding" id="bdskySerialWilsonBalding" tree="@tree" weight="3.0"/>
+        {%- if origin_span[1] %}
+        {%- if origin_span[1] != origin_span[0] %}
         <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="10.0"/>
+        {%- endif %}
+        {%- else %}
+        <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="10.0"/>
+        {%- endif %}
         <operator spec="ScaleOperator" id="becomeUninfectiousRateScaler" parameter="@becomeUninfectiousRate" weight="2.0"/>
         <operator spec="ScaleOperator" id="reproductiveNumberScaler" parameter="@reproductiveNumber" weight="10.0"/>
         <operator spec="ScaleOperator" id="samplingProportionScaler" parameter="@samplingProportion" weight="10.0"/>
@@ -233,7 +283,13 @@
             <log idref="prior"/>
             <log spec="TreeHeightLogger" id="treeHeight" tree="@tree"/>
             <log idref="birthDeath"/>
+            {%- if origin_span[1] %}
+            {%- if origin_span[1] != origin_span[0] %}
             <log idref="origin"/>
+            {%- endif %}
+            {%- else %}
+            <log idref="origin"/>
+            {%- endif %}
             <log idref="becomeUninfectiousRate"/>
             <log idref="reproductiveNumber"/>
             <log idref="samplingProportion"/>
@@ -272,11 +328,20 @@
             <log spec="TreeWithMetaDataLogger" id="treeWithMetaDataLogger" branchratemodel="@clock" tree="@tree"/>
         </logger>
         <operatorschedule spec="OperatorSchedule" id="operatorSchedule"/>
-        <logger id="ancestralStateLogger" fileName="$(tree).ancestral.trees" logEvery="10000" mode="tree">
+        {%- if ancestral_logger == "state" %}
+        <logger id="ancestralStateLogger" fileName="$(tree).ancestral.trees" logEvery="1000" mode="tree">
             <!-- Start character ancestral state loggers -->
             {%- for vu in variation_units %}
-            <log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" data="@filter.{{ loop.index }}" taxonset="@taxa" siteModel="@morphSiteModel.{{ loop.index }}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
+            <log spec="beastlabs.evolution.likelihood.AncestralStateLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" value="site.{{ loop.index }}" data="@filter.{{ loop.index }}" taxonset="@taxa" siteModel="@morphSiteModel.{{ loop.index }}" rootFrequencies="@rootfreqs.{{loop.index}}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
             {%- endfor %}
         </logger>
+        {%- elif ancestral_logger == "sequence" %}
+        <logger id="ancestralSequenceLogger" fileName="$(tree).ancestral.trees" logEvery="1000" mode="tree">
+            <!-- Start character ancestral sequence loggers -->
+            {%- for vu in variation_units %}
+            <log spec="beastclassic.evolution.likelihood.AncestralSequenceLogger" id="morphTreeLikelihood.character.{{ loop.index }}.anclogger" value="site.{{ loop.index }}" tag="morphTreeLikelihood.character.{{ loop.index }}" data="@filter.{{ loop.index }}" siteModel="@morphSiteModel.{{ loop.index }}" rootFrequencies="@rootfreqs.{{loop.index}}" branchRateModel="@clock" tree="@tree" useAmbiguities="true" useTipLikelihoods="true"/>
+            {%- endfor %}
+        </logger>
+        {%- endif %}
     </run>
 </beast>
