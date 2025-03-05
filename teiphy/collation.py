@@ -2,7 +2,8 @@
 
 from enum import Enum
 from typing import List, Union
-from pathlib import os, Path
+import os
+from pathlib import Path
 from datetime import datetime  # for calculating the current year (for dating and tree height purposes)
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
