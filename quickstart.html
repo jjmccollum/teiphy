@@ -1,25 +1,25 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quickstart &mdash; teiphy  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=8f9e6779" />
+
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=71494f10"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=71494f10"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -109,40 +109,40 @@
 }
 </style>
 <section id="quickstart">
-<h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h1>
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h1>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
 <p>The software can be installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>teiphy
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install teiphy
 </pre></div>
 </div>
 <p>Alternatively, you can install the package by cloning this repository and installing it with poetry:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jjmccollum/teiphy.git
-<span class="nb">cd</span><span class="w"> </span>teiphy
-pip<span class="w"> </span>install<span class="w"> </span>poetry
-poetry<span class="w"> </span>install
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/jjmccollum/teiphy.git
+<span class="nb">cd</span> teiphy
+pip install poetry
+poetry install
 </pre></div>
 </div>
 <p>Once the package is installed, you can run all unit tests via the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>pytest
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run pytest
 </pre></div>
 </div>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <p>To use the software, run the <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> command line tool:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>&lt;input<span class="w"> </span>TEI<span class="w"> </span>XML&gt;<span class="w"> </span>&lt;output<span class="w"> </span>file&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy &lt;input TEI XML&gt; &lt;output file&gt;
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">teiphy</span></code> can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, BEAST 2.7 XML, CSV, TSV, Excel and STEMMA formats.
 <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
 “.nex”, “.nexus”, “.nxs”, “.ph”, “.phy”, “.fa”, “.fasta”, “.xml”, “.tnt”, “.csv”, “.tsv”, “.xlsx”.</p>
 <p>To explicitly say which format you wish to export to, use the <code class="docutils literal notranslate"><span class="pre">--format</span></code> option. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>&lt;input<span class="w"> </span>TEI<span class="w"> </span>XML&gt;<span class="w"> </span>&lt;output<span class="w"> </span>file&gt;<span class="w"> </span>--format<span class="w"> </span>nexus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy &lt;input TEI XML&gt; &lt;output file&gt; --format nexus
 </pre></div>
 </div>
 <p>For more information about the other options, see the help with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy<span class="w"> </span>--help
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>teiphy --help
 </pre></div>
 </div>
 <p>Or see the documentation with explanations about <a class="reference external" href="https://jjmccollum.github.io/teiphy/advanced.html">advanced usage</a>.</p>
