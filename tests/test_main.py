@@ -319,7 +319,7 @@ def test_to_nexus_calibrate_dates():
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
         assert "CALIBRATE 18 = fixed(%d)" % (datetime.now().year - 1364) in text
-        assert "CALIBRATE P46 = uniform(%d,%d)" % (datetime.now().year - 225, datetime.now().year - 175) in text
+        assert "CALIBRATE P46 = uniform(%d,%d)" % (datetime.now().year - 399, datetime.now().year - 200) in text
 
 
 def test_to_nexus_calibrate_dates_no_dates():
@@ -371,7 +371,7 @@ def test_to_nexus_mrbayes():
         assert "Begin MRBAYES;" in text
         assert "prset treeagepr = uniform(%d,%d)" % (datetime.now().year - 80, datetime.now().year - 50) in text
         assert "calibrate 18 = fixed(%d);" % (datetime.now().year - 1364) in text
-        assert "calibrate P46 = uniform(%d,%d);" % (datetime.now().year - 225, datetime.now().year - 175) in text
+        assert "calibrate P46 = uniform(%d,%d);" % (datetime.now().year - 399, datetime.now().year - 200) in text
 
 
 def test_to_nexus_mrbayes_no_dates():
@@ -1416,7 +1416,7 @@ def test_to_csv_show_ext_distance_table():
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
         assert (
-            ",19/41," in text
+            ",18/40," in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1432,7 +1432,7 @@ def test_to_csv_proportion_show_ext_distance_table():
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
         assert (
-            ",0.4634146341463415/41," in text
+            ",0.45/40," in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1459,7 +1459,7 @@ def test_to_csv_proportion_similarity_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
-        assert ",0.5365853658536586," in text
+        assert ",0.55," in text
 
 
 def test_to_csv_show_ext_similarity_table():
@@ -1475,7 +1475,7 @@ def test_to_csv_show_ext_similarity_table():
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
         assert (
-            "22/41" in text
+            "22/40" in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1491,7 +1491,7 @@ def test_to_csv_proportion_show_ext_similarity_table():
         assert text.startswith(",UBS,P46,01,02,03,04,06")
         assert "\nUBS," in text
         assert (
-            "0.5365853658536586/41" in text
+            "0.55/40" in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1642,7 +1642,7 @@ def test_to_phylip_similarity_matrix():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("%d" % (len(xml_witnesses)))
-        assert "UBS 42 22" in text  # UBS agrees with itself 42 times and agrees with P46 22 times
+        assert "UBS 40 20" in text  # UBS agrees with itself 40 times and agrees with P46 20 times
 
 
 def test_to_stemma():
