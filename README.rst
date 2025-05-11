@@ -95,7 +95,7 @@ To use the software, run the ``teiphy`` command line tool:
 
     teiphy <input TEI XML> <output file>
 
-``teiphy`` can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, BEAST 2.7 XML, CSV, TSV, Excel and STEMMA formats. 
+``teiphy`` can export to NEXUS, Hennig86 (TNT), PHYLIP (in the relaxed form used by RAxML), FASTA, BEAST 2.7 XML, CSV, TSV, Excel and ``stemma`` formats. 
 ``teiphy`` will try to infer the file format to export to from the extension of the output file. Accepted file extensions are:
 ".nex", ".nexus", ".nxs", ".ph", ".phy", ".fa", ".fasta", ".xml", ".tnt", ".csv", ".tsv", ".xlsx".
 

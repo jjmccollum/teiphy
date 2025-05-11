@@ -8,7 +8,7 @@ For these reasons, ``teiphy`` ensures that these types of judgments, as well as 
 
 Collations should preserve as much detail as possible, including information on how certain types of data can be normalized and collapsed for analysis.
 Since we may want to conduct the same analysis at different levels of granularity, the underlying collation data should be available for us to use in any case, and only the output should reflect changes in the desired level of detail.
-Likewise, as noted in the previous section, uncertainty about witnesses’ attestations should be encoded in the collation and preserved in the conversion of the collation.
+Likewise, as noted in the previous section, uncertainty about witnesses' attestations should be encoded in the collation and preserved in the conversion of the collation.
 
 Analysis at Varying Levels of Detail Using Reading Types
 --------------------------------------------------------
@@ -128,7 +128,7 @@ Underneath this element, you can optionally include ``certainty``
 elements (also depicted in the above example), which can indicate
 different probabilities associated with their respective targeted
 readings. If these are not specified, then the readings referenced by
-the ``witDetail`` element’s ``@target`` attribute will be assigned equal
+the ``witDetail`` element's ``@target`` attribute will be assigned equal
 probabilities. While it is recommended that you specify values between 0
 and 1 for the ``@degree`` attribute of each ``certainty`` element, this
 is not necessary; the values you specify will be normalized in the
@@ -165,7 +165,7 @@ XML:
 
 The only condition is that you must use these attributes consistently:
 if you label a ``rdg`` element with an ``@xml:id`` attribute, then you
-must reference that attribute’s value in the ``witDetail`` and
+must reference that attribute's value in the ``witDetail`` and
 ``certainty`` elements; otherwise, you must use and reference the ``@n``
 attribute.
 
@@ -286,24 +286,24 @@ arguments when invoking any conversion command through the CLI:
 
    -m lac -m overlap
 
-Correctors’ Hands
+Correctors' Hands
 -----------------
 
 Collation data often distinguishes the first hand responsible for a
 manuscript from the hands of correctors who introduced changed readings
 either into the text or into the margin of the same manuscript. Some
 manuscripts include multiple layers of correction, where each corrector
-can be assumed to have had knowledge of any previous correctors’ notes.
+can be assumed to have had knowledge of any previous correctors' notes.
 Since the activity of most correctors is sporadic, the average corrector
 will effectively be a fragmentary witness in the places where he or she
 is cited in the apparatus. But if you wish to assume that each corrector
 approved of all the readings from the previous hand that he or she did
-not change, then you can “fill out” each corrector’s text using the text
+not change, then you can “fill out” each corrector's text using the text
 of the first hand (for the first corrector) or the filled-out text of
 the previous corrector (for all subsequent correctors). Under this
 assumption, the placement of the corrector on a phylogenetic tree will
 be facilitated by the disambiguation of what would otherwise be the
-corrector’s “missing” characters.
+corrector's “missing” characters.
 
 To enable this behavior, you first have to ensure that the desired
 correctors have their own ``witness`` elements in the collation
@@ -365,7 +365,7 @@ This will ignore multiple attestations (i.e., treat the units where they
 occur as missing characters for the base witnesses with multiple
 attestations at those units), unless the sigla with multiple attestation
 suffixes are included as distinct ``witness`` elements in the
-collation’s ``listWit`` element.
+collation's ``listWit`` element.
 Note that the ``*`` character must be passed as an option in a special way (i.e., as ``-s"*"``, with no space after the argument and surrounding quotation marks)
 because it is a reserved character on the command line and must be escaped properly.
 
@@ -382,8 +382,8 @@ Ascertainment Bias
 ------------------
 
 To facilitate accurate branch length estimation, ``teiphy`` includes all constant sites (i.e., variation units with only one substantive reading after trivial readings have been merged with their parents) in its output by default.
-(The only exception is output for the STEMMA program, which is parsimony-based and does not estimate branch lengths.)
-If you want only informative sites to be included in your output, then you can ensure that this happens by including the ``--drop-constant`` flag in your command.
+(The only exception is output for the ``stemma`` program, which is parsimony-based and does not estimate branch lengths.)
+If you want only sites with textual variants to be included in your output, then you can ensure that this happens by including the ``--drop-constant`` flag in your command.
 
 Note that if you do exclude constant sites, or if your TEI XML collation only includes locations in the textual tradition where the readings differ, 
 then it will be important to correct for ascertainment bias when performing phylogenetic analysis which utilizes the branch lengths 
@@ -444,7 +444,7 @@ as in the following examples:
 
 As part of the Bayesian phylogenetic analysis, the distributions of the tip dates for witnesses with date ranges will also be estimated.
 
-Tip dates are also used by ``teiphy`` in converting TEI XML to inputs to the STEMMA program, as STEMMA uses date ranges to constrain the relationships between witnesses that it will consider.
+Tip dates are also used by ``teiphy`` in converting TEI XML to inputs to the ``stemma`` program, as ``stemma`` uses date ranges to constrain the relationships between witnesses that it will consider.
 
 Root Frequencies and Substitution Models
 ----------------------------------------
@@ -586,6 +586,56 @@ If you wish to encode such transcriptional possibilities as time-dependent, you 
     </listRelation>
 
 If you tag certain transcriptional ``relation`` elements in this way, ``teiphy`` will map the ``listRelation`` to an ``EpochSubstitutionModel`` instance consisting of multiple substitution models that apply at the corresponding points in time.
+
+Assigning Weights to Sites (for Weighted Parsimony)
+---------------------------------------------------
+
+If you are using ``stemma``, you can assign different weights to variation units so that changes in those units will contribute more or less to the cost of a candidate stemma.
+As with intrinsic and transcriptional probabilities, you can do this by defining analytic tags for different variation categories as follows:
+
+.. code:: xml
+
+    <interpGrp type="weight">
+        <interp xml:id="Semantic">
+            <p>The current variation unit involves semantic changes.</p>
+            <certainty locus="value" degree="10"/>
+        </interp>
+        <interp xml:id="Idiolectal">
+            <p>The current variation unit involves idiolectal changes.</p>
+            <certainty locus="value" degree="5"/>
+        </interp>
+        <interp xml:id="Pragmatic">
+            <p>The current variation unit involves pragmatic changes.</p>
+            <certainty locus="value" degree="2"/>
+        </interp>
+        <interp xml:id="Aural">
+            <p>The current variation unit involves changes due to similar sounds.</p>
+            <certainty locus="value" degree="1"/>
+        </interp>
+    </interpGrp>
+
+As with intrinsic odds categories, you can assign fixed weights to different categories using ``certainty`` elements, where a given category's weight is specified in the ``@degree`` attribute.
+In the above example, units characterized by changes of the ``Aural`` category will have the lowest weight (corresponding to changes judged to be most common), while those characterized by ``Semantic`` changes will have the highest weight (corresponding to changes judged to be least common).
+Since ``stemma`` only supports integer weights, any floating-point weights specified in this way will be coerced to integers by truncating their fractional part.
+If you do not specify any weight for a category, its weight will default to 1.
+
+You can then assign one or more of these categories to each variation unit in your TEI XML collation.
+Specifically, for each ``app`` element, you can provide one or more pointers to these categories using the ``@ana`` attribute, as in the following example:
+
+.. code:: xml
+
+    <app xml:id="B10K1V15U26-40" ana="#Pragmatic #Semantic">
+        ...
+    </app>
+
+In this case, two categories, ``Pragmatic`` and ``Semantic``, are referenced.
+If a variation unit is associated with only one category, then variations in it will incur costs scaled by that category's weight.
+If it is associated with more than one category, then variations in it will incur costs scaled by the average of those categories' weights.
+If a variation unit is associated with no category, then its weight will default to 1.
+
+Note that all changes in a weighted variation unit, regardless of their source and target readings or their direction, will have the same weight.
+Assigning varying weights to transitions between specific readings is not supported in ``stemma``.
+In a Bayesian phylogenetic setting, this can be done in BEAST 2 using transcriptional relations, as described in the previous section.
 
 Logging for Ancestral State Reconstructions
 -------------------------------------------
