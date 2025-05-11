@@ -144,6 +144,24 @@
         </fileDesc>
     </teiHeader>
     <text xml:lang="grc">
+        <interpGrp type="weight">
+            <interp xml:id="Semantic">
+                <p>The current variation unit involves semantic changes.</p>
+                <certainty locus="value" degree="10"/>
+            </interp>
+            <interp xml:id="Idiolectal">
+                <p>The current variation unit involves idiolectal changes.</p>
+                <certainty locus="value" degree="5"/>
+            </interp>
+            <interp xml:id="Pragmatic">
+                <p>The current variation unit involves pragmatic changes.</p>
+                <certainty locus="value" degree="2"/>
+            </interp>
+            <interp>
+                <p>The current variation unit involves changes due to similar sounds.</p>
+                <certainty locus="value" degree="1"/>
+            </interp>
+        </interpGrp>
         <interpGrp type="intrinsic">
             <interp xml:id="RatingA">
                 <p>The text is certain.</p>

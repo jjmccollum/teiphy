@@ -7,6 +7,7 @@
             </titleStmt>
             <publicationStmt>
                 <authority xml:id="JJM">Edited by Joey McCollum</authority>
+                <authority xml:id="RT">Arabic versional evidence added by Robert Turnbull</authority>
                 <date>2022</date>
                 <availability>
                     <p>This is an open access work licensed under a Creative Commons Attribution 4.0 International license.</p>
@@ -23,13 +24,28 @@
                     <witness n="UBS">
                         <origDate notBefore="50" notAfter="80"/>
                     </witness>
+                    <witness n="Byz">
+                        <origDate notBefore="400" notAfter="799"/>
+                    </witness>
+                    <witness n="Lect">
+                        <origDate notBefore="400" notAfter="799"/>
+                    </witness>
                     <!-- Papyri -->
                     <witness n="P46">
                         <origDate notBefore="200" notAfter="399"/>
                     </witness>
+                    <witness n="P49">
+                        <origDate notBefore="200" notAfter="299"/>
+                    </witness>
                     <!-- Majuscules -->
                     <witness n="01">
                         <origDate notBefore="300" notAfter="399"/>
+                    </witness>
+                    <witness type="corrector" n="01C1">
+                        <origDate notBefore="400" notAfter="599"/>
+                    </witness>
+                    <witness type="corrector" n="01C2">
+                        <origDate notBefore="600" notAfter="699"/>
                     </witness>
                     <witness n="02">
                         <origDate notBefore="400" notAfter="499"/>
@@ -37,8 +53,17 @@
                     <witness n="03">
                         <origDate notBefore="300" notAfter="399"/>
                     </witness>
+                    <witness type="corrector" n="03C2">
+                        <origDate notBefore="500" notAfter="599"/>
+                    </witness>
                     <witness n="04">
                         <origDate notBefore="400" notAfter="499"/>
+                    </witness>
+                    <witness type="corrector" n="04C2">
+                        <origDate notBefore="500" notAfter="799"/>
+                    </witness>
+                    <witness type="corrector" n="04C3">
+                        <origDate notBefore="800" notAfter="899"/>
                     </witness>
                     <witness n="06">
                         <origDate notBefore="500" notAfter="599"/>
@@ -55,17 +80,53 @@
                     <witness n="012">
                         <origDate notBefore="800" notAfter="899"/>
                     </witness>
+                    <witness n="016">
+                        <origDate notBefore="400" notAfter="499"/>
+                    </witness>
+                    <witness type="commentary" n="018">
+                        <origDate notBefore="800" notAfter="899"/>
+                    </witness>
+                    <witness n="020">
+                        <origDate notBefore="800" notAfter="899"/>
+                    </witness>
+                    <witness n="025">
+                        <origDate notBefore="800" notAfter="899"/>
+                    </witness>
+                    <witness n="044">
+                        <origDate notBefore="800" notAfter="999"/>
+                    </witness>
+                    <witness type="commentary" n="075">
+                        <origDate notBefore="900" notAfter="999"/>
+                    </witness>
+                    <witness n="082">
+                        <origDate notBefore="500" notAfter="599"/>
+                    </witness>
+                    <witness type="commentary" n="0150">
+                        <origDate notBefore="800" notAfter="899"/>
+                    </witness>
+                    <witness n="0159">
+                        <origDate notBefore="500" notAfter="599"/>
+                    </witness>
                     <!-- Minuscules -->
-                    <witness n="18">
-                        <origDate when="1364"/>
+                    <witness n="6">
+                        <origDate notBefore="1200" notAfter="1299"/>
                     </witness>
                     <witness n="33">
                         <origDate notBefore="800" notAfter="899"/>
                     </witness>
-                    <witness n="35">
-                        <origDate notBefore="1000" notAfter="1099"/>
+                    <witness n="81">
+                        <origDate when="1044"/>
                     </witness>
-                    <witness n="88">
+                    <witness n="104">
+                        <origDate when="1087"/>
+                    </witness>
+                    <witness n="256">
+                        <origDate notBefore="1000" notAfter="1199"/>
+                    </witness>
+                    <witness n="263">
+                        <origDate notBefore="1200" notAfter="1299"/>
+                    </witness>
+                    <witness n="365">
                         <origDate notBefore="1100" notAfter="1199"/>
                     </witness>
                     <witness n="424">
@@ -74,32 +135,47 @@
                     <witness type="corrector" n="424C">
                         <origDate notBefore="1025" notAfter="1099"/>
                     </witness>
-                    <witness type="commentary" n="606">
-                        <origDate notBefore="1000" notAfter="1099"/>
+                    <witness n="436">
+                        <origDate notBefore="1000" notAfter="1199"/>
                     </witness>
-                    <witness n="915">
-                        <origDate notBefore="1200" notAfter="1299"/>
+                    <witness n="459">
+                        <origDate when="1092"/>
                     </witness>
                     <witness n="1175">
                         <origDate notBefore="1000" notAfter="1099"/>
                     </witness>
-                    <witness n="1505">
+                    <witness n="1241">
                         <origDate notBefore="1100" notAfter="1199"/>
                     </witness>
-                    <witness n="1611">
-                        <origDate notBefore="900" notAfter="999"/>
+                    <witness n="1319">
+                        <origDate notBefore="1100" notAfter="1199"/>
+                    </witness>
+                    <witness n="1573">
+                        <origDate notBefore="1100" notAfter="1299"/>
                     </witness>
                     <witness n="1739">
                         <origDate notBefore="900" notAfter="999"/>
                     </witness>
+                    <witness n="1852">
+                        <origDate notBefore="1200" notAfter="1299"/>
+                    </witness>
                     <witness n="1881">
                         <origDate notBefore="1300" notAfter="1399"/>
                     </witness>
-                    <witness type="commentary" n="1910">
-                        <origDate notBefore="1000" notAfter="1099"/>
+                    <witness n="1912">
+                        <origDate notBefore="900" notAfter="999"/>
                     </witness>
-                    <witness n="2495">
-                        <origDate notBefore="1400" notAfter="1499"/>
+                    <witness type="commentary" n="1962">
+                        <origDate notBefore="1000" notAfter="1199"/>
+                    </witness>
+                    <witness n="2127">
+                        <origDate notBefore="1100" notAfter="1199"/>
+                    </witness>
+                    <witness n="2200">
+                        <origDate notBefore="1300" notAfter="1399"/>
+                    </witness>
+                    <witness n="2464">
+                        <origDate notBefore="800" notAfter="899"/>
                     </witness>
                     <!-- Versions -->
                     <witness type="version" n="vg">
@@ -114,6 +190,9 @@
                     <witness type="corrector" n="syrhmg">
                         <origDate notBefore="615" notAfter="616"/>
                     </witness>
+                    <witness type="version" n="syrpal">
+                        <origDate notBefore="400" notAfter="1030"/><!-- Metzger, The Early Versions of the New Testament: Their Origin, Transmission, And Limitations, 77-78; origin around the early fifth century, earliest extant manuscript dated to 1030 -->
+                    </witness>
                     <witness type="version" n="copsa">
                         <origDate notBefore="200" notAfter="599"/><!-- Metzger, The Early Versions of the New Testament: Their Origin, Transmission, And Limitations, 113-114, 129-131; origin as early as 200, earliest complete manuscripts of the Pauline Epistles date to around 600 -->
                     </witness>
@@ -123,21 +202,43 @@
                     <witness type="version" n="arm">
                         <origDate notBefore="410" notAfter="1199"/><!-- Metzger, The Early Versions of the New Testament: Their Origin, Transmission, And Limitations, 157, 161; origin between 410-414, earliest manuscript of Paul dates from the twelfth century -->
                     </witness>
+                    <witness type="version" n="eth">
+                        <origDate notBefore="400" notAfter="1378"/><!-- Metzger, The Early Versions of the New Testament: Their Origin, Transmission, And Limitations, 223, 226; origin as early as fifth century, earliest manuscript of Paul is dated to 1378 -->
+                    </witness>
                     <witness type="version" n="geo">
                         <origDate notBefore="450" notAfter="960"/><!-- Metzger, The Early Versions of the New Testament: Their Origin, Transmission, And Limitations, 184, 187; origin likely before the middle of the fifth century, earliest manuscript of Paul dates from between 959 and 969 -->
                     </witness>
+                    <witness type="version" n="slav">
+                        <origDate notBefore="884" notAfter="1199"/><!-- Metzger, The Early Versions of the New Testament: Their Origin, Transmission, And Limitations, 403, 408-409; origin as early as 884, earliest manuscripts of Paul dated to the twelfth century -->
+                    </witness>
+                    <witness type="version" n="goth" resp="#JJM">
+                        <origDate notBefore="490" notAfter="555"/>
+                    </witness>
+                    <witness type="version" n="arbgr1" resp="#RT">
+                        <origDate notBefore="750" notAfter="849"/>
+                        <note>Based on transcriptions of Sinai ar. 73, 148, 155, 159, 160, 163.</note>
+                    </witness>
                     <!-- Church fathers -->
                     <witness type="father" n="Ambrosiaster">
-                        <origDate notBefore="363" notAfter="800"/><!-- composition date during the tenure of Pope Damasus; earliest manuscript is eighth-century -->
+                        <origDate notBefore="363" notAfter="799"/><!-- composition date during the tenure of Pope Damasus; earliest manuscript is eighth-century -->
+                    </witness>
+                    <witness type="father" n="Augustine">
+                        <origDate notBefore="386" notAfter="449"/><!-- Augustine's conversion; earliest manuscript of City of God is dated to 449 at the latest (https://www.medievalists.net/2018/07/oldest-surviving-manuscripts-of-augustines-works/) -->
                     </witness>
                     <witness type="father" n="Chrysostom">
                         <origDate notBefore="375" notAfter="999"/><!-- our earliest extant manuscripts of Chrysostom's homilies on Ephesians date to the tenth century (per Pinakes) -->
+                    </witness>
+                    <witness type="father" n="CyrilOfAlexandria">
+                        <origDate notBefore="412" notAfter="1099"/><!-- our earliest extant manuscripts of Cyril's works in which he cites Ephesians date to the eleventh century (per Pinakes) -->
                     </witness>
                     <witness type="father" n="Jerome">
                         <origDate notBefore="386" notAfter="899"/><!-- Heine dates the composition of Jerome's commentary on Ephesians to 386-388 in his introduction; the earliest witness to his commentary on Ephesians is dated to the ninth century (per https://www.fourthcentury.com/jerome-commentaries-on-four-letters-of-paul/) -->
                     </witness>
                     <witness type="father" n="MariusVictorinus">
                         <origDate notBefore="363" notAfter="1499"/><!-- the earliest extant manuscript of his commentary on Ephesians is dated to the fifteenth century -->
+                    </witness>
+                    <witness type="father" n="Origen">
+                        <origDate notBefore="232" notAfter="999"/><!-- the earliest catena manuscript containing Origen's commentary is GA 1900, dating to the tenth century -->
                     </witness>
                     <witness type="father" n="Pelagius">
                         <origDate notBefore="390" notAfter="599"/><!-- the archetype of the extant tradition probably dates to the fifth or sixth century (Souter 1:202, 223) -->
@@ -150,6 +251,24 @@
         </fileDesc>
     </teiHeader>
     <text xml:lang="grc">
+        <interpGrp type="weight">
+            <interp xml:id="Semantic">
+                <p>The current variation unit involves semantic changes.</p>
+                <certainty locus="value" degree="10"/>
+            </interp>
+            <interp xml:id="Idiolectal">
+                <p>The current variation unit involves idiolectal changes.</p>
+                <certainty locus="value" degree="5"/>
+            </interp>
+            <interp xml:id="Pragmatic">
+                <p>The current variation unit involves pragmatic changes.</p>
+                <certainty locus="value" degree="2"/>
+            </interp>
+            <interp xml:id="Aural">
+                <p>The current variation unit involves changes due to similar sounds.</p>
+                <certainty locus="value" degree="1"/>
+            </interp>
+        </interpGrp>
         <interpGrp type="intrinsic">
             <interp xml:id="RatingA">
                 <p>The current reading is absolutely more likely than the linked reading.</p>
@@ -179,10 +298,6 @@
             <interp xml:id="AurConf">
                 <p>Aural confusion concerning letters or dipthongs that came to have the same sound in later Greek, including various itacisms (i.e., interchanges between ι, ει, η, οι, and υ), \textgreek{αι}-\textgreek{ε} interchanges, ο-ω interchanges, interchanges between similar-sounding consonants (e.g., β-υ after certain vowels and π-φ) and other less common interchanges (e.g., vowel sounds that might be confused if spoken quickly).</p>
             </interp>
-            <interp xml:id="LingConf">
-                <p>Linguistic confusion concerning rules of Greek grammar.</p>
-		        <p><i>Constructiones ad sensum</i> that reflect changes in grammatical rules over time also fall under this rubric.</p>
-            </interp>
             <interp xml:id="VisErr">
                 <p>Visual error, such as paleographic confusion of similar letters, haplography, dittography and other repetitions of nearby letters, and other skips of the eye resulting in small omissions. Rarer situations, like duplication or omission of letters related to the presence or absence of an ornamental capital at the start of a line, also fall under this rubric.</p>
             </interp>
@@ -194,31 +309,30 @@
             </interp>
         </interpGrp>
         <body>
-            <app xml:id="B10K1V1U24-26">
+            <app xml:id="B10K1V1U24-26" ana="#Semantic">
                 <lem/>
-                <rdg n="1" wit="UBS 01C2 02 03C2 06 012 18 33 35 88 424* 606 915 1175 1505 1611 1881 1910 2495 vg syrp syrh copsa copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
-                <rdg n="1-f1" type="defective" cause="parablepsis" wit="010"><w>εν</w><w>εφεω</w></rdg>
-                <rdg n="2" wit="P46 01* 03* 424C 1739"/>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
+                <rdg n="1" wit="UBS 01C2 02 03C2 06 010 012 018 020 025 044C 075 0150 33 81 104 256 263 365 424* 436 459 1175 1241 1319 1573 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh copsa copbo arm eth geo slav goth arbgr1 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>εφεσω</w></rdg>
+                <rdg n="2" wit="P46 01* 03* 424C 1739 Origen"/>
+                <witDetail n="Z" type="lac" wit="04 016 044* 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
                     </listRelation>
                     <listRelation type="transcriptional">
+                        <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K1V6U20-24">
+            <app xml:id="B10K1V6U20-24" ana="#Semantic">
                 <lem><w>εν</w><w>τω</w><w>ηγαπημενω</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 03 06C2 18 33 35 424 606 915 1175 1505 1611 1739 1881 1910/1 1910/3 syrp syrhmg arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>εν</w><w>τω</w><w>ηγαπημενω</w></rdg>
-                <rdg n="1-f1" type="defective" cause="linguistic-confusion" wit="2495"><w>εν</w><w>τω</w><w>αγαπημενω</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="88"><w>εν</w><w>τω</w><w>ηγαπιμενω</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="commentary" wit="1910/2"><w>δια</w><w>του</w><w>ηγαπημενου</w></rdg>
-                <rdg n="2" wit="06* 010 012 syrh copsa copbo Ambrosiaster MariusVictorinus"><w>εν</w><w>τω</w><w>ηγαπημενω</w><w>υιω</w><w>αυτου</w></rdg>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 424C"/>
+                <rdg n="1" wit="UBS P46 01 02 03 06C2 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect syrp syrpal syrhmg arm geo slav Chrysostom Jerome Origen TheodoreOfMopsuestia"><w>εν</w><w>τω</w><w>ηγαπημενω</w></rdg>
+                <rdg n="2" wit="06* 010 012 syrh copsa copbo eth goth Ambrosiaster Augustine MariusVictorinus"><w>εν</w><w>τω</w><w>ηγαπημενω</w><w>υιω</w><w>αυτου</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Pelagius"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W1/2-3" type="ambiguous" cause="translation" xml:lang="ara" wit="arbgr1" target="1 2"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
@@ -229,52 +343,51 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K1V14U2">
+            <app xml:id="B10K1V14U2" ana="#Idiolectal">
                 <lem><w>ο</w></lem>
-                <rdg n="1" wit="UBS P46 02 03 010 012 424C 606 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh"><w>ο</w></rdg>
-                <rdg n="2" wit="01 06 18 33 35 88 424* 915 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ος</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg copsa copbo"/>
+                <rdg n="1" wit="UBS P46 02 03 010 012 020 025 075 6 81 104 256 263 365 424C 459 1175 1319 1573 1739 1881 1912 1962 2127 syrp syrh slav CyrilOfAlexandria Origen"><w>ο</w></rdg>
+                <rdg n="2" wit="01 06 018 044 0150 33 424* 436 1241 1852 2200 2464 Byz Lect vg goth Ambrosiaster Augustine Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ος</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="Chrysostom"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" cause="translation" xml:lang="ara" wit="arbgr1" target="1 2"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#LingConf"/>
+                        <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#Clar"/>
                         <relation active="1" passive="2" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K1V15U26-40">
+            <app xml:id="B10K1V15U26-40" ana="#Pragmatic #Semantic">
                 <lem><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></lem>
-                <rdg n="1" wit="UBS 01C2 06C2 18 35 88 424 606 915 1505 1611 2495 vg syrh copsa arm geo Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="2" wit="06* 010 012"><w>και</w><w>την</w><w>αγαπην</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <rdg n="3" wit="1175 1910"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w><w>αγαπην</w></rdg>
-                <rdg n="4" wit="P46 01* 02 03 33 1739 1881 Jerome"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
-                <witDetail n="W1/4" type="ambiguous" wit="copbo" target="1 4" ><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 424C syrp syrhmg"/>
+                <rdg n="1" wit="UBS 01C2 06C2 018 020 044 075 0150 6 424 1241 1852 1912 1962 2200 Byz Lect vg syrh copsa arm eth geo slav goth arbgr1 Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>και</w><w>την</w><w>αγαπην</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
+                <rdg n="1-s1" type="subreading" wit="06* 010 012"><w>και</w><w>την</w><w>αγαπην</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
+                <rdg n="2" wit="P46 01* 02 03 025 33 1739 1881 Augustine Jerome Origen"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w></rdg>
+                <rdg n="3" wit="81 104 256 263 365 436 459 1175 1319 1573 2127 CyrilOfAlexandria"><w>και</w><w>την</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w><w>αγαπην</w></rdg>
+                <rdg n="3-s1" type="subreading" cause="clarification" wit="2464"><w>και</w><w>εις</w><w>παντας</w><w>τους</w><w>αγιους</w><w>αγαπην</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" wit="copbo" target="1 2" ><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
                         <relation active="2" passive="3" ana="#EqualRating"/>
-                        <relation active="3" passive="4" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
                         <relation active="1" passive="3" ana="#Clar"/>
-                        <relation active="1" passive="4" ana="#VisErr"/>
-                        <relation active="2" passive="3" ana="#Clar"/>
-                        <relation active="4" passive="2 3" ana="#Clar"/>
-                        <relation active="2 3 4" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="2" passive="1 3" ana="#Clar"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K1V18U2-12">
-                <lem><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></lem>
-                <rdg n="1" wit="UBS 01 02 06 18 35 88 424 606 915 1505 1611 1910 2495 vg syrp syrh copsa copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="010 012"><w>πεφωτεισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w><w>υμων</w></rdg>
-                <rdg n="2" wit="P46 03 33 1175 1739 1881"><w>πεφωτισμενους</w><w>τους</w><w>οφθαλμους</w><w>της</w><w>καρδιας</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg TheodoreOfMopsuestia"/>
+            <app xml:id="B10K1V18U12" ana="#Pragmatic">
+                <lem><w>υμων</w></lem>
+                <rdg n="1" wit="UBS 01 02 06 010 012 018 020 025 044 075 0150 81 104 256 263 365 424 436 459 1241 1319 1573 1852 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo eth geo slav goth arbgr1 Ambrosiaster Augustine Chrysostom Jerome MariusVictorinus Pelagius"><w>υμων</w></rdg>
+                <rdg n="2" wit="P46 03 6 33 1175 1739 1881 arm CyrilOfAlexandria Origen"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
@@ -286,38 +399,38 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K2V5U16-18">
+            <app xml:id="B10K2V5U16-18" ana="#Idiolectal">
                 <lem><w>τω</w><w>χριστω</w></lem>
-                <rdg n="1" wit="UBS 01 02 06 010 012 18 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 syrp syrh Jerome Pelagius TheodoreOfMopsuestia"><w>τω</w><w>χριστω</w></rdg>
-                <rdg n="2" wit="P46 03 33 copsa copbo arm geo Ambrosiaster Chrysostom MariusVictorinus"><w>εν</w><w>τω</w><w>χριστω</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
+                <rdg n="1" wit="UBS 01 02 06 010 012 018 020 025 044 075 0150 6 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect slav goth Augustine CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>τω</w><w>χριστω</w></rdg>
+                <rdg n="2" wit="syrp syrh syrpal"><w>συν</w><w>τω</w><w>χριστω</w></rdg>
+                <rdg n="3" wit="P46 03 33 copsa copbo arm eth geo Ambrosiaster Chrysostom MariusVictorinus"><w>εν</w><w>τω</w><w>χριστω</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" cause="translation" xml:lang="ara" wit="arbgr1" target="1 2"/>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W1/3" type="ambiguous" target="1 3" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="3" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingB"/>
+                        <relation active="1" passive="2" ana="#RatingA"/>
+                        <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Harm #VisErr"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K2V5U20-24">
-                <lem><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></lem>
-                <rdg n="1" wit="UBS P46 01 03 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 syrh geo Jerome TheodoreOfMopsuestia"><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit=""><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="1-f1-v1" type="reconstructed" wit="02"><w>χαριτι</w><w>εσται</w><w>σ<unclear>ε</unclear><supplied reason="lacuna">σω</supplied>σμενοι</w></rdg>
-                <rdg n="2" wit="copsa copbo arm"><w>χαριτι</w><w>γαρ</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="3" wit="Ambrosiaster MariusVictorinus Pelagius"><w>ου</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="3-f1" type="defective" cause="aural-confusion" wit="010C 012"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεσωσμενοι</w></rdg>
-                <rdg n="3-f2" type="defective" wit="010*"><w>ου</w><w>χαριτι</w><w>εσται</w><w>σεωσμενοι</w></rdg>
-                <rdg n="3-s1" type="subreading" cause="clarification" wit="06*"><w>ου</w><w>τη</w><w>χαριτι</w><w>εστε</w><w>σεσωσμενοι</w></rdg>
+            <app xml:id="B10K2V5U20" ana="#Pragmatic">
+                <lem><w>χαριτι</w></lem>
+                <rdg n="1" wit="UBS P46 01 02 03 06C2 018 020 025 044 075 0150 6 33 81 104 263 424 459 1175 1241 1739 1852 1881 1912 1962 2200 Byz Lect syrh eth geo slav goth arbgr1 Jerome TheodoreOfMopsuestia"><w>χαριτι</w></rdg>
+                <rdg n="2" wit="256 365 436 1319 1573 2127 syrpal copsa copbo arm"><w>χαριτι</w><w>γαρ</w></rdg>
+                <rdg n="3" wit="010 012 Ambrosiaster Augustine MariusVictorinus Pelagius"><w>ου</w><w>χαριτι</w></rdg>
+                <rdg n="3-s1" type="subreading" cause="linguistic-confusion" wit="06*"><w>ου</w><w>τη</w><w>χαριτι</w></rdg>
                 <witDetail n="W1/3" type="ambiguous" target="1 3" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="3" locus="value" degree="0.3333"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 424C 1910 syrp syrhmg Chrysostom"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingA"/>
+                        <relation active="1" passive="2" ana="#RatingB"/>
                         <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
@@ -329,67 +442,61 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K2V21U6-8">
+            <app xml:id="B10K2V21U6-8" ana="#Pragmatic">
                 <lem><w>πασα</w><w>οικοδομη</w></lem>
-                <rdg n="1" wit="UBS 01* 03 06 010 012 18 33 35 88 424C 606 1175 1505 1611 1739* 1910 2495 syrh geo Chrysostom"><w>πασα</w><w>οικοδομη</w></rdg>
-                <rdg n="2" wit="01C1 04 915 1739C 1881 copsa copbo arm"><w>πασα</w><w>η</w><w>οικοδομη</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="02 424*"><w>πασα</w><w><unclear>η</unclear></w><w>οικοδομη</w></rdg>
-                <witDetail n="Z" type="lac" wit="P46 06C1 06C2 vg syrp syrhmg Ambrosiaster Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"/>
+                <rdg n="1" wit="UBS 01* 03 06 010 012 018 020 044 0150 33 104 256 263 365 424C 436 459 1175 1241 1319 1573 1739 1852 1962 2127 2200 2464 Byz Lect geo"><w>πασα</w><w>οικοδομη</w></rdg>
+                <rdg n="2" wit="01C1 02 04 025 075 6 81 424* 1881 1912 copsa copbo arm eth arbgr1"><w>πασα</w><w>η</w><w>οικοδομη</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" cause="translation" xml:lang="ara" wit="goth" target="1 2"/>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Chrysostom Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="P46 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#Clar"/>
+                        <relation active="1" passive="2" ana="#AurConf #Clar"/>
                         <relation active="2" passive="1" ana="#AurConf"/>
                         <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K3V1U14-18">
+            <app xml:id="B10K3V1U14-18" ana="#Pragmatic">
                 <lem><w>του</w><w>χριστου</w><w>ιησου</w></lem>
-                <rdg n="1" wit="UBS P46 01C1 02 03 06C1 18 33 35 424* 1175 vg copsa copbo Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
-                <rdg n="2" wit="01* 06* 010 012 Ambrosiaster MariusVictorinus"><w>του</w><w>χριστου</w></rdg>
-                <rdg n="3" wit="88 424C 606 1505 1739 1910 2495"><w>χριστου</w><w>ιησου</w></rdg>
-                <rdg n="4" wit="915 1611 1881"><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="5" wit="syrp arm Chrysostom"><w>του</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="6" wit="04"><w>του</w><w>κυριου</w><w>ιησου</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="copsa geo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="W1/3-1" type="ambiguous" target="1 3" cause="translation" xml:lang="syr" wit="syrh"><w>ܕܡܫܝܚܐ</w><w>ܝܫܘܥ</w></witDetail>
-                <witDetail n="W1/3-2" type="ambiguous" target="1 3" cause="translation" xml:lang="lat" wit="vg"><w>christi</w><w>iesu</w></witDetail>
-                <witDetail n="W1/5" type="ambiguous" target="1 5" wit="Jerome"><certainty target="1" locus="value" degree="0.3333"/><certainty target="5" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="Z" type="lac" wit="06C2 syrhmg TheodoreOfMopsuestia"/>
+                <rdg n="1" wit="UBS P46 01C2 02 03 06C2 018 020 025 075 0150 33 81 104 263 424* 436 459 1175 1241 1912 2464 Byz Lect vg syrh copbo goth Origen Pelagius"><w>του</w><w>χριστου</w><w>ιησου</w></rdg>
+                <rdg n="1-s1" type="subreading" cause="clarification" wit="424C 1739"><w>χριστου</w><w>ιησου</w></rdg>
+                <rdg n="2" wit="2200 syrp arm slav arbgr1 Chrysostom"><w>του</w><w>ιησου</w><w>χριστου</w></rdg>
+                <rdg n="2-s1" type="subreading" cause="clarification" wit="6 1962 1881"><w>ιησου</w><w>χριστου</w></rdg>
+                <rdg n="3" wit="04 044"><w>του</w><w>κυριου</w><w>ιησου</w></rdg>
+                <rdg n="4" wit="01* 06* 010 012 256 1319 1573 1852 2127 eth Ambrosiaster MariusVictorinus"><w>του</w><w>χριστου</w></rdg>
+                <rdg n="5" wit="365"><w>εν</w><w>χριστω</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="geo CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Jerome"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="W1/4" type="ambiguous" target="1 4" wit="copsa"><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
                         <relation active="2" passive="3" ana="#EqualRating"/>
                         <relation active="3" passive="4" ana="#EqualRating"/>
                         <relation active="4" passive="5" ana="#EqualRating"/>
-                        <relation active="5" passive="6" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#VisErr"/>
-                        <relation active="1" passive="3" ana="#VisErr"/>
-                        <relation active="1" passive="5" ana="#Clar"/>
-                        <relation active="1" passive="6" ana="#VisErr"/>
-                        <relation active="2" passive="1 5" ana="#Clar"/>
-                        <relation active="3" passive="1" ana="#Clar"/>
-                        <relation active="3" passive="4" ana="#Clar"/>
-                        <relation active="4" passive="3" ana="#Clar"/>
-                        <relation active="4" passive="5" ana="#Clar"/>
-                        <relation active="5" passive="1" ana="#Clar"/>
-                        <relation active="5" passive="4" ana="#VisErr"/>
-                        <relation active="6" passive="1" ana="#VisErr"/>
-                        <relation active="2 3 4 5 6" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="1 2" passive="4" ana="#Clar"/>
+                        <relation active="1 4" passive="2" ana="#Clar"/>
+                        <relation active="1" passive="3" ana="#VisErr"/><!-- paleographic confusion of χυ and κυ -->
+                        <relation active="2 4" passive="1" ana="#Clar"/>
+                        <relation active="3" passive="1" ana="#VisErr"/><!-- paleographic confusion of χυ and κυ -->
+                        <relation active="4" passive="5" ana="#Clar"/><!-- partial assimilation to δεσμιος εν κυριω in 4:1 -->
+                        <relation active="2 3 4 5" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K3V9U6">
+            <app xml:id="B10K3V9U6" ana="#Semantic">
                 <lem><w>παντας</w></lem>
-                <rdg n="1" wit="UBS P46 01C2 03 04 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1910 2495 vg syrp syrh copsa copbo arm geo Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παντας</w></rdg>
-                <rdg n="2" wit="01* 02 424C 1739 1881 Jerome"/>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="06C1 06C2 syrhmg"/>
+                <rdg n="1" wit="UBS P46 01C2 03 04 06 010 012 018 020 025 044 075 33 81 104 256 263 365 424* 436 459 1175 1241 1319 1573 1852 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh copsa copbo arm eth geo slav goth arbgr1 Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παντας</w></rdg>
+                <rdg n="2" wit="01* 02 0150 6 424C 1739 1881 Augustine Jerome"/>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Ambrosiaster CyrilOfAlexandria"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
@@ -401,12 +508,11 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K3V13U22-28">
-                <lem><w>ητις</w><w>εστιν</w><w>δοξα</w><w>υμων</w></lem>
-                <rdg n="1" wit="UBS 01 02 03* 06 010 012 424* 1175 vg syrp syrh copsa copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ητις</w><w>εστιν</w><w>δοξα</w><w>υμων</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="03C2 18 35 88 424C 606 915 1505 1611 1881 1910 2495"><w>ητις</w><w>εστι</w><w>δοξα</w><w>υμων</w></rdg>
-                <rdg n="2" wit="P46 04 33 1739"><w>ητις</w><w>εστιν</w><w>δοξα</w><w>ημων</w></rdg>
-                <witDetail n="Z" type="lac" wit="06C1 06C2 424C syrhmg"/>
+            <app xml:id="B10K3V13U28" ana="#Aural">
+                <lem><w>υμων</w></lem>
+                <rdg n="1" wit="UBS 01 02 03 06 010 012 018 020 025 044 075 0150 6 256 263 365 424 1175 1241 1852 1881 1962 2200 2464 Byz Lect vg syrp syrh copsa copbo arm eth geo slav goth Ambrosiaster Augustine Chrysostom Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"><w>υμων</w></rdg>
+                <rdg n="2" wit="P46 04 33 81 104 436 459 1573 1739 1912 2127 arbgr1"><w>ημων</w></rdg>
+                <witDetail n="Z" type="lac" wit="016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
@@ -418,49 +524,52 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K3V14U14-18">
+            <app xml:id="B10K3V14U14-18" ana="#Semantic">
                 <lem><w>προς</w><w>τον</w><w>πατερα</w></lem>
-                <rdg n="1" wit="UBS P46 01* 02 03 04 33 424C 1175 1739 1910/1 copsa copbo geo Jerome"><w>προς</w><w>τον</w><w>πατερα</w></rdg>
-                <rdg n="2" wit="01C2 06 010 012 18 35 88 424* 606 1505 1611 1881 1910/2 2495 vg syrp syrh arm Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="clarification" wit="915"><w>προς</w><w>τον</w><w>πατερα</w><w>μου</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
-                <witDetail n="Z" type="lac" wit="06C1 06C2 syrhmg"/>
+                <rdg n="1" wit="UBS P46 01* 02 03 04 025 0150 6 33 81 256 263 365 424C 1175 1573 1739 1962 2127 syrpal copsa copbo eth geo arbgr1 CyrilOfAlexandria Jerome"><w>προς</w><w>τον</w><w>πατερα</w></rdg>
+                <rdg n="2" wit="01C2 06 010 012 018 020 044 075 104 424* 436 459 1241 1852 1881 1912 2200 2464 Byz Lect vg syrp syrh arm slav goth Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>προς</w><w>τον</w><w>πατερα</w><w>του</w><w>κυριου</w><w>ημων</w><w>ιησου</w><w>χριστου</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.2500"/><certainty target="2" locus="value" degree="0.7500"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#Clar #Harm"/>
+                        <relation active="1" passive="2" ana="#Clar"/>
+                        <relation active="2" passive="1" ana="#VisErr"/>
                         <relation active="1" passive="2" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K3V19U20-34">
+            <app xml:id="B10K3V19U20-34" ana="#Semantic">
                 <lem><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></lem>
-                <rdg n="1" wit="UBS 01 02 04 06 18 35 88 424 606 915 1505 1611 1739 1910 2495 vg syrp syrh copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="010 012"><w>ινα</w><w>πληρωθηται</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="1-s1" type="subreading" cause="clarification" wit="1881"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>χριστου</w></rdg>
-                <rdg n="2" wit="03 1175 copsa"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="P46"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w><unclear>τ</unclear>ου</w><w>θεου</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="clarification" wit=""><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w><w>εις</w><w>υμας</w></rdg>
-                <rdg n="2-s1-v1" type="reconstructed" wit="33"><w>ινα</w><w><supplied reason="lacuna">πληρω</supplied>θη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w><w>εις</w><w>υμας</w></rdg>
-                <witDetail n="Z" type="lac" wit="06C1 06C2 424C syrhmg"/>
+                <rdg n="1" wit="UBS 01 02 04 06 010 012 018 020 025 044 075 0150 6 104 256 263 365 424 436 459 1241 1573 1739 1852 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copbo arm eth geo slav goth arbgr1 Ambrosiaster Augustine Chrysostom CyrilOfAlexandria Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
+                <rdg n="1-s1" type="subreading" cause="clarification" wit="81"><w>ινα</w><w>πληροφορηθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
+                <rdg n="2" wit="1881"><w>ινα</w><w>πληρωθητε</w><w>εις</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>χριστου</w></rdg>
+                <rdg n="3" wit="P46 03 1175 copsa"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w></rdg>
+                <rdg n="3-s1" type="subreading" cause="clarification" wit="33"><w>ινα</w><w>πληρωθη</w><w>παν</w><w>το</w><w>πληρωμα</w><w>του</w><w>θεου</w><w>εις</w><w>υμας</w></rdg>
+                <witDetail n="Z" type="lac" wit="016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
+                        <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#VisErr"/>
+                        <relation active="1" passive="2" ana="#Clar"/>
+                        <relation active="1" passive="3" ana="#Clar #VisErr"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="3" passive="1" ana="#Clar"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K3V20U8-10">
+            <app xml:id="B10K3V20U8-10" ana="#Semantic">
                 <lem><w>υπερ</w><w>παντα</w></lem>
-                <rdg n="1" wit="UBS 01 02 03 04 18 33 35 88 424 915 1175 1505 1611 1739 1881 1910 2495 syrp syrh copsa copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia"><w>υπερ</w><w>παντα</w></rdg>
+                <rdg n="1" wit="UBS 01 02 03 04 016 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect syrp syrh syrpal copsa copbo arm geo slav goth arbgr1 Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia"><w>υπερ</w><w>παντα</w></rdg>
                 <rdg n="2" wit="P46 06 010 012 vg Pelagius"><w>παντα</w></rdg>
-                <witDetail n="↑B10K3V20U8-18R3" type="overlap" target="B10K3V20U8-18R3" wit="606"/>
-                <witDetail n="Z" type="lac" wit="06C1 06C2 424C syrhmg"/>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.1111"/><certainty target="2" locus="value" degree="0.8888"/></witDetail>
+                <witDetail n="Z" type="lac" wit="082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
@@ -471,44 +580,17 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K4V6U24-28">
+            <app xml:id="B10K4V6U24-28" ana="#Pragmatic">
                 <lem><w>και</w><w>εν</w><w>πασιν</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 04 33 88 424C 915 1739* 1881 copsa copbo Jerome"><w>και</w><w>εν</w><w>πασιν</w></rdg>
-                <rdg n="1-f1" type="defective" cause="parablepsis" wit="03"><w>εν</w><w>πασιν</w></rdg>
-                <rdg n="2" wit="06C1 06C2 012 18 35 424* 606 1175 1505 1611 1910 2495 vg syrp syrh arm Ambrosiaster Chrysostom Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>και</w><w>εν</w><w>πασιν</w><w>ημειν</w></rdg>
-                <rdg n="2-f2" type="defective" wit="010"><w>και</w><w>ε</w><w>πασιν</w><w>ημιν</w></rdg>
-                <rdg n="3" wit="1739C"><w>και</w><w>εν</w><w>πασιν</w><w>υμιν</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <rdg n="1" wit="UBS P46 01 02 03 04 025 082 0150 6 33 81 104 424C 436 459 1739 1881 1912* 1962 2464 copsa copbo eth arbgr1 Augustine CyrilOfAlexandria Jerome Origen"><w>και</w><w>εν</w><w>πασιν</w></rdg>
+                <rdg n="2" wit="06 010 012 018 020 044 075 256 263 365 424* 1175 1319 1573 1852 1912C 2127 2200 Byz Lect vg syrp syrh arm slav goth Ambrosiaster Pelagius TheodoreOfMopsuestia"><w>και</w><w>εν</w><w>πασιν</w><w>ημιν</w></rdg>
+                <rdg n="3" wit="1241"><w>και</w><w>εν</w><w>πασιν</w><w>αμην</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="Chrysostom MariusVictorinus"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="geo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="syrhmg"/>
+                <witDetail n="Z" type="lac" wit="016 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
-                        <relation active="2" passive="3" ana="#EqualRating"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="1" passive="2 3" ana="#Clar"/>
-                        <relation active="2 3" passive="1" ana="#VisErr"/>
-                        <relation active="1 3" passive="2" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
-            </app>
-            <app xml:id="B10K4V8U12-18">
-                <lem><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></lem>
-                <rdg n="1" wit="UBS 01* 04C 010 012 33 606 1910 vg copsa copbo Ambrosiaster Jerome Pelagius TheodoreOfMopsuestia"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="1-f1" type="defective" cause="haplography" wit="P46"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δομα</w></rdg>
-                <rdg n="1-f2" type="defective" cause="aural-confusion" wit="06*"><w>ηχμαλωτευσεν</w><w>εχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="03C2"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δοματα</w></rdg>
-                <rdg n="1-o1-f1" type="defective" cause="aural-confusion" wit="88 915"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="2" wit="01C2 03* 04* 06C2 1175 1739 syrp syrh arm geo Chrysostom MariusVictorinus"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <rdg n="2-o1" type="orthographic" wit="18 35 424 1611 1881"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δοματα</w></rdg>               
-                <rdg n="2-o1-f1" type="defective" cause="aural-confusion" wit="1505 2495"><w>ηχμαλωτευσεν</w><w>αιχμαλωσιαν</w><w>και</w><w>εδωκε</w><w>δωματα</w></rdg>
-                <rdg n="3" wit="02"><w>ηχμαλωτευσας</w><w>αιχμαλωσιαν</w><w>εδωκεν</w><w>δοματα</w></rdg>
-                <witDetail n="Z" type="lac" wit="06C1 424C syrhmg"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingB"/>
                         <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
@@ -518,51 +600,63 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K4V9U21">
+            <app xml:id="B10K4V8U16" ana="#Pragmatic">
+                <lem><w>εδωκεν</w></lem>
+                <rdg n="1" wit="UBS P46 01* 02 04C2 06* 010 012 33 1241 1962 2464 vg copsa copbo slav Ambrosiaster Jerome Pelagius TheodoreOfMopsuestia"><w>εδωκεν</w></rdg>
+                <rdg n="2" wit="01C2 03 04* 04C3 06C2 018 020 025 044 075 0150 6 81 104 256 263 365 424 436 459 1175 1319 1573 1739 1852 1881 1912 2127 2200 Byz Lect syrp syrh arm geo goth arbgr1 Chrysostom CyrilOfAlexandria MariusVictorinus"><w>και</w><w>εδωκεν</w></rdg>
+                <rdg n="3" wit="eth"><w>και</w><w>εδωκας</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.6000"/><certainty target="2" locus="value" degree="0.4000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="016 082 0159"/>
+                <note>
+                    <listRelation type="intrinsic">
+                        <relation active="1" passive="2" ana="#RatingB"/>
+                        <relation active="2" passive="3" ana="#EqualRating"/>
+                    </listRelation>
+                    <listRelation type="transcriptional">
+                        <relation active="1 2" passive="3" ana="#Harm"/>
+                        <relation active="1 3" passive="2" ana="#Harm"/>
+                        <relation active="1" passive="2" ana="#Clar"/>
+                        <relation active="2 3" passive="1" ana="#Harm"/>
+                        <relation active="1 3" passive="2" ana="#Byz" notBefore="800"/>
+                    </listRelation>
+                </note>
+            </app>
+            <app xml:id="B10K4V9U21" ana="#Semantic">
                 <lem/>
-                <rdg n="1" wit="UBS P46 01* 02 04 06 010 012 33 424C 1739 1881 1910 copbo Ambrosiaster Jerome MariusVictorinus Pelagius"/>
-                <rdg n="2" wit="01C2 03 18 35 88 424* 606 915 1175 1505 1611 2495 vg syrp syrh copsa arm geo Chrysostom TheodoreOfMopsuestia"><w>πρωτον</w></rdg>
-                <witDetail n="Z" type="lac" wit="06C1 06C2 syrhmg"/>
+                <rdg n="1" wit="UBS P46 01* 02 04* 06 010 012 016 082 6 33 81 424C 1241 1739 1881 copbo eth Ambrosiaster Augustine CyrilOfAlexandria Jerome MariusVictorinus Origen Pelagius"/>
+                <rdg n="2" wit="01C2 03 04C3 018 020 025 044 075 0150 104 256 263 365 424* 436 459 1175 1319 1573 1852 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh copsa arm geo slav goth arbgr1 Chrysostom TheodoreOfMopsuestia"><w>πρωτον</w></rdg>
+                <witDetail n="Z" type="lac" wit="0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="2" passive="1" ana="#VisErr"/>
                         <relation active="1" passive="2" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K4V9U22-28">
-                <lem><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερη</w></lem>
-                <rdg n="1" wit="UBS 01 02 03 04 06C2 18 33 35 88 424 606 1175 1505 1611 1739 1881 1910 2495 vg syrh copbo arm Chrysostom Pelagius TheodoreOfMopsuestia"><w>εις</w><w>τα</w><w>κατωτερα</w><w>μερη</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="915"><w>εις</w><w>τα</w><w>κατοτερα</w><w>μερη</w></rdg>
-                <rdg n="2" wit="06* 010 012 copsa Ambrosiaster Jerome MariusVictorinus"><w>εις</w><w>τα</w><w>κατωτερα</w></rdg>
-                <rdg n="3" wit="P46"><w>εις</w><w>κατωτερα</w></rdg>
-                <witDetail n="W1/2/3" type="ambiguous" target="1 2 3" cause="translation" xml:lang="syr" wit="syrp"><w>ܠܬܚܬܝܬܗ</w></witDetail>
+            <app xml:id="B10K4V9U28" ana="#Semantic">
+                <lem><w>μερη</w></lem>
+                <rdg n="1" wit="UBS 01 02 03 04 06C2 016 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrh copbo arm slav arbgr1 Augustine Chrysostom CyrilOfAlexandria Pelagius TheodoreOfMopsuestia"><w>μερη</w></rdg>
+                <rdg n="2" wit="P46 06* 010 012 copsa eth goth Ambrosiaster Jerome MariusVictorinus Origen"/>
+                <witDetail n="Z" type="lac" wit="082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
-                        <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#Clar"/>
-                        <relation active="2" passive="3" ana="#VisErr"/>
-                        <relation active="3" passive="2" ana="#Clar"/>
-                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
-                <witDetail n="Z" type="lac" wit="06C1 424C syrhmg"/>
             </app>
-            <app xml:id="B10K4V19U4">
+            <app xml:id="B10K4V19U4" ana="#Semantic">
                 <lem><w>απηλγηκοτες</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 03 18 33 35 424 606 915 1175 1505 1611 1739 1881 1910 2495 syrh copsa copbo Chrysostom"><w>απηλγηκοτες</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="88"><w>απηλγικοτες</w></rdg>
-                <rdg n="2" wit="06 vg syrp arm Ambrosiaster Jerome MariusVictorinus Pelagius"><w>απηλπικοτες</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010 012"><w>αφηλπικοτες</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg TheodoreOfMopsuestia"/>
+                <rdg n="1" wit="UBS P46 01 02 03 018 020 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect syrh copsa copbo Chrysostom Origen"><w>απηλγηκοτες</w></rdg>
+                <rdg n="2" wit="06 025 1241 vg syrp arm eth slav goth arbgr1 Ambrosiaster Jerome MariusVictorinus Pelagius"><w>απηλπικοτες</w></rdg>
+                <rdg n="2-o1" type="orthographic" wit="010 012"><w>αφηλπικοτες</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
@@ -574,157 +668,124 @@
                     </listRelation>
                 </note>
             </app>
-            <!-- a large transposition is encoded as an overlapping unit below -->
-            <app xml:id="B10K4V28U18-26">
-                <rdg xml:id="B10K4V28U18-26R1" n="1" wit="UBS P46 01 02 03 06 010 012 1175 vg copbo arm Ambrosiaster Jerome MariusVictorinus Pelagius">
-                    <ref target="#B10K4V28U18-22">[B10K4V28U18-22]</ref>
-                    <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
-                </rdg>
-                <rdg xml:id="B10K4V28U18-26R2" n="2" wit="18 35 88 424* 606 915 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia">
-                    <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
-                    <ref target="#B10K4V28U18-22">[B10K4V28U18-22]</ref>
-                </rdg>
-                <rdg xml:id="B10K4V28U18-26R3" n="3" wit="33 424C 1739 1881">
-                    <ref target="#B10K4V28U24-26">[B10K4V28U24-26]</ref>
-                </rdg>
-                <rdg xml:id="B10K4V28U18-26R4" n="4" wit="copsa">
-                    <ref target="#B10K4V28U18-22">[B10K4V28U22-24]</ref>
-                </rdg>
-                <witDetail n="W1/2" type="ambiguous" target="#B10K4V28U18-26R1 #B10K4V28U18-26R2" wit="geo"><certainty target="#B10K4V28U18-26R1" locus="value" degree="0.5000"/><certainty target="#B10K4V28U18-26R2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrp syrhmg"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="#B10K4V28U18-26R1" passive="#B10K4V28U18-26R2" ana="#RatingC"/>
-                        <relation active="#B10K4V28U18-26R2" passive="#B10K4V28U18-26R3" ana="#EqualRating"/>
-                        <relation active="#B10K4V28U18-26R3" passive="#B10K4V28U18-26R4" ana="#EqualRating"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="#B10K4V28U18-26R1" passive="#B10K4V28U18-26R2" ana="#Clar"/>
-                        <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R2" passive="#B10K4V28U18-26R3" ana="#Clar"/>
-                        <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R2" passive="#B10K4V28U18-26R4" ana="#Clar"/>
-                        <relation active="#B10K4V28U18-26R1 #B10K4V28U18-26R3 #B10K4V28U18-26R4" passive="#B10K4V28U18-26R2" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
-            </app>
-            <app xml:id="B10K4V28U18-22">
-                <lem><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></lem>
-                <rdg n="1" wit="UBS 01* 02 03C2 06C1 06C2 010 012 606 915 1175 1505 2495 copbo arm geo Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="06*"><w>ταις</w><w>ιδιαις</w><w>χιρσιν</w></rdg>
-                <rdg n="1-o1" type="orthographic" wit="1611"><w>ταις</w><w>ιδιαις</w><w>χερσι</w></rdg>
-                <rdg n="2" wit="P46 01C2 03* 18 35 88 424* 1910 copsa Ambrosiaster Chrysostom Pelagius"><w>ταις</w><w>χερσιν</w></rdg>
-                <witDetail n="W1/2-1" type="ambiguous" target="1 2" cause="translation" xml:lang="syr" wit="syrp syrh"><w>ܒܐܝܕܘܗܝ</w></witDetail>
-                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="↑B10K4V28U18-26R3" type="overlap" target="#B10K4V28U18-26R3" wit="33 424C 1739 1881"/>
-                <witDetail n="Z" type="lac" wit="04 syrhmg"/>
+            <app xml:id="B10K4V28U18-24" ana="#Pragmatic #Semantic">
+                <lem><w>ταις</w><w>ιδιαις</w><w>χερσιν</w><w>το</w><w>αγαθον</w></lem>
+                <rdg n="1" wit="UBS 01* 02 06 010 012 075 0150 81 104 256 263 365 459 1175 1241 1319 1573 2127 2464 copbo arm eth slav goth Augustine Jerome MariusVictorinus"><w>ταις</w><w>ιδιαις</w><w>χερσιν</w><w>το</w><w>αγαθον</w></rdg>
+                <rdg n="2" wit="P46 P49 01C2 03 Ambrosiaster Pelagius"><w>ταις</w><w>χερσιν</w><w>το</w><w>αγαθον</w></rdg>
+                <rdg n="3" wit="020 044 424* 1852 2200 Lect Chrysostom Origen"><w>το</w><w>αγαθον</w><w>ταις</w><w>χερσιν</w></rdg>
+                <rdg n="4" wit="018 436 1912 1962 TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w><w>ταις</w><w>ιδιαις</w><w>χερσιν</w></rdg>
+                <rdg n="5" wit="copsa"><w>ταις</w><w>χερσιν</w></rdg>
+                <rdg n="6" wit="025 6 33 424C 1739 1881"><w>το</w><w>αγαθον</w></rdg>
+                <witDetail n="W1/2/3/4" type="ambiguous" target="1 2 3 4" wit="arbgr1"/>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="W1/4" type="ambiguous" target="1 4" wit="geo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="W3/4" type="ambiguous" target="3 4" wit="Byz"><certainty target="3" locus="value" degree="0.5000"/><certainty target="4" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#VisErr"/>
-                        <relation active="2" passive="1" ana="#Harm"/>
-                        <relation active="1" passive="2" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
-            </app>
-            <app xml:id="B10K4V28U24-26">
-                <lem><w>το</w><w>αγαθον</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>το</w><w>αγαθον</w></rdg>
-                <witDetail n="↑B10K4V28U18-26R4" type="overlap" target="#B10K4V28U18-26R4" wit="copsa"/>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
-            </app>
-            <app xml:id="B10K4V29U32-34">
-                <lem><w>της</w><w>χρειας</w></lem>
-                <rdg n="1" wit="UBS P46 03 06C2 18 33 35 88 424 606 915 1505 1611 1739 1881 2495 syrh copsa copbo arm geo Chrysostom Jerome TheodoreOfMopsuestia"><w>της</w><w>χρειας</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="01 02 1175"><w>της</w><w>χριας</w></rdg>
-                <rdg n="2" wit="06* 010 012 Ambrosiaster MariusVictorinus Pelagius"><w>της</w><w>πιστεως</w></rdg>
-                <rdg n="3" wit="syrp"/>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 424C 1910 syrhmg"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingA"/>
-                        <relation active="2" passive="3" ana="#EqualRating"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#Clar"/>
-                        <relation active="1 2" passive="3" ana="#VisErr"/>
-                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
-            </app>
-            <app xml:id="B10K4V32U30-32">
-                <lem><w>εχαρισατο</w><w>υμιν</w></lem>
-                <rdg n="1" wit="UBS 01 010 012 18 35 copsa copbo Ambrosiaster MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εχαρισατο</w><w>υμιν</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="02"><w>εχαρισατο</w><w>υμι<unclear>ν</unclear></w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="P46"><w>εχαρισατο</w><w>υμειν</w></rdg>
-                <rdg n="2" wit="03 06C2 33 88 424* 606 1175 1505 1739 1881 1910 2495 syrp syrh arm geo Chrysostom Jerome"><w>εχαρισατο</w><w>ημιν</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="1611"><w><unclear>ε</unclear>χαρισατο</w><w>ημιν</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="06*"><w>εχαρισατο</w><w>ημειν</w></rdg>
-                <rdg n="2-f2" type="defective" cause="aural-confusion" wit="915"><w>εχαρησατο</w><w>ημιν</w></rdg>
-                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingB"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#AurConf #Clar"/>
-                        <relation active="2" passive="1" ana="#AurConf #Harm"/>
-                        <relation active="1" passive="2" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
-            </app>
-            <app xml:id="B10K5V2U18-20">
-                <lem><w>ηγαπησεν</w><w>ημας</w></lem>
-                <rdg n="1" wit="UBS P46 01C2a 06 010 012 18 33 35 88 424 606 915 1505 1611 1739 1881 1910 2495 vg syrp syrh arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>ηγαπησεν</w><w>ημας</w></rdg>
-                <rdg n="2" wit="01* 01C2b 03 1175 copsa copbo Ambrosiaster MariusVictorinus"><w>ηγαπησεν</w><w>υμας</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="02"><w><supplied reason="lacuna">ηγα</supplied><unclear>π</unclear>ησεν</w><w>υμας</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingB"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#AurConf #Harm"/>
-                        <relation active="2" passive="1" ana="#AurConf #Clar #Harm"/>
-                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
-            </app>
-            <app xml:id="B10K5V2U28-40">
-                <lem><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></lem>
-                <rdg n="1" wit="UBS 010C 012 18 33 35 88 424 606 1505 1611 1739 1881 1910 2495 vg syrp syrh arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="02"><w>υπερ</w><w>ημων</w><w>προσ<supplied reason="lacuna">φορ</supplied>αν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-v2" type="reconstructed" wit="915"><w>υπ<unclear>ερ</unclear></w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-f1" type="defective" cause="visual-error" wit="P46"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>οσμην</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="1-f2" type="defective" wit="010*"><w>υπερ</w><w>ημεν</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="2" wit="03 1175 copsa copbo Ambrosiaster MariusVictorinus"><w>υπερ</w><w>υμων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="3" wit="01"><w>υπερ</w><w>ημων</w><w>θυσιαν</w><w>και</w><w>προσφοραν</w><w>τω</w><w>θεω</w></rdg>
-                <rdg n="4" wit="06"><w>προσφοραν</w><w>υπερ</w><w>ημων</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingA"/>
                         <relation active="2" passive="3" ana="#EqualRating"/>
                         <relation active="3" passive="4" ana="#EqualRating"/>
+                        <relation active="4" passive="5" ana="#EqualRating"/>
+                        <relation active="5" passive="6" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#AurConf #Harm"/>
-                        <relation active="1" passive="3" ana="#VisErr"/>
-                        <relation active="1" passive="4" ana="#Harm"/>
-                        <relation active="2" passive="1" ana="#AurConf #Clar #Harm"/>
-                        <relation active="3" passive="1" ana="#VisErr"/>
-                        <relation active="2 3 4" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="1 2" passive="6" ana="#VisErr"/><!-- homoioarcton from ταις to το -->
+                        <relation active="1" passive="2" ana="#VisErr"/>
+                        <relation active="1" passive="4" ana="#Clar"/>
+                        <relation active="2" passive="1" ana="#Clar"/>
+                        <relation active="2" passive="5" ana="#VisErr"/><!-- homoioteleuton from χερσιν to αγαθον -->
+                        <relation active="3 4" passive="6" ana="#VisErr"/><!-- homoioteleuton from αγαθον to χερσιν  -->
+                        <relation active="3" passive="4" ana="#Clar"/>
+                        <relation active="3" passive="5" ana="#VisErr"/><!-- homoioarcton from το to ταις -->
+                        <relation active="4" passive="1" ana="#Clar"/>
+                        <relation active="4" passive="3" ana="#VisErr"/>
+                        <relation active="1 2 3 5 6" passive="4" ana="#Byz" notBefore="800"/>
+                        <relation active="1 2 4 5 6" passive="3" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K5V9U2-10">
-                <lem><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>φωτος</w></lem>
-                <rdg n="1" wit="UBS 01 02 03 06* 010 012 33 424C 1175C 1739 1881 vg syrp copsa copbo arm Ambrosiaster Jerome MariusVictorinus Pelagius"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>φωτος</w></rdg>
-                <rdg n="2" wit="P46 06C2 18 35 88 424* 606 915 1175* 1505 1611 1910 2495 syrh Chrysostom TheodoreOfMopsuestia"><w>ο</w><w>γαρ</w><w>καρπος</w><w>του</w><w>πνευματος</w></rdg>
+            <app xml:id="B10K4V29U32-34" ana="#Semantic">
+                <lem><w>της</w><w>χρειας</w></lem>
+                <rdg n="1" wit="UBS P46 03 06C2 016 018 020 025 044 075 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect syrp syrh syrpal copsa copbo arm eth geo slav arbgr1 Chrysostom Jerome Origen TheodoreOfMopsuestia"><w>της</w><w>χρειας</w></rdg>
+                <rdg n="2" wit="06* 010 012 goth Ambrosiaster MariusVictorinus Pelagius"><w>της</w><w>πιστεως</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.6667"/><certainty target="2" locus="value" degree="0.3333"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
+                <note>
+                    <listRelation type="intrinsic">
+                        <relation active="1" passive="2" ana="#RatingA"/>
+                    </listRelation>
+                    <listRelation type="transcriptional">
+                        <relation active="1" passive="2" ana="#Clar"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
+                    </listRelation>
+                </note>
+            </app>
+            <app xml:id="B10K4V32U32" ana="#Aural">
+                <lem><w>υμιν</w></lem>
+                <rdg n="1" wit="UBS P46 01 02 010 012 025 0150 6 81 256 263 365 1319 1573 2127 copsa copbo eth goth Ambrosiaster MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>υμιν</w></rdg>
+                <rdg n="2" wit="P49 03 06 018 020 044 075 33 104 424 436 459 1175 1241 1739 1852 1881 1912 1962 2464 Byz Lect syrp syrh syrpal arm geo slav arbgr1 Jerome"><w>ημιν</w></rdg>
+                <rdg n="2-s1" type="subreading" cause="linguistic-confusion" wit="2200"><w>ημας</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
+                <witDetail n="W1/2-3" type="ambiguous" target="1 2" wit="Chrysostom Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
+                <note>
+                    <listRelation type="intrinsic">
+                        <relation active="1" passive="2" ana="#RatingB"/>
+                    </listRelation>
+                    <listRelation type="transcriptional">
+                        <relation active="1" passive="2" ana="#AurConf"/>
+                        <relation active="2" passive="1" ana="#AurConf"/>
+                        <relation active="1" passive="2" ana="#Byz" notBefore="800"/>
+                    </listRelation>
+                </note>
+            </app>
+            <app xml:id="B10K5V2U20" ana="#Aural">
+                <lem><w>ημας</w></lem>
+                <rdg n="1" wit="UBS P46 01C2 06 010 012 018 020 044 075 0150 6 33 104 256 263 365 424 436 459 1319 1573 1739 1852 1881 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal arm geo goth arbgr1 Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>ημας</w></rdg>
+                <rdg n="2" wit="01* 02 03 025 0159 81 1175 1241 1912 copsa copbo eth slav Ambrosiaster MariusVictorinus"><w>υμας</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.7500"/><certainty target="2" locus="value" degree="0.2500"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082"/>
+                <note>
+                    <listRelation type="intrinsic">
+                        <relation active="1" passive="2" ana="#RatingB"/>
+                    </listRelation>
+                    <listRelation type="transcriptional">
+                        <relation active="1" passive="2" ana="#AurConf #Harm"/>
+                        <relation active="2" passive="1" ana="#AurConf #Clar #Harm"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
+                    </listRelation>
+                </note>
+            </app>
+            <app xml:id="B10K5V2U28-40" ana="#Aural #Idiolectal #Pragmatic">
+                <lem><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></lem>
+                <rdg n="1" wit="UBS P46 P49 02 010 012 018 020 025 044 075 0150 0159 6 33 81 104 256 263 365 424 436 459 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal arm geo goth arbgr1 Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>υπερ</w><w>ημων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="1-s1" type="subreading" cause="clarification" wit="01"><w>υπερ</w><w>ημων</w><w>θυσιαν</w><w>και</w><w>προσφοραν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="1-s2" type="subreading" cause="clarification" wit="06"><w>προσφοραν</w><w>υπερ</w><w>ημων</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="2" wit="1241"><w>υπερ</w><w>ημων</w><w>εν</w><w>φθορα</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <rdg n="3" wit="03 1175 copsa copbo eth slav Ambrosiaster MariusVictorinus"><w>υπερ</w><w>υμων</w><w>προσφοραν</w><w>και</w><w>θυσιαν</w><w>τω</w><w>θεω</w></rdg>
+                <witDetail n="W1/3" type="ambiguous" target="1 3" wit="Augustine"><certainty target="1" locus="value" degree="0.9000"/><certainty target="3" locus="value" degree="0.1000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082"/>
+                <note>
+                    <listRelation type="intrinsic">
+                        <relation active="1" passive="2" ana="#RatingA"/>
+                        <relation active="2" passive="3" ana="#EqualRating"/>
+                    </listRelation>
+                    <listRelation type="transcriptional">
+                        <relation active="1" passive="2" ana="#Clar"/>
+                        <relation active="1" passive="3" ana="#AurConf"/>
+                        <relation active="3" passive="1" ana="#AurConf"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
+                    </listRelation>
+                </note>
+            </app>
+            <app xml:id="B10K5V9U10" ana="#Semantic">
+                <lem><w>φωτος</w></lem>
+                <rdg n="1" wit="UBS P49 01 02 03 06* 010 012 025 6 33 81 256 424C 1175 1319 1739 1881 1962 2127 2464 vg syrp syrpal copsa copbo arm eth goth arbgr1 Ambrosiaster Augustine Jerome MariusVictorinus Origen Pelagius"><w>φωτος</w></rdg>
+                <rdg n="2" wit="P46 06C2 018 020 044 075 0150 104 263 365 424* 436 459 1241 1573 1852 1912 2200 Byz Lect syrh slav Chrysostom TheodoreOfMopsuestia"><w>πνευματος</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="geo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 syrhmg"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
@@ -736,38 +797,35 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K5V14U34-42">
+            <app xml:id="B10K5V14U34-42" ana="#Aural">
                 <lem><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></lem>
-                <rdg n="1" wit="UBS P46 02 03 06C2 010 012 18 33 35 88 424 915 1175 1505 1611 1739 1881 2495 vg syrp syrh copsa copbo arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="01"><w>και</w><w>επιφαυσι</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
-                <rdg n="2" wit="1910"><w>και</w><w>επιψαυσεις</w><w>του</w><w>χριστου</w></rdg>
-                <rdg n="2-v1" type="reconstructed" wit="06*"><w>και</w><w>επι<unclear>ψ</unclear>αυσεις</w><w>του</w><w>χριστου</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="606"><w>και</w><w>επιφαυσεις</w><w>του</w><w>χριστου</w></rdg>
-                <rdg n="3" wit="Ambrosiaster MariusVictorinus"><w>και</w><w>επιψαυσει</w><w>σου</w><w>ο</w><w>χριστος</w></rdg><!-- known to be in some manuscripts contemporary with Chrysostom, Theodore of Mopsuestia, and Jerome; Theodoret is also aware of the common reading in some manuscripts of his time -->
-                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg"/>
+                <rdg n="1" wit="UBS P46 01 02 03 06C2 010 012 018 020 025 044 048 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm eth geo slav arbgr1 Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
+                <rdg n="2" wit="06* Ambrosiaster MariusVictorinus"><w>και</w><w>επιψαυσεις</w><w>του</w><w>χριστου</w></rdg>
+                <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.9474"/><certainty target="2" locus="value" degree="0.0526"/></witDetail>
+                <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159 goth"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
-                        <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2 3" ana="#Clar"/>
-                        <relation active="1" passive="3" ana="#VisErr"/>
-                        <relation active="3" passive="2" ana="#Clar"/>
-                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="1" passive="2" ana="#VisErr"/>
+                        <relation active="2" passive="1" ana="#Clar"/>
+                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K5V15U4-8">
+            <app xml:id="B10K5V15U4-8" ana="#Pragmatic">
                 <lem><w>ουν</w><w>ακριβως</w><w>πως</w></lem>
-                <rdg n="1" wit="UBS 01* 03C2 33 915 1175 1739 copsa geo"><w>ουν</w><w>ακριβως</w><w>πως</w></rdg>
-                <rdg n="1-f1" type="defective" cause="aural-confusion" wit="P46 03*"><w>ουν</w><w>ακρειβως</w><w>πως</w></rdg>
-                <rdg n="2" wit="01C2 02 06 010 012 18 35 88 424 606 1505 1611 1881 1910 2495 syrp syrh arm Ambrosiaster Chrysostom Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ουν</w><w>πως</w><w>ακριβως</w></rdg>
-                <rdg n="3" wit="02 vg copbo Pelagius"><w>ουν</w><w>αδελφοι</w><w>πως</w><w>ακριβως</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
+                <rdg n="1" wit="UBS P46 01* 03 0150 33 81 104 436 459 1175 1241 1739 1962 copsa geo slav arbgr1 Origen"><w>ουν</w><w>ακριβως</w><w>πως</w></rdg>
+                <rdg n="2" wit="06 010 012 018 020 025 044 075 6 256 263 365 424 1319 1573 1852 1881 1912 2127 2200 Byz Lect syrp syrh syrpal arm eth Ambrosiaster Augustine Jerome MariusVictorinus TheodoreOfMopsuestia"><w>ουν</w><w>πως</w><w>ακριβως</w></rdg>
+                <rdg n="3" wit="01C2 02 2464 vg copbo Pelagius"><w>ουν</w><w>αδελφοι</w><w>πως</w><w>ακριβως</w></rdg>
+                <witDetail n="W1/2" type="ambiguous" target="1 2" wit="Chrysostom"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159 goth"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
+                        <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
                         <relation active="1" passive="2" ana="#VisErr"/>
@@ -777,14 +835,13 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K5V19U12-16">
+            <app xml:id="B10K5V19U12-16" ana="#Semantic">
                 <lem><w>και</w><w>ωδαις</w><w>πνευματικαις</w></lem>
-                <rdg n="1" wit="UBS 01C1 06 010 012 18 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copsa copbo arm geo Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>και</w><w>ωδαις</w><w>πνευματικαις</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="33"><w>και</w><w><supplied reason="lacuna">ω</supplied>δαις</w><w>πνευματικαις</w></rdg>
+                <rdg n="1" wit="UBS 01C1 06 010 012 018 020 025 044 048 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm geo slav goth arbgr1 Augustine Chrysostom Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"><w>και</w><w>ωδαις</w><w>πνευματικαις</w></rdg>
                 <rdg n="1-f1" type="defective" cause="dittography" wit="01*"><w>και</w><w>ωδαις</w><w>κα</w><w>πνευματικαις</w></rdg>
                 <rdg n="2" wit="02"><w>και</w><w>ωδαις</w><w>πνευματικαις</w><w>εν</w><w>χαριτι</w></rdg>
                 <rdg n="3" wit="P46 03 Ambrosiaster"><w>και</w><w>ωδαις</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C syrhmg"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
@@ -798,17 +855,14 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K5V22U6-10">
+            <app xml:id="B10K5V22U6-10" ana="#Pragmatic #Semantic">
                 <lem><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></lem>
                 <rdg n="1" wit="UBS P46 03 Jerome TheodoreOfMopsuestia"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="2" wit="01 02 33 88 424C 606 1175 1505 1611 1739 1910 2495 vg syrhmg copsa copbo arm Ambrosiaster MariusVictorinus Pelagius"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></rdg>
-                <rdg n="2-f1" type="defective" wit="1881"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασεσθωσαν</w></rdg>
-                <rdg n="3" wit="18 35 424* 915C syrh geo Chrysostom"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
-                <rdg n="3-f1" type="defective" cause="aural-confusion" wit="915*"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθαι</w></rdg>
-                <rdg n="4" wit="06C1"><w>υποτασσεσθε</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="4-f1" type="defective" cause="aural-confusion" wit="06* 012"><w>υποτασσεσθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <rdg n="4-f2" type="defective" cause="aural-confusion" wit="010"><w>υποτασεθαι</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C2 syrp"/>
+                <rdg n="2" wit="06 010 012"><w>υποτασσεσθε</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
+                <rdg n="3" wit="01 02 016 025 6 33 81 104 256 263 365 424C 436 459 1175 1241 1319 1573 1739 1881 1962 2127 2464 vg syrpal copsa copbo arm eth goth arbgr1 Ambrosiaster Augustine MariusVictorinus Origen Pelagius"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθωσαν</w></rdg>
+                <rdg n="3-s1" type="subreading" cause="clarification" wit="044"><w>υποτασεσθωσαν</w><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w></rdg>
+                <rdg n="4" wit="018 020 075 0150 424* 1852 1912 2200 Byz Lect syrh geo slav Chrysostom"><w>τοις</w><w>ιδιοις</w><w>ανδρασιν</w><w>υποτασσεσθε</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
@@ -819,38 +873,39 @@
                         <relation active="1 2 3" passive="4" ana="#Harm"/>
                         <relation active="1" passive="2 3 4" ana="#Clar"/>
                         <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="3" ana="#Clar #Harm"/>
-                        <relation active="3" passive="4" ana="#Clar"/>
+                        <relation active="3" passive="4" ana="#Clar"/><!-- assimilation to other second-person imperatives in this section -->
+                        <relation active="4" passive="2" ana="#Clar"/><!-- second-person imperatives, by virtue of their emphasis, tend to be the most prominent constituent in their clause -->
                         <relation active="1 2 4" passive="3" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K5V30U13">
+            <app xml:id="B10K5V30U13" ana="#Semantic">
                 <lem/>
-                <rdg n="1" wit="UBS P46 01* 02 03 33 424C 1739* 1881 copsa copbo Jerome"/>
-                <rdg n="2" wit="01C2 06 18 35 88 424 915 1175 1505 1611 1739C 1910 vg syrp syrh arm geo Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010 012"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οσταιων</w><w>αυτου</w></rdg>
-                <rdg n="2-s1" type="subreading" cause="parablepsis" wit="2495"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
-                <rdg n="3" wit="606"><w>εκ</w><w>της</w><w>γαστρος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστων</w><w>αυτου</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
+                <rdg n="1" wit="UBS P46 01* 02 03 048 6 33 81 424C 1739* 1881 2464 copsa copbo eth Augustine Jerome Origen"/>
+                <rdg n="2" wit="0150"><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
+                <rdg n="3" wit="01C2 06 010 012 020 025 044 075 104 256 263 365 424* 436 459 1175 1241 1319 1573 1739C 1852 1962 2127 2200 Byz Lect vg syrp syrh arm geo slav arbgr1 Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
+                <rdg n="3-s1" type="subreading" cause="assimilation" wit="018"><w>εκ</w><w>του</w><w>σωματος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
+                <rdg n="3-s2" type="subreading" cause="clarification" wit="1912"><w>εκ</w><w>της</w><w>σαρκος</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159 goth"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
                         <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#Harm"/>
-                        <relation active="2" passive="1" ana="#VisErr"/>
-                        <relation active="2" passive="3" ana="#Clar"/>
-                        <relation active="1 3" passive="2" ana="#Byz" notBefore="800"/>
+                        <relation active="1" passive="2 3" ana="#Harm"/>
+                        <relation active="2 3" passive="1" ana="#VisErr"/>
+                        <relation active="3" passive="2" ana="#VisErr"/>
+                        <relation active="1 2" passive="3" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K6V1U14-16">
+            <app xml:id="B10K6V1U14-16" ana="#Semantic">
                 <lem><w>εν</w><w>κυριω</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 06C2 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 2495 vg syrp syrh copsa copbo arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>εν</w><w>κυριω</w></rdg>
+                <rdg n="1" wit="UBS P46 01 02 06C1 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh copsa copbo arm eth geo slav arbgr1 Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>εν</w><w>κυριω</w></rdg>
+                <rdg n="1-s1" type="subreading" cause="haplography" wit="1573"><w>κυριω</w></rdg>
                 <rdg n="2" wit="03 06* 010 012 Ambrosiaster"/><!-- Western contamination in 03? -->
-                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg MariusVictorinus"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159 goth MariusVictorinus"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
@@ -862,32 +917,33 @@
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K6V12U2-12">
-                <lem><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλη</w></lem>
-                <rdg n="1" wit="UBS 01 02 06C2 18 33 35 88 424 606 915 1505 1611 1739 1881 1910 2495 vg syrh copsa copbo arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>ημιν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="2" wit="03 06* 010 012 1175 syrp Ambrosiaster"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμιν</w><w>η</w><w>παλη</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="P46"><w>οτι</w><w>ουκ</w><w>εστιν</w><w>υμειν</w><w>η</w><w>παλη</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 424C syrhmg MariusVictorinus"/>
+            <app xml:id="B10K6V12U8" ana="#Aural #Pragmatic">
+                <lem><w>ημιν</w></lem>
+                <rdg n="1" wit="UBS 01 02 06C2 016 018 020 025 075 0150 6 33 104 256 263 365 424 436 459 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrh copsa copbo arm geo arbgr1 Chrysostom CyrilOfAlexandria Jerome Origen Pelagius TheodoreOfMopsuestia"><w>ημιν</w></rdg>
+                <rdg n="2" wit="P46 03 06* 010 012 044 81 1175 syrp syrpal eth slav goth Ambrosiaster Augustine"><w>υμιν</w></rdg>
+                <rdg n="3" wit=""/>
+                <witDetail n="W1/3" type="ambiguous" target="1 3" wit="copsa"><certainty target="1" locus="value" degree="0.5000"/><certainty target="3" locus="value" degree="0.5000"/></witDetail>
+                <witDetail n="Z" type="lac" wit="04 082 0159 MariusVictorinus"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingB"/>
+                        <relation active="2" passive="3" ana="#EqualRating"/>
                     </listRelation>
                     <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#AurConf #Harm"/>
-                        <relation active="2" passive="1" ana="#AurConf #Clar"/>
-                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
+                        <relation active="1 2" passive="3" ana="#VisErr"/>
+                        <relation active="1" passive="2" ana="#AurConf"/>
+                        <relation active="2" passive="1" ana="#AurConf"/>
+                        <relation active="3" passive="1 2" ana="#VisErr"/>
+                        <relation active="2 3" passive="1" ana="#Byz" notBefore="800"/>
                     </listRelation>
                 </note>
             </app>
-            <app xml:id="B10K6V19U32-38">
+            <app xml:id="B10K6V19U32-38" ana="#Semantic">
                 <lem><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></lem>
-                <rdg n="1" wit="UBS 01 02 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 1910 1910 2495 vg syrp syrh copsa copbo arm geo Chrysostom Jerome Pelagius TheodoreOfMopsuestia"><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></rdg>
-                <rdg n="1-v1" type="reconstructed" wit="06C1"><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελ<supplied reason="illegible">ιου</supplied></w></rdg>
-                <rdg n="1-f2" type="defective" cause="haplography" wit=""><w>το</w><w>μηστυριον</w><w>του</w><w>αγγελλιου</w></rdg>
-                <rdg n="1-f2-v1" type="reconstructed" wit="06C0"><w>το</w><w>μυστηριον</w><w>του</w><w>αγγελ<supplied reason="illegible">ιου</supplied></w></rdg>
-                <rdg n="2" wit="03 06* 010 012 Ambrosiaster MariusVictorinus"><w>το</w><w>μυστηριον</w></rdg>
+                <rdg n="1" wit="UBS 01 02 06 016 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh copsa copbo arm eth geo slav goth arbgr1 Chrysostom Jerome Origen Pelagius TheodoreOfMopsuestia"><w>το</w><w>μυστηριον</w><w>του</w><w>ευαγγελιου</w></rdg>
+                <rdg n="2" wit="03 010 012 Ambrosiaster MariusVictorinus"><w>το</w><w>μυστηριον</w></rdg>
                 <witDetail n="W1/2" type="ambiguous" target="1 2" wit="P46"><certainty target="1" locus="value" degree="0.0148"/><certainty target="2" locus="value" degree="0.9852"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C2 424C syrhmg"/>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>
@@ -900,18 +956,18 @@
                 </note>
             </app>
             <!-- transposition of εν αυτω -->
-            <app xml:id="B10K6V20U12-18">
-                <rdg xml:id="B10K6V20U12-18R1" n="1" wit="UBS P46 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 vg syrp syrh arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia">
+            <app xml:id="B10K6V20U12-18" ana="#Pragmatic">
+                <rdg xml:id="B10K6V20U12-18R1" n="1" wit="UBS P46 02 03 06 010 012 016 018 020 025 044 075 0150 6 33 81 256 263 365 424 436 1175 1241 1319 1573 1739 1852 1912 1962 1881 2127 2200 2464 Byz Lect vg syrp syrh syrpal arm eth geo slav goth arbgr1 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia">
                     <ref target="#B10K6V20U12">[B10K6V20U12]</ref>
                     <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
                     <ref target="#B10K6V20U18">[B10K6V20U18]</ref>
                 </rdg>
-                <rdg xml:id="B10K6V20U12-18R2" n="2" wit="01 copsa copbo">
+                <rdg xml:id="B10K6V20U12-18R2" n="2" wit="01 104 459 copsa copbo">
                     <ref target="#B10K6V20U12">[B10K6V20U12]</ref>
                     <ref target="#B10K6V20U18">[B10K6V20U18]</ref>
                     <ref target="#B10K6V20U14-16">[B10K6V20U14-16]</ref>
                 </rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg"/>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="#B10K6V20U12-18R1" passive="#B10K6V20U12-18R2" ana="#RatingA"/>
@@ -924,14 +980,14 @@
             </app>
             <app xml:id="B10K6V20U12">
                 <lem><w>ινα</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 03 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 1739 1881 2495 vg syrp syrh copsa copbo arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg MariusVictorinus"/>
+                <rdg n="1" wit="UBS P46 01 02 03 06 010 012 016 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm eth geo slav goth arbgr1 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>ινα</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
             </app>
-            <app xml:id="B10K6V20U14-16">
+            <app xml:id="B10K6V20U14-16" ana="#Idiolectal">
                 <lem><w>εν</w><w>αυτω</w></lem>
-                <rdg n="1" wit="UBS 01 02 06 010 012 18 33 35 88 424 606 915 1175 1505 1611 2495 vg syrh arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>αυτω</w></rdg>
+                <rdg n="1" wit="UBS 01 02 06 010 012 016 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1852 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm eth geo slav goth arbgr1 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εν</w><w>αυτω</w></rdg>
                 <rdg n="2" wit="P46 03 1739 1881 syrp"><w>αυτο</w></rdg><!-- some potential examples of this verb with an accusative object occur in LSJ, s.v. "παρρησιάζομαι" -->
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg copsa copbo MariusVictorinus"/>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingC"/>
@@ -945,30 +1001,17 @@
             </app>
             <app xml:id="B10K6V20U18">
                 <lem><w>παρρησιασωμαι</w></lem>
-                <rdg n="1" wit="UBS 01 02 03 18 33 35 424 606 1175 1611 1739 1881 2495 vg syrp syrh arm geo Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παρρησιασωμαι</w></rdg>
-                <rdg n="1-f1" type="defective" wit="P46 06"><w>παρησιασωμαι</w></rdg>
-                <rdg n="1-f2" type="defective" cause="parablepsis" wit="1505"><w>παρρηασωμαι</w></rdg>
-                <rdg n="2" wit="010C 012 88 915"><w>παρρησιασομαι</w></rdg>
-                <rdg n="2-f1" type="defective" cause="aural-confusion" wit="010*"><w>παρρισιασομαι</w></rdg>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 424C 1910 syrhmg copsa copbo MariusVictorinus"/>
-                <note>
-                    <listRelation type="intrinsic">
-                        <relation active="1" passive="2" ana="#RatingA"/>
-                    </listRelation>
-                    <listRelation type="transcriptional">
-                        <relation active="1" passive="2" ana="#AurConf"/>
-                        <relation active="2" passive="1" ana="#AurConf #Clar"/>
-                        <relation active="2" passive="1" ana="#Byz" notBefore="800"/>
-                    </listRelation>
-                </note>
+                <rdg n="1" wit="UBS P46 01 02 03 06 010C 016 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm eth geo slav goth arbgr1 Ambrosiaster Chrysostom Jerome MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>παρρησιασωμαι</w></rdg>
+                <rdg n="1-s1" type="subreading" cause="aural-confusion" wit="010* 012"><w>παρρησιασομαι</w></rdg>
+                <witDetail n="Z" type="lac" wit="04 082 0159"/>
             </app>
-            <app xml:id="B10K6V24U27">
+            <app xml:id="B10K6V24U27" ana="#Idiolectal">
                 <lem/>
-                <rdg n="1" wit="UBS P46 01* 02 03 010 012 33 424C 1175 1881 1910 copsa Ambrosiaster Jerome Pelagius TheodoreOfMopsuestia"/>
-                <rdg n="2" wit="01C2 06 18 35 88 424* 606 915 1505 1611 1739 2495 syrp syrh arm geo Chrysostom MariusVictorinus"><w>αμην</w></rdg>
+                <rdg n="1" wit="UBS P46 01* 02 03 010 012 6 33 81 1175 1241 1739* 1881 syrpal copsa arbgr1 Ambrosiaster Jerome Origen Pelagius TheodoreOfMopsuestia"/>
+                <rdg n="2" wit="01C2 06 018 020 025 044 075 0150 104 256 263 365 424 436 459 1319 1573 1739C 1852 1912 1962 2127 2200 2464 Byz Lect syrp syrh arm eth geo slav goth Chrysostom MariusVictorinus"><w>αμην</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="copbo"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="vg"><certainty target="1" locus="value" degree="0.3333"/><certainty target="2" locus="value" degree="0.6667"/></witDetail>
-                <witDetail n="Z" type="lac" wit="04 06C1 06C2 syrhmg"/>
+                <witDetail n="Z" type="lac" wit="04 016 082 0159"/>
                 <note>
                     <listRelation type="intrinsic">
                         <relation active="1" passive="2" ana="#RatingA"/>

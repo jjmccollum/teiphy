@@ -160,7 +160,7 @@ def test_to_nexus():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" in text
-        assert "\t22 B10K4V28U24_26" in text
+        assert "\t35 B10K6V20U12" in text
         assert "StatesFormat=Frequency" not in text
 
 
@@ -173,7 +173,7 @@ def test_to_nexus_drop_constant():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "CharStateLabels" in text
-        assert "\t22 B10K4V28U24_26" not in text
+        assert "\t35 B10K6V20U12" not in text
         assert "StatesFormat=Frequency" not in text
 
 
@@ -197,7 +197,7 @@ def test_to_nexus_frequency():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "\t22 B10K4V28U24_26" in text
+        assert "\t35 B10K6V20U12" in text
         assert "StatesFormat=Frequency" in text
 
 
@@ -209,7 +209,7 @@ def test_to_nexus_drop_constant_frequency():
         assert output.exists()
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
-        assert "\t22 B10K4V28U24_26" not in text
+        assert "\t35 B10K6V20U12" not in text
         assert "StatesFormat=Frequency" in text
 
 
@@ -318,7 +318,7 @@ def test_to_nexus_calibrate_dates():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("#NEXUS")
         assert "Begin ASSUMPTIONS;" in text
-        assert "CALIBRATE 18 = fixed(%d)" % (datetime.now().year - 1364) in text
+        assert "CALIBRATE 81 = fixed(%d)" % (datetime.now().year - 1044) in text
         assert "CALIBRATE P46 = uniform(%d,%d)" % (datetime.now().year - 399, datetime.now().year - 200) in text
 
 
@@ -370,7 +370,7 @@ def test_to_nexus_mrbayes():
         assert text.startswith("#NEXUS")
         assert "Begin MRBAYES;" in text
         assert "prset treeagepr = uniform(%d,%d)" % (datetime.now().year - 80, datetime.now().year - 50) in text
-        assert "calibrate 18 = fixed(%d);" % (datetime.now().year - 1364) in text
+        assert "calibrate 81 = fixed(%d);" % (datetime.now().year - 1044) in text
         assert "calibrate P46 = uniform(%d,%d);" % (datetime.now().year - 399, datetime.now().year - 200) in text
 
 
@@ -574,7 +574,7 @@ def test_to_hennig86_drop_constant():
         text = output.read_text(encoding="utf-8")
         assert text.startswith("nstates")
         assert "xread" in text
-        assert "%d %d" % (len(xml_variation_units) - 2, len(xml_witnesses)) in text
+        assert "%d %d" % (len(xml_variation_units) - 1, len(xml_witnesses)) in text
 
 
 def test_to_phylip():
@@ -635,7 +635,7 @@ def test_to_phylip_drop_constant():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="ascii")
-        assert text.startswith("%d %d" % (len(xml_witnesses), len(xml_variation_units) - 2))
+        assert text.startswith("%d %d" % (len(xml_witnesses), len(xml_variation_units) - 1))
 
 
 def test_to_fasta():
@@ -733,7 +733,7 @@ def test_to_beast():
         assert len(beast_xml_sequences) == len(xml_witnesses)
         assert len(beast_xml_charstatelabels) == len(xml_variation_units)
         assert len(beast_xml_site_distributions) == len(xml_variation_units)
-        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K4V28U24-26\"]")
+        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K6V20U12\"]")
         assert len(beast_xml_singleton_sequences) == 1
         assert beast_xml_singleton_sequences[0].get("value") is not None
         assert "DUMMY" in beast_xml_singleton_sequences[0].get("value")
@@ -775,7 +775,7 @@ def test_to_beast_drop_constant():
         assert len(beast_xml_sequences) == len(xml_witnesses)
         assert len(beast_xml_charstatelabels) == len(xml_variation_units) - 2
         assert len(beast_xml_site_distributions) == len(xml_variation_units) - 2
-        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K4V28U24-26\"]")
+        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K6V20U12\"]")
         assert len(beast_xml_singleton_sequences) == 0
 
 
@@ -1327,8 +1327,8 @@ def test_to_csv():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
-        assert "B10K4V28U24-26," in text
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
+        assert "B10K6V20U12," in text
 
 
 def test_to_csv_drop_constant():
@@ -1338,8 +1338,8 @@ def test_to_csv_drop_constant():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
-        assert "B10K4V28U24-26," not in text
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
+        assert "B10K6V20U12," not in text
 
 
 def test_to_csv_long_table():
@@ -1350,7 +1350,7 @@ def test_to_csv_long_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("taxon,character,state,value")
-        assert "B10K4V28U24-26," in text
+        assert "B10K6V20U12," in text
 
 
 def test_to_csv_nexus_table():
@@ -1361,7 +1361,7 @@ def test_to_csv_nexus_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
-        assert "B10K4V28U24-26," in text
+        assert "B10K6V20U12," in text
         assert "{1 2}" in text
 
 
@@ -1375,7 +1375,7 @@ def test_to_csv_ambiguous_as_missing_nexus_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
-        assert "B10K4V28U24-26," in text
+        assert "B10K6V20U12," in text
         assert "{1 2}" not in text
 
 
@@ -1386,7 +1386,7 @@ def test_to_csv_distance_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert ",13," in text
 
@@ -1400,7 +1400,7 @@ def test_to_csv_proportion_distance_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert ",0.5," in text
 
@@ -1413,10 +1413,10 @@ def test_to_csv_show_ext_distance_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         print(text)
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert (
-            ",18/40," in text
+            ",17/38," in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1429,10 +1429,10 @@ def test_to_csv_proportion_show_ext_distance_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert (
-            ",0.45/40," in text
+            ",0.4473684210526316/38," in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1443,7 +1443,7 @@ def test_to_csv_similarity_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert ",22," in text
 
@@ -1457,9 +1457,9 @@ def test_to_csv_proportion_similarity_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert ",0.55," in text
+        assert ",0.5789473684210527," in text
 
 
 def test_to_csv_show_ext_similarity_table():
@@ -1472,10 +1472,10 @@ def test_to_csv_show_ext_similarity_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         print(text)
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert (
-            "22/40" in text
+            "22/38" in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1488,10 +1488,10 @@ def test_to_csv_proportion_show_ext_similarity_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith(",UBS,P46,01,02,03,04,06")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
         assert (
-            "0.55/40" in text
+            "0.5789473684210527/38" in text
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
@@ -1505,7 +1505,7 @@ def test_to_csv_drop_constant_long_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("taxon,character,state,value")
-        assert "B10K4V28U24-26," not in text
+        assert "B10K6V20U12," not in text
 
 
 def test_to_csv_drop_constant_nexus_table():
@@ -1518,7 +1518,7 @@ def test_to_csv_drop_constant_nexus_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
-        assert "B10K4V28U24-26," not in text
+        assert "B10K6V20U12," not in text
         assert "{1 2}" in text
 
 
@@ -1541,7 +1541,7 @@ def test_to_csv_drop_constant_ambiguous_as_missing_nexus_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",B10K1V1U24-26,B10K1V6U20-24,B10K1V14U2,B10K1V15U26-40")
-        assert "B10K4V28U24-26," not in text
+        assert "B10K6V20U12," not in text
         assert "{1 2}" not in text
 
 
@@ -1552,7 +1552,7 @@ def test_to_tsv():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith("\tUBS\tP46\t01\t02\t03\t04\t06")
+        assert text.startswith("\tUBS\tByz\tLect\tP46\tP49\t01")
 
 
 def test_to_tsv_long_table():
@@ -1573,7 +1573,7 @@ def test_to_tsv_nexus_table():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("\tB10K1V1U24-26\tB10K1V6U20-24\tB10K1V14U2\tB10K1V15U26-40")
-        assert "B10K4V28U24-26" in text
+        assert "B10K6V20U12" in text
         assert "{1 2}" in text
 
 
@@ -1584,7 +1584,7 @@ def test_to_tsv_distance_table():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
-        assert text.startswith("\tUBS\tP46\t01\t02\t03\t04\t06")
+        assert text.startswith("\tUBS\tByz\tLect\tP46\tP49\t01")
         assert "\nUBS\t" in text
         assert "\t13\t" in text
 
@@ -1626,8 +1626,8 @@ def test_to_phylip_distance_matrix():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("%d" % (len(xml_witnesses)))
         assert (
-            "UBS 0 19" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted as a disagreement is the one where P46 is ambiguous
+            "UBS 0 11" in text
+        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted as a disagreement is the one where Byz is ambiguous
 
 
 def test_to_phylip_similarity_matrix():
@@ -1642,7 +1642,7 @@ def test_to_phylip_similarity_matrix():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("%d" % (len(xml_witnesses)))
-        assert "UBS 40 20" in text  # UBS agrees with itself 40 times and agrees with P46 20 times
+        assert "UBS 38 26" in text  # UBS agrees with itself 38 times and agrees with Byz 26 times
 
 
 def test_to_stemma():
@@ -1652,7 +1652,17 @@ def test_to_stemma():
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8")
-        assert text.startswith("* UBS P46 01 02 03 04 06")
+        assert text.startswith("* UBS Byz Lect P46 P49 01")
+        assert (
+            "παρρησιασωμαι |*1 παρρησιασομαι" in text
+        )  # variation units with no ana attribute should default to weights of 1
+        assert (
+            "ο |*5 ος" in text
+        )  # variation units with one attribute should have the weight associated with that category
+        assert (
+            "τοις.ιδιοις.ανδρασιν |*6 υποτασσεσθε.τοις.ιδιοις.ανδρασιν τοις.ιδιοις.ανδρασιν.υποτασσεσθωσαν υποτασεσθωσαν.τοις.ιδιοις.ανδρασιν τοις.ιδιοις.ανδρασιν.υποτασσεσθε"
+            in text
+        )  # variation units with multiple ana attributes should have weights equal to the average weights of their categories
         chron_output = Path(str(output) + "_chron")
         assert chron_output.exists()
         chron_text = chron_output.read_text(encoding="utf-8")

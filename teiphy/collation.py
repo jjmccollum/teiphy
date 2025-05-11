@@ -107,6 +107,8 @@ class Collation:
         self.variation_unit_ids = []
         self.substantive_variation_unit_reading_tuples = []
         self.substantive_readings_by_variation_unit_id = {}
+        self.weight_categories = []
+        self.weights_by_id = {}
         self.intrinsic_categories = []
         self.intrinsic_odds_by_id = {}
         self.transcriptional_categories = []
@@ -128,6 +130,7 @@ class Collation:
             self.update_origin_date_range_from_witness_date_ranges()
         else:
             self.update_witness_date_ranges_from_origin_date_range()
+        self.parse_weights(xml)
         self.parse_intrinsic_odds(xml)
         self.parse_transcriptional_rates(xml)
         self.parse_apps(xml)
@@ -377,6 +380,40 @@ class Collation:
         t1 = time.time()
         if self.verbose:
             print("Finished updating lower bounds on witness dates in %0.4fs." % (t1 - t0))
+        return
+
+    def parse_weights(self, xml: et.ElementTree):
+        """Given an XML tree for a collation, populates this Collation's list of variation unit weight categories
+        (associated with types of variation that may have different expected frequencies)
+        and its dictionary mapping these categories to integer weights.
+
+        Args:
+            xml: An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.
+        """
+        if self.verbose:
+            print("Parsing variation unit weight categories...")
+        t0 = time.time()
+        self.weight_categories = []
+        self.weights_by_id = {}
+        for interp in xml.xpath("//tei:interpGrp[@type=\"weight\"]/tei:interp", namespaces={"tei": tei_ns}):
+            # These must be indexed by the xml:id attribute, so skip any that do not have one:
+            if interp.get("{%s}id" % xml_ns) is None:
+                continue
+            weight_category = interp.get("{%s}id" % xml_ns)
+            # Retrieve this element's text value and coerce it to an integer, defaulting to 1 if it has none:
+            weight = 1
+            for certainty in interp.xpath("./tei:certainty", namespaces={"tei": tei_ns}):
+                if certainty.get("degree") is not None:
+                    weight = int(certainty.get("degree"))
+                    break
+            self.weight_categories.append(weight_category)
+            self.weights_by_id[weight_category] = weight
+        t1 = time.time()
+        if self.verbose:
+            print(
+                "Finished processing %d variation unit weight categories in %0.4fs."
+                % (len(self.weight_categories), t1 - t0)
+            )
         return
 
     def parse_intrinsic_odds(self, xml: et.ElementTree):
@@ -1242,7 +1279,11 @@ class Collation:
                     earliest_date = date_range[0]
             if date_range[1] is not None:
                 if latest_date is not None:
-                    latest_wit = wit if date_range[1] > latest_date else latest_wit
+                    latest_wit = (
+                        wit
+                        if (date_range[1] > latest_date or (date_range[0] == date_range[1] == latest_date))
+                        else latest_wit
+                    )  # the second check ensures that a witness with a fixed date is preferred to a witness with a date range that ends with the same date
                     latest_date = max(date_range[1], latest_date)
                 else:
                     latest_wit = wit
@@ -2253,7 +2294,7 @@ class Collation:
         return
 
     def get_stemma_symbols(self):
-        """Returns a list of one-character symbols needed to represent the states of all substantive readings in STEMMA format.
+        """Returns a list of one-character symbols needed to represent the states of all substantive readings in stemma format.
 
         The number of symbols equals the maximum number of substantive readings at any variation unit.
 
@@ -2262,7 +2303,7 @@ class Collation:
         """
         possible_symbols = (
             list(string.digits) + list(string.ascii_lowercase) + list(string.ascii_uppercase)
-        )  # NOTE: the maximum number of symbols allowed in STEMMA format (other than "?" and "-") is 62
+        )  # NOTE: the maximum number of symbols allowed in stemma format (other than "?" and "-") is 62
         # The number of symbols needed is equal to the length of the longest substantive reading vector:
         nsymbols = 0
         # If there are no witnesses, then no symbols are needed at all:
@@ -2275,12 +2316,14 @@ class Collation:
         return stemma_symbols
 
     def to_stemma(self, file_addr: Union[Path, str]):
-        """Writes this Collation to a STEMMA file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.
+        """Writes this Collation to a stemma file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.
 
         Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.
+        If an interpGrp for weights is specified in the TEI XML collation, then the weights for the interp elements will be used as weights
+        for the variation units that specify them in their ana attribute.
 
         Args:
-            file_addr: A string representing the path to an output STEMMA prep file; the file should have no extension.
+            file_addr: A string representing the path to an output stemma prep file; the file should have no extension.
             The accompanying chron file will match this file name, except that it will have "_chron" appended to the end.
             drop_constant: An optional flag indicating whether to ignore variation units with one substantive reading.
         """
@@ -2321,7 +2364,7 @@ class Collation:
                 k = rdg_support.index(1)
                 indices = tuple([j, k])
                 reading_wits_by_indices[indices].append(wit.id)
-        # In a third pass, write to the STEMMA file:
+        # In a third pass, write to the stemma file:
         symbols = self.get_stemma_symbols()
         Path(file_addr).parent.mkdir(
             parents=True, exist_ok=True
@@ -2364,6 +2407,20 @@ class Collation:
                     if k == 0:
                         f.write(text)
                         f.write(" |")
+                        # Add the weight of this variation unit after the pipe by comparing its analysis categories to their weights:
+                        weight = 1
+                        vu = self.variation_units[j]
+                        if len(vu.analysis_categories) > 0:
+                            weight = int(
+                                sum(
+                                    [
+                                        self.weights_by_id[ana] if ana in self.weights_by_id else 1
+                                        for ana in vu.analysis_categories
+                                    ]
+                                )
+                                / len(vu.analysis_categories)
+                            )
+                        f.write("*%d" % weight)
                     # Every subsequent reading should be preceded by a space:
                     elif k > 0:
                         f.write(" %s" % text)

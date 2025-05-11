@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teiphy"
-version = "0.1.20"
+version = "0.1.21"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
@@ -34,6 +34,7 @@ rich = ">=12.5.1"
 python-slugify = ">=6.1.2"
 Jinja2 = ">=3.1.6"
 setuptools = ">=70.0.0"
+h11 = ">=0.16.0"
 
 [tool.poetry.group.dev.dependencies]
 Sphinx = ">=7.0.0"

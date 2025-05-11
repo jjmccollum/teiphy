@@ -35,6 +35,12 @@ class VariationUnit:
             self.id = xml.get("n")
             if xml.get("from") is not None and xml.get("to") is not None:
                 self.id += "_" + xml.get("from") + "_" + xml.get("to")
+        # Initialize its list of analysis categories (for weighting changes in this unit in the stemma program):
+        self.analysis_categories = []
+        if xml.get("ana") is not None:
+            ana_split = xml.get("ana").split()
+            for ana in ana_split:
+                self.analysis_categories.append(ana.strip("#"))  # remove any leading hashtags
         # Initialize its list of readings:
         self.readings = []
         # Initialize its dictionaries of intrinsic and transcriptional relations:

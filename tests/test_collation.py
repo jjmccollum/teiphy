@@ -71,6 +71,7 @@ class CollationMalformedCategoriesTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(malformed_categories_example, parser=parser)
+        self.xml_weights = xml.xpath("//tei:interpGrp[@type=\"weight\"]/tei:interp", namespaces={"tei": tei_ns})
         self.xml_intrinsic_relations = xml.xpath(
             "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
         )
@@ -78,6 +79,9 @@ class CollationMalformedCategoriesTestCase(unittest.TestCase):
             "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.collation = Collation(xml)
+
+    def test_weight_categories(self):
+        self.assertEqual(len(self.collation.weight_categories), len(self.xml_weights) - 1)
 
     def test_intrinsic_categories(self):
         self.assertEqual(len(self.collation.intrinsic_categories), len(self.xml_intrinsic_relations) - 1)
@@ -234,18 +238,11 @@ class CollationMissingTestCase(unittest.TestCase):
             sum(rdg_support), 0
         )  # all entries in the reading support vector for this lacunose witness should be 0
 
-    def test_missing_overlap(self):
-        vu_ind = self.collation.variation_unit_ids.index("B10K3V20U8-10")
-        rdg_support = self.collation.readings_by_witness["606"][vu_ind]
-        self.assertEqual(
-            sum(rdg_support), 0
-        )  # all entries in the reading support vector for this witness to an overlapping reading should be 0
-
     def test_missing_get_readings_by_witness_for_unit(self):
         vu = self.collation.variation_units[0]
         assert vu.id == "B10K1V1U24-26"
         result = self.collation.get_readings_by_witness_for_unit(vu)
-        assert len(result) == 40
+        assert len(result) == 73
 
 
 class CollationManuscriptSuffixesTestCase(unittest.TestCase):
@@ -265,16 +262,16 @@ class CollationManuscriptSuffixesTestCase(unittest.TestCase):
         )  # "C" is a suffix, but "424C" is a distinct witness
 
     def test_get_base_wit_one_suffix(self):
-        self.assertEqual(self.collation.get_base_wit("424*"), "424")
+        self.assertEqual(self.collation.get_base_wit("01*"), "01")
 
     def test_get_base_wit_multiple_suffixes(self):
         self.assertEqual(self.collation.get_base_wit("424T*"), "424")
 
     def test_merged_attestations(self):
-        vu_ind = self.collation.variation_unit_ids.index("B10K3V14U14-18")
-        rdg_support = self.collation.readings_by_witness["1910"][vu_ind]
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V28U18-24")
+        rdg_support = self.collation.readings_by_witness["arbgr1"][vu_ind]
         self.assertEqual(
-            rdg_support, [1, 1, 0]
+            rdg_support, [1, 1, 1, 1, 0, 0]
         )  # all entries in the reading support vector for this witness with multiple attestations should have all attested readings supported
 
 
@@ -287,17 +284,17 @@ class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
         )
 
     def test_inactive_corrector(self):
-        vu_ind = self.collation.variation_unit_ids.index("B10K4V8U12-18")
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V8U16")
         rdg_support = self.collation.readings_by_witness["06C1"][vu_ind]
         self.assertEqual(
-            rdg_support, [0, 0, 1, 0, 0, 0, 0, 0, 0]
+            rdg_support, [1, 0, 0]
         )  # this corrector is inactive in this unit and should default to the first-hand reading
 
     def test_active_corrector(self):
-        vu_ind = self.collation.variation_unit_ids.index("B10K4V8U12-18")
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V8U16")
         rdg_support = self.collation.readings_by_witness["06C2"][vu_ind]
         self.assertEqual(
-            rdg_support, [0, 0, 0, 0, 0, 1, 0, 0, 0]
+            rdg_support, [0, 1, 0]
         )  # this corrector is active in this unit and should have its own reading
 
 
@@ -417,16 +414,16 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
-            matrix[0, 1], 13
-        )  # entry for UBS and P46 should be 13 (remember not to count P46 lacunae and ambiguities and P46 defective readings under the UBS reading)
+            matrix[0, 1], 11
+        )  # entry for UBS and Byz should be 11 (remember not to count Byz lacunae and ambiguities)
 
     def test_to_distance_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_distance_matrix(drop_constant=True)
         self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
-            matrix[0, 1], 13
-        )  # entry for UBS and P46 should be 13 (remember not to count P46 lacunae and ambiguities and P46 defective readings under the UBS reading)
+            matrix[0, 1], 11
+        )  # entry for UBS and P46 should be 11 (remember not to count Byz lacunae and ambiguities)
 
     def test_to_distance_matrix_proportion(self):
         matrix, witness_labels = self.collation.to_distance_matrix(proportion=True)
@@ -434,8 +431,8 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 13 / (len(self.xml_variation_units) - 2)) < 1e-4
-        )  # entry for UBS and P46 should be 13 divided by the number of variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 11 / (len(self.xml_variation_units) - 1)) < 1e-4
+        )  # entry for UBS and Byz should be 11 divided by the number of variation units where neither witness is lacunose or ambiguous
 
     def test_to_distance_matrix_drop_constant_proportion(self):
         matrix, witness_labels = self.collation.to_distance_matrix(drop_constant=True, proportion=True)
@@ -443,69 +440,69 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 13 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
-        )  # entry for UBS and P46 should be 13 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 11 / (len(self.xml_variation_units) - 1 - 2)) < 1e-4
+        )  # entry for UBS and Byz should be 11 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
 
     def test_to_distance_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_distance_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "13/38")
+        self.assertEqual(matrix[0, 1], "11/37")
 
     def test_to_distance_matrix_proportion_show_ext(self):
         matrix, witness_labels = self.collation.to_distance_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.34210526315789475/38")
+        self.assertEqual(matrix[0, 1], "0.2972972972972973/37")
 
     def test_to_similarity_matrix(self):
         matrix, witness_labels = self.collation.to_similarity_matrix()
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
-            matrix[0, 1], 25
-        )  # entry for UBS and P46 should be 25 (remember not to count P46 lacunae and ambiguities and to count P46 defective readings as agreeing with the UBS reading)
+            matrix[0, 1], 26
+        )  # entry for UBS and Byz should be 26 (remember not to count Byz lacunae and ambiguities)
 
     def test_to_similarity_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
-            matrix[0, 1], 23
-        )  # entry for UBS and P46 should be 23 (the two constant variation units should be dropped)
+            matrix[0, 1], 24
+        )  # entry for UBS and Byz should be 24 (the two constant variation units should be dropped)
 
     def test_to_similarity_matrix_proportion(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True)
-        self.assertEqual(np.trace(matrix), 40)  # diagonal entries should be 1
+        self.assertEqual(np.trace(matrix), 73)  # diagonal entries should be 1
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 25 / (len(self.xml_variation_units) - 2)) < 1e-4
-        )  # entry for UBS and P46 should be 25 divided by the number of variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 26 / (len(self.xml_variation_units) - 1)) < 1e-4
+        )  # entry for UBS and Byz should be 26 divided by the number of variation units where neither witness is lacunose or ambiguous
 
     def test_to_similarity_matrix_drop_constant_proportion(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True, proportion=True)
-        self.assertEqual(np.trace(matrix), 40)  # diagonal entries should be 0
+        self.assertEqual(np.trace(matrix), 73)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 23 / (len(self.xml_variation_units) - 2 - 2)) < 1e-4
-        )  # entry for UBS and P46 should be 23 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 24 / (len(self.xml_variation_units) - 1 - 2)) < 1e-4
+        )  # entry for UBS and Byz should be 24 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
 
     def test_to_similarity_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "25/38")
+        self.assertEqual(matrix[0, 1], "26/37")
 
     def test_to_similarity_matrix_proportion_show_ext(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.6578947368421053/38")
+        self.assertEqual(matrix[0, 1], "0.7027027027027027/37")
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
         self.assertEqual(row_labels[0], "UBS")
         self.assertEqual(column_labels[0], "B10K1V1U24-26")
         self.assertEqual(nexus_table[0, 0], "1")  # reading of UBS at B10K1V1U24-26 should have ID "1"
-        self.assertEqual(nexus_table[26, 1], "{1 2}")  # ambiguous reading of vg at B10K1V6U20-24 should have ID "{1 2}"
+        self.assertEqual(nexus_table[51, 1], "{1 2}")  # ambiguous reading of vg at B10K1V6U20-24 should have ID "{1 2}"
 
     def test_to_long_table(self):
         long_table, column_labels = self.collation.to_long_table()
