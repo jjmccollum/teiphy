@@ -59,6 +59,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ascertainment-bias">Ascertainment Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tree-priors-clock-models-and-tip-dates">Tree Priors, Clock Models, and Tip Dates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#root-frequencies-and-substitution-models">Root Frequencies and Substitution Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assigning-weights-to-sites-for-weighted-parsimony">Assigning Weights to Sites (for Weighted Parsimony)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging-for-ancestral-state-reconstructions">Logging for Ancestral State Reconstructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#overriding-or-supplying-dates-from-a-csv-file">Overriding or Supplying Dates from a CSV file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-output-formats-and-options">Supported Output Formats and Options</a></li>
@@ -436,8 +437,8 @@ attestations, then you can do so via</p>
 <section id="ascertainment-bias">
 <h2>Ascertainment Bias<a class="headerlink" href="#ascertainment-bias" title="Link to this heading"></a></h2>
 <p>To facilitate accurate branch length estimation, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> includes all constant sites (i.e., variation units with only one substantive reading after trivial readings have been merged with their parents) in its output by default.
-(The only exception is output for the STEMMA program, which is parsimony-based and does not estimate branch lengths.)
-If you want only informative sites to be included in your output, then you can ensure that this happens by including the <code class="docutils literal notranslate"><span class="pre">--drop-constant</span></code> flag in your command.</p>
+(The only exception is output for the <code class="docutils literal notranslate"><span class="pre">stemma</span></code> program, which is parsimony-based and does not estimate branch lengths.)
+If you want only sites with textual variants to be included in your output, then you can ensure that this happens by including the <code class="docutils literal notranslate"><span class="pre">--drop-constant</span></code> flag in your command.</p>
 <p>Note that if you do exclude constant sites, or if your TEI XML collation only includes locations in the textual tradition where the readings differ,
 then it will be important to correct for ascertainment bias when performing phylogenetic analysis which utilizes the branch lengths
 (such as maximum-likelihood or Bayesian techniques).
@@ -489,7 +490,7 @@ as in the following examples:</p>
 </pre></div>
 </div>
 <p>As part of the Bayesian phylogenetic analysis, the distributions of the tip dates for witnesses with date ranges will also be estimated.</p>
-<p>Tip dates are also used by <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> in converting TEI XML to inputs to the STEMMA program, as STEMMA uses date ranges to constrain the relationships between witnesses that it will consider.</p>
+<p>Tip dates are also used by <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> in converting TEI XML to inputs to the <code class="docutils literal notranslate"><span class="pre">stemma</span></code> program, as <code class="docutils literal notranslate"><span class="pre">stemma</span></code> uses date ranges to constrain the relationships between witnesses that it will consider.</p>
 </section>
 <section id="root-frequencies-and-substitution-models">
 <h2>Root Frequencies and Substitution Models<a class="headerlink" href="#root-frequencies-and-substitution-models" title="Link to this heading"></a></h2>
@@ -617,6 +618,49 @@ If you wish to encode such transcriptional possibilities as time-dependent, you 
 </pre></div>
 </div>
 <p>If you tag certain transcriptional <code class="docutils literal notranslate"><span class="pre">relation</span></code> elements in this way, <code class="docutils literal notranslate"><span class="pre">teiphy</span></code> will map the <code class="docutils literal notranslate"><span class="pre">listRelation</span></code> to an <code class="docutils literal notranslate"><span class="pre">EpochSubstitutionModel</span></code> instance consisting of multiple substitution models that apply at the corresponding points in time.</p>
+</section>
+<section id="assigning-weights-to-sites-for-weighted-parsimony">
+<h2>Assigning Weights to Sites (for Weighted Parsimony)<a class="headerlink" href="#assigning-weights-to-sites-for-weighted-parsimony" title="Link to this heading"></a></h2>
+<p>If you are using <code class="docutils literal notranslate"><span class="pre">stemma</span></code>, you can assign different weights to variation units so that changes in those units will contribute more or less to the cost of a candidate stemma.
+As with intrinsic and transcriptional probabilities, you can do this by defining analytic tags for different variation categories as follows:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;interpGrp</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;weight&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Semantic&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>variation<span class="w"> </span>unit<span class="w"> </span>involves<span class="w"> </span>semantic<span class="w"> </span>changes.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Idiolectal&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>variation<span class="w"> </span>unit<span class="w"> </span>involves<span class="w"> </span>idiolectal<span class="w"> </span>changes.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;5&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Pragmatic&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>variation<span class="w"> </span>unit<span class="w"> </span>involves<span class="w"> </span>pragmatic<span class="w"> </span>changes.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="w">    </span><span class="nt">&lt;interp</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;Aural&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>The<span class="w"> </span>current<span class="w"> </span>variation<span class="w"> </span>unit<span class="w"> </span>involves<span class="w"> </span>changes<span class="w"> </span>due<span class="w"> </span>to<span class="w"> </span>similar<span class="w"> </span>sounds.<span class="nt">&lt;/p&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certainty</span><span class="w"> </span><span class="na">locus=</span><span class="s">&quot;value&quot;</span><span class="w"> </span><span class="na">degree=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/interp&gt;</span>
+<span class="nt">&lt;/interpGrp&gt;</span>
+</pre></div>
+</div>
+<p>As with intrinsic odds categories, you can assign fixed weights to different categories using <code class="docutils literal notranslate"><span class="pre">certainty</span></code> elements, where a given category’s weight is specified in the <code class="docutils literal notranslate"><span class="pre">&#64;degree</span></code> attribute.
+In the above example, units characterized by changes of the <code class="docutils literal notranslate"><span class="pre">Aural</span></code> category will have the lowest weight (corresponding to changes judged to be most common), while those characterized by <code class="docutils literal notranslate"><span class="pre">Semantic</span></code> changes will have the highest weight (corresponding to changes judged to be least common).
+Since <code class="docutils literal notranslate"><span class="pre">stemma</span></code> only supports integer weights, any floating-point weights specified in this way will be coerced to integers by truncating their fractional part.
+If you do not specify any weight for a category, its weight will default to 1.</p>
+<p>You can then assign one or more of these categories to each variation unit in your TEI XML collation.
+Specifically, for each <code class="docutils literal notranslate"><span class="pre">app</span></code> element, you can provide one or more pointers to these categories using the <code class="docutils literal notranslate"><span class="pre">&#64;ana</span></code> attribute, as in the following example:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;app</span><span class="w"> </span><span class="na">xml:id=</span><span class="s">&quot;B10K1V15U26-40&quot;</span><span class="w"> </span><span class="na">ana=</span><span class="s">&quot;#Pragmatic #Semantic&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span>...
+<span class="nt">&lt;/app&gt;</span>
+</pre></div>
+</div>
+<p>In this case, two categories, <code class="docutils literal notranslate"><span class="pre">Pragmatic</span></code> and <code class="docutils literal notranslate"><span class="pre">Semantic</span></code>, are referenced.
+If a variation unit is associated with only one category, then variations in it will incur costs scaled by that category’s weight.
+If it is associated with more than one category, then variations in it will incur costs scaled by the average of those categories’ weights.
+If a variation unit is associated with no category, then its weight will default to 1.</p>
+<p>Note that all changes in a weighted variation unit, regardless of their source and target readings or their direction, will have the same weight.
+Assigning varying weights to transitions between specific readings is not supported in <code class="docutils literal notranslate"><span class="pre">stemma</span></code>.
+In a Bayesian phylogenetic setting, this can be done in BEAST 2 using transcriptional relations, as described in the previous section.</p>
 </section>
 <section id="logging-for-ancestral-state-reconstructions">
 <h2>Logging for Ancestral State Reconstructions<a class="headerlink" href="#logging-for-ancestral-state-reconstructions" title="Link to this heading"></a></h2>
