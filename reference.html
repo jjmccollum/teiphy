@@ -87,6 +87,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_origin_date_range"><code class="docutils literal notranslate"><span class="pre">Collation.parse_origin_date_range()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_readings_by_witness"><code class="docutils literal notranslate"><span class="pre">Collation.parse_readings_by_witness()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_transcriptional_rates"><code class="docutils literal notranslate"><span class="pre">Collation.parse_transcriptional_rates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.parse_weights"><code class="docutils literal notranslate"><span class="pre">Collation.parse_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_beast"><code class="docutils literal notranslate"><span class="pre">Collation.to_beast()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_csv"><code class="docutils literal notranslate"><span class="pre">Collation.to_csv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_dataframe"><code class="docutils literal notranslate"><span class="pre">Collation.to_dataframe()</span></code></a></li>
@@ -435,7 +436,7 @@ If no intrinsic odds are specified, then a uniform distribution over all states 
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.get_stemma_symbols">
 <span class="sig-name descname"><span class="pre">get_stemma_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.get_stemma_symbols" title="Link to this definition"></a></dt>
-<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in STEMMA format.</p>
+<dd><p>Returns a list of one-character symbols needed to represent the states of all substantive readings in stemma format.</p>
 <p>The number of symbols equals the maximum number of substantive readings at any variation unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -518,6 +519,19 @@ If the XML tree does not contain a listWit element, then a ParsingException is t
 <dd><p>Given an XML tree for a collation, populates this Collation’s dictionary mapping transcriptional change categories
 (e.g., “aural confusion,” “visual error,” “clarification”) to numerical rates.
 If a category does not contain a certainty element specifying its number, then it will be assumed to be a parameter to be estimated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.parse_weights">
+<span class="sig-name descname"><span class="pre">parse_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ElementTree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.parse_weights" title="Link to this definition"></a></dt>
+<dd><p>Given an XML tree for a collation, populates this Collation’s list of variation unit weight categories
+(associated with types of variation that may have different expected frequencies)
+and its dictionary mapping these categories to integer weights.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>xml</strong> – An lxml.etree.ElementTree representing an XML tree rooted at a TEI element.</p>
@@ -905,12 +919,14 @@ A list of witness ID strings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_stemma">
 <span class="sig-name descname"><span class="pre">to_stemma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_stemma" title="Link to this definition"></a></dt>
-<dd><p>Writes this Collation to a STEMMA file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.</p>
-<p>Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.</p>
+<dd><p>Writes this Collation to a stemma file without an extension and a Chron file (containing low, middle, and high dates for all witnesses) without an extension.</p>
+<p>Since this format does not support ambiguous states, all reading vectors with anything other than one nonzero entry will be interpreted as lacunose.
+If an interpGrp for weights is specified in the TEI XML collation, then the weights for the interp elements will be used as weights
+for the variation units that specify them in their ana attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_addr</strong> – A string representing the path to an output STEMMA prep file; the file should have no extension.</p></li>
+<li><p><strong>file_addr</strong> – A string representing the path to an output stemma prep file; the file should have no extension.</p></li>
 <li><p><strong>name</strong> (<em>The accompanying chron file will match this file</em>)</p></li>
 <li><p><strong>end.</strong> (<em>except that it will have &quot;_chron&quot; appended to the</em>)</p></li>
 <li><p><strong>drop_constant</strong> – An optional flag indicating whether to ignore variation units with one substantive reading.</p></li>
