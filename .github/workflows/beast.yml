@@ -13,7 +13,7 @@ jobs:
     - name: Install Java 17
       uses: actions/setup-java@v4
       with:
-        java-package: 'jre+fx'
+        java-package: 'jdk+fx'
         distribution: 'zulu'
         java-version: '17.0.3'
     - name: Install poetry
@@ -31,12 +31,12 @@ jobs:
         poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock local --seed 1337 example/ubs_ephesians.xml beast_local_example.xml
     - name: Install Phylogenetics Package
       run: |
-        export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jre+fx/17.0.3-7/x64
+        export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.3-7/x64
         export PATH=${JAVA_HOME}/bin:${PATH}
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd BeastFX
-        ant -DopenjreLnx=$JAVA_HOME linux
+        ant linux
         cd ~
         mkdir .beast
         cd .beast
