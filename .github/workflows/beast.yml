@@ -4,10 +4,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     python-version: ["3.10"]
     steps:
     - uses: actions/checkout@v4
     - name: Install Java 17
@@ -16,19 +12,6 @@ jobs:
         java-package: 'jdk+fx'
         distribution: 'zulu'
         java-version: '17.0.3'
-    # - name: Install poetry
-    #   run: pipx install poetry
-    # - name: Install dependencies for Python ${{ matrix.python-version }}
-    #   uses: actions/setup-python@v5
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
-    #     cache: 'poetry'
-    # - run: poetry install
-    # - name: Testing
-    #   run: |
-    #     poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock strict --seed 1337 example/ubs_ephesians.xml beast_strict_example.xml
-    #     poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock uncorrelated --seed 1337 example/ubs_ephesians.xml beast_uncorrelated_example.xml
-    #     poetry run teiphy -t reconstructed -t defective -t orthographic -t subreading -m overlap -m lac -s"*" -s T --fill-correctors --clock local --seed 1337 example/ubs_ephesians.xml beast_local_example.xml
     - name: Install Phylogenetics Package
       run: |
         export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.3-7/x64
@@ -37,14 +20,6 @@ jobs:
         git clone https://github.com/CompEvol/BeastFX.git
         cd BeastFX
         ant -DopenjreLnx=$JAVA_HOME linux
-        cd ~
-        mkdir .beast
-        cd .beast
-        cp /home/runner/work/teiphy/teiphy/beast2/release/Linux/*.tgz .
-        tar zxvf *.tgz
-        ~/.beast/beast/bin/packagemanager -add BEAST_CLASSIC
-        ~/.beast/beast/bin/packagemanager -add BEASTLabs
-        ~/.beast/beast/bin/packagemanager -add BDSKY
     - name: Phylogenetics Run
       run: |
         ~/.beast/beast/bin/beast -overwrite beast_strict_example.xml
