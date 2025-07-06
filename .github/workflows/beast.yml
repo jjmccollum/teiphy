@@ -36,7 +36,8 @@ jobs:
         git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd BeastFX
-        ant package
+        sed -e 's:jrebin:jre/bin:g' build.xml
+        ant linux
         cd ~
         mkdir .beast
         cd .beast
