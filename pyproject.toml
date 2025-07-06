@@ -35,6 +35,9 @@ python-slugify = ">=6.1.2"
 Jinja2 = ">=3.1.6"
 setuptools = ">=70.0.0"
 h11 = ">=0.16.0"
+tornado = ">=6.5"
+urllib3 = ">=2.5.0"
+requests = ">=2.32.4"
 
 [tool.poetry.group.dev.dependencies]
 Sphinx = ">=7.0.0"
