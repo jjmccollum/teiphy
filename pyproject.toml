@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teiphy"
-version = "0.1.21"
+version = "0.1.22"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
@@ -48,7 +48,7 @@ sphinx-copybutton = ">=0.4.0"
 black = ">=24.3.0"
 sphinxcontrib-bibtex = ">=2.4.1"
 sphinx-click = {git = "https://github.com/rbturnbull/sphinx-click.git"}
-tornado = ">=6.4.2"
+tornado = ">=6.5"
 requests = ">=2.32.0"
 idna = ">=3.7"
 urllib3 = ">=2.2.2"

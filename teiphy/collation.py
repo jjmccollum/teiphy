@@ -5,6 +5,7 @@ from typing import List, Union
 import os
 from pathlib import Path
 from datetime import datetime  # for calculating the current year (for dating and tree height purposes)
+import math  # for special functions
 import time  # to time calculations for users
 import string  # for easy retrieval of character ranges
 from lxml import etree as et  # for reading TEI XML inputs
@@ -47,6 +48,7 @@ class TableType(str, Enum):
     matrix = "matrix"
     distance = "distance"
     similarity = "similarity"
+    idf = "idf"
     nexus = "nexus"
     long = "long"
 
@@ -1875,7 +1877,7 @@ class Collation:
                 Default value is False.
 
         Returns:
-            A NumPy distance matrix with a row and column for each witness.
+            A NumPy agreement matrix with a row and column for each witness.
             A list of witness ID strings.
         """
         # Populate a list of sites that will correspond to columns of the sequence alignment:
@@ -1935,6 +1937,85 @@ class Collation:
                 if show_ext:
                     cell_entry = str(cell_entry) + "/" + str(extant_units)
                 matrix[i, j] = cell_entry
+        return matrix, witness_labels
+
+    def to_idf_matrix(self, drop_constant: bool = False):
+        """Transforms this Collation into a NumPy inverse document frequency-weighted agreements matrix between witnesses, along with an array of its labels for the witnesses.
+        The IDF weight of an agreement on a given reading is the information content -log(Pr(R)) of the event R of randomly sampling a witness with that reading.
+        The IDF-weighted agreement score for two witnesses is the sum of the IDF weights for the readings at which they agree.
+        Where any witness is lacunose or ambiguous, it contributes to its potential readings' sampling probabilities in proportion to its degrees of support for those readings.
+        Similarly, where one or both target witnesses are lacunose or ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+
+        Returns:
+            A NumPy IDF-weighted agreement matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        # Then populate the matrix one variation unit at a time:
+        matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            # Otherwise, calculate the sampling probabilities for each reading in this unit:
+            sampling_probabilities = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            rdg_support_by_witness = {}
+            for i, wit in enumerate(witness_labels):
+                wit_rdg_support = self.readings_by_witness[wit][k]
+                # If the reading support vector consists of zeroes, then this witness is lacunose here; treat it as a vector of ones:
+                wit_rdg_support = [1.0] * len(wit_rdg_support) if sum(wit_rdg_support) == 0 else wit_rdg_support
+                # Then normalize the vector, so it can be interpreted as a probability distribution:
+                norm = sum(wit_rdg_support)
+                wit_rdg_support = [w / norm for w in wit_rdg_support]
+                # Save this vector of probabilities for this witness:
+                rdg_support_by_witness[wit] = wit_rdg_support
+                # Then add this witness's contributions to the readings' sampling probabilities:
+                for l, w in enumerate(wit_rdg_support):
+                    sampling_probabilities[l] += w
+            sampling_probabilities = [w / len(witness_labels) for w in sampling_probabilities]
+            # Then calculate the IDF weights for agreements between witnesses in this unit:
+            for i, wit_1 in enumerate(witness_labels):
+                for j, wit_2 in enumerate(witness_labels):
+                    # The contribution to the weighted sum for these witnesses will be identical regardless of the order in which they are specified,
+                    # so we only have to calculate it once:
+                    if i > j:
+                        matrix[i, j] = matrix[j, i]
+                        continue
+                    # First, calculate the probability that these two witnesses agree:
+                    wit_1_rdg_support = rdg_support_by_witness[wit_1]
+                    wit_2_rdg_support = rdg_support_by_witness[wit_2]
+                    probability_of_agreement = sum(
+                        [wit_1_rdg_support[l] * wit_2_rdg_support[l] for l in range(len(sampling_probabilities))]
+                    )
+                    # If these witnesses do not agree at this variation unit, then this unit contributes nothing to their total score:
+                    if probability_of_agreement == 0:
+                        continue
+                    # Otherwise, calculate the expected information content (in bits) of their agreement conditioned on the fact that they agree:
+                    expected_information_content = sum(
+                        [
+                            -math.log2(sampling_probabilities[l])
+                            * (wit_1_rdg_support[l] * wit_2_rdg_support[l] / probability_of_agreement)
+                            for l in range(len(sampling_probabilities))
+                        ]
+                    )
+                    # Then add this contribution to the total score for these two witnesses:
+                    matrix[i, j] += expected_information_content
+                    matrix[j, i] += expected_information_content
         return matrix, witness_labels
 
     def to_nexus_table(self, drop_constant: bool = False, ambiguous_as_missing: bool = False):
@@ -2127,6 +2208,10 @@ class Collation:
             matrix, witness_labels = self.to_similarity_matrix(
                 drop_constant=drop_constant, proportion=proportion, show_ext=show_ext
             )
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.idf:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_idf_matrix(drop_constant=drop_constant)
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.nexus:
             # Convert the collation to a NumPy array and get its row and column labels first:

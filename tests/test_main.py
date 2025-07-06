@@ -515,8 +515,8 @@ def test_to_nexus_mrbayes_local_clock():
 def test_to_hennig86():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.tnt"
@@ -547,8 +547,8 @@ def test_to_hennig86():
 def test_to_hennig86_drop_constant():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.tnt"
@@ -580,8 +580,8 @@ def test_to_hennig86_drop_constant():
 def test_to_phylip():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.phy"
@@ -610,8 +610,8 @@ def test_to_phylip():
 def test_to_phylip_drop_constant():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.phy"
@@ -641,7 +641,7 @@ def test_to_phylip_drop_constant():
 def test_to_fasta():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.fa"
@@ -671,7 +671,7 @@ def test_to_fasta():
 def test_to_fasta_drop_constant():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.fa"
@@ -702,8 +702,8 @@ def test_to_fasta_drop_constant():
 def test_to_beast():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:witness", namespaces={"tei": tei_ns})
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -727,13 +727,13 @@ def test_to_beast():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        beast_xml_sequences = beast_xml.xpath("//sequence")
-        beast_xml_charstatelabels = beast_xml.xpath("//charstatelabels")
-        beast_xml_site_distributions = beast_xml.xpath("//distribution[@spec=\"TreeLikelihood\"]")
+        beast_xml_sequences = beast_xml.xpath(".//sequence")
+        beast_xml_charstatelabels = beast_xml.xpath(".//charstatelabels")
+        beast_xml_site_distributions = beast_xml.xpath(".//distribution[@spec=\"TreeLikelihood\"]")
         assert len(beast_xml_sequences) == len(xml_witnesses)
         assert len(beast_xml_charstatelabels) == len(xml_variation_units)
         assert len(beast_xml_site_distributions) == len(xml_variation_units)
-        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K6V20U12\"]")
+        beast_xml_singleton_sequences = beast_xml.xpath(".//charstatelabels[@characterName=\"B10K6V20U12\"]")
         assert len(beast_xml_singleton_sequences) == 1
         assert beast_xml_singleton_sequences[0].get("value") is not None
         assert "DUMMY" in beast_xml_singleton_sequences[0].get("value")
@@ -743,8 +743,8 @@ def test_to_beast():
 def test_to_beast_drop_constant():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:witness", namespaces={"tei": tei_ns})
-    xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:witness", namespaces={"tei": tei_ns})
+    xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -769,13 +769,13 @@ def test_to_beast_drop_constant():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        beast_xml_sequences = beast_xml.xpath("//sequence")
-        beast_xml_charstatelabels = beast_xml.xpath("//charstatelabels")
-        beast_xml_site_distributions = beast_xml.xpath("//distribution[@spec=\"TreeLikelihood\"]")
+        beast_xml_sequences = beast_xml.xpath(".//sequence")
+        beast_xml_charstatelabels = beast_xml.xpath(".//charstatelabels")
+        beast_xml_site_distributions = beast_xml.xpath(".//distribution[@spec=\"TreeLikelihood\"]")
         assert len(beast_xml_sequences) == len(xml_witnesses)
         assert len(beast_xml_charstatelabels) == len(xml_variation_units) - 2
         assert len(beast_xml_site_distributions) == len(xml_variation_units) - 2
-        beast_xml_singleton_sequences = beast_xml.xpath("//charstatelabels[@characterName=\"B10K6V20U12\"]")
+        beast_xml_singleton_sequences = beast_xml.xpath(".//charstatelabels[@characterName=\"B10K6V20U12\"]")
         assert len(beast_xml_singleton_sequences) == 0
 
 
@@ -803,12 +803,12 @@ def test_to_beast_no_dates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
+        beast_xml_traits = beast_xml.xpath(".//trait[@traitname=\"date\"]")
         assert len(beast_xml_traits) == 1
         assert beast_xml_traits[0].get("value") is not None
         assert beast_xml_traits[0].get("value") == ""
-        assert len(beast_xml.xpath("//origin")) == 1
-        beast_xml_origin = beast_xml.find("//origin")
+        assert len(beast_xml.xpath(".//origin")) == 1
+        beast_xml_origin = beast_xml.find(".//origin")
         assert float(beast_xml_origin.get("value")) == 0.0  # the minimum height of the tree
         assert float(beast_xml_origin.get("lower")) == 0.0  # the minimum height of the tree
         assert beast_xml_origin.get("upper") == "Infinity"
@@ -838,7 +838,7 @@ def test_to_beast_some_dates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        beast_xml_traits = beast_xml.xpath("//trait[@traitname=\"date\"]")
+        beast_xml_traits = beast_xml.xpath(".//trait[@traitname=\"date\"]")
         assert len(beast_xml_traits) == 1
         assert beast_xml_traits[0].get("value") is not None
         assert "UBS=80" in beast_xml_traits[0].get(
@@ -851,8 +851,8 @@ def test_to_beast_some_dates():
             "value"
         )  # 02 has an explicit upper bound of 500, and its lower bound should be set to 80 based on the origin date
         assert "06=550"  # 06 has the lower and upper bounds on its date explicitly specified
-        assert len(beast_xml.xpath("//origin")) == 1
-        beast_xml_origin = beast_xml.find("//origin")
+        assert len(beast_xml.xpath(".//origin")) == 1
+        beast_xml_origin = beast_xml.find(".//origin")
         assert float(beast_xml_origin.get("value")) == datetime.now().year - 80  # minimum height of the tree
         assert float(beast_xml_origin.get("lower")) == datetime.now().year - 80  # minimum height of the tree
         assert beast_xml_origin.get("upper") == "Infinity"
@@ -882,8 +882,8 @@ def test_to_beast_no_origin():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert len(beast_xml.xpath("//origin")) == 1
-        beast_xml_origin = beast_xml.find("//origin")
+        assert len(beast_xml.xpath(".//origin")) == 1
+        beast_xml_origin = beast_xml.find(".//origin")
         assert (
             float(beast_xml_origin.get("value")) == 1450.0
         )  # this should equal the difference between the earliest possible tip date and the latest possible tip date
@@ -917,8 +917,8 @@ def test_to_beast_no_origin_some_dates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert len(beast_xml.xpath("//origin")) == 1
-        beast_xml_origin = beast_xml.find("//origin")
+        assert len(beast_xml.xpath(".//origin")) == 1
+        beast_xml_origin = beast_xml.find(".//origin")
         assert (
             float(beast_xml_origin.get("value")) == datetime.now().year - 50
         )  # this should equal the difference between the earliest possible tip date and the latest possible tip date
@@ -952,8 +952,8 @@ def test_to_beast_some_origin_some_dates():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert len(beast_xml.xpath("//origin")) == 1
-        beast_xml_origin = beast_xml.find("//origin")
+        assert len(beast_xml.xpath(".//origin")) == 1
+        beast_xml_origin = beast_xml.find(".//origin")
         assert (
             float(beast_xml_origin.get("value")) == 1420.0
         )  # this should equal the difference between the earliest possible tip date and the latest possible tip date
@@ -969,7 +969,7 @@ def test_to_beast_variable_rates():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
     xml_transcriptional_categories = xml.xpath(
-        "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+        ".//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
     )
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -1006,7 +1006,7 @@ def test_to_beast_variable_rates():
         for i, xml_transcriptional_category in enumerate(xml_transcriptional_categories):
             transcriptional_category = xml_transcriptional_category.get("{%s}id" % xml_ns)
             beast_xml_transcriptional_rate_categories = beast_xml.xpath(
-                "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
+                ".//stateNode[@id=\"%s_rate\"]" % transcriptional_category
             )
             assert len(beast_xml_transcriptional_rate_categories) == 1
             assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == expected_rates[i]
@@ -1017,7 +1017,7 @@ def test_to_beast_fixed_rates():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(fixed_rates_example, parser=parser)
     xml_transcriptional_categories = xml.xpath(
-        "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+        ".//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
     )
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -1047,7 +1047,7 @@ def test_to_beast_fixed_rates():
                 xml_transcriptional_category.xpath("./tei:certainty", namespaces={"tei": tei_ns})[0].get("degree")
             )
             beast_xml_transcriptional_rate_categories = beast_xml.xpath(
-                "//stateNode[@id=\"%s_rate\"]" % transcriptional_category
+                ".//stateNode[@id=\"%s_rate\"]" % transcriptional_category
             )
             assert len(beast_xml_transcriptional_rate_categories) == 1
             assert float(beast_xml_transcriptional_rate_categories[0].get("value")) == transcriptional_rate
@@ -1130,7 +1130,7 @@ def test_to_beast_intrinsic_odds_no_relations():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        root_frequencies_xml = beast_xml.find("//rootFrequencies/frequencies")
+        root_frequencies_xml = beast_xml.find(".//rootFrequencies/frequencies")
         assert root_frequencies_xml.get("value") is not None
         assert root_frequencies_xml.get("value") == "0.25 0.25 0.25 0.25"
 
@@ -1161,8 +1161,8 @@ def test_to_beast_strict_clock():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert beast_xml.find("//branchRateModel") is not None
-        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert beast_xml.find(".//branchRateModel") is not None
+        branch_rate_model = beast_xml.find(".//branchRateModel")
         assert branch_rate_model.get("spec") == "StrictClockModel"
 
 
@@ -1192,8 +1192,8 @@ def test_to_beast_uncorrelated_clock():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert beast_xml.find("//branchRateModel") is not None
-        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert beast_xml.find(".//branchRateModel") is not None
+        branch_rate_model = beast_xml.find(".//branchRateModel")
         assert branch_rate_model.get("spec") == "UCRelaxedClockModel"
 
 
@@ -1223,8 +1223,8 @@ def test_to_beast_local_clock():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert beast_xml.find("//branchRateModel") is not None
-        branch_rate_model = beast_xml.find("//branchRateModel")
+        assert beast_xml.find(".//branchRateModel") is not None
+        branch_rate_model = beast_xml.find(".//branchRateModel")
         assert branch_rate_model.get("spec") == "RandomLocalClockModel"
 
 
@@ -1254,8 +1254,8 @@ def test_to_beast_state_ancestral_logger():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert beast_xml.find("//logger[@id=\"ancestralStateLogger\"]") is not None
-        ancestral_log = beast_xml.find("//logger[@id=\"ancestralStateLogger\"]/log")
+        assert beast_xml.find(".//logger[@id=\"ancestralStateLogger\"]") is not None
+        ancestral_log = beast_xml.find(".//logger[@id=\"ancestralStateLogger\"]/log")
         assert ancestral_log.get("spec") == "beastlabs.evolution.likelihood.AncestralStateLogger"
 
 
@@ -1285,8 +1285,8 @@ def test_to_beast_sequence_ancestral_logger():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert beast_xml.find("//logger[@id=\"ancestralSequenceLogger\"]") is not None
-        ancestral_log = beast_xml.find("//logger[@id=\"ancestralSequenceLogger\"]/log")
+        assert beast_xml.find(".//logger[@id=\"ancestralSequenceLogger\"]") is not None
+        ancestral_log = beast_xml.find(".//logger[@id=\"ancestralSequenceLogger\"]/log")
         assert ancestral_log.get("spec") == "beastclassic.evolution.likelihood.AncestralSequenceLogger"
 
 
@@ -1316,8 +1316,8 @@ def test_to_beast_sequence_no_logger():
         assert result.exit_code == 0
         assert output.exists()
         beast_xml = et.parse(output, parser=parser)
-        assert beast_xml.find("//logger[@id=\"ancestralStateLogger\"]") is None
-        assert beast_xml.find("//logger[@id=\"ancestralSequenceLogger\"]") is None
+        assert beast_xml.find(".//logger[@id=\"ancestralStateLogger\"]") is None
+        assert beast_xml.find(".//logger[@id=\"ancestralSequenceLogger\"]") is None
 
 
 def test_to_csv():
@@ -1495,6 +1495,18 @@ def test_to_csv_proportion_show_ext_similarity_table():
         )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
 
 
+def test_to_csv_idf_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--verbose", "--table", "idf", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
+        assert "\nUBS," in text
+        assert "13.020683774592346" in text
+
+
 def test_to_csv_drop_constant_long_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
@@ -1616,7 +1628,7 @@ def test_to_excel_nexus_table():
 def test_to_phylip_distance_matrix():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.phy"
@@ -1633,7 +1645,7 @@ def test_to_phylip_distance_matrix():
 def test_to_phylip_similarity_matrix():
     parser = et.XMLParser(remove_comments=True)
     xml = et.parse(input_example, parser=parser)
-    xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+    xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.phy"
