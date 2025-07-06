@@ -2005,11 +2005,10 @@ class Collation:
                     # If these witnesses do not agree at this variation unit, then this unit contributes nothing to their total score:
                     if probability_of_agreement == 0:
                         continue
-                    # Otherwise, calculate the expected information content (in bits) of their agreement conditioned on the fact that they agree:
+                    # Otherwise, calculate the expected information content (in bits) of their agreement given their agreement on that reading:
                     expected_information_content = sum(
                         [
-                            -math.log2(sampling_probabilities[l])
-                            * (wit_1_rdg_support[l] * wit_2_rdg_support[l] / probability_of_agreement)
+                            -math.log2(sampling_probabilities[l]) * (wit_1_rdg_support[l] * wit_2_rdg_support[l])
                             for l in range(len(sampling_probabilities))
                         ]
                     )
