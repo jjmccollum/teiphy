@@ -33,7 +33,7 @@ jobs:
       run: |
         export JAVA_HOME=/opt/hostedtoolcache/Java_Zulu_jdk+fx/17.0.6-10/x64
         export PATH=${JAVA_HOME}/bin:${PATH}
-        git clone https://github.com/CompEvol/beast2.git --branch v2.7.7
+        git clone https://github.com/CompEvol/beast2.git
         git clone https://github.com/CompEvol/BeastFX.git
         cd BeastFX
         ant -DopenjreLnx=$JAVA_HOME linux

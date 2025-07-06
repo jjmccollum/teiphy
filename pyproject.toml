@@ -49,9 +49,9 @@ black = ">=24.3.0"
 sphinxcontrib-bibtex = ">=2.4.1"
 sphinx-click = {git = "https://github.com/rbturnbull/sphinx-click.git"}
 tornado = ">=6.5"
-requests = ">=2.32.0"
+requests = ">=2.32.4"
 idna = ">=3.7"
-urllib3 = ">=2.2.2"
+urllib3 = ">=2.5.0"
 zipp = ">=3.19.1"
 
 

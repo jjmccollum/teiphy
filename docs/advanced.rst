@@ -687,7 +687,7 @@ If you specify the ``show_ext`` argument as True, then each cell will be populat
 The same class's ``to_nexus_table`` method produces a NumPy ``array`` with rows for witnesses, columns for variation unit IDs, and attested reading IDs in the cells, resembling a NEXUS sequence.
 By default, cells corresponding to ambiguous readings are written as space-separated sequences of readings between braces, but they can be written as missing states with the ``ambiguous_as_missing`` argument.
 The same class's ``to_long_table`` method produces a NumPy ``array`` with columns for witness ID, variation unit ID, reading index, and reading text and rows for all combinations of these values found in the collation.
-The ``to_dataframe`` method invokes ``to_numpy`` by default, but if the ``table_type`` argument is ``distance``, ``nexus`` or ``long``, then it will invoke ``to_distance_matrix``, ``to_nexus_table`` or ``to_long_table``, respectively.
+The ``to_dataframe`` method invokes ``to_numpy`` by default, but if the ``table_type`` argument is ``distance``, ``agreement``, ``idf``, ``nexus`` or ``long``, then it will invoke ``to_distance_matrix``, ``to_agreement_matrix``, ``to_idf_matrix``, ``to_nexus_table`` or ``to_long_table``, respectively.
 It returns a Pandas ``DataFrame`` augmented with row and column labels (or, in the case of a long table, just column labels).
 
 From the command line, the types of matrices listed above can be written to a specified CSV, TSV, or Excel (.xlsx) file.
