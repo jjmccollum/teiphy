@@ -56,6 +56,10 @@ The ``teiphy`` program takes a collation of texts encoded using the `Text Encodi
 and converts it to a NEXUS format so that it can be used for phylogenetic analysis.
 It can also convert to other formats as well, including Hennig86 (for TNT), PHYLIP (for RAxML), FASTA, and the XML format used by BEAST 2.7.
 
+(Note: Some features that ``teiphy`` includes in BEAST 2 outputs will not work correctly with versions of BEAST 2 prior to v2.7.7.
+Other features depend on the BEASTLabs, BEAST_CLASSIC, and BDSKY packages.
+Make sure you have a recent version of BEAST 2 and these packages installed!)
+
 
 .. end-about
 

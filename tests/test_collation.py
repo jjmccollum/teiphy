@@ -18,14 +18,14 @@ class CollationDefaultTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
-        self.xml_witnesses = xml.xpath("//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
-        self.xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
-        self.xml_readings = xml.xpath("//tei:rdg", namespaces={"tei": tei_ns})
+        self.xml_witnesses = xml.xpath(".//tei:listWit/tei:witness", namespaces={"tei": tei_ns})
+        self.xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
+        self.xml_readings = xml.xpath(".//tei:rdg", namespaces={"tei": tei_ns})
         self.xml_intrinsic_relations = xml.xpath(
-            "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
+            ".//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.xml_transcriptional_relations = xml.xpath(
-            "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+            ".//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.collation = Collation(xml)
 
@@ -71,12 +71,12 @@ class CollationMalformedCategoriesTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(malformed_categories_example, parser=parser)
-        self.xml_weights = xml.xpath("//tei:interpGrp[@type=\"weight\"]/tei:interp", namespaces={"tei": tei_ns})
+        self.xml_weights = xml.xpath(".//tei:interpGrp[@type=\"weight\"]/tei:interp", namespaces={"tei": tei_ns})
         self.xml_intrinsic_relations = xml.xpath(
-            "//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
+            ".//tei:interpGrp[@type=\"intrinsic\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.xml_transcriptional_relations = xml.xpath(
-            "//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
+            ".//tei:interpGrp[@type=\"transcriptional\"]/tei:interp", namespaces={"tei": tei_ns}
         )
         self.collation = Collation(xml)
 
@@ -175,7 +175,7 @@ class CollationTrivialReconstructedTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
-        self.xml_readings = xml.xpath("//tei:rdg[not(@type) or @type!=\"reconstructed\"]", namespaces={"tei": tei_ns})
+        self.xml_readings = xml.xpath(".//tei:rdg[not(@type) or @type!=\"reconstructed\"]", namespaces={"tei": tei_ns})
         self.collation = Collation(xml, trivial_reading_types=["reconstructed"])
 
     def test_substantive_variation_unit_reading_tuples(self):
@@ -187,7 +187,7 @@ class CollationTrivialDefectiveTestCase(unittest.TestCase):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
         self.xml_readings = xml.xpath(
-            "//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\")]", namespaces={"tei": tei_ns}
+            ".//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\")]", namespaces={"tei": tei_ns}
         )
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective"])
 
@@ -200,7 +200,7 @@ class CollationTrivialOrthographicTestCase(unittest.TestCase):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
         self.xml_readings = xml.xpath(
-            "//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\" and @type !=\"orthographic\")]",
+            ".//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\" and @type !=\"orthographic\")]",
             namespaces={"tei": tei_ns},
         )
         self.collation = Collation(xml, trivial_reading_types=["reconstructed", "defective", "orthographic"])
@@ -214,7 +214,7 @@ class CollationTrivialSubreadingTestCase(unittest.TestCase):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
         self.xml_readings = xml.xpath(
-            "//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\" and @type !=\"orthographic\" and @type !=\"subreading\")]",
+            ".//tei:rdg[not(@type) or (@type!=\"reconstructed\" and @type!=\"defective\" and @type !=\"orthographic\" and @type !=\"subreading\")]",
             namespaces={"tei": tei_ns},
         )
         self.collation = Collation(
@@ -311,7 +311,7 @@ class CollationOutputTestCase(unittest.TestCase):
     def setUp(self):
         parser = et.XMLParser(remove_comments=True)
         xml = et.parse(input_example, parser=parser)
-        self.xml_variation_units = xml.xpath("//tei:app", namespaces={"tei": tei_ns})
+        self.xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
         self.collation = Collation(
             xml,
             trivial_reading_types=["reconstructed", "defective", "orthographic", "subreading"],
@@ -398,13 +398,19 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(stemma_symbols, [])
 
     def test_to_numpy_ignore_missing(self):
-        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
+        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=None)
         self.assertTrue(
             matrix.sum(axis=0)[5] < len(self.collation.variation_unit_ids)
         )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
 
-    def test_to_numpy_split_missing(self):
-        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=True)
+    def test_to_numpy_split_missing_uniform(self):
+        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing="uniform")
+        self.assertTrue(
+            abs(matrix.sum(axis=0)[5] - len(self.collation.variation_unit_ids)) < 1e-4
+        )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
+
+    def test_to_numpy_split_missing_proportional(self):
+        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing="proportional")
         self.assertTrue(
             abs(matrix.sum(axis=0)[5] - len(self.collation.variation_unit_ids)) < 1e-4
         )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
@@ -463,7 +469,7 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_to_similarity_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True)
-        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be 0
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
             matrix[0, 1], 24
@@ -480,7 +486,7 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_to_similarity_matrix_drop_constant_proportion(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True, proportion=True)
-        self.assertEqual(np.trace(matrix), 73)  # diagonal entries should be 0
+        self.assertEqual(np.trace(matrix), 73)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
@@ -496,6 +502,30 @@ class CollationOutputTestCase(unittest.TestCase):
         matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(matrix[0, 1], "0.7027027027027027/37")
+
+    def test_to_idf_matrix(self):
+        matrix, witness_labels = self.collation.to_idf_matrix()
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
+
+    def test_to_idf_matrix_drop_constant(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(drop_constant=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
+
+    def test_to_idf_matrix_split_missing_uniform(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(split_missing="uniform")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 9.860587) < 1e-4)  # entry for UBS and Byz should be 9.860587
+
+    def test_to_idf_matrix_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(split_missing="proportional")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()

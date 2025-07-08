@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<beast version="2.7" namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.inference.distribution:beast.base.inference.util:beast.base.evolution:beast.base.evolution.alignment:beast.base.evolution.datatype:beast.base.evolution.tree:beast.base.evolution.tree.coalescent:beast.base.evolution.branchratemodel:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood">
+<beast version="2.7" namespace="beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.inference.distribution:beast.base.inference.util:beast.base.evolution:beast.base.evolution.alignment:beast.base.evolution.datatype:beast.base.evolution.tree:beast.base.evolution.tree.coalescent:beast.base.evolution.branchratemodel:beast.evolution.nuc:beast.base.evolution.operator:beast.evolution.nuc:beast.base.evolution.operator.kernel:beast.base.inference.operator:beast.base.inference.operator.kernel:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood">
     <data spec="Alignment" id="alignment" dataType="standard" statecount="{{ nsymbols }}">
         <!-- Start witness sequences -->
         {%- for wit in witnesses %}
@@ -18,7 +18,7 @@
         </trait>
         <taxonset spec="TaxonSet" idref="taxa"/>
     </tree>
-    <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree" removalProbability="1.0">
+    <birthDeathSkylineModel spec="bdsky.evolution.speciation.BirthDeathSkylineModel" id="birthDeath" tree="@tree">
         {%- if origin_span[1] %}
         {%- if origin_span[1] == origin_span[0] %}
         <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="{{ origin_span[1] }}" value="{{ origin_span[0] }}" estimate="false"/>
@@ -29,17 +29,17 @@
         <origin spec="parameter.RealParameter" id="origin" lower="{{ origin_span[0] }}" upper="Infinity" value="{{ origin_span[0] }}"/>
         {%- endif %}
         <!-- The reciprocal of the expected waiting time (in years) before a manuscript is copied -->
-        <birthRate spec="parameter.RealParameter" id="birthRate" lower="0.0" upper="Infinity" value="0.040"/>
+        <birthRate spec="parameter.RealParameter" id="birthRate" lower="0.0" upper="0.100" value="0.020"/>
         <!-- The reciprocal of the expected waiting time (in years) before a manuscript is lost -->
-        <deathRate spec="parameter.RealParameter" id="deathRate" lower="0.0" upper="Infinity" value="0.025"/>
-        <!-- The reciprocal of the expected waiting time (in years) before a manuscript is preserved -->
-        <samplingRate spec="parameter.RealParameter" id="samplingRate" lower="0.0" upper="Infinity" value="0.010"/>
+        <deathRate spec="parameter.RealParameter" id="deathRate" lower="0.0" upper="0.050" value="0.005"/>
+        <!-- The reciprocal of the expected waiting time (in years) before a manuscript is copied and goes on to be preserved -->
+        <samplingRate spec="parameter.RealParameter" id="samplingRate" lower="0.0" upper="0.100" value="0.010"/>
     </birthDeathSkylineModel>
     {%- if clock_model == "strict" %}
     <branchRateModel spec="StrictClockModel" id="clock" clock.rate="@clock.mean"/>
     {%- elif clock_model == "uncorrelated" %}
     <branchRateModel spec="UCRelaxedClockModel" id="clock" tree="@tree" clock.rate="@clock.mean" rateCategories="@clock.rateCategories">
-        <distr spec="LogNormalDistributionModel" meanInRealSpace="true" M="@clock.mean" S="@clock.stdDev"/>
+        <distr spec="LogNormalDistributionModel" meanInRealSpace="true" M="1.0" S="@clock.stdDev"/><!-- this is expected to have a mean of 1; it is scaled by clock.mean -->
     </branchRateModel>
     {%- elif clock_model == "local" %}
     <branchRateModel spec="RandomLocalClockModel" id="clock" tree="@tree" clock.rate="@clock.mean" indicators="@clock.indicators" rates="@clock.rates" includeRoot="true"/>
@@ -56,13 +56,13 @@
             <stateNode idref="samplingRate"/>
             <!-- Start clock parameters -->
             {%- if clock_model == "strict" %}
-            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
+            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="0.1"/>
             {%- elif clock_model == "uncorrelated" %}
-            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
+            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="0.1"/>
             <stateNode spec="parameter.RealParameter" id="clock.stdDev" lower="0.0" upper="Infinity" value="1.0"/>
             <stateNode spec="parameter.IntegerParameter" id="clock.rateCategories"  dimension="{{ clock_rate_categories }}" value="1"/>
             {%- elif clock_model == "local" %}
-            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="1.0"/>
+            <stateNode spec="parameter.RealParameter" id="clock.mean" lower="0.0" upper="Infinity" value="0.1"/>
             <stateNode spec="parameter.BooleanParameter" id="clock.indicators" value="false"/>
             <stateNode spec="parameter.RealParameter" id="clock.rates" lower="0.0" upper="Infinity" value="1.0"/>
             {%- endif %}
@@ -94,15 +94,6 @@
                     <distr spec="LogNormalDistributionModel" M="0.0" S="1.0" offset="{{ origin_span[0] }}"/>
                 </distribution>
                 {%- endif %}
-                <distribution spec="Prior" id="birthRatePrior" x="@birthRate">
-                    <distr spec="beast.base.inference.distribution.Uniform" id="birthRatePrior.Uniform" lower="0.004" upper="0.040"/>
-                </distribution>
-                <distribution spec="Prior" id="deathRatePrior" x="@deathRate">
-                    <distr spec="beast.base.inference.distribution.Uniform" id="deathRatePrior.Uniform" lower="0.004" upper="0.040"/>
-                </distribution>
-                <distribution spec="Prior" id="samplingRatePrior" x="@samplingRate">
-                    <distr spec="beast.base.inference.distribution.Uniform" id="samplingRatePrior.Uniform" lower="0.0" upper="0.040"/>
-                </distribution>
                 <!-- Priors for the clock model parameters -->
                 {%- if clock_model == "strict" %}
                 <distribution spec="Prior" id="clock.meanPrior" x="@clock.mean">
@@ -152,8 +143,7 @@
                         <userDataType spec="StandardData" id="morphDataType.{{ vu_ind }}" nrOfStates="{{ vu.nstates }}"/>
                     </data>
                     <siteModel spec="SiteModel" id="morphSiteModel.{{ vu_ind }}">
-                        <mutationRate spec="parameter.RealParameter" id="mutationRate.{{ vu_ind }}" value="1.0" estimate="false"/>
-                        <shape spec="parameter.RealParameter" id="gammaShape.{{ vu_ind }}" value="1.0" estimate="false"/>
+                        <mutationRate spec="parameter.RealParameter" id="mutationRate.{{ vu_ind }}" value="1.0"/>
                         {%- if vu.epoch_heights_string != "" %}
                         <substModel spec="beastlabs.evolution.substitutionmodel.EpochSubstitutionModel" id="substModel.{{ vu_ind }}">
                             <epochDates spec="parameter.RealParameter">{{ vu.epoch_heights_string }}</epochDates>
@@ -222,54 +212,42 @@
             </distribution>
         </distribution>
         <!-- Operators for the tree -->
-        <operator spec="ScaleOperator" id="treeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="ScaleOperator" id="treeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
-        <operator spec="beast.base.evolution.operator.Uniform" id="treeUniformOperator" tree="@tree" weight="30.0"/>
-        <operator spec="SubtreeSlide" id="treeSubtreeSlide" tree="@tree" weight="15.0"/>
-        <operator spec="Exchange" id="treeNarrowExchange" tree="@tree" weight="3.0"/>
+        <operator spec="BactrianScaleOperator" id="treeScaler" scaleFactor="0.5" tree="@tree" weight="3.0"/>
+        <operator spec="BactrianScaleOperator" id="treeRootScaler" rootOnly="true" scaleFactor="0.5" tree="@tree" weight="3.0"/>
+        <operator spec="BactrianNodeOperator" id="treeUniformOperator" tree="@tree" weight="30.0"/>
+        <operator spec="BactrianSubtreeSlide" id="treeSubtreeSlide" tree="@tree" weight="15.0"/>
+        <operator spec="Exchange" id="treeNarrowExchange" tree="@tree" weight="15.0"/>
         <operator spec="Exchange" id="treeWideExchange" isNarrow="false" tree="@tree" weight="3.0"/>
         <operator spec="WilsonBalding" id="treeWilsonBalding" tree="@tree" weight="3.0"/>
         <!-- Operators for the Birth-Death Skyline model -->
         {%- if origin_span[1] %}
         {%- if origin_span[1] != origin_span[0] %}
-        <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="3.0"/>
+        <operator spec="BactrianScaleOperator" id="originScaler" parameter="@origin" weight="3.0"/>
         {%- endif %}
         {%- else %}
-        <operator spec="ScaleOperator" id="originScaler" parameter="@origin" weight="3.0"/>
+        <operator spec="BactrianScaleOperator" id="originScaler" parameter="@origin" weight="3.0"/>
         {%- endif %}
-        <operator spec="ScaleOperator" id="birthRateScaler" parameter="@birthRate" weight="10.0"/>
-        <operator spec="ScaleOperator" id="deathRateScaler" parameter="@deathRate" weight="10.0"/>
-        <operator spec="ScaleOperator" id="samplingRateScaler" parameter="@samplingRate" weight="10.0"/>
+        <operator spec="BactrianScaleOperator" id="birthRateScaler" parameter="@birthRate" weight="10.0"/>
+        <operator spec="BactrianScaleOperator" id="deathRateScaler" parameter="@deathRate" weight="10.0"/>
+        <operator spec="BactrianScaleOperator" id="samplingRateScaler" parameter="@samplingRate" weight="10.0"/>
         <!-- Operators for the clock model -->
         {%- if clock_model == "strict" %}
-        <operator spec="UpDownOperator" id="tree_updown" scaleFactor=".75" weight="10.0">
-            <up idref="tree"/>
-            <down idref="clock.mean"/>
-        </operator>
-        <operator spec="ScaleOperator" id="clock.rateScaler" scaleFactor=".75" weight="1.0" parameter="@clock.mean"/>
+        <operator spec="BactrianScaleOperator" id="clock.rateScaler" scaleFactor=".75" parameter="@clock.mean" weight="10.0"/>
         {%- elif clock_model == "uncorrelated" %}
-        <operator spec="UpDownOperator" id="tree_updown" scaleFactor=".75" weight="10.0">
-            <up idref="tree"/>
-            <down idref="clock.mean"/>
-        </operator>
-        <operator spec="ScaleOperator" id="clock.rateScaler" scaleFactor=".75" weight="1.0" parameter="@clock.mean"/>
-        <operator spec="ScaleOperator" id="clock.stdDevScaler" scaleFactor=".75" weight="1.0" parameter="@clock.stdDev"/>
-        <operator spec="UniformOperator" id="clock.rateCategoriesUniform" weight="1.0" parameter="@clock.rateCategories"/>
+        <operator spec="BactrianScaleOperator" id="clock.rateScaler" scaleFactor=".75" parameter="@clock.mean" weight="10.0"/>
+        <operator spec="BactrianScaleOperator" id="clock.stdDevScaler" scaleFactor=".75" parameter="@clock.stdDev" weight="10.0"/>
+        <operator spec="UniformOperator" id="clock.rateCategoriesUniform" parameter="@clock.rateCategories" weight="10.0"/>
         {%- elif clock_model == "local" %}
-        <operator spec="UpDownOperator" id="tree_updown" scaleFactor=".75" weight="10.0">
-            <up idref="tree"/>
-            <down idref="clock.mean"/>
-        </operator>
-        <operator spec="ScaleOperator" id="clock.rateScaler" scaleFactor=".75" weight="1.0" parameter="@clock.mean"/>
-        <operator spec="BitFlipOperator" id="clock.indicatorFlip" weight="1.0" parameter="@clock.indicators"/>
-        <operator spec="ScaleOperator" id="clock.ratesScaler" scaleFactor=".75" weight="1.0" parameter="@clock.rates"/>
+        <operator spec="BactrianScaleOperator" id="clock.rateScaler" scaleFactor=".75" parameter="@clock.mean" weight="10.0"/>
+        <operator spec="BitFlipOperator" id="clock.indicatorFlip" parameter="@clock.indicators" weight="10.0"/>
+        <operator spec="BactrianScaleOperator" id="clock.ratesScaler" scaleFactor=".75" parameter="@clock.rates" weight="10.0"/>
         {%- endif %}
         <!-- Start intrinsic odds operators -->
 
         <!-- Start transcriptional rate operators -->
         {%- for tc in transcriptional_categories %}
         {%- if tc.estimate == "true" %}
-        <operator spec="ScaleOperator" id="scaler.{{ tc.id }}_rate" scaleFactor="0.5" weight="1" parameter="@{{ tc.id }}_rate"/>
+        <operator spec="BactrianScaleOperator" id="scaler.{{ tc.id }}_rate" scaleFactor="0.5" parameter="@{{ tc.id }}_rate" weight="10.0"/>
         {%- endif %}
         {%- endfor %}
         <!-- Start witness date operators -->

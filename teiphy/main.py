@@ -5,7 +5,7 @@ from lxml import etree as et  # for parsing XML input
 import typer
 
 from .format import Format
-from .collation import Collation, ClockModel, AncestralLogger, TableType
+from .collation import Collation, ClockModel, AncestralLogger, TableType, SplitMissingType
 
 
 app = typer.Typer(rich_markup_mode="rich")
@@ -81,11 +81,11 @@ def to_file(
     ),
     table: TableType = typer.Option(
         TableType.matrix,
-        help="The type of table to use for CSV/TSV/Excel/PHYLIP output. If \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option). If \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option). If \"similarity\", then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the --proportion flag can be used with this option). If \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option). If \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts. If the output is a PHYLIP file, then the type of tabular output must be \"distance\" or \"similarity\"; otherwise, it will be ignored.",
+        help="The type of table to use for CSV/TSV/Excel/PHYLIP output.\nIf \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option).\nIf \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"similarity\", then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"idf\", then the table will have rows and columns for witnesses, where each cell contains the sum of inverse document frequency-weighted agreements between the corresponding pair of witnesses.\nIf \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option).\nIf \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.\nIf the output is a PHYLIP file, then the type of tabular output must be \"distance\" or \"similarity\"; otherwise, it will be ignored.",
     ),
-    split_missing: bool = typer.Option(
-        False,
-        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats.",
+    split_missing: SplitMissingType = typer.Option(
+        None,
+        help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings.\nIf not specified, then missing data is ignored (i.e., all states are 0).\nIf \"uniform\", then the contribution of 1 is divided evenly over all substantive readings.\nIf \"proportional\", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.\nNot applicable for non-tabular formats.",
     ),
     show_ext: bool = typer.Option(
         False,
