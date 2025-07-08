@@ -675,17 +675,22 @@ Outputs in ``nexus`` format also support up to 62 states to accommodate software
 
 Collations can also be converted to tabular formats.
 Within Python, the ``collation`` class's ``to_numpy`` method can be invoked to convert a collation to a NumPy ``array`` with rows for variant readings, columns for witnesses, and frequency values in the cells.
-Where a witness has missing data at a variation, its frequencies for different readings at this unit can be split evenly over 1 using the ``split_missing`` argument; otherwise, the witness will have frequencies of 0 for all readings at that unit.
+Where a witness has missing data at a variation, its frequencies for different readings at this unit can be split over 1 using the ``split_missing`` argument.
+If the ``uniform`` option is specified for this argument, then the frequency of 1 is split over all substantive readings, corresponding to a flat prior about what the witness's missing reading was.
+If the ``proportional`` option is specified for this argument, then the frequency of 1 is split in proportion to the readings' support from witnesses whose readings are not missing, corresponding to a prior informed by the sample populations for the readings.
+Otherwise, the witness will have frequencies of 0 for all readings at that unit.
 The same class's ``to_distance_matrix`` method produces a NumPy ``array`` with rows and columns for witnesses, where each cell contains the number of units where the row witness and column witness both have unambiguous readings and these readings disagree.
 The cells can instead be populated with the proportion of disagreements among units where the row and column witnesses have readings with the ``proportion`` argument.
 If you specify the ``show_ext`` argument as True, then each cell will be populated by the number or proportion of disagreements followed by the number of units where both witnesses have have unambiguous readings (e.g., 3/50 or 0.06/50).
 The same class's ``to_similarity_matrix`` method produces a NumPy ``array`` with rows and columns for witnesses, where each cell contains the number of units where the row witness and column witness both have unambiguous readings and these readings agree.
 The cells can instead be populated with the proportion of agreements among units where the row and column witnesses have readings with the ``proportion`` argument.
+The same class's ``to_idf_matrix`` method produces a NumPy ``array`` with rows and columns for witnesses, where each cell contains the sum of inverse document frequency (IDF)-weighted agreements between the corresponding witnesses.
+This value corresponds to the total expected information content (in bits) of the event of the correponding witnesses' agreement, with more exclusive agreements receiving higher weights.
 If you specify the ``show_ext`` argument as True, then each cell will be populated by the number or proportion of agreements followed by the number of units where both witnesses have have unambiguous readings (e.g., 47/50 or 0.94/50).
 The same class's ``to_nexus_table`` method produces a NumPy ``array`` with rows for witnesses, columns for variation unit IDs, and attested reading IDs in the cells, resembling a NEXUS sequence.
 By default, cells corresponding to ambiguous readings are written as space-separated sequences of readings between braces, but they can be written as missing states with the ``ambiguous_as_missing`` argument.
 The same class's ``to_long_table`` method produces a NumPy ``array`` with columns for witness ID, variation unit ID, reading index, and reading text and rows for all combinations of these values found in the collation.
-The ``to_dataframe`` method invokes ``to_numpy`` by default, but if the ``table_type`` argument is ``distance``, ``nexus`` or ``long``, then it will invoke ``to_distance_matrix``, ``to_nexus_table`` or ``to_long_table``, respectively.
+The ``to_dataframe`` method invokes ``to_numpy`` by default, but if the ``table_type`` argument is ``distance``, ``agreement``, ``idf``, ``nexus`` or ``long``, then it will invoke ``to_distance_matrix``, ``to_agreement_matrix``, ``to_idf_matrix``, ``to_nexus_table`` or ``to_long_table``, respectively.
 It returns a Pandas ``DataFrame`` augmented with row and column labels (or, in the case of a long table, just column labels).
 
 From the command line, the types of matrices listed above can be written to a specified CSV, TSV, or Excel (.xlsx) file.

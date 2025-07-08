@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for teiphy/main.py: 100.00%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
+    <link rel="stylesheet" href="style_cb_81f8c14c.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
 </head>
 <body class="pyfile">
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_0203103e395d7d41_reading_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-11 10:54 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.9.2">coverage.py v7.9.2</a>,
+            created at 2025-07-08 14:44 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -87,7 +87,7 @@
     <p class="run"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t"><span class="key">import</span> <span class="nam">typer</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">from</span> <span class="op">.</span><span class="nam">format</span> <span class="key">import</span> <span class="nam">Format</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="key">from</span> <span class="op">.</span><span class="nam">collation</span> <span class="key">import</span> <span class="nam">Collation</span><span class="op">,</span> <span class="nam">ClockModel</span><span class="op">,</span> <span class="nam">AncestralLogger</span><span class="op">,</span> <span class="nam">TableType</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="key">from</span> <span class="op">.</span><span class="nam">collation</span> <span class="key">import</span> <span class="nam">Collation</span><span class="op">,</span> <span class="nam">ClockModel</span><span class="op">,</span> <span class="nam">AncestralLogger</span><span class="op">,</span> <span class="nam">TableType</span><span class="op">,</span> <span class="nam">SplitMissingType</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="nam">app</span> <span class="op">=</span> <span class="nam">typer</span><span class="op">.</span><span class="nam">Typer</span><span class="op">(</span><span class="nam">rich_markup_mode</span><span class="op">=</span><span class="str">"rich"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -163,11 +163,11 @@
     <p class="pln"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">    <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">    <span class="nam">table</span><span class="op">:</span> <span class="nam">TableType</span> <span class="op">=</span> <span class="nam">typer</span><span class="op">.</span><span class="nam">Option</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t">        <span class="nam">TableType</span><span class="op">.</span><span class="nam">matrix</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">        <span class="nam">help</span><span class="op">=</span><span class="str">"The type of table to use for CSV/TSV/Excel/PHYLIP output. If \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option). If \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option). If \"similarity\", then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the --proportion flag can be used with this option). If \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option). If \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts. If the output is a PHYLIP file, then the type of tabular output must be \"distance\" or \"similarity\"; otherwise, it will be ignored."</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">        <span class="nam">help</span><span class="op">=</span><span class="str">"The type of table to use for CSV/TSV/Excel/PHYLIP output.\nIf \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option).\nIf \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"similarity\", then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"idf\", then the table will have rows and columns for witnesses, where each cell contains the sum of inverse document frequency-weighted agreements between the corresponding pair of witnesses.\nIf \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option).\nIf \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.\nIf the output is a PHYLIP file, then the type of tabular output must be \"distance\" or \"similarity\"; otherwise, it will be ignored."</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t">    <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t">    <span class="nam">split_missing</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">typer</span><span class="op">.</span><span class="nam">Option</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t87" href="#t87">87</a></span><span class="t">        <span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t">        <span class="nam">help</span><span class="op">=</span><span class="str">"Treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Not applicable for non-tabular formats."</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t">    <span class="nam">split_missing</span><span class="op">:</span> <span class="nam">SplitMissingType</span> <span class="op">=</span> <span class="nam">typer</span><span class="op">.</span><span class="nam">Option</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t87" href="#t87">87</a></span><span class="t">        <span class="key">None</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t">        <span class="nam">help</span><span class="op">=</span><span class="str">"Treat missing characters/variation units as having a contribution of 1 split over all states/readings.\nIf not specified, then missing data is ignored (i.e., all states are 0).\nIf \"uniform\", then the contribution of 1 is divided evenly over all substantive readings.\nIf \"proportional\", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.\nNot applicable for non-tabular formats."</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">    <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">    <span class="nam">show_ext</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="nam">typer</span><span class="op">.</span><span class="nam">Option</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -274,8 +274,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_0203103e395d7d41_reading_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.8.0">coverage.py v7.8.0</a>,
-            created at 2025-05-11 10:54 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.9.2">coverage.py v7.9.2</a>,
+            created at 2025-07-08 14:44 +0000
         </p>
     </div>
 </footer>
