@@ -53,6 +53,11 @@ class TableType(str, Enum):
     long = "long"
 
 
+class SplitMissingType(str, Enum):
+    uniform = "uniform"
+    proportional = "proportional"
+
+
 class Collation:
     """Base class for storing TEI XML collation data internally.
 
@@ -1728,12 +1733,15 @@ class Collation:
             f.write(rendered)
         return
 
-    def to_numpy(self, drop_constant: bool = False, split_missing: bool = True):
+    def to_numpy(self, drop_constant: bool = False, split_missing: SplitMissingType = None):
         """Returns this Collation in the form of a NumPy array, along with arrays of its row and column labels.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings; if False, then missing data is ignored (i.e., all states are 0). Default value is True.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
 
         Returns:
             A NumPy array with a row for each substantive reading and a column for each witness.
@@ -1761,6 +1769,20 @@ class Collation:
                     reading_labels.append(vu.id + ", " + rdg.text)
         witness_labels = [wit.id for wit in self.witnesses]
         matrix = np.zeros((len(reading_labels), len(witness_labels)), dtype=float)
+        # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
+        support_proportions_by_unit = {}
+        for j, vu_id in enumerate(self.variation_unit_ids):
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            for i, wit in enumerate(self.witnesses):
+                rdg_support = self.readings_by_witness[wit.id][j]
+                for l, w in enumerate(rdg_support):
+                    support_proportions[l] += w
+            norm = sum(support_proportions)
+            for l in range(len(support_proportions)):
+                support_proportions[l] = support_proportions[l] / norm
+            support_proportions_by_unit[vu_id] = support_proportions
         # Then populate it with the appropriate values:
         col_ind = 0
         for i, wit in enumerate(self.witnesses):
@@ -1771,16 +1793,20 @@ class Collation:
                 rdg_support = self.readings_by_witness[wit.id][j]
                 # If this reading support vector sums to 0, then this is missing data; handle it as specified:
                 if sum(rdg_support) == 0:
-                    if split_missing:
-                        for i in range(len(rdg_support)):
+                    if split_missing == SplitMissingType.uniform:
+                        for l in range(len(rdg_support)):
                             matrix[row_ind, col_ind] = 1 / len(rdg_support)
+                            row_ind += 1
+                    elif split_missing == SplitMissingType.proportional:
+                        for l in range(len(rdg_support)):
+                            matrix[row_ind, col_ind] = support_proportions_by_unit[vu_id][l]
                             row_ind += 1
                     else:
                         row_ind += len(rdg_support)
                 # Otherwise, add its coefficients normally:
                 else:
-                    for i in range(len(rdg_support)):
-                        matrix[row_ind, col_ind] = rdg_support[i]
+                    for l in range(len(rdg_support)):
+                        matrix[row_ind, col_ind] = rdg_support[l]
                         row_ind += 1
             col_ind += 1
         return matrix, reading_labels, witness_labels
@@ -1939,7 +1965,7 @@ class Collation:
                 matrix[i, j] = cell_entry
         return matrix, witness_labels
 
-    def to_idf_matrix(self, drop_constant: bool = False):
+    def to_idf_matrix(self, drop_constant: bool = False, split_missing: SplitMissingType = None):
         """Transforms this Collation into a NumPy inverse document frequency-weighted agreements matrix between witnesses, along with an array of its labels for the witnesses.
         The IDF weight of an agreement on a given reading is the information content -log(Pr(R)) of the event R of randomly sampling a witness with that reading.
         The IDF-weighted agreement score for two witnesses is the sum of the IDF weights for the readings at which they agree.
@@ -1949,6 +1975,10 @@ class Collation:
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
                 Default value is False.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
 
         Returns:
             A NumPy IDF-weighted agreement matrix with a row and column for each witness.
@@ -1966,6 +1996,20 @@ class Collation:
         substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # Initialize the output array with the appropriate dimensions:
         witness_labels = [wit.id for wit in self.witnesses]
+        # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
+        support_proportions_by_unit = {}
+        for j, vu_id in enumerate(self.variation_unit_ids):
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][j]
+                for l, w in enumerate(rdg_support):
+                    support_proportions[l] += w
+            norm = sum(support_proportions)
+            for l in range(len(support_proportions)):
+                support_proportions[l] = support_proportions[l] / norm
+            support_proportions_by_unit[vu_id] = support_proportions
         # Then populate the matrix one variation unit at a time:
         matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
         for k, vu_id in enumerate(self.variation_unit_ids):
@@ -1976,18 +2020,21 @@ class Collation:
             sampling_probabilities = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
             rdg_support_by_witness = {}
             for i, wit in enumerate(witness_labels):
-                wit_rdg_support = self.readings_by_witness[wit][k]
-                # If the reading support vector consists of zeroes, then this witness is lacunose here; treat it as a vector of ones:
-                wit_rdg_support = [1.0] * len(wit_rdg_support) if sum(wit_rdg_support) == 0 else wit_rdg_support
-                # Then normalize the vector, so it can be interpreted as a probability distribution:
-                norm = sum(wit_rdg_support)
-                wit_rdg_support = [w / norm for w in wit_rdg_support]
+                rdg_support = self.readings_by_witness[wit][k]
+                # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                if sum(rdg_support) == 0:
+                    if split_missing == SplitMissingType.uniform:
+                        rdg_support = [1 / len(rdg_support) for l in range(len(rdg_support))]
+                    elif split_missing == SplitMissingType.proportional:
+                        rdg_support = [support_proportions_by_unit[vu_id][l] for l in range(len(rdg_support))]
                 # Save this vector of probabilities for this witness:
-                rdg_support_by_witness[wit] = wit_rdg_support
+                rdg_support_by_witness[wit] = rdg_support
                 # Then add this witness's contributions to the readings' sampling probabilities:
-                for l, w in enumerate(wit_rdg_support):
+                for l, w in enumerate(rdg_support):
                     sampling_probabilities[l] += w
-            sampling_probabilities = [w / len(witness_labels) for w in sampling_probabilities]
+            # Then normalize the sampling probabilities so they sum to 1:
+            norm = sum(sampling_probabilities)
+            sampling_probabilities = [w / norm for w in sampling_probabilities]
             # Then calculate the IDF weights for agreements between witnesses in this unit:
             for i, wit_1 in enumerate(witness_labels):
                 for j, wit_2 in enumerate(witness_labels):
@@ -2005,11 +2052,14 @@ class Collation:
                     # If these witnesses do not agree at this variation unit, then this unit contributes nothing to their total score:
                     if probability_of_agreement == 0:
                         continue
-                    # Otherwise, calculate the expected information content (in bits) of their agreement given their agreement on that reading:
+                    # Otherwise, calculate the expected information content (in bits) of their agreement given their agreement on that reading
+                    # (skipping readings with a sampling probability of 0):
                     expected_information_content = sum(
                         [
-                            -math.log2(sampling_probabilities[l]) * (wit_1_rdg_support[l] * wit_2_rdg_support[l])
+                            -math.log2(sampling_probabilities[l])
+                            * (wit_1_rdg_support[l] * wit_2_rdg_support[l] / probability_of_agreement)
                             for l in range(len(sampling_probabilities))
+                            if sampling_probabilities[l] > 0.0
                         ]
                     )
                     # Then add this contribution to the total score for these two witnesses:
@@ -2162,7 +2212,7 @@ class Collation:
         ambiguous_as_missing: bool = False,
         proportion: bool = False,
         table_type: TableType = TableType.matrix,
-        split_missing: bool = True,
+        split_missing: SplitMissingType = None,
         show_ext: bool = False,
     ):
         """Returns this Collation in the form of a Pandas DataFrame array, including the appropriate row and column labels.
@@ -2177,9 +2227,11 @@ class Collation:
             table_type (TableType, optional): A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
-                if False, then missing data is ignored (i.e., all states are 0).
-                Default value is True.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+                Only applicable for table types "matrix" and "idf".
             show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
@@ -2210,7 +2262,7 @@ class Collation:
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.idf:
             # Convert the collation to a NumPy array and get its row and column labels first:
-            matrix, witness_labels = self.to_idf_matrix(drop_constant=drop_constant)
+            matrix, witness_labels = self.to_idf_matrix(drop_constant=drop_constant, split_missing=split_missing)
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.nexus:
             # Convert the collation to a NumPy array and get its row and column labels first:
@@ -2231,7 +2283,7 @@ class Collation:
         ambiguous_as_missing: bool = False,
         proportion: bool = False,
         table_type: TableType = TableType.matrix,
-        split_missing: bool = True,
+        split_missing: SplitMissingType = None,
         show_ext: bool = False,
         **kwargs
     ):
@@ -2250,9 +2302,11 @@ class Collation:
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
-                if False, then missing data is ignored (i.e., all states are 0).
-                Default value is True.
+            split_missing: An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+                Only applicable for table types "matrix" and "idf".
             show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
@@ -2286,7 +2340,7 @@ class Collation:
         ambiguous_as_missing: bool = False,
         proportion: bool = False,
         table_type: TableType = TableType.matrix,
-        split_missing: bool = True,
+        split_missing: SplitMissingType = None,
         show_ext: bool = False,
     ):
         """Writes this Collation to an Excel (.xlsx) file with the given address.
@@ -2304,9 +2358,11 @@ class Collation:
             table_type: A TableType option indicating which type of tabular output to generate.
                 Only applicable for tabular outputs.
                 Default value is "matrix".
-            split_missing: An optional flag indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings;
-                if False, then missing data is ignored (i.e., all states are 0).
-                Default value is True.
+            split_missing: An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+                Only applicable for table types "matrix" and "idf".
             show_ext: An optional flag indicating whether each cell in a distance or similarity matrix
                 should include the number of their extant, unambiguous variation units after the number of their disagreements/agreements.
                 Only applicable for tabular output formats of type \"distance\" or \"similarity\".
@@ -2573,7 +2629,7 @@ class Collation:
         file_addr: Union[Path, str],
         format: Format = None,
         drop_constant: bool = False,
-        split_missing: bool = True,
+        split_missing: SplitMissingType = None,
         char_state_labels: bool = True,
         frequency: bool = False,
         ambiguous_as_missing: bool = False,
@@ -2595,11 +2651,11 @@ class Collation:
                 Defaults to None.
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
                 Default value is False.
-            split_missing (bool, optional): An optional flag indicating whether to treat
-                missing characters/variation units as having a contribution of 1 split over all states/readings;
-                if False, then missing data is ignored (i.e., all states are 0).
-                Not applicable for NEXUS, HENNIG86, PHYLIP, FASTA, or STEMMA format.
-                Default value is True.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+                Only applicable for tabular outputs of type "matrix" or "idf".
             char_state_labels (bool, optional): An optional flag indicating whether to print
                 the CharStateLabels block in NEXUS output.
                 Default value is True.

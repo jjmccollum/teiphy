@@ -34,7 +34,10 @@ class VariationUnit:
         elif xml.get("n") is not None:
             self.id = xml.get("n")
             if xml.get("from") is not None and xml.get("to") is not None:
-                self.id += "_" + xml.get("from") + "_" + xml.get("to")
+                if xml.get("from") != xml.get("to"):
+                    self.id += "_" + xml.get("from") + "_" + xml.get("to")  # range of word indices
+                else:
+                    self.id += "_" + xml.get("from")  # single word index
         # Initialize its list of analysis categories (for weighting changes in this unit in the stemma program):
         self.analysis_categories = []
         if xml.get("ana") is not None:

@@ -1504,7 +1504,7 @@ def test_to_csv_idf_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "13.020683774592346" in text
+        assert "9.93225658177545" in text
 
 
 def test_to_csv_drop_constant_long_table():

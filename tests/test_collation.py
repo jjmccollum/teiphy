@@ -398,13 +398,19 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertEqual(stemma_symbols, [])
 
     def test_to_numpy_ignore_missing(self):
-        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=False)
+        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=None)
         self.assertTrue(
             matrix.sum(axis=0)[5] < len(self.collation.variation_unit_ids)
         )  # lacuna in the first witness should result in its column summing to less than the total number of substantive variation units
 
-    def test_to_numpy_split_missing(self):
-        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing=True)
+    def test_to_numpy_split_missing_uniform(self):
+        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing="uniform")
+        self.assertTrue(
+            abs(matrix.sum(axis=0)[5] - len(self.collation.variation_unit_ids)) < 1e-4
+        )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
+
+    def test_to_numpy_split_missing_proportional(self):
+        matrix, reading_labels, witness_labels = self.collation.to_numpy(split_missing="proportional")
         self.assertTrue(
             abs(matrix.sum(axis=0)[5] - len(self.collation.variation_unit_ids)) < 1e-4
         )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
@@ -501,13 +507,25 @@ class CollationOutputTestCase(unittest.TestCase):
         matrix, witness_labels = self.collation.to_idf_matrix()
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 9.836124) < 1e-4)  # entry for UBS and Byz should be 9.836124
+        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
 
     def test_to_idf_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_idf_matrix(drop_constant=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 9.836124) < 1e-4)  # entry for UBS and Byz should be 9.836124
+        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
+
+    def test_to_idf_matrix_split_missing_uniform(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(split_missing="uniform")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 9.860587) < 1e-4)  # entry for UBS and Byz should be 9.860587
+
+    def test_to_idf_matrix_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(split_missing="proportional")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
