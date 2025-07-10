@@ -2021,16 +2021,20 @@ class Collation:
             rdg_support_by_witness = {}
             for i, wit in enumerate(witness_labels):
                 rdg_support = self.readings_by_witness[wit][k]
-                # If this reading support vector sums to 0, then this is missing data; handle it as specified:
-                if sum(rdg_support) == 0:
+                # Check if this reading support vector represents missing data:
+                norm = sum(rdg_support)
+                if norm == 0:
+                    # If this reading support vector sums to 0, then this is missing data; handle it as specified:
                     if split_missing == SplitMissingType.uniform:
                         rdg_support = [1 / len(rdg_support) for l in range(len(rdg_support))]
                     elif split_missing == SplitMissingType.proportional:
                         rdg_support = [support_proportions_by_unit[vu_id][l] for l in range(len(rdg_support))]
-                # Save this vector of probabilities for this witness:
+                else:
+                    # Otherwise, the data is present, though it may be ambiguous; normalize the reading probabilities to sum to 1:
+                    rdg_support = [w / norm for l, w in enumerate(rdg_support)]
                 rdg_support_by_witness[wit] = rdg_support
                 # Then add this witness's contributions to the readings' sampling probabilities:
-                for l, w in enumerate(rdg_support):
+                for l, w in enumerate(rdg_support_by_witness[wit]):
                     sampling_probabilities[l] += w
             # Then normalize the sampling probabilities so they sum to 1:
             norm = sum(sampling_probabilities)

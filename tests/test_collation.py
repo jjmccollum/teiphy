@@ -507,25 +507,25 @@ class CollationOutputTestCase(unittest.TestCase):
         matrix, witness_labels = self.collation.to_idf_matrix()
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
+        self.assertTrue(abs(matrix[0, 1] - 7.936539) < 1e-4)  # entry for UBS and Byz should be 7.936539
 
     def test_to_idf_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_idf_matrix(drop_constant=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
+        self.assertTrue(abs(matrix[0, 1] - 7.936539) < 1e-4)  # entry for UBS and Byz should be 7.936539
 
     def test_to_idf_matrix_split_missing_uniform(self):
         matrix, witness_labels = self.collation.to_idf_matrix(split_missing="uniform")
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 9.860587) < 1e-4)  # entry for UBS and Byz should be 9.860587
+        self.assertTrue(abs(matrix[0, 1] - 9.836124) < 1e-4)  # entry for UBS and Byz should be 9.836124
 
     def test_to_idf_matrix_split_missing_proportional(self):
         matrix, witness_labels = self.collation.to_idf_matrix(split_missing="proportional")
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 7.968564) < 1e-4)  # entry for UBS and Byz should be 7.968564
+        self.assertTrue(abs(matrix[0, 1] - 7.940864) < 1e-4)  # entry for UBS and Byz should be 7.940864
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
