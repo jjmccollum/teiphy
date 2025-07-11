@@ -1779,7 +1779,9 @@ class Collation:
                 rdg_support = self.readings_by_witness[wit.id][j]
                 for l, w in enumerate(rdg_support):
                     support_proportions[l] += w
-            norm = sum(support_proportions)
+            norm = (
+                sum(support_proportions) if sum(support_proportions) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
             for l in range(len(support_proportions)):
                 support_proportions[l] = support_proportions[l] / norm
             support_proportions_by_unit[vu_id] = support_proportions
@@ -1999,6 +2001,7 @@ class Collation:
         # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
         support_proportions_by_unit = {}
         for j, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
             if vu_id not in substantive_variation_unit_ids_set:
                 continue
             support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
@@ -2006,7 +2009,9 @@ class Collation:
                 rdg_support = self.readings_by_witness[wit][j]
                 for l, w in enumerate(rdg_support):
                     support_proportions[l] += w
-            norm = sum(support_proportions)
+            norm = (
+                sum(support_proportions) if sum(support_proportions) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
             for l in range(len(support_proportions)):
                 support_proportions[l] = support_proportions[l] / norm
             support_proportions_by_unit[vu_id] = support_proportions
@@ -2036,8 +2041,10 @@ class Collation:
                 # Then add this witness's contributions to the readings' sampling probabilities:
                 for l, w in enumerate(rdg_support_by_witness[wit]):
                     sampling_probabilities[l] += w
-            # Then normalize the sampling probabilities so they sum to 1:
-            norm = sum(sampling_probabilities)
+            norm = (
+                sum(sampling_probabilities) if sum(sampling_probabilities) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            # Otherwise, normalize the sampling probabilities so they sum to 1:
             sampling_probabilities = [w / norm for w in sampling_probabilities]
             # Then calculate the IDF weights for agreements between witnesses in this unit:
             for i, wit_1 in enumerate(witness_labels):

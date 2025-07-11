@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teiphy"
-version = "0.1.22b"
+version = "0.1.22c"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
