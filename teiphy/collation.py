@@ -49,6 +49,9 @@ class TableType(str, Enum):
     distance = "distance"
     similarity = "similarity"
     idf = "idf"
+    mean_idf = "mean-idf"
+    mi = "mi"
+    mean_mi = "mean-mi"
     nexus = "nexus"
     long = "long"
 
@@ -1859,10 +1862,9 @@ class Collation:
             for j, wit_2 in enumerate(witness_labels):
                 extant_units = 0
                 disagreements = 0
-                # If either of the cells for this pair of witnesses has been populated already,
-                # then just copy the entry from the other side of the diagonal without recalculating:
+                # The contribution to the entry for these witnesses will be identical regardless of the order in which they are specified,
+                # so we only have to calculate it once:
                 if i > j:
-                    matrix[i, j] = matrix[j, i]
                     continue
                 # Otherwise, calculate the number of units where both witnesses have unambiguous readings
                 # and the number of units where they disagree:
@@ -1888,6 +1890,7 @@ class Collation:
                 if show_ext:
                     cell_entry = str(cell_entry) + "/" + str(extant_units)
                 matrix[i, j] = cell_entry
+                matrix[j, i] = cell_entry
         return matrix, witness_labels
 
     def to_similarity_matrix(self, drop_constant: bool = False, proportion: bool = False, show_ext: bool = False):
@@ -1936,10 +1939,9 @@ class Collation:
             for j, wit_2 in enumerate(witness_labels):
                 extant_units = 0
                 agreements = 0
-                # If either of the cells for this pair of witnesses has been populated already,
-                # then just copy the entry from the other side of the diagonal without recalculating:
+                # The contribution to the entry for these witnesses will be identical regardless of the order in which they are specified,
+                # so we only have to calculate it once:
                 if i > j:
-                    matrix[i, j] = matrix[j, i]
                     continue
                 # Otherwise, calculate the number of units where both witnesses have unambiguous readings
                 # and the number of units where they agree:
@@ -1965,14 +1967,16 @@ class Collation:
                 if show_ext:
                     cell_entry = str(cell_entry) + "/" + str(extant_units)
                 matrix[i, j] = cell_entry
+                matrix[j, i] = cell_entry
         return matrix, witness_labels
 
     def to_idf_matrix(self, drop_constant: bool = False, split_missing: SplitMissingType = None):
-        """Transforms this Collation into a NumPy inverse document frequency-weighted agreements matrix between witnesses, along with an array of its labels for the witnesses.
+        """Transforms this Collation into a NumPy matrix of agreements between witnesses weighted by inverse document frequency (IDF), along with an array of its labels for the witnesses.
         The IDF weight of an agreement on a given reading is the information content -log(Pr(R)) of the event R of randomly sampling a witness with that reading.
         The IDF-weighted agreement score for two witnesses is the sum of the IDF weights for the readings at which they agree.
-        Where any witness is lacunose or ambiguous, it contributes to its potential readings' sampling probabilities in proportion to its degrees of support for those readings.
-        Similarly, where one or both target witnesses are lacunose or ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.
+        Where any witness is ambiguous, it contributes to its potential readings' sampling probabilities in proportion to its degrees of support for those readings.
+        Similarly, where one or both target witnesses are ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.
+        If a split_missing argument is supplied, then lacunae are handled in the same way.
 
         Args:
             drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
@@ -2000,13 +2004,13 @@ class Collation:
         witness_labels = [wit.id for wit in self.witnesses]
         # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
         support_proportions_by_unit = {}
-        for j, vu_id in enumerate(self.variation_unit_ids):
+        for k, vu_id in enumerate(self.variation_unit_ids):
             # Skip this variation unit if it is a dropped constant site:
             if vu_id not in substantive_variation_unit_ids_set:
                 continue
             support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
             for i, wit in enumerate(witness_labels):
-                rdg_support = self.readings_by_witness[wit][j]
+                rdg_support = self.readings_by_witness[wit][k]
                 for l, w in enumerate(rdg_support):
                     support_proportions[l] += w
             norm = (
@@ -2052,7 +2056,6 @@ class Collation:
                     # The contribution to the weighted sum for these witnesses will be identical regardless of the order in which they are specified,
                     # so we only have to calculate it once:
                     if i > j:
-                        matrix[i, j] = matrix[j, i]
                         continue
                     # First, calculate the probability that these two witnesses agree:
                     wit_1_rdg_support = rdg_support_by_witness[wit_1]
@@ -2076,6 +2079,369 @@ class Collation:
                     # Then add this contribution to the total score for these two witnesses:
                     matrix[i, j] += expected_information_content
                     matrix[j, i] += expected_information_content
+        return matrix, witness_labels
+
+    def to_mean_idf_matrix(self, drop_constant: bool = False, split_missing: SplitMissingType = None):
+        """Transforms this Collation into a NumPy matrix of average inverse document frequency (IDF) weights on agreements between witnesses, along with an array of its labels for the witnesses.
+        The IDF weight of an agreement on a given reading is the information content -log(Pr(R)) of the event R of randomly sampling a witness with that reading.
+        The IDF-weighted agreement score for two witnesses is the sum of the IDF weights for the readings at which they agree.
+        The average is taken over all variation units at which both witnesses have a non-zero reading support vector.
+        Where any witness is ambiguous, it contributes to its potential readings' sampling probabilities in proportion to its degrees of support for those readings.
+        Similarly, where one or both target witnesses are ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.
+        If a split_missing argument is supplied, then lacunae are handled in the same way.
+        This will improve the value of relationships involving more fragmentary witnesses, 
+        but be warned that extremely fragmentary witnesses may have their values inflated and should probably be excluded from consideration.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+
+        Returns:
+            A NumPy IDF-weighted agreement matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
+        support_proportions_by_unit = {}
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][k]
+                for l, w in enumerate(rdg_support):
+                    support_proportions[l] += w
+            norm = (
+                sum(support_proportions) if sum(support_proportions) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            for l in range(len(support_proportions)):
+                support_proportions[l] = support_proportions[l] / norm
+            support_proportions_by_unit[vu_id] = support_proportions
+        # Then populate the matrix one variation unit at a time:
+        matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
+        nonzero_vu_count_matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            # Otherwise, calculate the sampling probabilities for each reading in this unit:
+            sampling_probabilities = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            rdg_support_by_witness = {}
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][k]
+                # Check if this reading support vector represents missing data:
+                norm = sum(rdg_support)
+                if norm == 0:
+                    # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                    if split_missing == SplitMissingType.uniform:
+                        rdg_support = [1 / len(rdg_support) for l in range(len(rdg_support))]
+                    elif split_missing == SplitMissingType.proportional:
+                        rdg_support = [support_proportions_by_unit[vu_id][l] for l in range(len(rdg_support))]
+                else:
+                    # Otherwise, the data is present, though it may be ambiguous; normalize the reading probabilities to sum to 1:
+                    rdg_support = [w / norm for l, w in enumerate(rdg_support)]
+                rdg_support_by_witness[wit] = rdg_support
+                # Then add this witness's contributions to the readings' sampling probabilities:
+                for l, w in enumerate(rdg_support_by_witness[wit]):
+                    sampling_probabilities[l] += w
+            norm = (
+                sum(sampling_probabilities) if sum(sampling_probabilities) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            # Otherwise, normalize the sampling probabilities so they sum to 1:
+            sampling_probabilities = [w / norm for w in sampling_probabilities]
+            # Then calculate the IDF weights for agreements between witnesses in this unit:
+            for i, wit_1 in enumerate(witness_labels):
+                for j, wit_2 in enumerate(witness_labels):
+                    # The contribution to the weighted sum for these witnesses will be identical regardless of the order in which they are specified,
+                    # so we only have to calculate it once:
+                    if i > j:
+                        continue
+                    # First, get the witnesses' reading support vectors at this unit:
+                    wit_1_rdg_support = rdg_support_by_witness[wit_1]
+                    wit_2_rdg_support = rdg_support_by_witness[wit_2]
+                    # If either witness has an all-zero reading support vector, then skip this variation unit:
+                    if sum(wit_1_rdg_support) == 0 or sum(wit_2_rdg_support) == 0:
+                        continue
+                    # Otherwise, the witnesses both have non-zero vectors here; increment the count of the units where this happens:
+                    nonzero_vu_count_matrix[i, j] += 1
+                    nonzero_vu_count_matrix[j, i] += 1
+                    # Then calculate the probability that these two witnesses agree:
+                    probability_of_agreement = sum(
+                        [wit_1_rdg_support[l] * wit_2_rdg_support[l] for l in range(len(sampling_probabilities))]
+                    )
+                    # If these witnesses do not agree at this variation unit, then this unit contributes nothing to their total score:
+                    if probability_of_agreement == 0:
+                        continue
+                    # Otherwise, calculate the expected information content (in bits) of their agreement given their agreement on that reading
+                    # (skipping readings with a sampling probability of 0):
+                    expected_information_content = sum(
+                        [
+                            -math.log2(sampling_probabilities[l])
+                            * (wit_1_rdg_support[l] * wit_2_rdg_support[l] / probability_of_agreement)
+                            for l in range(len(sampling_probabilities))
+                            if sampling_probabilities[l] > 0.0
+                        ]
+                    )
+                    # Then add this contribution to the total score for these two witnesses:
+                    matrix[i, j] += expected_information_content
+                    matrix[j, i] += expected_information_content
+        # Finally, obtain an average information content for each pair of witnesses:
+        for i, wit_1 in enumerate(witness_labels):
+            for j, wit_2 in enumerate(witness_labels):
+                matrix[i, j] = matrix[i, j] / nonzero_vu_count_matrix[i, j] if nonzero_vu_count_matrix[i, j] > 0 else 0
+        return matrix, witness_labels
+    
+    def to_mi_matrix(self, drop_constant: bool = False, split_missing: SplitMissingType = None):
+        """Transforms this Collation into a NumPy matrix of the total mutual information (MI), in bits, between witnesses over all variation units, along with an array of its labels for the witnesses.
+        This is equivalent to the total Kullback-Leibler divergence of the joint distribution of the witnesses' observed readings 
+        from the joint distribution of their expected readings under the assumption that the witnesses are independent, taken over all variation units.
+        The value of 0 if and only if the witnesses are completely independent.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+
+        Returns:
+            A NumPy MI matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
+        support_proportions_by_unit = {}
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][k]
+                for l, w in enumerate(rdg_support):
+                    support_proportions[l] += w
+            norm = (
+                sum(support_proportions) if sum(support_proportions) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            for l in range(len(support_proportions)):
+                support_proportions[l] = support_proportions[l] / norm
+            support_proportions_by_unit[vu_id] = support_proportions
+        # Then populate the matrix one variation unit at a time:
+        matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            # Otherwise, calculate the sampling probabilities for each reading in this unit:
+            sampling_probabilities = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            rdg_support_by_witness = {}
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][k]
+                # Check if this reading support vector represents missing data:
+                norm = sum(rdg_support)
+                if norm == 0:
+                    # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                    if split_missing == SplitMissingType.uniform:
+                        rdg_support = [1 / len(rdg_support) for l in range(len(rdg_support))]
+                    elif split_missing == SplitMissingType.proportional:
+                        rdg_support = [support_proportions_by_unit[vu_id][l] for l in range(len(rdg_support))]
+                else:
+                    # Otherwise, the data is present, though it may be ambiguous; normalize the reading probabilities to sum to 1:
+                    rdg_support = [w / norm for l, w in enumerate(rdg_support)]
+                rdg_support_by_witness[wit] = rdg_support
+                # Then add this witness's contributions to the readings' sampling probabilities:
+                for l, w in enumerate(rdg_support_by_witness[wit]):
+                    sampling_probabilities[l] += w
+            norm = (
+                sum(sampling_probabilities) if sum(sampling_probabilities) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            # Otherwise, normalize the sampling probabilities so they sum to 1:
+            sampling_probabilities = [w / norm for w in sampling_probabilities]
+            # Then populate a contingency table for the expected probabilities of joint support in this unit:
+            expected_joint_probabilities = np.full((len(sampling_probabilities), len(sampling_probabilities)), 0, dtype=float)
+            for l1 in range(len(sampling_probabilities)):
+                for l2 in range(len(sampling_probabilities)):
+                    expected_joint_probabilities[l1, l2] = sampling_probabilities[l1]*sampling_probabilities[l2]
+            # Then calculate the mutual information contribution for each pair of witnesses:
+            for i, wit_1 in enumerate(witness_labels):
+                for j, wit_2 in enumerate(witness_labels):
+                    # The mutual information for these witnesses at this unit will be identical regardless of the order in which they are specified,
+                    # so we only have to calculate it once:
+                    if i > j:
+                        continue
+                    wit_1_rdg_support = rdg_support_by_witness[wit_1]
+                    wit_2_rdg_support = rdg_support_by_witness[wit_2]
+                    # If either witness has an all-zeroes vector (because it is lacunose in this unit), then we can skip these witnesses here:
+                    if sum(wit_1_rdg_support) == 0 or sum(wit_2_rdg_support) == 0:
+                        continue
+                    # Otherwise, populate a contingency table for the observed probabilities of joint support in this unit:
+                    observed_joint_probabilities = np.full((len(sampling_probabilities), len(sampling_probabilities)), 0, dtype=float)
+                    for l1, w1 in enumerate(rdg_support_by_witness[wit_1]):
+                        for l2, w2 in enumerate(rdg_support_by_witness[wit_2]):
+                            observed_joint_probabilities[l1, l2] = w1 * w2
+                    # Then calculate the mutual information using the expected and observed distribution matrices:
+                    mutual_information = 0.0
+                    for l1 in range(len(sampling_probabilities)):
+                        for l2 in range(len(sampling_probabilities)):
+                            observed = observed_joint_probabilities[l1, l2]
+                            expected = expected_joint_probabilities[l1, l2]
+                            if observed == 0:
+                                continue
+                            mutual_information += observed * math.log2(observed / expected)
+                    # Then add this mutual information to the total for these two witnesses:
+                    matrix[i, j] += mutual_information
+                    matrix[j, i] += mutual_information
+        return matrix, witness_labels
+
+    def to_mean_mi_matrix(self, drop_constant: bool = False, split_missing: SplitMissingType = None):
+        """Transforms this Collation into a NumPy matrix of the average mutual information (MI), in bits, between witnesses over all variation units, along with an array of its labels for the witnesses.
+        This is equivalent to the average Kullback-Leibler divergence of the joint distribution of the witnesses' observed readings 
+        from the joint distribution of their expected readings under the assumption that the witnesses are independent, taken over all variation units.
+        The value of 0 if and only if the witnesses are completely independent.
+        This will improve the value of relationships involving more fragmentary witnesses, 
+        but be warned that extremely fragmentary witnesses may have their values inflated and should probably be excluded from consideration.
+
+        Args:
+            drop_constant (bool, optional): An optional flag indicating whether to ignore variation units with one substantive reading.
+                Default value is False.
+            split_missing (SplitMissingType, optional): An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+                If not specified, then missing data is ignored (i.e., all states are 0).
+                If "uniform", then the contribution of 1 is divided evenly over all substantive readings.
+                If "proportional", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.
+
+        Returns:
+            A NumPy MI matrix with a row and column for each witness.
+            A list of witness ID strings.
+        """
+        # Populate a list of sites that will correspond to columns of the sequence alignment:
+        substantive_variation_unit_ids = self.variation_unit_ids
+        if drop_constant:
+            substantive_variation_unit_ids = [
+                vu_id
+                for vu_id in self.variation_unit_ids
+                if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
+            ]
+        substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
+        substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
+        # Initialize the output array with the appropriate dimensions:
+        witness_labels = [wit.id for wit in self.witnesses]
+        # For each variation unit, keep a record of the proportion of non-missing witnesses supporting the substantive variant readings:
+        support_proportions_by_unit = {}
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            support_proportions = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][k]
+                for l, w in enumerate(rdg_support):
+                    support_proportions[l] += w
+            norm = (
+                sum(support_proportions) if sum(support_proportions) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            for l in range(len(support_proportions)):
+                support_proportions[l] = support_proportions[l] / norm
+            support_proportions_by_unit[vu_id] = support_proportions
+        # Then populate the matrix one variation unit at a time:
+        matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
+        nonzero_vu_count_matrix = np.full((len(witness_labels), len(witness_labels)), 0, dtype=float)
+        for k, vu_id in enumerate(self.variation_unit_ids):
+            # Skip this variation unit if it is a dropped constant site:
+            if vu_id not in substantive_variation_unit_ids_set:
+                continue
+            # Otherwise, calculate the sampling probabilities for each reading in this unit:
+            sampling_probabilities = [0.0] * len(self.substantive_readings_by_variation_unit_id[vu_id])
+            rdg_support_by_witness = {}
+            for i, wit in enumerate(witness_labels):
+                rdg_support = self.readings_by_witness[wit][k]
+                # Check if this reading support vector represents missing data:
+                norm = sum(rdg_support)
+                if norm == 0:
+                    # If this reading support vector sums to 0, then this is missing data; handle it as specified:
+                    if split_missing == SplitMissingType.uniform:
+                        rdg_support = [1 / len(rdg_support) for l in range(len(rdg_support))]
+                    elif split_missing == SplitMissingType.proportional:
+                        rdg_support = [support_proportions_by_unit[vu_id][l] for l in range(len(rdg_support))]
+                else:
+                    # Otherwise, the data is present, though it may be ambiguous; normalize the reading probabilities to sum to 1:
+                    rdg_support = [w / norm for l, w in enumerate(rdg_support)]
+                rdg_support_by_witness[wit] = rdg_support
+                # Then add this witness's contributions to the readings' sampling probabilities:
+                for l, w in enumerate(rdg_support_by_witness[wit]):
+                    sampling_probabilities[l] += w
+            norm = (
+                sum(sampling_probabilities) if sum(sampling_probabilities) > 0 else 1.0
+            )  # if this variation unit has no extant witnesses (e.g., if its only witnesses are fragmentary and we have excluded them), then assume a norm of 1 to avoid division by zero
+            # Otherwise, normalize the sampling probabilities so they sum to 1:
+            sampling_probabilities = [w / norm for w in sampling_probabilities]
+            # Then populate a contingency table for the expected probabilities of joint support in this unit:
+            expected_joint_probabilities = np.full((len(sampling_probabilities), len(sampling_probabilities)), 0, dtype=float)
+            for l1 in range(len(sampling_probabilities)):
+                for l2 in range(len(sampling_probabilities)):
+                    expected_joint_probabilities[l1, l2] = sampling_probabilities[l1]*sampling_probabilities[l2]
+            # Then calculate the mutual information contribution for each pair of witnesses:
+            for i, wit_1 in enumerate(witness_labels):
+                for j, wit_2 in enumerate(witness_labels):
+                    # The mutual information for these witnesses at this unit will be identical regardless of the order in which they are specified,
+                    # so we only have to calculate it once:
+                    if i > j:
+                        continue
+                    wit_1_rdg_support = rdg_support_by_witness[wit_1]
+                    wit_2_rdg_support = rdg_support_by_witness[wit_2]
+                    # If either witness has an all-zeroes vector (because it is lacunose in this unit), then we can skip these witnesses here:
+                    if sum(wit_1_rdg_support) == 0 or sum(wit_2_rdg_support) == 0:
+                        continue
+                    # Otherwise, populate a contingency table for the observed probabilities of joint support in this unit:
+                    observed_joint_probabilities = np.full((len(sampling_probabilities), len(sampling_probabilities)), 0, dtype=float)
+                    for l1, w1 in enumerate(rdg_support_by_witness[wit_1]):
+                        for l2, w2 in enumerate(rdg_support_by_witness[wit_2]):
+                            observed_joint_probabilities[l1, l2] = w1 * w2
+                    # Then calculate the mutual information using the expected and observed distribution matrices:
+                    mutual_information = 0.0
+                    for l1 in range(len(sampling_probabilities)):
+                        for l2 in range(len(sampling_probabilities)):
+                            observed = observed_joint_probabilities[l1, l2]
+                            expected = expected_joint_probabilities[l1, l2]
+                            if observed == 0:
+                                continue
+                            mutual_information += observed * math.log2(observed / expected)
+                    # Then add this mutual information to the total for these two witnesses, and increment the count of variation units where both have non-zero reading support vectors:
+                    matrix[i, j] += mutual_information
+                    matrix[j, i] += mutual_information
+                    nonzero_vu_count_matrix[i, j] += 1
+                    nonzero_vu_count_matrix[j, i] += 1
+        # Finally, obtain an average mutual information for each pair of witnesses:
+        for i, wit_1 in enumerate(witness_labels):
+            for j, wit_2 in enumerate(witness_labels):
+                matrix[i, j] = matrix[i, j] / nonzero_vu_count_matrix[i, j] if nonzero_vu_count_matrix[i, j] > 0 else 0
         return matrix, witness_labels
 
     def to_nexus_table(self, drop_constant: bool = False, ambiguous_as_missing: bool = False):
@@ -2274,6 +2640,18 @@ class Collation:
         elif table_type == TableType.idf:
             # Convert the collation to a NumPy array and get its row and column labels first:
             matrix, witness_labels = self.to_idf_matrix(drop_constant=drop_constant, split_missing=split_missing)
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.mean_idf:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_mean_idf_matrix(drop_constant=drop_constant, split_missing=split_missing)
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.mi:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_mi_matrix(drop_constant=drop_constant, split_missing=split_missing)
+            df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
+        elif table_type == TableType.mean_mi:
+            # Convert the collation to a NumPy array and get its row and column labels first:
+            matrix, witness_labels = self.to_mean_mi_matrix(drop_constant=drop_constant, split_missing=split_missing)
             df = pd.DataFrame(matrix, index=witness_labels, columns=witness_labels)
         elif table_type == TableType.nexus:
             # Convert the collation to a NumPy array and get its row and column labels first:
