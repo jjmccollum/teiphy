@@ -98,6 +98,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_hennig86"><code class="docutils literal notranslate"><span class="pre">Collation.to_hennig86()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_idf_matrix"><code class="docutils literal notranslate"><span class="pre">Collation.to_idf_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_long_table"><code class="docutils literal notranslate"><span class="pre">Collation.to_long_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_mean_idf_matrix"><code class="docutils literal notranslate"><span class="pre">Collation.to_mean_idf_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_mean_mi_matrix"><code class="docutils literal notranslate"><span class="pre">Collation.to_mean_mi_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_mi_matrix"><code class="docutils literal notranslate"><span class="pre">Collation.to_mi_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_nexus"><code class="docutils literal notranslate"><span class="pre">Collation.to_nexus()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_nexus_table"><code class="docutils literal notranslate"><span class="pre">Collation.to_nexus_table()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#teiphy.Collation.to_numpy"><code class="docutils literal notranslate"><span class="pre">Collation.to_numpy()</span></code></a></li>
@@ -776,11 +779,12 @@ Note that because Hennig86 format does not support NEXUS-style ambiguities, such
 <dl class="py method">
 <dt class="sig sig-object py" id="teiphy.Collation.to_idf_matrix">
 <span class="sig-name descname"><span class="pre">to_idf_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_constant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitMissingType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_idf_matrix" title="Link to this definition"></a></dt>
-<dd><p>Transforms this Collation into a NumPy inverse document frequency-weighted agreements matrix between witnesses, along with an array of its labels for the witnesses.
+<dd><p>Transforms this Collation into a NumPy matrix of agreements between witnesses weighted by inverse document frequency (IDF), along with an array of its labels for the witnesses.
 The IDF weight of an agreement on a given reading is the information content -log(Pr(R)) of the event R of randomly sampling a witness with that reading.
 The IDF-weighted agreement score for two witnesses is the sum of the IDF weights for the readings at which they agree.
-Where any witness is lacunose or ambiguous, it contributes to its potential readings’ sampling probabilities in proportion to its degrees of support for those readings.
-Similarly, where one or both target witnesses are lacunose or ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.</p>
+Where any witness is ambiguous, it contributes to its potential readings’ sampling probabilities in proportion to its degrees of support for those readings.
+Similarly, where one or both target witnesses are ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.
+If a split_missing argument is supplied, then lacunae are handled in the same way.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -812,6 +816,88 @@ Default value is False.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A NumPy array with columns for taxa, characters, reading indices, and reading values, and rows for each combination of these values in the matrix.
 A list of column label strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_mean_idf_matrix">
+<span class="sig-name descname"><span class="pre">to_mean_idf_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_constant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitMissingType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_mean_idf_matrix" title="Link to this definition"></a></dt>
+<dd><p>Transforms this Collation into a NumPy matrix of average inverse document frequency (IDF) weights on agreements between witnesses, along with an array of its labels for the witnesses.
+The IDF weight of an agreement on a given reading is the information content -log(Pr(R)) of the event R of randomly sampling a witness with that reading.
+The IDF-weighted agreement score for two witnesses is the sum of the IDF weights for the readings at which they agree.
+The average is taken over all variation units at which both witnesses have a non-zero reading support vector.
+Where any witness is ambiguous, it contributes to its potential readings’ sampling probabilities in proportion to its degrees of support for those readings.
+Similarly, where one or both target witnesses are ambiguous, the expected information content of their agreement is calculated based on the probabilities of their having the same reading.
+If a split_missing argument is supplied, then lacunae are handled in the same way.
+This will improve the value of relationships involving more fragmentary witnesses,
+but be warned that extremely fragmentary witnesses may have their values inflated and should probably be excluded from consideration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.
+Default value is False.</p></li>
+<li><p><strong>split_missing</strong> (<em>SplitMissingType</em><em>, </em><em>optional</em>) – An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+If not specified, then missing data is ignored (i.e., all states are 0).
+If “uniform”, then the contribution of 1 is divided evenly over all substantive readings.
+If “proportional”, then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A NumPy IDF-weighted agreement matrix with a row and column for each witness.
+A list of witness ID strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_mean_mi_matrix">
+<span class="sig-name descname"><span class="pre">to_mean_mi_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_constant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitMissingType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_mean_mi_matrix" title="Link to this definition"></a></dt>
+<dd><p>Transforms this Collation into a NumPy matrix of the average mutual information (MI), in bits, between witnesses over all variation units, along with an array of its labels for the witnesses.
+This is equivalent to the average Kullback-Leibler divergence of the joint distribution of the witnesses’ observed readings
+from the joint distribution of their expected readings under the assumption that the witnesses are independent, taken over all variation units.
+The value of 0 if and only if the witnesses are completely independent.
+This will improve the value of relationships involving more fragmentary witnesses,
+but be warned that extremely fragmentary witnesses may have their values inflated and should probably be excluded from consideration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.
+Default value is False.</p></li>
+<li><p><strong>split_missing</strong> (<em>SplitMissingType</em><em>, </em><em>optional</em>) – An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+If not specified, then missing data is ignored (i.e., all states are 0).
+If “uniform”, then the contribution of 1 is divided evenly over all substantive readings.
+If “proportional”, then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A NumPy MI matrix with a row and column for each witness.
+A list of witness ID strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="teiphy.Collation.to_mi_matrix">
+<span class="sig-name descname"><span class="pre">to_mi_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_constant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SplitMissingType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#teiphy.Collation.to_mi_matrix" title="Link to this definition"></a></dt>
+<dd><p>Transforms this Collation into a NumPy matrix of the total mutual information (MI), in bits, between witnesses over all variation units, along with an array of its labels for the witnesses.
+This is equivalent to the total Kullback-Leibler divergence of the joint distribution of the witnesses’ observed readings
+from the joint distribution of their expected readings under the assumption that the witnesses are independent, taken over all variation units.
+The value of 0 if and only if the witnesses are completely independent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drop_constant</strong> (<em>bool</em><em>, </em><em>optional</em>) – An optional flag indicating whether to ignore variation units with one substantive reading.
+Default value is False.</p></li>
+<li><p><strong>split_missing</strong> (<em>SplitMissingType</em><em>, </em><em>optional</em>) – An option indicating whether or not to treat missing characters/variation units as having a contribution of 1 split over all states/readings.
+If not specified, then missing data is ignored (i.e., all states are 0).
+If “uniform”, then the contribution of 1 is divided evenly over all substantive readings.
+If “proportional”, then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A NumPy MI matrix with a row and column for each witness.
+A list of witness ID strings.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -251,6 +251,9 @@ If “matrix”, then the table will have rows for witnesses and columns for all
 If “distance”, then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the –proportion flag can be used with this option).
 If “similarity”, then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the –proportion flag can be used with this option).
 If “idf”, then the table will have rows and columns for witnesses, where each cell contains the sum of inverse document frequency-weighted agreements between the corresponding pair of witnesses.
+If “mean-idf”, then the table will have rows and columns for witnesses, where each cell contains the average of inverse document frequency-weighted agreements between the corresponding pair of witnesses, taken over all variation units where they both have non-zero reading support vectors.
+If “mi”, then the table will have rows and columns for witnesses, where each cell contains the sum of mutual information between the corresponding pair of witnesses over all variation units.
+If “mean-mi”, then the table will have rows and columns for witnesses, where each cell contains the average mutual information between the corresponding pair of witnesses, taken over all variation units where they both have non-zero reading support vectors.
 If “nexus”, then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the –ambiguous-as-missing flag can be used with this option).
 If “long”, then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.
 If the output is a PHYLIP file, then the type of tabular output must be “distance” or “similarity”; otherwise, it will be ignored.</p>
@@ -259,7 +262,7 @@ If the output is a PHYLIP file, then the type of tabular output must be “dista
 <dd class="field-odd"><p>TableType.matrix</p>
 </dd>
 <dt class="field-even">Options<span class="colon">:</span></dt>
-<dd class="field-even"><p>matrix | distance | similarity | idf | nexus | long</p>
+<dd class="field-even"><p>matrix | distance | similarity | idf | mean-idf | mi | mean-mi | nexus | long</p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,13 +354,13 @@ Not applicable for non-tabular formats.</p>
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Link to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;typer.models.TyperPath object at 0x7fae7d804ca0&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;typer.models.TyperPath object at 0x7fe5e93b2580&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Link to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;typer.models.TyperPath object at 0x7fae7d8044f0&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;typer.models.TyperPath object at 0x7fe5e93b2610&gt;</p>
 </dd></dl>
 
 </section>
