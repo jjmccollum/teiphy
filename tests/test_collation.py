@@ -527,6 +527,78 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 7.940864) < 1e-4)  # entry for UBS and Byz should be 7.940864
 
+    def test_to_mean_idf_matrix(self):
+        matrix, witness_labels = self.collation.to_mean_idf_matrix()
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 0.208856) < 1e-4)  # entry for UBS and Byz should be 0.208856
+
+    def test_to_mean_idf_matrix_drop_constant(self):
+        matrix, witness_labels = self.collation.to_mean_idf_matrix(drop_constant=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 0.220459) < 1e-4)  # entry for UBS and Byz should be 0.220459
+
+    def test_to_mean_idf_matrix_split_missing_uniform(self):
+        matrix, witness_labels = self.collation.to_mean_idf_matrix(split_missing="uniform")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 0.258845) < 1e-4)  # entry for UBS and Byz should be 0.258845
+
+    def test_to_mean_idf_matrix_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_mean_idf_matrix(split_missing="proportional")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 0.208970) < 1e-4)  # entry for UBS and Byz should be 0.208970
+
+    def test_to_mi_matrix(self):
+        matrix, witness_labels = self.collation.to_mi_matrix()
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 45.5426315926971) < 1e-4)  # entry for UBS and Byz should be 45.5426315926971
+
+    def test_to_mi_matrix_drop_constant(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(drop_constant=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 45.5426315926971) < 1e-4)  # entry for UBS and Byz should be 45.5426315926971
+
+    def test_to_mi_matrix_split_missing_uniform(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(split_missing="uniform")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 49.3844864802365) < 1e-4)  # entry for UBS and Byz should be 49.3844864802365
+
+    def test_to_mi_matrix_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(split_missing="proportional")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 45.5451469073476) < 1e-4)  # entry for UBS and Byz should be 45.5451469073476
+
+    def test_to_mean_mi_matrix(self):
+        matrix, witness_labels = self.collation.to_mean_mi_matrix()
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 1.1984903050709763) < 1e-4)  # entry for UBS and Byz should be 1.1984903050709763
+
+    def test_to_mean_mi_matrix_drop_constant(self):
+        matrix, witness_labels = self.collation.to_mean_mi_matrix(drop_constant=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 1.2650730997971416) < 1e-4)  # entry for UBS and Byz should be 1.2650730997971416
+
+    def test_to_mean_mi_matrix_split_missing_uniform(self):
+        matrix, witness_labels = self.collation.to_mean_mi_matrix(split_missing="uniform")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 1.2995917494799079) < 1e-4)  # entry for UBS and Byz should be 1.2995917494799079
+
+    def test_to_mean_mi_matrix_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_mean_mi_matrix(split_missing="proportional")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 1.198556497561779) < 1e-4)  # entry for UBS and Byz should be 1.198556497561779
+
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
         self.assertEqual(row_labels[0], "UBS")

@@ -1507,6 +1507,42 @@ def test_to_csv_idf_table():
         assert "9.90215396342428" in text
 
 
+def test_to_csv_mean_idf_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--verbose", "--table", "mean-idf", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
+        assert "\nUBS," in text
+        assert "0.260582999037481" in text
+
+
+def test_to_csv_mi_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--verbose", "--table", "mi", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
+        assert "\nUBS," in text
+        assert "50.9296128755997" in text
+
+
+def test_to_csv_mean_mi_table():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.csv"
+        result = runner.invoke(app, ["--verbose", "--table", "mean-mi", str(input_example), str(output)])
+        assert result.exit_code == 0
+        assert output.exists()
+        text = output.read_text(encoding="utf-8-sig")
+        assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
+        assert "\nUBS," in text
+        assert "1.3402529704105193" in text
+
+
 def test_to_csv_drop_constant_long_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
