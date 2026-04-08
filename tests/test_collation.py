@@ -5,6 +5,8 @@ from pathlib import Path
 from datetime import datetime
 import numpy as np
 from lxml import etree as et
+from tqdm import tqdm
+from functools import partialmethod
 
 from teiphy import tei_ns, Collation
 
@@ -12,6 +14,9 @@ test_dir = Path(__file__).parent
 root_dir = test_dir.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
 malformed_categories_example = test_dir / "malformed_categories_example.xml"
+
+# For unit tests, we need to disable tqdm, because it writes to stderr (which will cause most tests to fail):
+tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
 
 class CollationDefaultTestCase(unittest.TestCase):
@@ -579,25 +584,33 @@ class CollationOutputTestCase(unittest.TestCase):
         matrix, witness_labels = self.collation.to_mean_mi_matrix()
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.1984903050709763) < 1e-4)  # entry for UBS and Byz should be 1.1984903050709763
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.1984903050709763) < 1e-4
+        )  # entry for UBS and Byz should be 1.1984903050709763
 
     def test_to_mean_mi_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_mean_mi_matrix(drop_constant=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.2650730997971416) < 1e-4)  # entry for UBS and Byz should be 1.2650730997971416
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.2650730997971416) < 1e-4
+        )  # entry for UBS and Byz should be 1.2650730997971416
 
     def test_to_mean_mi_matrix_split_missing_uniform(self):
         matrix, witness_labels = self.collation.to_mean_mi_matrix(split_missing="uniform")
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.2995917494799079) < 1e-4)  # entry for UBS and Byz should be 1.2995917494799079
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.2995917494799079) < 1e-4
+        )  # entry for UBS and Byz should be 1.2995917494799079
 
     def test_to_mean_mi_matrix_split_missing_proportional(self):
         matrix, witness_labels = self.collation.to_mean_mi_matrix(split_missing="proportional")
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.198556497561779) < 1e-4)  # entry for UBS and Byz should be 1.198556497561779
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.198556497561779) < 1e-4
+        )  # entry for UBS and Byz should be 1.198556497561779
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()

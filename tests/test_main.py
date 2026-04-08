@@ -3,6 +3,8 @@ from datetime import datetime
 import tempfile
 from typer.testing import CliRunner
 from lxml import etree as et
+from tqdm import tqdm
+from functools import partialmethod
 
 from teiphy.main import app
 from teiphy.collation import ParsingException, WitnessDateException, IntrinsicRelationsException
@@ -31,6 +33,9 @@ intrinsic_odds_no_relations_example = test_dir / "intrinsic_odds_no_relations_ex
 some_dates_csv_file = test_dir / "some_dates.csv"
 bad_dates_csv_file = test_dir / "bad_dates.csv"
 non_csv_dates_file = test_dir / "non_csv_dates.txt"
+
+# For unit tests, we need to disable tqdm, because it writes to stderr (which will cause most tests to fail):
+tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
 
 def test_version():
