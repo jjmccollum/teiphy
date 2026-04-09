@@ -1523,6 +1523,7 @@ class Collation:
                 for vu_id in self.variation_unit_ids
                 if len(self.substantive_readings_by_variation_unit_id[vu_id]) > 1
             ]
+        # Populate sets of substantive variation unit IDs and substantive variant reading tuples:
         substantive_variation_unit_ids_set = set(substantive_variation_unit_ids)
         substantive_variation_unit_reading_tuples_set = set(self.substantive_variation_unit_reading_tuples)
         # First, calculate the values we will be using for the main template:
@@ -1588,8 +1589,14 @@ class Collation:
             if vu.id not in substantive_variation_unit_ids_set:
                 continue
             variation_unit_object = {}
+            # Copy the one-based index of this variation unit:
+            variation_unit_object["index"] = j + 1
             # Copy the ID of this variation unit:
             variation_unit_object["id"] = vu.id
+            # Set a flag indicating if this variation unit is constant:
+            variation_unit_object["is_constant"] = (
+                True if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 1 else False
+            )
             # Copy this variation unit's number of substantive readings,
             # setting it to 2 if it is a singleton unit:
             variation_unit_object["nstates"] = (
@@ -1738,6 +1745,18 @@ class Collation:
             ancestral_logger=ancestral_logger.value,
             witnesses=witness_objects,
             variation_units=variation_unit_objects,
+            non_constant_variation_units=[
+                variation_unit_object
+                for variation_unit_object in variation_unit_objects
+                if not variation_unit_object["is_constant"]
+            ],
+            constant_variation_unit_filter=",".join(
+                [
+                    str(variation_unit_object["index"])
+                    for variation_unit_object in variation_unit_objects
+                    if variation_unit_object["is_constant"]
+                ]
+            ),
             intrinsic_categories=intrinsic_category_objects,
             transcriptional_categories=transcriptional_category_objects,
         )
