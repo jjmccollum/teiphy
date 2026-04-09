@@ -709,6 +709,16 @@ def test_to_beast():
     xml = et.parse(input_example, parser=parser)
     xml_witnesses = xml.xpath(".//tei:witness", namespaces={"tei": tei_ns})
     xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
+    xml_singleton_variation_units = [
+        xml_variation_unit
+        for xml_variation_unit in xml_variation_units
+        if len(xml_variation_unit.xpath(".//tei:rdg[not(@type)]", namespaces={"tei": tei_ns})) == 1
+    ]
+    xml_singleton_variation_unit_indices = [
+        str(j + 1)
+        for j, xml_variation_unit in enumerate(xml_variation_units)
+        if len(xml_variation_unit.xpath(".//tei:rdg[not(@type)]", namespaces={"tei": tei_ns})) == 1
+    ]
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -734,14 +744,21 @@ def test_to_beast():
         beast_xml = et.parse(output, parser=parser)
         beast_xml_sequences = beast_xml.xpath(".//sequence")
         beast_xml_charstatelabels = beast_xml.xpath(".//charstatelabels")
+        beast_xml_singleton_charstatelabels = [
+            charstatelabel for charstatelabel in beast_xml_charstatelabels if "DUMMY" in charstatelabel.get("value")
+        ]
         beast_xml_site_distributions = beast_xml.xpath(".//distribution[@spec=\"TreeLikelihood\"]")
+        beast_xml_constant_tree_likelihoods = beast_xml.xpath(".//distribution[@id=\"morphTreeLikelihood.constant\"]")
+        beast_xml_constant_filtered_alignments = beast_xml.xpath(".//data[@id=\"filter.constant\"]")
         assert len(beast_xml_sequences) == len(xml_witnesses)
         assert len(beast_xml_charstatelabels) == len(xml_variation_units)
-        assert len(beast_xml_site_distributions) == len(xml_variation_units)
-        beast_xml_singleton_sequences = beast_xml.xpath(".//charstatelabels[@characterName=\"B10K6V20U12\"]")
-        assert len(beast_xml_singleton_sequences) == 1
-        assert beast_xml_singleton_sequences[0].get("value") is not None
-        assert "DUMMY" in beast_xml_singleton_sequences[0].get("value")
+        assert len(beast_xml_singleton_charstatelabels) == len(xml_singleton_variation_units)
+        assert len(beast_xml_constant_tree_likelihoods) == 1
+        assert len(beast_xml_constant_filtered_alignments) == 1
+        assert beast_xml_constant_filtered_alignments[0].get("filter") == ",".join(xml_singleton_variation_unit_indices)
+        assert len(beast_xml_site_distributions) == len(xml_variation_units) - len(xml_singleton_variation_units) + len(
+            beast_xml_constant_tree_likelihoods
+        )
         assert "WARNING: the latest witness" in result.stdout
 
 
@@ -750,6 +767,11 @@ def test_to_beast_drop_constant():
     xml = et.parse(input_example, parser=parser)
     xml_witnesses = xml.xpath(".//tei:witness", namespaces={"tei": tei_ns})
     xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
+    xml_singleton_variation_units = [
+        xml_variation_unit
+        for xml_variation_unit in xml_variation_units
+        if len(xml_variation_unit.xpath(".//tei:rdg[not(@type)]", namespaces={"tei": tei_ns})) == 1
+    ]
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -776,12 +798,16 @@ def test_to_beast_drop_constant():
         beast_xml = et.parse(output, parser=parser)
         beast_xml_sequences = beast_xml.xpath(".//sequence")
         beast_xml_charstatelabels = beast_xml.xpath(".//charstatelabels")
+        beast_xml_singleton_charstatelabels = [
+            charstatelabel for charstatelabel in beast_xml_charstatelabels if "DUMMY" in charstatelabel.get("value")
+        ]
         beast_xml_site_distributions = beast_xml.xpath(".//distribution[@spec=\"TreeLikelihood\"]")
+        beast_xml_constant_tree_likelihoods = beast_xml.xpath(".//distribution[@id=\"morphTreeLikelihood.constant\"]")
         assert len(beast_xml_sequences) == len(xml_witnesses)
-        assert len(beast_xml_charstatelabels) == len(xml_variation_units) - 2
-        assert len(beast_xml_site_distributions) == len(xml_variation_units) - 2
-        beast_xml_singleton_sequences = beast_xml.xpath(".//charstatelabels[@characterName=\"B10K6V20U12\"]")
-        assert len(beast_xml_singleton_sequences) == 0
+        assert len(beast_xml_charstatelabels) == len(xml_variation_units) - len(xml_singleton_variation_units)
+        assert len(beast_xml_singleton_charstatelabels) == 0
+        assert len(beast_xml_constant_tree_likelihoods) == 0
+        assert len(beast_xml_site_distributions) == len(xml_variation_units) - len(xml_singleton_variation_units)
 
 
 def test_to_beast_no_dates():
