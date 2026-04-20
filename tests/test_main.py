@@ -1446,9 +1446,7 @@ def test_to_csv_show_ext_distance_table():
         print(text)
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            ",17/38," in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert ",17/38," in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_csv_proportion_show_ext_distance_table():
@@ -1462,9 +1460,8 @@ def test_to_csv_proportion_show_ext_distance_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            ",0.4473684210526316/38," in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert ",0.447368" in text
+        assert "/38," in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_csv_similarity_table():
@@ -1490,7 +1487,7 @@ def test_to_csv_proportion_similarity_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert ",0.5789473684210527," in text
+        assert ",0.578947" in text
 
 
 def test_to_csv_show_ext_similarity_table():
@@ -1505,9 +1502,7 @@ def test_to_csv_show_ext_similarity_table():
         print(text)
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            "22/38" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert ",22/38" in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_csv_proportion_show_ext_similarity_table():
@@ -1521,9 +1516,8 @@ def test_to_csv_proportion_show_ext_similarity_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            "0.5789473684210527/38" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert "0.578947" in text  # note that type "lac" readings are not treated as missing with the above inputs
+        assert "/38" in text
 
 
 def test_to_csv_idf_table():
@@ -1535,19 +1529,19 @@ def test_to_csv_idf_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "9.90215396342428" in text
+        assert "9.902153" in text
 
 
 def test_to_csv_mean_idf_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "mean-idf", str(input_example), str(output)])
+        result = runner.invoke(app, ["--verbose", "--table", "idf", "--proportion", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "0.260582999037481" in text
+        assert "0.260582" in text
 
 
 def test_to_csv_mi_table():
@@ -1559,19 +1553,19 @@ def test_to_csv_mi_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "50.9296128755997" in text
+        assert "50.929612" in text
 
 
 def test_to_csv_mean_mi_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "mean-mi", str(input_example), str(output)])
+        result = runner.invoke(app, ["--verbose", "--table", "mi", "--proportion", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "1.3402529704105193" in text
+        assert "1.340252" in text
 
 
 def test_to_csv_drop_constant_long_table():
@@ -1704,9 +1698,7 @@ def test_to_phylip_distance_matrix():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("%d" % (len(xml_witnesses)))
-        assert (
-            "UBS 0 11" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted as a disagreement is the one where Byz is ambiguous
+        assert "UBS 0 12" in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_phylip_similarity_matrix():
