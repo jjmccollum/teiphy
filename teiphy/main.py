@@ -5,7 +5,7 @@ from lxml import etree as et  # for parsing XML input
 import typer
 
 from .format import Format
-from .collation import Collation, ClockModel, AncestralLogger, TableType, SplitMissingType
+from .collation import Collation, ClockModel, AncestralLogger, TableType, SplitMissingType, TransformMatrixType
 
 
 app = typer.Typer(rich_markup_mode="rich")
@@ -61,7 +61,7 @@ def to_file(
     ),
     proportion: bool = typer.Option(
         False,
-        help="If set, populate the output distance matrix's cells with proportions of disagreements over variation units where both witnesses are extant; this option is only used if --table distance is specified.",
+        help="If set, divide the output matrix's cells by the numnber of variation units where the row and column witnesses are both extant; this option is only used for witness-to-witness matrix outputs (e.g., tabular outputs of type \"distance\", \"similarity\", \"idf\", \"mi\", etc.).\nFor distance and similarity matrices, this option will transform disagreement or agreement counts to values between 0 and 1.\nFor IDF and MI matrices, this option will return the mean IDF or MI for each pair of witnesses over all variation units where both are extant.",
     ),
     calibrate_dates: bool = typer.Option(
         False,
@@ -81,15 +81,19 @@ def to_file(
     ),
     table: TableType = typer.Option(
         TableType.matrix,
-        help="The type of table to use for CSV/TSV/Excel/PHYLIP output.\nIf \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option).\nIf \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"similarity\", then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"idf\", then the table will have rows and columns for witnesses, where each cell contains the sum of inverse document frequency-weighted agreements between the corresponding pair of witnesses.\nIf \"mean-idf\", then the table will have rows and columns for witnesses, where each cell contains the average of inverse document frequency-weighted agreements between the corresponding pair of witnesses, taken over all variation units where they both have non-zero reading support vectors.\nIf \"mi\", then the table will have rows and columns for witnesses, where each cell contains the sum of mutual information between the corresponding pair of witnesses over all variation units.\nIf \"mean-mi\", then the table will have rows and columns for witnesses, where each cell contains the average mutual information between the corresponding pair of witnesses, taken over all variation units where they both have non-zero reading support vectors.\nIf \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option).\nIf \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.\nIf the output is a PHYLIP file, then the type of tabular output must be \"distance\" or \"similarity\"; otherwise, it will be ignored.",
+        help="The type of table to use for CSV/TSV/Excel/PHYLIP output.\nIf \"matrix\", then the table will have rows for witnesses and columns for all variant readings, with frequency values in cells (the --split-missing flag can be used with this option).\nIf \"distance\", then the table will have rows and columns for witnesses, with the number or proportion of disagreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"similarity\", then the table will have rows and columns for witnesses, with the number or proportion of agreements between each pair in the corresponding cell (the --proportion flag can be used with this option).\nIf \"idf\", then the table will have rows and columns for witnesses, where each cell contains the sum or mean of inverse document frequency-weighted agreements between the corresponding pair of witnesses (the --proportion flag can be used with this option).\nIf \"mi\", then the table will have rows and columns for witnesses, where each cell contains the sum or mean of mutual information between the corresponding pair of witnesses over all variation units (the --proportion flag can be used with this option).\nIf \"nexus\", then the table will have rows for witnesses and columns for variation units with reading IDs in cells (the --ambiguous-as-missing flag can be used with this option).\nIf \"long\", then the table will consist of repeated rows with column entries for taxa, characters, reading indices, and reading texts.\nIf the output is a PHYLIP file, then the type of tabular output must be \"distance\" or \"similarity\"; otherwise, it will be ignored.",
     ),
     split_missing: SplitMissingType = typer.Option(
         None,
         help="Treat missing characters/variation units as having a contribution of 1 split over all states/readings.\nIf not specified, then missing data is ignored (i.e., all states are 0).\nIf \"uniform\", then the contribution of 1 is divided evenly over all substantive readings.\nIf \"proportional\", then the contribution of 1 is divided between the readings in proportion to their support among the witnesses that are not missing.\nNot applicable for non-tabular formats.",
     ),
+    transform_matrix: TransformMatrixType = typer.Option(
+        None,
+        help="Transform the columns of a witness-to-witness matrix output (e.g., a tabular output of type \"distance\", \"similarity\", \"idf\", \"mi\", etc.).\nIf \"stddev\", then the mean and standard deviation of each column are calculated and each value in that column is replaced with the number of standard deviations it is from the mean.\nIf \"mad\", then the median and median absolute deviation (MAD) of each column are calculated and each value in that column is replaced with the number of MADs it is from the median.\nThe transformation is applied after the --split-missing and --proportion options are applied.",
+    ),
     show_ext: bool = typer.Option(
         False,
-        help="If set, each cell in a distance or similarity matrix will display the count/proportion of disagreements/agreements, followed by the number of variation units where both witnesses are extant and have unambiguous readings. (For example, a cell containing 47/50 in a similarity table would indicate that the row and column witnesses agree at 47 of the 50 units where they both have readings.) This option is only valid for tabular output formats of type \"distance\" or \"similarity\".",
+        help="If set, each cell of a witness-to-witness matrix output (e.g., a tabular output of type \"distance\", \"similarity\", \"idf\", \"mi\", etc.) will display the cell's value, followed by the number of variation units where both witnesses are extant and have unambiguous readings.\n(For example, a cell containing 47/50 in a similarity table would indicate that the row and column witnesses agree at 47 of the 50 units where they both have readings.)",
     ),
     seed: int = typer.Option(
         None,
@@ -181,6 +185,7 @@ def to_file(
         ancestral_logger=ancestral_logger,
         table_type=table,
         split_missing=split_missing,
+        transform_matrix=transform_matrix,
         show_ext=show_ext,
         seed=seed,
     )
