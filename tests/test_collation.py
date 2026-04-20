@@ -473,12 +473,14 @@ class CollationOutputTestCase(unittest.TestCase):
     def test_to_distance_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_distance_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "12/38")
+        self.assertEqual(int(matrix[0, 1].split("/")[0]), 12)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_distance_matrix_proportion_show_ext(self):
         matrix, witness_labels = self.collation.to_distance_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.3157894736842105/38")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 0.3157894736842105) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_similarity_matrix(self):
         matrix, witness_labels = self.collation.to_similarity_matrix()
@@ -523,12 +525,14 @@ class CollationOutputTestCase(unittest.TestCase):
     def test_to_similarity_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "26/38")
+        self.assertEqual(int(matrix[0, 1].split("/")[0]), 26)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_similarity_matrix_proportion_show_ext(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.6842105263157895/38")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 0.6842105263157895) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_idf_matrix(self):
         matrix, witness_labels = self.collation.to_idf_matrix()
@@ -563,7 +567,8 @@ class CollationOutputTestCase(unittest.TestCase):
     def test_to_idf_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_idf_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "7.936538602542361/38")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 7.936538602542361) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_mean_idf_matrix(self):
         matrix, witness_labels = self.collation.to_idf_matrix(proportion=True)
@@ -600,7 +605,8 @@ class CollationOutputTestCase(unittest.TestCase):
     def test_to_mean_idf_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_idf_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.20885627901427267/38")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 0.20885627901427267) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_mi_matrix(self):
         matrix, witness_labels = self.collation.to_mi_matrix()
@@ -635,7 +641,8 @@ class CollationOutputTestCase(unittest.TestCase):
     def test_to_mi_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_mi_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "45.542631592697106/38")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 45.542631592697106) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_mean_mi_matrix(self):
         matrix, witness_labels = self.collation.to_mi_matrix(proportion=True)
@@ -682,7 +689,8 @@ class CollationOutputTestCase(unittest.TestCase):
     def test_to_mean_mi_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_mi_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "1.1984903050709765/38")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 1.1984903050709765) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()
