@@ -52,6 +52,7 @@ sphinxcontrib-bibtex = ">=2.4.1"
 sphinx-click = {git = "https://github.com/rbturnbull/sphinx-click.git"}
 starlette = ">=0.49.1"
 tornado = ">=6.5.5"
+mistune = ">=3.2.1"
 pygments = ">=2.20.0"
 requests = ">=2.33.0"
 idna = ">=3.7"

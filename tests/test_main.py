@@ -314,6 +314,32 @@ def test_to_nexus_fragmentary_threshold_bad_threshold():
         assert result.stdout.startswith("Error: the fragmentary variation unit proportion threshold is")
 
 
+def test_to_nexus_fill_correctors_threshold_bad_threshold():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--fill-correctors-threshold",
+                1.1,
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 1
+        assert result.stdout.startswith("Error: the variation unit proportion threshold for filling correctors is")
+
+
 def test_to_nexus_calibrate_dates():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.nexus"

@@ -161,6 +161,13 @@ def to_file(
             % fragmentary_threshold
         )
         exit(1)
+    # Make sure the fill_correctors_threshold input, if specified, is between 0 and 1:
+    if fill_correctors_threshold is not None and (fill_correctors_threshold < 0.0 or fill_correctors_threshold > 1.0):
+        print(
+            "Error: the variation unit proportion threshold for filling correctors is %f. It must be a value in [0, 1]."
+            % fill_correctors_threshold
+        )
+        exit(1)
     # Make sure the dates_file input, if specified, is a CSV file:
     if dates_file is not None and dates_file.suffix.lower() != ".csv":
         print("Error opening dates file: The dates file is not a CSV file. Make sure the dates file type is .csv.")
