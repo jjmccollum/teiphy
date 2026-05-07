@@ -382,6 +382,14 @@ correctors of Codex Bezae follows:</p>
 </pre></div>
 </div>
 <p>Then, when you invoke any conversion command through the CLI, make sure that you include the <code class="docutils literal notranslate"><span class="pre">--fill-correctors</span></code> argument.</p>
+<p>If your collation contains many correctors and you only want to fill in the most extensive ones
+(presumably so that the others can be filtered out with the <code class="docutils literal notranslate"><span class="pre">--fragmentary-threshold</span></code> option described below),
+you can do this with the <code class="docutils literal notranslate"><span class="pre">--fill-correctors-threshold</span></code> option.
+With this option, you can specify a minimum proportion of variation units at which a corrector must be extant
+in order for it to be filled.
+For any corrector that passes the threshold, its lacunae will be filled in
+with the most recent non-lacunose reading found in previous correctors or its first hand,
+even if the previous correctors were too fragmentary to have their lacunae filled.</p>
 </section>
 <section id="excluding-fragmentary-witnesses">
 <h2>Excluding Fragmentary witnesses<a class="headerlink" href="#excluding-fragmentary-witnesses" title="Link to this heading"></a></h2>

@@ -161,6 +161,12 @@
 </dd></dl>
 
 <dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-teiphy-fill-correctors-threshold">
+<span class="sig-name descname"><span class="pre">--fill-correctors-threshold</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;fill_correctors_threshold&gt;</span></span><a class="headerlink" href="#cmdoption-teiphy-fill-correctors-threshold" title="Link to this definition"></a></dt>
+<dd><p>Do not fill in any correctors that have explicit readings at fewer than the specified proportion of variation units. For the purposes of this calculation, a corrector has an explicit reading at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the -m option). This option is only used if the –fill-correctors flag is specified.</p>
+</dd></dl>
+
+<dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-drop-constant">
 <span class="sig-name descname"><span class="pre">--drop-constant</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--no-drop-constant</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-drop-constant" title="Link to this definition"></a></dt>
 <dd><p>If set, do not write constant sites (i.e., variation units with one substantive reading) to output.</p>
@@ -369,13 +375,13 @@ The transformation is applied after the –split-missing and –proportion optio
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-INPUT">
 <span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-INPUT" title="Link to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;typer.models.TyperPath object at 0x7fee26fa4950&gt;</p>
+<dd><p><strong>Required argument</strong> Input TEI XML collation file to convert. &lt;typer.models.TyperPath object at 0x7fa7b55e75c0&gt;</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-teiphy-arg-OUTPUT">
 <span class="sig-name descname"><span class="pre">OUTPUT</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-teiphy-arg-OUTPUT" title="Link to this definition"></a></dt>
-<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;typer.models.TyperPath object at 0x7fee25d19100&gt;</p>
+<dd><p><strong>Required argument</strong> Output for converted collation. If –format is not specified, then the format will be derived from the extension of this file. &lt;typer.models.TyperPath object at 0x7fa7a9788980&gt;</p>
 </dd></dl>
 
 </section>
