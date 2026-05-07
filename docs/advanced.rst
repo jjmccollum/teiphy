@@ -319,6 +319,15 @@ correctors of Codex Bezae follows:
 
 Then, when you invoke any conversion command through the CLI, make sure that you include the ``--fill-correctors`` argument.
 
+If your collation contains many correctors and you only want to fill in the most extensive ones 
+(presumably so that the others can be filtered out with the ``--fragmentary-threshold`` option described below),
+you can do this with the ``--fill-correctors-threshold`` option.
+With this option, you can specify a minimum proportion of variation units at which a corrector must be extant 
+in order for it to be filled.
+For any corrector that passes the threshold, its lacunae will be filled in 
+with the most recent non-lacunose reading found in previous correctors or its first hand,
+even if the previous correctors were too fragmentary to have their lacunae filled.
+
 Excluding Fragmentary witnesses
 -------------------------------
 

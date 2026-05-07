@@ -51,6 +51,10 @@ def to_file(
         None,
         help="Ignore all witnesses that are extant at fewer than the specified proportion of variation units. For the purposes of this calculation, a witness is considered non-extant/lacunose at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the -m option). This calculation is performed after the reading sequences of correctors have been filled in (if the --fill-correctors flag was specified). Thus, a threshold of 0.7 means that a witness with missing readings at more than 30 percent of variation units will be excluded from the output.",
     ),
+    fill_correctors_threshold: float = typer.Option(
+        None,
+        help="Do not fill in any correctors that have explicit readings at fewer than the specified proportion of variation units. For the purposes of this calculation, a corrector has an explicit reading at a variation unit if the type of its reading in that unit is in the user-specified list of missing reading types (i.e., the argument(s) of the -m option). This option is only used if the --fill-correctors flag is specified.",
+    ),
     drop_constant: bool = typer.Option(
         False,
         help="If set, do not write constant sites (i.e., variation units with one substantive reading) to output.",
@@ -168,6 +172,7 @@ def to_file(
         missing_reading_types,
         fill_correctors,
         fragmentary_threshold,
+        fill_correctors_threshold,
         dates_file,
         verbose,
     )

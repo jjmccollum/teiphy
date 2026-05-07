@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "teiphy"
-version = "0.1.25"
+version = "0.1.26"
 description = "Converts TEI XML collations to NEXUS and other formats"
 authors = ["Joey McCollum and Robert Turnbull"]
 license = "MIT"
@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-lxml = ">=4.9.3"
+lxml = ">=6.1.0"
 numpy = ">=1.23.2"
 pandas = ">=1.4.4"
 openpyxl = ">=3.0.10"
