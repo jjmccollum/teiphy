@@ -78,6 +78,7 @@ class Collation:
         missing_reading_types: A set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
         fill_corrector_lacunae: A boolean flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
         fragmentary_threshold: A float representing the proportion such that all witnesses extant at fewer than this proportion of variation units are filtered out of the collation.
+        fill_correctors_threshold: A float representing the proportion such that all correctors extant at fewer than this proportion of variation units are not filled in.
         witnesses: A list of Witness instances contained in this Collation.
         witness_index_by_id: A dictionary mapping base witness ID strings to their int indices in the witnesses list.
         variation_units: A list of VariationUnit instances contained in this Collation.
@@ -95,6 +96,7 @@ class Collation:
         missing_reading_types: List[str] = [],
         fill_corrector_lacunae: bool = False,
         fragmentary_threshold: float = None,
+        fill_correctors_threshold: float = None,
         dates_file: Union[Path, str] = None,
         verbose: bool = False,
     ):
@@ -107,6 +109,7 @@ class Collation:
             missing_reading_types: An optional set of reading types (e.g., "lac", "overlap") whose readings should be treated as missing data.
             fill_corrector_lacunae: An optional flag indicating whether or not to fill "lacunae" in witnesses with type "corrector".
             fragmentary_threshold: An optional float representing the proportion such that all witnesses extant at fewer than this proportion of variation units are filtered out of the collation.
+            fill_correctors_threshold: An optional float representing the proportion such that all correctors extant at fewer than this proportion of variation units are not filled in.
             dates_file: An optional path to a CSV file containing witness IDs, minimum dates, and maximum dates. If specified, then for all witnesses in the first column, any existing date ranges for them in the TEI XML collation will be ignored.
             verbose: An optional flag indicating whether or not to print timing and debugging details for the user.
         """
@@ -115,6 +118,7 @@ class Collation:
         self.missing_reading_types = set(missing_reading_types)
         self.fill_corrector_lacunae = fill_corrector_lacunae
         self.fragmentary_threshold = fragmentary_threshold
+        self.fill_correctors_threshold = fill_correctors_threshold
         self.verbose = verbose
         self.witnesses = []
         self.witness_index_by_id = {}
@@ -667,19 +671,38 @@ class Collation:
                 self.readings_by_witness[wit].append(readings_by_witness_for_unit[wit])
         # Optionally, fill the lacunae of the correctors:
         if self.fill_corrector_lacunae:
+            filled_readings = []
             for i, wit in enumerate(self.witnesses):
                 # If this is the first witness, then it shouldn't be a corrector (since there is no previous witness against which to compare it):
                 if i == 0:
+                    filled_readings = list(self.readings_by_witness[wit.id])
                     continue
                 # Otherwise, if this witness is not a corrector, then skip it:
                 if wit.type != "corrector":
+                    filled_readings = list(self.readings_by_witness[wit.id])
                     continue
-                # Otherwise, retrieve the previous witness:
-                prev_wit = self.witnesses[i - 1]
+                # Otherwise, add this corrector's extant readings to the filled readings list:
                 for j in range(len(self.readings_by_witness[wit.id])):
-                    # If the corrector has no reading, then set it to the previous witness's reading:
+                    if sum(self.readings_by_witness[wit.id][j]) != 0:
+                        filled_readings[j] = list(self.readings_by_witness[wit.id][j])
+                # If a threshold of extant readings is specified, then check if this corrector meets it, and skip it if not:
+                if self.fill_correctors_threshold is not None:
+                    # If there is a threshold, then first check the proportion of variation units at which this witness is not lacunose:
+                    proportion_extant = sum(
+                        [
+                            1
+                            for j in range(len(self.readings_by_witness[wit.id]))
+                            if sum(self.readings_by_witness[wit.id][j]) != 0
+                        ]
+                    ) / len(self.readings_by_witness[wit.id])
+                    # If this corrector does not exceed the threshold, then don't fill it,
+                    # but do update the running set of readings for the previous corrector and first hand:
+                    if proportion_extant < self.fill_correctors_threshold:
+                        continue
+                # Otherwise, fill every lacuna in this corrector based on the filled readings list:
+                for j in range(len(self.readings_by_witness[wit.id])):
                     if sum(self.readings_by_witness[wit.id][j]) == 0:
-                        self.readings_by_witness[wit.id][j] = self.readings_by_witness[prev_wit.id][j]
+                        self.readings_by_witness[wit.id][j] = list(filled_readings[j])
         t1 = time.time()
         if self.verbose:
             print(

@@ -303,6 +303,40 @@ class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
         )  # this corrector is active in this unit and should have its own reading
 
 
+class CollationFillCorrectorsThresholdTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(
+            xml,
+            missing_reading_types=["overlap", "lac"],
+            manuscript_suffixes=["*", "T"],
+            fill_corrector_lacunae=True,
+            fill_correctors_threshold=0.25,
+        )
+
+    def test_corrector_below_threshold(self):
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V8U16")
+        rdg_support = self.collation.readings_by_witness["06C1"][vu_ind]
+        self.assertEqual(
+            rdg_support, [0, 0, 0]
+        )  # this corrector is too lacunose and should not be filled in at this unit
+
+    def test_corrector_above_threshold_fill_from_previous_corrector(self):
+        vu_ind = self.collation.variation_unit_ids.index("B10K6V1U14-16")
+        rdg_support = self.collation.readings_by_witness["06C2"][vu_ind]
+        self.assertEqual(
+            rdg_support, [1, 0, 0]
+        )  # this corrector is extant in enough units to be filled in at this unit, and it should be filled in with the previous corrector's reading
+
+    def test_corrector_above_threshold_fill_from_first_hand(self):
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V6U24-28")
+        rdg_support = self.collation.readings_by_witness["06C2"][vu_ind]
+        self.assertEqual(
+            rdg_support, [0, 1, 0]
+        )  # this corrector is extant in enough units to be filled in at this unit, and it should be filled in with the first hand's reading (because the previous corrector is lacunose and too fragmentary)
+
+
 class CollationVerboseTestCase(unittest.TestCase):
     def test_verbose(self):
         with patch("sys.stdout", new=StringIO()) as out:
