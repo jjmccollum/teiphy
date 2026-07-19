@@ -338,7 +338,6 @@ class Collation:
                     if not np.isnan(dates_df.loc[wit_id]["max"])
                     else datetime.now().year
                 )
-                print(min_date, max_date)
                 if min_date is not None and max_date is not None and min_date > max_date:
                     raise ParsingException(
                         "In dates file %s, for witness ID %s, the minimum date %d is greater than the maximum date %d."
