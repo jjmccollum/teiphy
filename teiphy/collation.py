@@ -1439,6 +1439,11 @@ class Collation:
         # If this unit is a singleton, then return the string "0.5 0.5":
         if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 1:
             return "0.5 0.5"
+
+        if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 0:
+            raise ValueError(
+                f"Variation unit '{vu_id}' has no substantive readings. Cannot compute equilibrium frequencies."
+            )
         # Otherwise, set the equilibrium frequencies according to a uniform distribution:
         equilibrium_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
             self.substantive_readings_by_variation_unit_id[vu_id]
@@ -3017,7 +3022,7 @@ class Collation:
 
                         if k >= len(symbols):
                             raise ValueError(
-                                f"ERROR: too many substantive readings at variation unit {vu_id} to represent in stemma format!"
+                                f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in stemma format!"
                             )
 
                         rdg_symbol = symbols[k]  # get the one-character alphanumeric code for this state
