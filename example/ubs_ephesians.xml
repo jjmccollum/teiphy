@@ -799,7 +799,7 @@
             </app>
             <app xml:id="B10K5V14U34-42" ana="#Aural">
                 <lem><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></lem>
-                <rdg n="1" wit="UBS P46 01 02 03 06C2 010 012 018 020 025 044 048 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm eth geo slav arbgr1 Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
+                <rdg n="1" wit="UBS P46 01 02 03 06C2 010 012 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm eth geo slav arbgr1 Chrysostom CyrilOfAlexandria Jerome Pelagius TheodoreOfMopsuestia"><w>και</w><w>επιφαυσει</w><w>σοι</w><w>ο</w><w>χριστος</w></rdg>
                 <rdg n="2" wit="06* Ambrosiaster MariusVictorinus"><w>και</w><w>επιψαυσεις</w><w>του</w><w>χριστου</w></rdg>
                 <witDetail n="W1/2-1" type="ambiguous" target="1 2" wit="Augustine"><certainty target="1" locus="value" degree="0.9474"/><certainty target="2" locus="value" degree="0.0526"/></witDetail>
                 <witDetail n="W1/2-2" type="ambiguous" target="1 2" wit="Origen"><certainty target="1" locus="value" degree="0.5000"/><certainty target="2" locus="value" degree="0.5000"/></witDetail>
@@ -837,7 +837,7 @@
             </app>
             <app xml:id="B10K5V19U12-16" ana="#Semantic">
                 <lem><w>και</w><w>ωδαις</w><w>πνευματικαις</w></lem>
-                <rdg n="1" wit="UBS 01C1 06 010 012 018 020 025 044 048 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm geo slav goth arbgr1 Augustine Chrysostom Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"><w>και</w><w>ωδαις</w><w>πνευματικαις</w></rdg>
+                <rdg n="1" wit="UBS 01C1 06 010 012 018 020 025 044 075 0150 6 33 81 104 256 263 365 424 436 459 1175 1241 1319 1573 1739 1852 1881 1912 1962 2127 2200 2464 Byz Lect vg syrp syrh syrpal copsa copbo arm geo slav goth arbgr1 Augustine Chrysostom Jerome MariusVictorinus Origen Pelagius TheodoreOfMopsuestia"><w>και</w><w>ωδαις</w><w>πνευματικαις</w></rdg>
                 <rdg n="1-f1" type="defective" cause="dittography" wit="01*"><w>και</w><w>ωδαις</w><w>κα</w><w>πνευματικαις</w></rdg>
                 <rdg n="2" wit="02"><w>και</w><w>ωδαις</w><w>πνευματικαις</w><w>εν</w><w>χαριτι</w></rdg>
                 <rdg n="3" wit="P46 03 Ambrosiaster"><w>και</w><w>ωδαις</w></rdg>
@@ -881,7 +881,7 @@
             </app>
             <app xml:id="B10K5V30U13" ana="#Semantic">
                 <lem/>
-                <rdg n="1" wit="UBS P46 01* 02 03 048 6 33 81 424C 1739* 1881 2464 copsa copbo eth Augustine Jerome Origen"/>
+                <rdg n="1" wit="UBS P46 01* 02 03 6 33 81 424C 1739* 1881 2464 copsa copbo eth Augustine Jerome Origen"/>
                 <rdg n="2" wit="0150"><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
                 <rdg n="3" wit="01C2 06 010 012 020 025 044 075 104 256 263 365 424* 436 459 1175 1241 1319 1573 1739C 1852 1962 2127 2200 Byz Lect vg syrp syrh arm geo slav arbgr1 Ambrosiaster Chrysostom MariusVictorinus Pelagius TheodoreOfMopsuestia"><w>εκ</w><w>της</w><w>σαρκος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>
                 <rdg n="3-s1" type="subreading" cause="assimilation" wit="018"><w>εκ</w><w>του</w><w>σωματος</w><w>αυτου</w><w>και</w><w>εκ</w><w>των</w><w>οστεων</w><w>αυτου</w></rdg>

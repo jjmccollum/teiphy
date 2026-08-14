@@ -5,6 +5,8 @@ from pathlib import Path
 from datetime import datetime
 import numpy as np
 from lxml import etree as et
+from tqdm import tqdm
+from functools import partialmethod
 
 from teiphy import tei_ns, Collation
 
@@ -12,6 +14,9 @@ test_dir = Path(__file__).parent
 root_dir = test_dir.parent
 input_example = root_dir / "example/ubs_ephesians.xml"
 malformed_categories_example = test_dir / "malformed_categories_example.xml"
+
+# For unit tests, we need to disable tqdm, because it writes to stderr (which will cause most tests to fail):
+tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
 
 class CollationDefaultTestCase(unittest.TestCase):
@@ -298,6 +303,40 @@ class CollationFillCorrectorLacunaeTestCase(unittest.TestCase):
         )  # this corrector is active in this unit and should have its own reading
 
 
+class CollationFillCorrectorsThresholdTestCase(unittest.TestCase):
+    def setUp(self):
+        parser = et.XMLParser(remove_comments=True)
+        xml = et.parse(input_example, parser=parser)
+        self.collation = Collation(
+            xml,
+            missing_reading_types=["overlap", "lac"],
+            manuscript_suffixes=["*", "T"],
+            fill_corrector_lacunae=True,
+            fill_correctors_threshold=0.25,
+        )
+
+    def test_corrector_below_threshold(self):
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V8U16")
+        rdg_support = self.collation.readings_by_witness["06C1"][vu_ind]
+        self.assertEqual(
+            rdg_support, [0, 0, 0]
+        )  # this corrector is too lacunose and should not be filled in at this unit
+
+    def test_corrector_above_threshold_fill_from_previous_corrector(self):
+        vu_ind = self.collation.variation_unit_ids.index("B10K6V1U14-16")
+        rdg_support = self.collation.readings_by_witness["06C2"][vu_ind]
+        self.assertEqual(
+            rdg_support, [1, 0, 0]
+        )  # this corrector is extant in enough units to be filled in at this unit, and it should be filled in with the previous corrector's reading
+
+    def test_corrector_above_threshold_fill_from_first_hand(self):
+        vu_ind = self.collation.variation_unit_ids.index("B10K4V6U24-28")
+        rdg_support = self.collation.readings_by_witness["06C2"][vu_ind]
+        self.assertEqual(
+            rdg_support, [0, 1, 0]
+        )  # this corrector is extant in enough units to be filled in at this unit, and it should be filled in with the first hand's reading (because the previous corrector is lacunose and too fragmentary)
+
+
 class CollationVerboseTestCase(unittest.TestCase):
     def test_verbose(self):
         with patch("sys.stdout", new=StringIO()) as out:
@@ -415,21 +454,37 @@ class CollationOutputTestCase(unittest.TestCase):
             abs(matrix.sum(axis=0)[5] - len(self.collation.variation_unit_ids)) < 1e-4
         )  # the column for the first witness should sum to the total number of substantive variation units (give or take some rounding error)
 
+    def test_transform_matrix_stddev(self):
+        matrix = np.array([[0, 3, 8, 4], [1, 0, 2, 3], [1, 3, 0, 3], [4, 12, 2, 0]])
+        means = np.array([1.5, 4.5, 3.0, 2.5])
+        stddevs = np.array([1.5, 4.5, 3.0, 1.5])
+        expected_matrix = (matrix - means) / stddevs
+        actual_matrix = self.collation.transform_matrix(matrix, transform_matrix="stddev")
+        self.assertTrue(np.all(actual_matrix == expected_matrix))
+
+    def test_transform_matrix_mad(self):
+        matrix = np.array([[0, 3, 8, 4], [1, 0, 2, 3], [1, 3, 0, 3], [4, 12, 2, 0]])
+        medians = np.array([1, 3, 2, 3])
+        mads = np.array([0.5, 1.5, 1.0, 0.5])
+        expected_matrix = (matrix - medians) / mads
+        actual_matrix = self.collation.transform_matrix(matrix, transform_matrix="mad")
+        self.assertTrue(np.all(actual_matrix == expected_matrix))
+
     def test_to_distance_matrix(self):
         matrix, witness_labels = self.collation.to_distance_matrix()
         self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
-            matrix[0, 1], 11
-        )  # entry for UBS and Byz should be 11 (remember not to count Byz lacunae and ambiguities)
+            matrix[0, 1], 12
+        )  # entry for UBS and Byz should be 12 (the one Byz ambiguity has no overlap with the UBS reading)
 
     def test_to_distance_matrix_drop_constant(self):
         matrix, witness_labels = self.collation.to_distance_matrix(drop_constant=True)
         self.assertEqual(np.trace(matrix), 0)  # diagonal entries should be 0
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertEqual(
-            matrix[0, 1], 11
-        )  # entry for UBS and P46 should be 11 (remember not to count Byz lacunae and ambiguities)
+            matrix[0, 1], 12
+        )  # entry for UBS and P46 should be 12 (the one Byz ambiguity has no overlap with the UBS reading)
 
     def test_to_distance_matrix_proportion(self):
         matrix, witness_labels = self.collation.to_distance_matrix(proportion=True)
@@ -437,8 +492,8 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 11 / (len(self.xml_variation_units) - 1)) < 1e-4
-        )  # entry for UBS and Byz should be 11 divided by the number of variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 12 / len(self.xml_variation_units)) < 1e-4
+        )  # entry for UBS and Byz should be 12 divided by the number of variation units where neither witness is lacunose
 
     def test_to_distance_matrix_drop_constant_proportion(self):
         matrix, witness_labels = self.collation.to_distance_matrix(drop_constant=True, proportion=True)
@@ -446,18 +501,20 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 11 / (len(self.xml_variation_units) - 1 - 2)) < 1e-4
-        )  # entry for UBS and Byz should be 11 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 12 / (len(self.xml_variation_units) - 2)) < 1e-4
+        )  # entry for UBS and Byz should be 12 divided by the number of non-constant variation units where neither witness is lacunose
 
     def test_to_distance_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_distance_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "11/37")
+        self.assertEqual(int(matrix[0, 1].split("/")[0]), 12)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_distance_matrix_proportion_show_ext(self):
         matrix, witness_labels = self.collation.to_distance_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.2972972972972973/37")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 0.3157894736842105) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_similarity_matrix(self):
         matrix, witness_labels = self.collation.to_similarity_matrix()
@@ -477,31 +534,39 @@ class CollationOutputTestCase(unittest.TestCase):
 
     def test_to_similarity_matrix_proportion(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True)
-        self.assertEqual(np.trace(matrix), 73)  # diagonal entries should be 1
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(
+            matrix[1, 1] < 1.0
+        )  # but some can be less than one (due to places where they are extant but ambiguous)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 26 / (len(self.xml_variation_units) - 1)) < 1e-4
-        )  # entry for UBS and Byz should be 26 divided by the number of variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 26 / len(self.xml_variation_units)) < 1e-4
+        )  # entry for UBS and Byz should be 26 divided by the number of variation units where neither witness is lacunose
 
     def test_to_similarity_matrix_drop_constant_proportion(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(drop_constant=True, proportion=True)
-        self.assertEqual(np.trace(matrix), 73)  # diagonal entries should be nonzero
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(
+            matrix[1, 1] < 1.0
+        )  # but some can be less than one (due to places where they are extant but ambiguous)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(np.all(matrix >= 0.0) and np.all(matrix <= 1.0))  # all elements should be between 0 and 1
         self.assertTrue(
-            abs(matrix[0, 1] - 24 / (len(self.xml_variation_units) - 1 - 2)) < 1e-4
-        )  # entry for UBS and Byz should be 24 divided by the number of non-constant variation units where neither witness is lacunose or ambiguous
+            abs(matrix[0, 1] - 24 / (len(self.xml_variation_units) - 2)) < 1e-4
+        )  # entry for UBS and Byz should be 24 divided by the number of non-constant variation units where neither witness is lacunose
 
     def test_to_similarity_matrix_show_ext(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "26/37")
+        self.assertEqual(int(matrix[0, 1].split("/")[0]), 26)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_similarity_matrix_proportion_show_ext(self):
         matrix, witness_labels = self.collation.to_similarity_matrix(proportion=True, show_ext=True)
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertEqual(matrix[0, 1], "0.7027027027027027/37")
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 0.6842105263157895) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_idf_matrix(self):
         matrix, witness_labels = self.collation.to_idf_matrix()
@@ -527,29 +592,55 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 7.940864) < 1e-4)  # entry for UBS and Byz should be 7.940864
 
+    def test_to_idf_matrix_drop_constant_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(drop_constant=True, split_missing="proportional")
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 7.940864) < 1e-4)  # entry for UBS and Byz should be 7.940864
+
+    def test_to_idf_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 7.936538602542361) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
+
     def test_to_mean_idf_matrix(self):
-        matrix, witness_labels = self.collation.to_mean_idf_matrix()
+        matrix, witness_labels = self.collation.to_idf_matrix(proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 0.208856) < 1e-4)  # entry for UBS and Byz should be 0.208856
 
     def test_to_mean_idf_matrix_drop_constant(self):
-        matrix, witness_labels = self.collation.to_mean_idf_matrix(drop_constant=True)
+        matrix, witness_labels = self.collation.to_idf_matrix(drop_constant=True, proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 0.220459) < 1e-4)  # entry for UBS and Byz should be 0.220459
 
     def test_to_mean_idf_matrix_split_missing_uniform(self):
-        matrix, witness_labels = self.collation.to_mean_idf_matrix(split_missing="uniform")
+        matrix, witness_labels = self.collation.to_idf_matrix(split_missing="uniform", proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 0.258845) < 1e-4)  # entry for UBS and Byz should be 0.258845
 
     def test_to_mean_idf_matrix_split_missing_proportional(self):
-        matrix, witness_labels = self.collation.to_mean_idf_matrix(split_missing="proportional")
+        matrix, witness_labels = self.collation.to_idf_matrix(split_missing="proportional", proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 0.208970) < 1e-4)  # entry for UBS and Byz should be 0.208970
+
+    def test_to_mean_idf_matrix_drop_constant_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(
+            drop_constant=True, split_missing="proportional", proportion=True
+        )
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(matrix[0, 1] - 0.220580) < 1e-4)  # entry for UBS and Byz should be 0.220580
+
+    def test_to_mean_idf_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_idf_matrix(proportion=True, show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 0.20885627901427267) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_mi_matrix(self):
         matrix, witness_labels = self.collation.to_mi_matrix()
@@ -575,29 +666,65 @@ class CollationOutputTestCase(unittest.TestCase):
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
         self.assertTrue(abs(matrix[0, 1] - 45.5451469073476) < 1e-4)  # entry for UBS and Byz should be 45.5451469073476
 
-    def test_to_mean_mi_matrix(self):
-        matrix, witness_labels = self.collation.to_mean_mi_matrix()
+    def test_to_mi_matrix_drop_constant_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(drop_constant=True, split_missing="proportional")
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.1984903050709763) < 1e-4)  # entry for UBS and Byz should be 1.1984903050709763
+        self.assertTrue(abs(matrix[0, 1] - 45.5451469073476) < 1e-4)  # entry for UBS and Byz should be 45.5451469073476
+
+    def test_to_mi_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 45.542631592697106) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
+
+    def test_to_mean_mi_matrix(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(proportion=True)
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.1984903050709763) < 1e-4
+        )  # entry for UBS and Byz should be 1.1984903050709763
 
     def test_to_mean_mi_matrix_drop_constant(self):
-        matrix, witness_labels = self.collation.to_mean_mi_matrix(drop_constant=True)
+        matrix, witness_labels = self.collation.to_mi_matrix(drop_constant=True, proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.2650730997971416) < 1e-4)  # entry for UBS and Byz should be 1.2650730997971416
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.2650730997971416) < 1e-4
+        )  # entry for UBS and Byz should be 1.2650730997971416
 
     def test_to_mean_mi_matrix_split_missing_uniform(self):
-        matrix, witness_labels = self.collation.to_mean_mi_matrix(split_missing="uniform")
+        matrix, witness_labels = self.collation.to_mi_matrix(split_missing="uniform", proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.2995917494799079) < 1e-4)  # entry for UBS and Byz should be 1.2995917494799079
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.2995917494799079) < 1e-4
+        )  # entry for UBS and Byz should be 1.2995917494799079
 
     def test_to_mean_mi_matrix_split_missing_proportional(self):
-        matrix, witness_labels = self.collation.to_mean_mi_matrix(split_missing="proportional")
+        matrix, witness_labels = self.collation.to_mi_matrix(split_missing="proportional", proportion=True)
         self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
         self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
-        self.assertTrue(abs(matrix[0, 1] - 1.198556497561779) < 1e-4)  # entry for UBS and Byz should be 1.198556497561779
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.198556497561779) < 1e-4
+        )  # entry for UBS and Byz should be 1.198556497561779
+
+    def test_to_mean_mi_matrix_drop_constant_split_missing_proportional(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(
+            drop_constant=True, split_missing="proportional", proportion=True
+        )
+        self.assertNotEqual(np.trace(matrix), 0)  # diagonal entries should be nonzero
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(
+            abs(matrix[0, 1] - 1.2651429696485446) < 1e-4
+        )  # entry for UBS and Byz should be 1.2651429696485446
+
+    def test_to_mean_mi_matrix_show_ext(self):
+        matrix, witness_labels = self.collation.to_mi_matrix(proportion=True, show_ext=True)
+        self.assertTrue(np.all(matrix == matrix.T))  # matrix should be symmetrical
+        self.assertTrue(abs(float(matrix[0, 1].split("/")[0]) - 1.1984903050709765) < 1e-4)
+        self.assertEqual(int(matrix[0, 1].split("/")[1]), 38)
 
     def test_to_nexus_table(self):
         nexus_table, row_labels, column_labels = self.collation.to_nexus_table()

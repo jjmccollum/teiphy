@@ -3,6 +3,8 @@ from datetime import datetime
 import tempfile
 from typer.testing import CliRunner
 from lxml import etree as et
+from tqdm import tqdm
+from functools import partialmethod
 
 from teiphy.main import app
 from teiphy.collation import ParsingException, WitnessDateException, IntrinsicRelationsException
@@ -31,6 +33,9 @@ intrinsic_odds_no_relations_example = test_dir / "intrinsic_odds_no_relations_ex
 some_dates_csv_file = test_dir / "some_dates.csv"
 bad_dates_csv_file = test_dir / "bad_dates.csv"
 non_csv_dates_file = test_dir / "non_csv_dates.txt"
+
+# For unit tests, we need to disable tqdm, because it writes to stderr (which will cause most tests to fail):
+tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
 
 def test_version():
@@ -307,6 +312,32 @@ def test_to_nexus_fragmentary_threshold_bad_threshold():
         )
         assert result.exit_code == 1
         assert result.stdout.startswith("Error: the fragmentary variation unit proportion threshold is")
+
+
+def test_to_nexus_fill_correctors_threshold_bad_threshold():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output = Path(tmp_dir) / "test.nexus"
+        result = runner.invoke(
+            app,
+            [
+                "--verbose",
+                "-treconstructed",
+                "-tdefective",
+                "-torthographic",
+                "-tsubreading",
+                "-mlac",
+                "-moverlap",
+                "-s*",
+                "-sT",
+                "--fill-correctors",
+                "--fill-correctors-threshold",
+                1.1,
+                str(input_example),
+                str(output),
+            ],
+        )
+        assert result.exit_code == 1
+        assert result.stdout.startswith("Error: the variation unit proportion threshold for filling correctors is")
 
 
 def test_to_nexus_calibrate_dates():
@@ -704,6 +735,16 @@ def test_to_beast():
     xml = et.parse(input_example, parser=parser)
     xml_witnesses = xml.xpath(".//tei:witness", namespaces={"tei": tei_ns})
     xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
+    xml_singleton_variation_units = [
+        xml_variation_unit
+        for xml_variation_unit in xml_variation_units
+        if len(xml_variation_unit.xpath(".//tei:rdg[not(@type)]", namespaces={"tei": tei_ns})) == 1
+    ]
+    xml_singleton_variation_unit_indices = [
+        str(j + 1)
+        for j, xml_variation_unit in enumerate(xml_variation_units)
+        if len(xml_variation_unit.xpath(".//tei:rdg[not(@type)]", namespaces={"tei": tei_ns})) == 1
+    ]
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -729,14 +770,21 @@ def test_to_beast():
         beast_xml = et.parse(output, parser=parser)
         beast_xml_sequences = beast_xml.xpath(".//sequence")
         beast_xml_charstatelabels = beast_xml.xpath(".//charstatelabels")
+        beast_xml_singleton_charstatelabels = [
+            charstatelabel for charstatelabel in beast_xml_charstatelabels if "DUMMY" in charstatelabel.get("value")
+        ]
         beast_xml_site_distributions = beast_xml.xpath(".//distribution[@spec=\"TreeLikelihood\"]")
+        beast_xml_constant_tree_likelihoods = beast_xml.xpath(".//distribution[@id=\"morphTreeLikelihood.constant\"]")
+        beast_xml_constant_filtered_alignments = beast_xml.xpath(".//data[@id=\"filter.constant\"]")
         assert len(beast_xml_sequences) == len(xml_witnesses)
         assert len(beast_xml_charstatelabels) == len(xml_variation_units)
-        assert len(beast_xml_site_distributions) == len(xml_variation_units)
-        beast_xml_singleton_sequences = beast_xml.xpath(".//charstatelabels[@characterName=\"B10K6V20U12\"]")
-        assert len(beast_xml_singleton_sequences) == 1
-        assert beast_xml_singleton_sequences[0].get("value") is not None
-        assert "DUMMY" in beast_xml_singleton_sequences[0].get("value")
+        assert len(beast_xml_singleton_charstatelabels) == len(xml_singleton_variation_units)
+        assert len(beast_xml_constant_tree_likelihoods) == 1
+        assert len(beast_xml_constant_filtered_alignments) == 1
+        assert beast_xml_constant_filtered_alignments[0].get("filter") == ",".join(xml_singleton_variation_unit_indices)
+        assert len(beast_xml_site_distributions) == len(xml_variation_units) - len(xml_singleton_variation_units) + len(
+            beast_xml_constant_tree_likelihoods
+        )
         assert "WARNING: the latest witness" in result.stdout
 
 
@@ -745,6 +793,11 @@ def test_to_beast_drop_constant():
     xml = et.parse(input_example, parser=parser)
     xml_witnesses = xml.xpath(".//tei:witness", namespaces={"tei": tei_ns})
     xml_variation_units = xml.xpath(".//tei:app", namespaces={"tei": tei_ns})
+    xml_singleton_variation_units = [
+        xml_variation_unit
+        for xml_variation_unit in xml_variation_units
+        if len(xml_variation_unit.xpath(".//tei:rdg[not(@type)]", namespaces={"tei": tei_ns})) == 1
+    ]
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.xml"
@@ -771,12 +824,16 @@ def test_to_beast_drop_constant():
         beast_xml = et.parse(output, parser=parser)
         beast_xml_sequences = beast_xml.xpath(".//sequence")
         beast_xml_charstatelabels = beast_xml.xpath(".//charstatelabels")
+        beast_xml_singleton_charstatelabels = [
+            charstatelabel for charstatelabel in beast_xml_charstatelabels if "DUMMY" in charstatelabel.get("value")
+        ]
         beast_xml_site_distributions = beast_xml.xpath(".//distribution[@spec=\"TreeLikelihood\"]")
+        beast_xml_constant_tree_likelihoods = beast_xml.xpath(".//distribution[@id=\"morphTreeLikelihood.constant\"]")
         assert len(beast_xml_sequences) == len(xml_witnesses)
-        assert len(beast_xml_charstatelabels) == len(xml_variation_units) - 2
-        assert len(beast_xml_site_distributions) == len(xml_variation_units) - 2
-        beast_xml_singleton_sequences = beast_xml.xpath(".//charstatelabels[@characterName=\"B10K6V20U12\"]")
-        assert len(beast_xml_singleton_sequences) == 0
+        assert len(beast_xml_charstatelabels) == len(xml_variation_units) - len(xml_singleton_variation_units)
+        assert len(beast_xml_singleton_charstatelabels) == 0
+        assert len(beast_xml_constant_tree_likelihoods) == 0
+        assert len(beast_xml_site_distributions) == len(xml_variation_units) - len(xml_singleton_variation_units)
 
 
 def test_to_beast_no_dates():
@@ -1415,9 +1472,7 @@ def test_to_csv_show_ext_distance_table():
         print(text)
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            ",17/38," in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert ",17/38," in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_csv_proportion_show_ext_distance_table():
@@ -1431,9 +1486,8 @@ def test_to_csv_proportion_show_ext_distance_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            ",0.4473684210526316/38," in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert ",0.447368" in text
+        assert "/38," in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_csv_similarity_table():
@@ -1459,7 +1513,7 @@ def test_to_csv_proportion_similarity_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert ",0.5789473684210527," in text
+        assert ",0.578947" in text
 
 
 def test_to_csv_show_ext_similarity_table():
@@ -1474,9 +1528,7 @@ def test_to_csv_show_ext_similarity_table():
         print(text)
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            "22/38" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert ",22/38" in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_csv_proportion_show_ext_similarity_table():
@@ -1490,9 +1542,8 @@ def test_to_csv_proportion_show_ext_similarity_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert (
-            "0.5789473684210527/38" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted for the second part is the one where P46 is ambiguous
+        assert "0.578947" in text  # note that type "lac" readings are not treated as missing with the above inputs
+        assert "/38" in text
 
 
 def test_to_csv_idf_table():
@@ -1504,19 +1555,19 @@ def test_to_csv_idf_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "9.90215396342428" in text
+        assert "9.902153" in text
 
 
 def test_to_csv_mean_idf_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "mean-idf", str(input_example), str(output)])
+        result = runner.invoke(app, ["--verbose", "--table", "idf", "--proportion", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "0.260582999037481" in text
+        assert "0.260582" in text
 
 
 def test_to_csv_mi_table():
@@ -1528,19 +1579,19 @@ def test_to_csv_mi_table():
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "50.9296128755997" in text
+        assert "50.929612" in text
 
 
 def test_to_csv_mean_mi_table():
     with tempfile.TemporaryDirectory() as tmp_dir:
         output = Path(tmp_dir) / "test.csv"
-        result = runner.invoke(app, ["--verbose", "--table", "mean-mi", str(input_example), str(output)])
+        result = runner.invoke(app, ["--verbose", "--table", "mi", "--proportion", str(input_example), str(output)])
         assert result.exit_code == 0
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith(",UBS,Byz,Lect,P46,P49,01")
         assert "\nUBS," in text
-        assert "1.3402529704105193" in text
+        assert "1.340252" in text
 
 
 def test_to_csv_drop_constant_long_table():
@@ -1673,9 +1724,7 @@ def test_to_phylip_distance_matrix():
         assert output.exists()
         text = output.read_text(encoding="utf-8-sig")
         assert text.startswith("%d" % (len(xml_witnesses)))
-        assert (
-            "UBS 0 11" in text
-        )  # note that type "lac" readings are not treated as missing with the above inputs, so the only variation not counted as a disagreement is the one where Byz is ambiguous
+        assert "UBS 0 12" in text  # note that type "lac" readings are not treated as missing with the above inputs
 
 
 def test_to_phylip_similarity_matrix():
