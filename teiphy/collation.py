@@ -2962,6 +2962,12 @@ class Collation:
                     indices = tuple([j, k])
                     if indices not in reading_wits_by_indices:
                         break
+                    
+                    # print(k, indices, " ".join(reading_wits_by_indices[indices]))
+                    if k >= len(symbols):
+                        raise ValueError(
+                            f"ERROR: too many substantive readings at variation unit {vu_id} to represent in stemma format!"
+                        )
                     rdg_symbol = symbols[k]  # get the one-character alphanumeric code for this state
                     wits = " ".join(reading_wits_by_indices[indices])
                     # Open the variant reading support block with an angle bracket:
