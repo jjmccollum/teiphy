@@ -229,6 +229,16 @@ class CollationTrivialSubreadingTestCase(unittest.TestCase):
     def test_substantive_variation_unit_reading_tuples(self):
         self.assertEqual(len(self.collation.substantive_variation_unit_reading_tuples), len(self.xml_readings))
 
+    def test_no_substantive_readings(self):
+        xml = et.ElementTree(et.fromstring(f"""
+                <TEI xmlns="{tei_ns}">
+                    <teiHeader><fileDesc><sourceDesc><listWit><witness xml:id="A"/></listWit></sourceDesc></fileDesc></teiHeader>
+                    <text><body><app xml:id="vu1"><rdg n="1" type="subreading" wit="#A"/></app></body></text>
+                </TEI>
+                """))
+        with self.assertRaisesRegex(ValueError, "Variation unit vu1 has no substantive readings."):
+            Collation(xml, trivial_reading_types=["subreading"])
+
 
 class CollationMissingTestCase(unittest.TestCase):
     def setUp(self):
@@ -426,9 +436,40 @@ class CollationOutputTestCase(unittest.TestCase):
         beast_symbols = empty_collation.get_beast_symbols()
         self.assertEqual(beast_symbols, [])
 
+    def test_get_beast_equilibrium_frequencies_no_substantive_readings(self):
+        vu_id = self.collation.variation_units[0].id
+        self.collation.substantive_readings_by_variation_unit_id[vu_id] = []
+        with self.assertRaises(ValueError) as context:
+            self.collation.get_beast_equilibrium_frequencies_for_unit(0)
+        self.assertEqual(
+            str(context.exception),
+            f"Variation unit '{vu_id}' has no substantive readings. Cannot compute equilibrium frequencies.",
+        )
+
     def test_get_stemma_symbols(self):
         stemma_symbols = self.collation.get_stemma_symbols()
         self.assertEqual(stemma_symbols, ["0", "1", "2", "3", "4", "5"])
+
+    def test_get_symbols_too_many_readings(self):
+        wit_id = self.collation.witnesses[0].id
+        vu_id = self.collation.variation_unit_ids[0]
+        symbol_methods = [
+            (self.collation.get_nexus_symbols, "NEXUS", 62),
+            (self.collation.get_hennig86_symbols, "Hennig86", 32),
+            (self.collation.get_phylip_symbols, "PHYLIP", 32),
+            (self.collation.get_fasta_symbols, "FASTA", 32),
+            (self.collation.get_beast_symbols, "BEAST", 62),
+            (self.collation.get_stemma_symbols, "stemma", 62),
+        ]
+        for get_symbols, format_name, maximum_states in symbol_methods:
+            with self.subTest(format=format_name):
+                self.collation.readings_by_witness[wit_id][0] = [0] * (maximum_states + 1)
+                expected_message = (
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' "
+                    f"to represent in {format_name} format."
+                )
+                with self.assertRaisesRegex(ValueError, expected_message):
+                    get_symbols()
 
     def test_get_stemma_symbols_empty(self):
         empty_collation = self.collation
