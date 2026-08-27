@@ -591,6 +591,8 @@ class Collation:
             self.substantive_readings_by_variation_unit_id[vu.id].append(rdg.id)
             self.substantive_variation_unit_reading_tuples.append(tuple([vu.id, rdg.id]))
             reading_id_to_index[rdg.id] = len(self.substantive_readings_by_variation_unit_id[vu.id]) - 1
+        if len(self.substantive_readings_by_variation_unit_id[vu.id]) == 0:
+            raise ValueError(f"Variation unit {vu.id} has no substantive readings.")
         # If the list of substantive readings only contains one entry, then this variation unit is not informative;
         # return an empty dictionary and add nothing to the list of substantive reading labels:
         if self.verbose:
@@ -766,7 +768,12 @@ class Collation:
         if len(self.witnesses) == 0:
             return []
         wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
+        for i, vu_id in enumerate(self.variation_unit_ids):
+            rdg_support = self.readings_by_witness[wit_id][i]
+            if len(rdg_support) > len(possible_symbols):
+                raise ValueError(
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in NEXUS format."
+                )
             nsymbols = max(nsymbols, len(rdg_support))
         nexus_symbols = possible_symbols[:nsymbols]
         return nexus_symbols
@@ -1033,7 +1040,12 @@ class Collation:
         if len(self.witnesses) == 0:
             return []
         wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
+        for i, vu_id in enumerate(self.variation_unit_ids):
+            rdg_support = self.readings_by_witness[wit_id][i]
+            if len(rdg_support) > len(possible_symbols):
+                raise ValueError(
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in Hennig86 format."
+                )
             nsymbols = max(nsymbols, len(rdg_support))
         hennig86_symbols = possible_symbols[:nsymbols]
         return hennig86_symbols
@@ -1127,7 +1139,12 @@ class Collation:
         if len(self.witnesses) == 0:
             return []
         wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
+        for i, vu_id in enumerate(self.variation_unit_ids):
+            rdg_support = self.readings_by_witness[wit_id][i]
+            if len(rdg_support) > len(possible_symbols):
+                raise ValueError(
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in PHYLIP format."
+                )
             nsymbols = max(nsymbols, len(rdg_support))
         phylip_symbols = possible_symbols[:nsymbols]
         return phylip_symbols
@@ -1211,7 +1228,12 @@ class Collation:
         if len(self.witnesses) == 0:
             return []
         wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
+        for i, vu_id in enumerate(self.variation_unit_ids):
+            rdg_support = self.readings_by_witness[wit_id][i]
+            if len(rdg_support) > len(possible_symbols):
+                raise ValueError(
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in FASTA format."
+                )
             nsymbols = max(nsymbols, len(rdg_support))
         fasta_symbols = possible_symbols[:nsymbols]
         return fasta_symbols
@@ -1295,7 +1317,12 @@ class Collation:
         if len(self.witnesses) == 0:
             return []
         wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
+        for i, vu_id in enumerate(self.variation_unit_ids):
+            rdg_support = self.readings_by_witness[wit_id][i]
+            if len(rdg_support) > len(possible_symbols):
+                raise ValueError(
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in BEAST format."
+                )
             nsymbols = max(nsymbols, len(rdg_support))
         beast_symbols = possible_symbols[:nsymbols]
         return beast_symbols
@@ -1439,6 +1466,11 @@ class Collation:
         # If this unit is a singleton, then return the string "0.5 0.5":
         if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 1:
             return "0.5 0.5"
+
+        if len(self.substantive_readings_by_variation_unit_id[vu_id]) == 0:
+            raise ValueError(
+                f"Variation unit '{vu_id}' has no substantive readings. Cannot compute equilibrium frequencies."
+            )
         # Otherwise, set the equilibrium frequencies according to a uniform distribution:
         equilibrium_frequencies = [1.0 / len(self.substantive_readings_by_variation_unit_id[vu_id])] * len(
             self.substantive_readings_by_variation_unit_id[vu_id]
@@ -2889,7 +2921,12 @@ class Collation:
         if len(self.witnesses) == 0:
             return []
         wit_id = self.witnesses[0].id
-        for rdg_support in self.readings_by_witness[wit_id]:
+        for i, vu_id in enumerate(self.variation_unit_ids):
+            rdg_support = self.readings_by_witness[wit_id][i]
+            if len(rdg_support) > len(possible_symbols):
+                raise ValueError(
+                    f"ERROR: too many substantive readings at variation unit '{vu_id}' to represent in stemma format."
+                )
             nsymbols = max(nsymbols, len(rdg_support))
         stemma_symbols = possible_symbols[:nsymbols]
         return stemma_symbols
@@ -3014,6 +3051,7 @@ class Collation:
                         indices = tuple([j, k])
                         if indices not in reading_wits_by_indices:
                             break
+
                         rdg_symbol = symbols[k]  # get the one-character alphanumeric code for this state
                         wits = " ".join(reading_wits_by_indices[indices])
                         # Open the variant reading support block with an angle bracket:
