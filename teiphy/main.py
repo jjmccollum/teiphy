@@ -65,7 +65,7 @@ def to_file(
     ),
     proportion: bool = typer.Option(
         False,
-        help="If set, divide the output matrix's cells by the numnber of variation units where the row and column witnesses are both extant; this option is only used for witness-to-witness matrix outputs (e.g., tabular outputs of type \"distance\", \"similarity\", \"idf\", \"mi\", etc.).\nFor distance and similarity matrices, this option will transform disagreement or agreement counts to values between 0 and 1.\nFor IDF and MI matrices, this option will return the mean IDF or MI for each pair of witnesses over all variation units where both are extant.",
+        help="If set, divide the output matrix's cells by the number of variation units where the row and column witnesses are both extant; this option is only used for witness-to-witness matrix outputs (e.g., tabular outputs of type \"distance\", \"similarity\", \"idf\", \"mi\", etc.).\nFor distance and similarity matrices, this option will transform disagreement or agreement counts to values between 0 and 1.\nFor IDF and MI matrices, this option will return the mean IDF or MI for each pair of witnesses over all variation units where both are extant.",
     ),
     calibrate_dates: bool = typer.Option(
         False,

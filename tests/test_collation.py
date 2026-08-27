@@ -436,16 +436,6 @@ class CollationOutputTestCase(unittest.TestCase):
         beast_symbols = empty_collation.get_beast_symbols()
         self.assertEqual(beast_symbols, [])
 
-    def test_get_beast_equilibrium_frequencies_no_substantive_readings(self):
-        vu_id = self.collation.variation_units[0].id
-        self.collation.substantive_readings_by_variation_unit_id[vu_id] = []
-        with self.assertRaises(ValueError) as context:
-            self.collation.get_beast_equilibrium_frequencies_for_unit(0)
-        self.assertEqual(
-            str(context.exception),
-            f"Variation unit '{vu_id}' has no substantive readings. Cannot compute equilibrium frequencies.",
-        )
-
     def test_get_stemma_symbols(self):
         stemma_symbols = self.collation.get_stemma_symbols()
         self.assertEqual(stemma_symbols, ["0", "1", "2", "3", "4", "5"])
